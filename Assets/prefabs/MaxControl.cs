@@ -27,8 +27,13 @@ public class MaxControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 position = (Vector2)rigidbody2d.position + move * playerSpeed * Time.deltaTime;
-        rigidbody2d.MovePosition(position);
+        //Vector2 position = (Vector2)rigidbody2d.position + move * playerSpeed * Time.deltaTime;
+        //rigidbody2d.MovePosition(position);
+        Vector3 position = transform.position;
+        position.x = position.x + move.x * playerSpeed * Time.deltaTime;
+        position.z = position.z + move.y * playerSpeed * Time.deltaTime;
+        transform.position = position;
+        Debug.Log(transform.position);
     }
 
     public Vector2 GetPosition()
