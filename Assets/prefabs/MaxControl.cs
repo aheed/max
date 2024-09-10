@@ -9,20 +9,33 @@ public class MaxControl : MonoBehaviour
     Vector3 offset;
     public float playerSpeed = 3.0f;
     public InputAction MoveAction;
+    public InputAction FireAction;
     Rigidbody2D rigidbody2d;
     Vector2 move;
+    public GameObject bulletPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         MoveAction.Enable();
+        FireAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
+    }
+
+    void FireBullet()
+    {
+        Debug.Log("pow!");
+        GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
     }
 
     // Update is called once per frame
     void Update()
     {
         move = MoveAction.ReadValue<Vector2>();
+        if (FireAction.IsPressed())
+        {
+            FireBullet();
+        }
     }
 
     void FixedUpdate()
@@ -41,7 +54,7 @@ public class MaxControl : MonoBehaviour
         }
         offset.y = offset.z;
         transform.position = refObject.transform.position + offset;
-        Debug.Log(transform.position);
+        //Debug.Log(transform.position);
     }
 
     public Vector2 GetPosition()
@@ -52,5 +65,5 @@ public class MaxControl : MonoBehaviour
     public float GetAltitude()
     {
         return offset.z;
-    }
+    }    
 }

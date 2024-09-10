@@ -149,6 +149,24 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
+  FireAction:
+    m_Name: Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2bc94944-7a9d-4bf1-ae6d-c84950120f9b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 04cbb80e-5283-4a03-87f0-acb032d7b84e
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire
+      m_Flags: 0
+    m_Flags: 0
+  bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}
 --- !u!50 &-2765026285494241494
 Rigidbody2D:
   serializedVersion: 4
