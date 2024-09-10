@@ -2293,7 +2293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bde1e086a6b9d43b9174cd6d6c8b662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSpeed: {x: 0.4, y: 0.6}
+  levelSpeed: {x: 0.1, y: 0.1}
   maxY: 8
 --- !u!212 &608621885
 SpriteRenderer:
@@ -2335,7 +2335,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 21300000, guid: c5af1e78ba0e0536ba5194c784d391df, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2356,7 +2356,7 @@ Transform:
   m_GameObject: {fileID: 608621883}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.01, y: -8.48, z: 0}
+  m_LocalPosition: {x: 0.55, y: -1.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3400,6 +3400,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1349370398196582425, guid: ef656689f5ac54052b53051006d44669, type: 3}
+      propertyPath: refObject
+      value: 
+      objectReference: {fileID: 608621886}
     - target: {fileID: 2196899165539118260, guid: ef656689f5ac54052b53051006d44669, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1

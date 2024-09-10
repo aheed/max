@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ShadowControl : MonoBehaviour
 {
+    public float shadowCoeffX = 0.7f;
+    public float shadowCoeffY = -1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,8 +17,9 @@ public class ShadowControl : MonoBehaviour
     void Update()
     {
         MaxControl maxC = FindObjectOfType <MaxControl>();
-        var maxPos = maxC.GetPosition();
-        Vector2 newPos = maxPos + new Vector2(2.0f, -3.0f);
+        var planePos = maxC.GetPosition();
+        var planeAltitude = maxC.GetAltitude();
+        Vector2 newPos = planePos + new Vector2(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
 
         transform.position = newPos;
     }

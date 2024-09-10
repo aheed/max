@@ -5,11 +5,12 @@ using UnityEngine.InputSystem;
 
 public class MaxControl : MonoBehaviour
 {
+    public Transform refObject;
+    Vector3 offset;
     public float playerSpeed = 3.0f;
     public InputAction MoveAction;
     Rigidbody2D rigidbody2d;
     Vector2 move;
-    float altitude = 4.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -22,17 +23,24 @@ public class MaxControl : MonoBehaviour
     void Update()
     {
         move = MoveAction.ReadValue<Vector2>();
-
     }
 
     void FixedUpdate()
     {
         //Vector2 position = (Vector2)rigidbody2d.position + move * playerSpeed * Time.deltaTime;
         //rigidbody2d.MovePosition(position);
-        Vector3 position = transform.position;
-        position.x = position.x + move.x * playerSpeed * Time.deltaTime;
-        position.z = position.z + move.y * playerSpeed * Time.deltaTime;
-        transform.position = position;
+        //Vector3 position = transform.position;
+        //position.x = position.x + move.x * playerSpeed * Time.deltaTime;
+        //position.z = position.z + move.y * playerSpeed * Time.deltaTime;
+        //transform.position = position;
+        offset.x = offset.x + move.x * playerSpeed * Time.deltaTime;
+        offset.z = offset.z - move.y * playerSpeed * Time.deltaTime;
+        if (offset.z < 0) 
+        {
+            offset.z = 0;
+        }
+        offset.y = offset.z;
+        transform.position = refObject.transform.position + offset;
         Debug.Log(transform.position);
     }
 
@@ -43,6 +51,6 @@ public class MaxControl : MonoBehaviour
 
     public float GetAltitude()
     {
-        return altitude;
+        return offset.z;
     }
 }
