@@ -8,6 +8,8 @@ public class MaxControl : MonoBehaviour
     public Transform refObject;
     Vector3 offset;
     public float playerSpeed = 3.0f;
+    public float bulletIntervalSeconds = 0.1f;
+    float bulletCooldown = 0.0f;
     public InputAction MoveAction;
     public InputAction FireAction;
     Rigidbody2D rigidbody2d;
@@ -24,8 +26,12 @@ public class MaxControl : MonoBehaviour
 
     void FireBullet()
     {
-        Debug.Log("pow!");
-        GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
+        if (bulletCooldown <= 0)
+        {
+            Debug.Log("pow!");
+            GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
+            bulletCooldown = bulletIntervalSeconds;
+        }
     }
 
     // Update is called once per frame
@@ -36,6 +42,8 @@ public class MaxControl : MonoBehaviour
         {
             FireBullet();
         }
+        
+        bulletCooldown -= Time.deltaTime;
     }
 
     void FixedUpdate()
