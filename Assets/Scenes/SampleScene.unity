@@ -2444,6 +2444,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &763321429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763321430}
+  - component: {fileID: 763321431}
+  m_Layer: 0
+  m_Name: SceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &763321430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763321429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.99967873, y: -1.6606438, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &763321431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763321429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a71a076430c8dfd9b6105b946c1cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPlanePrefab: {fileID: 2165493113498992378, guid: 21e9beeb29cf4c9959214f56a5089997, type: 3}
+  shadowControlPrefab: {fileID: 9201924445058020500, guid: e228024eb4c67fdd19d72d2022609b02, type: 3}
 --- !u!1 &958610452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3414,7 +3460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2196899165539118260, guid: ef656689f5ac54052b53051006d44669, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2196899165539118260, guid: ef656689f5ac54052b53051006d44669, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3520,3 +3566,4 @@ SceneRoots:
   - {fileID: 4383985691207657450}
   - {fileID: 7439679462610380626}
   - {fileID: 608621886}
+  - {fileID: 763321430}

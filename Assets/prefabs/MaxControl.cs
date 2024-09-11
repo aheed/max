@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MaxControl : MonoBehaviour
+public class MaxControl : MonoBehaviour, IPositionObservable
 {
     public Transform refObject;
     Vector3 offset;

@@ -1,0 +1,15 @@
+Collision bullet/prefab
+Collision specific per tile type?
+
+Alternative approach: Game objects for interaction, tiles only for decoration (grass, water, road).
+Note that some commonly occuring game objects (flack guns) should be active (shoot flack).
+
+How to paint gameobjects on a grid? Gameobject brush?
+https://www.reddit.com/r/Unity2D/comments/1abbq31/how_to_detect_individual_collisions_for_tiles_in/
+
+To make shadow reusable: flip dependency around?
+
+Implement SceneController
+  Function for constructing Max plane, enemy plane. Includes attaching prop and shadow.
+  Set up max on startup
+
