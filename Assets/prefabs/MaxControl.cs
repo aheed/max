@@ -7,7 +7,8 @@ public class MaxControl : MonoBehaviour, IPositionObservable
 {
     public Transform refObject;
     Vector3 offset = new(0.0f, 0.0f, 0.8f);
-    public float playerSpeed = 3.0f;
+    public float horizontalSpeed = 3.0f;
+    public float verticalSpeed = 2.0f;
     public float bulletIntervalSeconds = 0.1f;
     float bulletCooldown = 0.0f;
     public InputAction MoveAction;
@@ -28,9 +29,8 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     {
         if (bulletCooldown <= 0)
         {
-            Debug.Log("pow!");
             //GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
-            Debug.Log($"Creating bullet at {transform.position}");
+            //Debug.Log($"Creating bullet at {transform.position}");
             GameObject projectileObject = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             bulletCooldown = bulletIntervalSeconds;
         }
@@ -56,8 +56,8 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         //position.x = position.x + move.x * playerSpeed * Time.deltaTime;
         //position.z = position.z + move.y * playerSpeed * Time.deltaTime;
         //transform.position = position;
-        offset.x = offset.x + move.x * playerSpeed * Time.deltaTime;
-        offset.z = offset.z - move.y * playerSpeed * Time.deltaTime;
+        offset.x = offset.x + move.x * horizontalSpeed * Time.deltaTime;
+        offset.z = offset.z - move.y * verticalSpeed * Time.deltaTime;
         if (offset.z < 0) 
         {
             offset.z = 0;
@@ -75,5 +75,10 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public float GetAltitude()
     {
         return offset.z;
-    }    
+    }
+
+    public float GetHeight()
+    {
+        return 0.1f;
+    }
 }

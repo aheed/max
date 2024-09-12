@@ -16,6 +16,11 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
         return transform.position.z;
     }
 
+    public float GetHeight()
+    {
+        return 0.3f;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
