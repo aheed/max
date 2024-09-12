@@ -27,9 +27,9 @@ public class SceneController : MonoBehaviour
         AddPlaneShadow(maxPlane);
 
         startPos = transform.position;
-        startPos.x += 0.0f;
-        startPos.y += 0.0f;
-        startPos.z = 0.2f;
+        startPos.x += 2.0f;
+        startPos.y += 2.0f;
+        startPos.z = 0.8f;
         EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane);
     }
