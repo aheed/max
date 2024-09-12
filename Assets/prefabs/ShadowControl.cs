@@ -21,7 +21,6 @@ public class ShadowControl : MonoBehaviour
     {
         if (plane != null)
         {
-            Debug.Log("Got Plane!!");
             var planePosz = plane.GetPosition();
             var planeAltitudez = plane.GetAltitude();
             Vector2 newPosz = planePosz + new Vector2(planeAltitudez * shadowCoeffX, planeAltitudez * shadowCoeffY);
@@ -29,6 +28,8 @@ public class ShadowControl : MonoBehaviour
             transform.position = newPosz;
             return;
         }
+
+        Debug.Log("No Plane!!");
 
         MaxControl maxC = FindObjectOfType <MaxControl>();
         var planePos = maxC.GetPosition();

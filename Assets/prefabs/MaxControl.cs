@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class MaxControl : MonoBehaviour, IPositionObservable
 {
     public Transform refObject;
-    Vector3 offset;
+    Vector3 offset = new(0.0f, 0.0f, 0.3f);
     public float playerSpeed = 3.0f;
     public float bulletIntervalSeconds = 0.1f;
     float bulletCooldown = 0.0f;

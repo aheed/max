@@ -6,7 +6,7 @@ public class BulletControl : MonoBehaviour
 {
     Vector3 speed;
     Vector3 startPosition;
-    float range = 20.0f;
+    float range = 10.0f;
 
     // Start is called before the first frame update
     void Start()
