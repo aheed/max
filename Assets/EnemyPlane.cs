@@ -29,4 +29,9 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
         transform.position += progress;
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("Enemyplane collided with " + col.name);
+    }
+
 }

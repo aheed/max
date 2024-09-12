@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class MaxControl : MonoBehaviour, IPositionObservable
 {
     public Transform refObject;
-    Vector3 offset = new(0.0f, 0.0f, 0.3f);
+    Vector3 offset = new(0.0f, 0.0f, 0.8f);
     public float playerSpeed = 3.0f;
     public float bulletIntervalSeconds = 0.1f;
     float bulletCooldown = 0.0f;
@@ -29,7 +29,9 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         if (bulletCooldown <= 0)
         {
             Debug.Log("pow!");
-            GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
+            //GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
+            Debug.Log($"Creating bullet at {transform.position}");
+            GameObject projectileObject = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             bulletCooldown = bulletIntervalSeconds;
         }
     }

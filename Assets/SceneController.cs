@@ -19,9 +19,9 @@ public class SceneController : MonoBehaviour
     {
         //var refobject = GetComponent<refobj>();
         var startPos = transform.position;
-        startPos.x += 1.0f;
+        /*startPos.x += 1.0f;
         startPos.y += 1.0f;
-        startPos.z = 0.5f;
+        startPos.z = 0.8f;*/
         MaxControl maxPlane = Instantiate(maxPlanePrefab, startPos, Quaternion.identity);
         maxPlane.refObject = refobject.transform;
         AddPlaneShadow(maxPlane);
