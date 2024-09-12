@@ -35,6 +35,21 @@ public class BulletControl : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log("Bullet collided with " + col.name);
+        var tempMonoArray = col.gameObject.GetComponents<MonoBehaviour>();
+
+        foreach (var monoBehaviour in tempMonoArray)
+        {
+            if (monoBehaviour is IPositionObservable posobs)
+            {
+                var alti = posobs.GetAltitude();
+                Debug.Log($"Hit!!!! Bullet collided with something as altitude {alti}");
+            }
+        } 
+
+        if (col.gameObject.GetComponent<EnemyPlane>())
+        {
+
+        }
         Destroy(gameObject);
     }
 }

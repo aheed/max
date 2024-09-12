@@ -13,3 +13,10 @@ Implement SceneController
   Function for constructing Max plane, enemy plane. Includes attaching prop and shadow.
   Set up max on startup
 
+The object that got hit shall check altitude for actual hit and handle the consequences.
+  Report to the colliding thing (bullet or whatever)(?)
+  Kill the colliding bullet?
+  Every object dealing with it's own collision detection? => Double detection on each collision.
+  Helper class with static functions for altitude overlap check.
+
+
