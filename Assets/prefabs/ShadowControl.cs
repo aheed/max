@@ -19,23 +19,25 @@ public class ShadowControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (plane != null)
+        if (plane == null)
         {
-            var planePosz = plane.GetPosition();
-            var planeAltitudez = plane.GetAltitude();
-            Vector2 newPosz = planePosz + new Vector2(planeAltitudez * shadowCoeffX, planeAltitudez * shadowCoeffY);
-
-            transform.position = newPosz;
+            Debug.Log("No Plane!!");
+            Destroy(gameObject);
             return;
         }
 
-        Debug.Log("No Plane!!");
+        if (plane is MonoBehaviour planeAsMB)
+        {
+            if (!planeAsMB.isActiveAndEnabled)
+            {
+                plane = null;
+                return;
+            }
+        }
 
-        MaxControl maxC = FindObjectOfType <MaxControl>();
-        var planePos = maxC.GetPosition();
-        var planeAltitude = maxC.GetAltitude();
+        var planePos = plane.GetPosition();
+        var planeAltitude = plane.GetAltitude();
         Vector2 newPos = planePos + new Vector2(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
-
         transform.position = newPos;
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,15 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Enemyplane collided with " + col.name);
+        var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
+        if (!collObjName.StartsWith("bullet"))
+        {
+            return; //no bullet collision
+        }                
+
+        Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
 }
