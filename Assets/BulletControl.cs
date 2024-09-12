@@ -30,28 +30,35 @@ public class BulletControl : MonoBehaviour, IPositionObservable
         }
     }
 
-    bool IsOverlappingZ(float altitude1, float height1, float altitude2, float height2)
+    bool IsOverlappingAltitude(float altitude1, float height1, float altitude2, float height2)
     {
         return (((altitude1 + height1 / 2) >= (altitude2 - height2 / 2)) &&
             ((altitude1 - height1 / 2) <= (altitude2 + height2 / 2)));
-    }    
+    }
 
-    void OnTriggerEnter2D(Collider2D col)
+    bool IsOverlappingAltitude(IPositionObservable obj1, GameObject obj2)
     {
-        var tempMonoArray = col.gameObject.GetComponents<MonoBehaviour>();
+        var tempMonoArray = obj2.GetComponents<MonoBehaviour>();
 
         foreach (var monoBehaviour in tempMonoArray)
         {
             if (monoBehaviour is IPositionObservable posobs)
             {
                 var alti = posobs.GetAltitude();
-                if (!IsOverlappingZ(GetAltitude(), GetHeight(), posobs.GetAltitude(), posobs.GetHeight()))
-                {
-                    return; //no actual collision, different altitudes
-                }                
-                break;
+                return IsOverlappingAltitude(obj1.GetAltitude(), obj1.GetHeight(), posobs.GetAltitude(), posobs.GetHeight());
             }
         }
+
+        // No altitude info found in obj2. Assume it overlaps.
+        return true;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (!IsOverlappingAltitude(this, col.gameObject))
+        {
+            return; //no actual collision, different altitudes
+        }                
 
         Debug.Log($"Hit!!!! Bullet at altitude {GetAltitude()} collided with {col.name}");
         Destroy(gameObject);
