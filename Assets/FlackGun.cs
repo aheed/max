@@ -15,7 +15,6 @@ public class FlackGun : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("FLACK firing *********************");
         Instantiate(flackProjectilePrefab, transform.position, Quaternion.identity);
     }
 

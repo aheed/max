@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FlackProjectile : MonoBehaviour
 {
+    public GameObject flackExplosionPrefab;
     public float speedMax = 5.0f;
     public float speedMin = 1.0f;
     public float lifeSpanSec = 2.0f;
@@ -26,7 +27,7 @@ public class FlackProjectile : MonoBehaviour
         timeToLiveSec -= Time.deltaTime;
         if (timeToLiveSec < 0f)
         {
-            Debug.Log("Kaboooooooooooooooooooooooooom!");
+            Instantiate(flackExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
