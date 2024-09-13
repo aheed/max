@@ -3357,6 +3357,63 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &1231201866352629312
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510448121908377944, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6335712394028609315, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
+      propertyPath: m_Name
+      value: flack_gun
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
 --- !u!1001 &2853367615520477439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3423,3 +3480,4 @@ SceneRoots:
   - {fileID: 958610454}
   - {fileID: 2853367615520477439}
   - {fileID: 763321430}
+  - {fileID: 1231201866352629312}

@@ -30,3 +30,9 @@ Change appearance based on state. Shot enemy airplane.
 
 How to set draw order based altitude? (max vs enemy plane on top)*
   Set draw order dynamically based on altitude
+
+Shot plane:
+  Burnt unicolor shape (not same as crashed max)
+    fades in 4 shades of gray from white to black
+  Flack explosion under it at the same time
+

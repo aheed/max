@@ -90,7 +90,6 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         {
             lastAltitude = GetAltitude();
             spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
-            Debug.Log($"new sorting order: {spriteR.sortingOrder}");
         }
         
     }
