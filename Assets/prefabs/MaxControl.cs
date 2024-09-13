@@ -113,4 +113,12 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     {
         return move.x;
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.name.StartsWith("flack_expl"))
+        {
+            Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+        }                
+    }
 }

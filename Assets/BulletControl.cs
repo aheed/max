@@ -32,6 +32,11 @@ public class BulletControl : MonoBehaviour, IPositionObservable
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        if (col.name.StartsWith("max") || col.name.StartsWith("flack"))
+        {
+            return;
+        }
+
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName == CollisionHelper.NoObject)
         {
