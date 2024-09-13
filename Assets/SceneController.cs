@@ -32,6 +32,13 @@ public class SceneController : MonoBehaviour
         startPos.z = 0.8f;
         EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane);
+
+        startPos = transform.position;
+        startPos.x += 0.0f;
+        startPos.y += 2.0f;
+        startPos.z = 2.8f;
+        EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
+        AddPlaneShadow(enemyPlane2);
     }
 
     // Update is called once per frame

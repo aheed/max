@@ -9,6 +9,7 @@ https://www.reddit.com/r/Unity2D/comments/1abbq31/how_to_detect_individual_colli
 
 To make shadow reusable: flip dependency around?
   Yes, because gameObjects can be destroyed anytime (!).
+  Simplest is probably to make the shadow a child object (nested prefab).
 
 Implement SceneController*
   Function for constructing Max plane, enemy plane. Includes attaching prop and shadow.
@@ -21,8 +22,11 @@ The object that got hit shall check altitude for actual hit and handle the conse
   Helper class with static functions for altitude overlap check.*
 
 Implement animations
-  propeller
+  propeller*
 
-Change appearance of plane and shadow depending on if it's turning left/right.
+Change appearance of plane and shadow depending on if it's turning left/right.*
 
 Change appearance based on state. Shot enemy airplane.
+
+How to set draw order based altitude? (max vs enemy plane on top)*
+  Set draw order dynamically based on altitude

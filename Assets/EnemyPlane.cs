@@ -6,6 +6,8 @@ using UnityEngine;
 public class EnemyPlane : MonoBehaviour, IPositionObservable
 {
     public float enemyPlaneSpeed = 0.1f;
+    float lastAltitude;
+    private SpriteRenderer spriteR;
 
     public Vector2 GetPosition()
     {
@@ -27,7 +29,7 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
     // Start is called before the first frame update
     void Start()
     {
-        
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -35,6 +37,13 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
     {
         Vector3 progress = new (enemyPlaneSpeed * Time.deltaTime, enemyPlaneSpeed * Time.deltaTime, 0.0f);
         transform.position += progress;
+
+        if (GetAltitude() != lastAltitude)
+        {
+            lastAltitude = GetAltitude();
+            spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
+            Debug.Log($"new sorting order: {spriteR.sortingOrder}");
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)

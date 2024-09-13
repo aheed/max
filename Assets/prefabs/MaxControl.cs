@@ -16,6 +16,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
+    float lastAltitude;
     public GameObject bulletPrefab;
     public Sprite leftSprite;
     public Sprite rightSprite;
@@ -84,7 +85,14 @@ public class MaxControl : MonoBehaviour, IPositionObservable
             spriteR.sprite = newSprite;
             lastMove = move;
         }
-        //Debug.Log(transform.position);
+
+        if (GetAltitude() != lastAltitude)
+        {
+            lastAltitude = GetAltitude();
+            spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
+            Debug.Log($"new sorting order: {spriteR.sortingOrder}");
+        }
+        
     }
 
     public Vector2 GetPosition()
