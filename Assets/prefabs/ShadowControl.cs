@@ -46,7 +46,6 @@ public class ShadowControl : MonoBehaviour
         var newSprite = planeMoveX == 0 ? straightSprite : turnSprite;
         if (newSprite != spriteR.sprite)
         {
-            Debug.Log("swapping shadow sprite...............");
             spriteR.sprite = newSprite;
         }
     }
