@@ -99,4 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftSprite: {fileID: 21300000, guid: 719cb236c155b4d899e4e02ecb461df3, type: 3}
   rightSprite: {fileID: 21300000, guid: 0217f8208d72bb5d0b1c15542e9b111f, type: 3}
-  spriteSwapIntervalSeconds: 0.1
+  spriteSwapIntervalSeconds: 0.07
