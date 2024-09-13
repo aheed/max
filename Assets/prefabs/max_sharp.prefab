@@ -99,7 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   refObject: {fileID: 0}
-  playerSpeed: 3
+  horizontalSpeed: 3
+  verticalSpeed: 2
+  bulletIntervalSeconds: 0.1
   MoveAction:
     m_Name: Move
     m_Type: 0
@@ -167,6 +169,9 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}
+  leftSprite: {fileID: 21300000, guid: 03f2eb85b5a66a9388688e77e0edb76c, type: 3}
+  rightSprite: {fileID: 21300000, guid: d43a14899fa2d27f7bf8ca8a9cccf4f6, type: 3}
+  straightSprite: {fileID: 21300000, guid: e3249e5fee7ce25be8867cfc474d9108, type: 3}
 --- !u!50 &-2765026285494241494
 Rigidbody2D:
   serializedVersion: 4

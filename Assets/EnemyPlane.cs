@@ -22,6 +22,8 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
         return 0.3f;
     }
 
+    public float GetMoveX() => 0;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -6,4 +6,6 @@ public interface IPositionObservable
     public float GetAltitude();
 
     public float GetHeight();
+
+    public float GetMoveX();
 }

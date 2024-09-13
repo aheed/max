@@ -6,6 +6,9 @@ public class ShadowControl : MonoBehaviour
 {
     public float shadowCoeffX = 0.7f;
     public float shadowCoeffY = -1.0f;
+    public Sprite turnSprite;
+    public Sprite straightSprite;
+    private SpriteRenderer spriteR;
 
     //public IPositionObservable Plane {get; set;}
     private IPositionObservable plane;
@@ -13,7 +16,7 @@ public class ShadowControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -39,6 +42,13 @@ public class ShadowControl : MonoBehaviour
         var planeAltitude = plane.GetAltitude();
         Vector2 newPos = planePos + new Vector2(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
         transform.position = newPos;
+        var planeMoveX = plane.GetMoveX();
+        var newSprite = planeMoveX == 0 ? straightSprite : turnSprite;
+        if (newSprite != spriteR.sprite)
+        {
+            Debug.Log("swapping shadow sprite...............");
+            spriteR.sprite = newSprite;
+        }
     }
 
     public void SetPlane(IPositionObservable plane)

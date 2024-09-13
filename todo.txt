@@ -8,15 +8,21 @@ How to paint gameobjects on a grid? Gameobject brush?
 https://www.reddit.com/r/Unity2D/comments/1abbq31/how_to_detect_individual_collisions_for_tiles_in/
 
 To make shadow reusable: flip dependency around?
+  Yes, because gameObjects can be destroyed anytime (!).
 
-Implement SceneController
+Implement SceneController*
   Function for constructing Max plane, enemy plane. Includes attaching prop and shadow.
   Set up max on startup
 
-The object that got hit shall check altitude for actual hit and handle the consequences.
+The object that got hit shall check altitude for actual hit and handle the consequences.*
   Report to the colliding thing (bullet or whatever)(?)
   Kill the colliding bullet?
-  Every object dealing with it's own collision detection? => Double detection on each collision.
-  Helper class with static functions for altitude overlap check.
+  Every object dealing with it's own collision detection? => Double detection on each collision.*
+  Helper class with static functions for altitude overlap check.*
 
+Implement animations
+  propeller
 
+Change appearance of plane and shadow depending on if it's turning left/right.
+
+Change appearance based on state. Shot enemy airplane.

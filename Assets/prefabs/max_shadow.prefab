@@ -97,3 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4042a14a694f531839077aa3f6251ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shadowCoeffX: 0.7
+  shadowCoeffY: -1
+  turnSprite: {fileID: 21300000, guid: f896e0401ae6856ffb87a1518bb69464, type: 3}
+  straightSprite: {fileID: 21300000, guid: c0f097edab99e92ac86baa96322e6342, type: 3}

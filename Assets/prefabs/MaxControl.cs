@@ -15,7 +15,12 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public InputAction FireAction;
     Rigidbody2D rigidbody2d;
     Vector2 move;
+    Vector2 lastMove;
     public GameObject bulletPrefab;
+    public Sprite leftSprite;
+    public Sprite rightSprite;
+    public Sprite straightSprite;
+    private SpriteRenderer spriteR;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +28,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         MoveAction.Enable();
         FireAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
     void FireBullet()
@@ -64,6 +70,20 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         }
         offset.y = offset.z;
         transform.position = refObject.transform.position + offset;
+        if (move.x != lastMove.x)
+        {
+            var newSprite = straightSprite;
+            if (move.x < 0)
+            {
+                newSprite = leftSprite;
+            }
+            else if (move.x > 0)
+            {
+                newSprite = rightSprite;
+            }
+            spriteR.sprite = newSprite;
+            lastMove = move;
+        }
         //Debug.Log(transform.position);
     }
 
@@ -80,5 +100,10 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public float GetHeight()
     {
         return 0.1f;
+    }
+
+    public float GetMoveX()
+    {
+        return move.x;
     }
 }
