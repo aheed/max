@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MaxControl : MonoBehaviour, IPositionObservable
 {
     public Transform refObject;
-    Vector3 offset = new(0.0f, 0.0f, 0.8f);
     public float horizontalSpeed = 3.0f;
     public float verticalSpeed = 2.0f;
     public float bulletIntervalSeconds = 0.1f;
+    public float bombIntervalSeconds = 0.5f;
     float bulletCooldown = 0.0f;
+    float bombCooldown = 0.0f;
     public InputAction MoveAction;
     public InputAction FireAction;
     Rigidbody2D rigidbody2d;
@@ -18,6 +20,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     Vector2 lastMove;
     float lastAltitude;
     public GameObject bulletPrefab;
+    public Bomb bombPrefab;
     public Sprite leftSprite;
     public Sprite rightSprite;
     public Sprite straightSprite;
@@ -50,27 +53,31 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         if (FireAction.IsPressed())
         {
             FireBullet();
+            if (move.y > 0)
+            {
+                DropBomb();
+            }
         }
         
         bulletCooldown -= Time.deltaTime;
+        bombCooldown -= Time.deltaTime;
     }
 
     void FixedUpdate()
     {
-        //Vector2 position = (Vector2)rigidbody2d.position + move * playerSpeed * Time.deltaTime;
-        //rigidbody2d.MovePosition(position);
-        //Vector3 position = transform.position;
-        //position.x = position.x + move.x * playerSpeed * Time.deltaTime;
-        //position.z = position.z + move.y * playerSpeed * Time.deltaTime;
-        //transform.position = position;
-        offset.x = offset.x + move.x * horizontalSpeed * Time.deltaTime;
-        offset.z = offset.z - move.y * verticalSpeed * Time.deltaTime;
-        if (offset.z < 0) 
+        if (move != Vector2.zero)
         {
-            offset.z = 0;
+            Vector3 tmpLocalPosition = transform.localPosition;
+            tmpLocalPosition.x += move.x * horizontalSpeed * Time.deltaTime;
+            tmpLocalPosition.z -= move.y * verticalSpeed * Time.deltaTime;
+            if (tmpLocalPosition.z < 0) 
+            {
+                tmpLocalPosition.z = 0;
+            }
+            tmpLocalPosition.y = tmpLocalPosition.z;
+            transform.localPosition = tmpLocalPosition;
         }
-        offset.y = offset.z;
-        transform.position = refObject.transform.position + offset;
+        //Debug.Log($"zzzzzz {offset} {refObject.transform.position} {transform.position}");
         if (move.x != lastMove.x)
         {
             var newSprite = straightSprite;
@@ -101,7 +108,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
 
     public float GetAltitude()
     {
-        return offset.z;
+        return transform.localPosition.z;
     }
 
     public float GetHeight()
@@ -120,5 +127,16 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         {
             Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
         }                
+    }
+
+    void DropBomb()
+    {
+        if (bombCooldown > 0)
+        {
+            return;
+        }
+
+        var bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
+        bombCooldown = bombIntervalSeconds;
     }
 }

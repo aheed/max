@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2055473255
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: e3249e5fee7ce25be8867cfc474d9108, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -100,10 +100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed51b529438840197baba1d9b8e111d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneReference: {fileID: 0}
   refObject: {fileID: 0}
   horizontalSpeed: 3
   verticalSpeed: 2
   bulletIntervalSeconds: 0.1
+  bombIntervalSeconds: 1
   MoveAction:
     m_Name: Move
     m_Type: 0
@@ -171,6 +173,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}
+  bombPrefab: {fileID: 2491784354435162974, guid: e47afaf0420b8b758a9245a7d5a64f81, type: 3}
   leftSprite: {fileID: 21300000, guid: 03f2eb85b5a66a9388688e77e0edb76c, type: 3}
   rightSprite: {fileID: 21300000, guid: d43a14899fa2d27f7bf8ca8a9cccf4f6, type: 3}
   straightSprite: {fileID: 21300000, guid: e3249e5fee7ce25be8867cfc474d9108, type: 3}

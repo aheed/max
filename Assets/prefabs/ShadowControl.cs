@@ -40,7 +40,7 @@ public class ShadowControl : MonoBehaviour
 
         var planePos = plane.GetPosition();
         var planeAltitude = plane.GetAltitude();
-        Vector2 newPos = planePos + new Vector2(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
+        Vector2 newPos = planePos + new Vector2(0f, planeAltitude * shadowCoeffY);
         transform.position = newPos;
         var planeMoveX = plane.GetMoveX();
         var newSprite = planeMoveX == 0 ? straightSprite : turnSprite;

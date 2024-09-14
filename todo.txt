@@ -36,3 +36,15 @@ Shot plane:
     fades in 4 shades of gray from white to black
   Flack explosion under it at the same time
 
+Bombs
+
+Houses
+
+Use parent/child object relationships instead of home made solutions for relative position. 
+Use transform.localposition instead of a separate offset vector.
+  Max vs refobj
+  Bomb vs refobj
+  Shadow vs plane
+
+Use GetComponent to get scene position reference object instead of passing it through the hierarchy.
+
