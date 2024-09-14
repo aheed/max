@@ -9,40 +9,19 @@ public class ShadowControl : MonoBehaviour
     public Sprite turnSprite;
     public Sprite straightSprite;
     private SpriteRenderer spriteR;
-
-    //public IPositionObservable Plane {get; set;}
     private IPositionObservable plane;
 
-    // Start is called before the first frame update
     void Start()
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
+        plane = PositionObservableHelper.GetPositionObservable(gameObject.transform.parent.gameObject);
+        Debug.Log($"plane refffff {plane}");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (plane == null)
-        {
-            Debug.Log("No Plane!!");
-            Destroy(gameObject);
-            return;
-        }
-
-        if (plane is MonoBehaviour planeAsMB)
-        {
-            if (!planeAsMB.isActiveAndEnabled)
-            {
-                plane = null;
-                return;
-            }
-        }
-
         var planeAltitude = plane.GetAltitude();
         transform.localPosition = new Vector3(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
-        /*var planePos = plane.GetPosition();
-        Vector2 newPos = planePos + new Vector2(0f, planeAltitude * shadowCoeffY);
-        transform.position = newPos;*/
 
         var planeMoveX = plane.GetMoveX();
         var newSprite = planeMoveX == 0 ? straightSprite : turnSprite;
@@ -50,13 +29,5 @@ public class ShadowControl : MonoBehaviour
         {
             spriteR.sprite = newSprite;
         }
-    }
-
-    public void SetPlane(IPositionObservable plane)
-    {
-        this.plane = plane;
-        Debug.Log("Setting plane instance");
-        Debug.Log(this);
-        Debug.Log(plane);
-    }
+    }    
 }
