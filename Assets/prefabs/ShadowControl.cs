@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShadowControl : MonoBehaviour
 {
-    public float shadowCoeffX = 0.7f;
+    public float shadowCoeffX = 0.0f;
     public float shadowCoeffY = -1.0f;
     public Sprite turnSprite;
     public Sprite straightSprite;
@@ -38,10 +38,12 @@ public class ShadowControl : MonoBehaviour
             }
         }
 
-        var planePos = plane.GetPosition();
         var planeAltitude = plane.GetAltitude();
+        transform.localPosition = new Vector3(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
+        /*var planePos = plane.GetPosition();
         Vector2 newPos = planePos + new Vector2(0f, planeAltitude * shadowCoeffY);
-        transform.position = newPos;
+        transform.position = newPos;*/
+
         var planeMoveX = plane.GetMoveX();
         var newSprite = planeMoveX == 0 ? straightSprite : turnSprite;
         if (newSprite != spriteR.sprite)

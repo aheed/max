@@ -9,9 +9,9 @@ public class SceneController : MonoBehaviour
     public ShadowControl shadowControlPrefab;
     public refobj refobject;
 
-    void AddPlaneShadow(IPositionObservable plane)
+    void AddPlaneShadow(IPositionObservable plane, Transform parent)
     {        
-        ShadowControl shadow = Instantiate(shadowControlPrefab, transform.position, Quaternion.identity);
+        ShadowControl shadow = Instantiate(shadowControlPrefab, transform.position, Quaternion.identity, parent);
         shadow.SetPlane(plane);
     }
 
@@ -24,21 +24,21 @@ public class SceneController : MonoBehaviour
         startPos.z = 0.8f;*/
         MaxControl maxPlane = Instantiate(maxPlanePrefab, startPos, Quaternion.identity, refobject.transform);
         maxPlane.refObject = refobject.transform;
-        AddPlaneShadow(maxPlane);
+        AddPlaneShadow(maxPlane, maxPlane.transform);
 
         startPos = transform.position;
         startPos.x += 2.0f;
         startPos.y += 2.0f;
         startPos.z = 0.8f;
         EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
-        AddPlaneShadow(enemyPlane);
+        AddPlaneShadow(enemyPlane, enemyPlane.transform);
 
         startPos = transform.position;
         startPos.x += 0.0f;
         startPos.y += 2.0f;
         startPos.z = 2.8f;
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
-        AddPlaneShadow(enemyPlane2);
+        AddPlaneShadow(enemyPlane2, enemyPlane2.transform);
     }
 
     // Update is called once per frame

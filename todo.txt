@@ -38,7 +38,8 @@ Shot plane:
 
 Bombs
   Dropping*
-  Effect on collision. Should not collide with anything until it's on ground level (z=0).
+  Effect on collision.
+  Should not collide with anything until it's on ground level (z close to 0).*
 
 Houses  
 
