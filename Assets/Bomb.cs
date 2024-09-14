@@ -5,11 +5,15 @@ using UnityEngine;
 public class Bomb : MonoBehaviour, IPositionObservable
 {
     public float verticalSpeed = 1.9f;
+    public float maxCollisionAltitude = 0.2f;
+
+    BoxCollider2D bombCollider;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        bombCollider = GetComponent<BoxCollider2D>();
+        bombCollider.enabled = false;
     }
 
     // Update is called once per frame
@@ -19,6 +23,11 @@ public class Bomb : MonoBehaviour, IPositionObservable
         tmpPos.z -= verticalSpeed * Time.deltaTime;
         tmpPos.y = tmpPos.z;
         transform.localPosition = tmpPos;
+
+        if (!bombCollider.enabled && tmpPos.z <= maxCollisionAltitude)
+        {
+            bombCollider.enabled = true;
+        }
 
         if (tmpPos.z <= 0)
         {
