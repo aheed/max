@@ -19,7 +19,7 @@ public static class CollisionHelper
         {
             if (monoBehaviour is IPositionObservable posobs)
             {
-                var alti = posobs.GetAltitude();
+                //Debug.Log($"{obj2.name} {obj1.GetAltitude()} {obj1.GetHeight()} {posobs.GetAltitude()} {posobs.GetHeight()}");
                 if (!IsOverlappingAltitude(obj1.GetAltitude(), obj1.GetHeight(), posobs.GetAltitude(), posobs.GetHeight()))
                 {
                     return NoObject;    

@@ -37,14 +37,17 @@ Shot plane:
   Flack explosion under it at the same time
 
 Bombs
+  Dropping*
+  Effect on collision. Should not collide with anything until it's on ground level (z=0).
 
-Houses
+Houses  
 
 Use parent/child object relationships instead of home made solutions for relative position. 
 Use transform.localposition instead of a separate offset vector.
-  Max vs refobj
-  Bomb vs refobj
+  Max vs refobj*
+  Bomb vs refobj*
   Shadow vs plane
+  Get rid of IPositionObservable.GetPosition()
 
 Use GetComponent to get scene position reference object instead of passing it through the hierarchy.
 

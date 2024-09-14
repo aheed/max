@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : MonoBehaviour, IPositionObservable
 {
     public float verticalSpeed = 1.9f;
 
@@ -22,8 +22,13 @@ public class Bomb : MonoBehaviour
 
         if (tmpPos.z <= 0)
         {
-            Debug.Log("Boooooooooooooooooooooooooooooooooooooom!");
+            //Debug.Log("Boooooooooooooooooooooooooooooooooooooom!");
             Destroy(gameObject);
         }
     }
+
+    public Vector2 GetPosition() => transform.position;
+    public float GetAltitude() => transform.localPosition.z;
+    public float GetHeight() => 0.2f;
+    public float GetMoveX() => 0;
 }

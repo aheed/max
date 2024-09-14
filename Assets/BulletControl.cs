@@ -32,7 +32,9 @@ public class BulletControl : MonoBehaviour, IPositionObservable
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.name.StartsWith("max") || col.name.StartsWith("flack"))
+        if (col.name.StartsWith("max") || 
+            col.name.StartsWith("flack") ||
+            col.name.StartsWith("bomb"))
         {
             return;
         }
@@ -41,7 +43,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
         if (collObjName == CollisionHelper.NoObject)
         {
             return; //no actual collision, different altitudes
-        }                
+        }
 
         Debug.Log($"Hit!!!!!!!!!!!!!!! Bullet at altitude {GetAltitude()} collided with {col.name} {collObjName}");
         Destroy(gameObject);
