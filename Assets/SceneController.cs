@@ -103,7 +103,6 @@ public class SceneController : MonoBehaviour
         var triangles = new List<int>();
         var normals = new List<Vector3>();
         var uvs = new List<Vector2>();
-        var llcX = riverLowerLeftCornerX;
         int segments = 0;
         while (y < maxY)
         {
@@ -112,10 +111,12 @@ public class SceneController : MonoBehaviour
             {
                 segmentHeight = maxY - y;
             }
-            vertices.Add(new Vector3(llcX, y, 0));
-            vertices.Add(new Vector3(llcX + riverWidth, y, 0));
-            vertices.Add(new Vector3(llcX, y + segmentHeight, 0));
-            vertices.Add(new Vector3(llcX + riverWidth, y + segmentHeight, 0));
+            var slopeIndex = Random.Range(0, riverSlopes.Length);
+            var slopeX = riverSlopes[slopeIndex] * segmentHeight;
+            vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + slopeX, y + segmentHeight, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth + slopeX, y + segmentHeight, 0));
 
             var triIndexOffset = segments * 4;
             triangles.Add(triIndexOffset + 0);
@@ -136,6 +137,7 @@ public class SceneController : MonoBehaviour
             uvs.Add(new Vector2(1, 1));
 
             y += segmentHeight;
+            riverLowerLeftCornerX += slopeX;
             segments += 1;
         }
 
