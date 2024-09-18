@@ -62,6 +62,12 @@ Make river sections as quads
     The slope going the other way can not occur anymore at that point => inevitable drift to the correct side.
     Landing strip shows up when the river is out of the picture.
     Similar on start until river shows up.
+    One mesh per gameobject.
+    The river of a level could be a gameobject with a single mesh.
+      x sections with restrictions to get close to the river.
+      y sections without slope restrictions
+      z sections with restrictions to get away from the river
+    
 
 Color change temporarily on explosion (river and ground):
   https://discussions.unity.com/t/change-color-and-glow-for-a-while/924415/5
