@@ -10,6 +10,8 @@ public class SceneController : MonoBehaviour
     public refobj refobject;
     public float width = 1;
     public float height = 1;
+    MeshFilter meshFilter;
+    MeshRenderer meshRenderer;
 
     void AddPlaneShadow(Transform parent)
     {        
@@ -18,8 +20,6 @@ public class SceneController : MonoBehaviour
 
     void CreateMesh(Vector3[] vertices)
     {
-        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-
         Mesh mesh = new Mesh();
         
         mesh.vertices = vertices;
@@ -56,9 +56,6 @@ public class SceneController : MonoBehaviour
 
     public void CreateBackground()
     {
-        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
-
         CreateMesh(new Vector3[4]
         {
             new Vector3(0, 0, 0),
@@ -80,6 +77,9 @@ public class SceneController : MonoBehaviour
 
     void Start()
     {
+        meshFilter = gameObject.AddComponent<MeshFilter>();
+        meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
         CreateBackground();
 
         //var refobject = GetComponent<refobj>();
