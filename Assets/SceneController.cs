@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
     public ShadowControl shadowControlPrefab;
     public GameObject riverSectionPrefab;
     public refobj refobject;
+    public GameObject riverParent;
     public float width = 1;
     public float height = 1;
     MeshFilter meshFilter;
@@ -17,6 +18,7 @@ public class SceneController : MonoBehaviour
     public float riverWidth = 4.0f;
     public float maxSegmentHeight = 3.0f;
     public float minSegmentHeight = 0.5f;
+    public Material riverMaterial;
     float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 1.0f, 2.0f};
 
@@ -87,14 +89,14 @@ public class SceneController : MonoBehaviour
         // GameObject
         var startPos = transform.position;
         startPos.z = -0.2f;
-        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
+        //var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
+        var rsGameObject = Instantiate(riverSectionPrefab, riverParent.transform);
 
         // MeshRenderer
         var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = rsGameObject.AddComponent<MeshRenderer>();
 
-        // todo: set correct material
-        meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
+        rsMeshRenderer.material = riverMaterial;
 
         // Mesh
         var y = refobject.transform.position.y;

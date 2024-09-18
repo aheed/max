@@ -67,6 +67,7 @@ Make river sections as quads
       x sections with restrictions to get close to the river.
       y sections without slope restrictions
       z sections with restrictions to get away from the river
+    Parent game object with sprite renderer to get the right sort order layer
     
 
 Color change temporarily on explosion (river and ground):
