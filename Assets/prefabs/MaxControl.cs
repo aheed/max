@@ -11,6 +11,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public float verticalSpeed = 2.0f;
     public float bulletIntervalSeconds = 0.1f;
     public float bombIntervalSeconds = 0.5f;
+    public float minAltitude = 0.1f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     public InputAction MoveAction;
@@ -25,6 +26,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public Sprite rightSprite;
     public Sprite straightSprite;
     private SpriteRenderer spriteR;
+    private bool initialized = false;
 
     // Start is called before the first frame update
     void Start()
@@ -65,17 +67,18 @@ public class MaxControl : MonoBehaviour, IPositionObservable
 
     void FixedUpdate()
     {
-        if (move != Vector2.zero)
+        if (move != Vector2.zero || !initialized)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
             tmpLocalPosition.x += move.x * horizontalSpeed * Time.deltaTime;
             tmpLocalPosition.z -= move.y * verticalSpeed * Time.deltaTime;
-            if (tmpLocalPosition.z < 0) 
+            if (tmpLocalPosition.z < minAltitude) 
             {
-                tmpLocalPosition.z = 0;
+                tmpLocalPosition.z = minAltitude;
             }
             tmpLocalPosition.y = tmpLocalPosition.z;
             transform.localPosition = tmpLocalPosition;
+            initialized = true;
         }
         //Debug.Log($"zzzzzz {offset} {refObject.transform.position} {transform.position}");
         if (move.x != lastMove.x)
