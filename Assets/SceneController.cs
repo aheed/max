@@ -7,11 +7,18 @@ public class SceneController : MonoBehaviour
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
     public ShadowControl shadowControlPrefab;
+    public GameObject riverSectionPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
+    public float riverSectionHeight = 20f;
+    public float riverWidth = 4.0f;
+    public float maxSegmentHeight = 3.0f;
+    public float minSegmentHeight = 0.5f;
+    float riverLowerLeftCornerX = 0f;
+    static readonly float[] riverSlopes = new float[] {0.5f, 1.0f, 2.0f};
 
     void AddPlaneShadow(Transform parent)
     {        
@@ -75,6 +82,72 @@ public class SceneController : MonoBehaviour
         });
     }
 
+    void CreateRiverSection()
+    {
+        // GameObject
+        var startPos = transform.position;
+        startPos.z = -0.2f;
+        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
+
+        // MeshRenderer
+        var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
+        var rsMeshRenderer = rsGameObject.AddComponent<MeshRenderer>();
+
+        // todo: set correct material
+        meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
+
+        // Mesh
+        var y = refobject.transform.position.y;
+        var maxY = y + riverSectionHeight;
+        var vertices = new List<Vector3>();
+        var triangles = new List<int>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var llcX = riverLowerLeftCornerX;
+        int segments = 0;
+        while (y < maxY)
+        {
+            var segmentHeight = Random.Range(minSegmentHeight, maxSegmentHeight);
+            if (y + segmentHeight > maxY)
+            {
+                segmentHeight = maxY - y;
+            }
+            vertices.Add(new Vector3(llcX, y, 0));
+            vertices.Add(new Vector3(llcX + riverWidth, y, 0));
+            vertices.Add(new Vector3(llcX, y + segmentHeight, 0));
+            vertices.Add(new Vector3(llcX + riverWidth, y + segmentHeight, 0));
+
+            var triIndexOffset = segments * 4;
+            triangles.Add(triIndexOffset + 0);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 1);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 3);
+            triangles.Add(triIndexOffset + 1);
+
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(1, 1));
+
+            y += segmentHeight;
+            segments += 1;
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.normals = normals.ToArray();
+        mesh.uv = uvs.ToArray();
+        
+        rsMeshFilter.mesh = mesh;
+    }
+
     void Start()
     {
         meshFilter = gameObject.AddComponent<MeshFilter>();
@@ -104,6 +177,8 @@ public class SceneController : MonoBehaviour
         startPos.z = 2.8f;
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane2.transform);
+
+        CreateRiverSection();
     }
 
     // Update is called once per frame
