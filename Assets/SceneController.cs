@@ -9,7 +9,6 @@ public class SceneController : MonoBehaviour
     public ShadowControl shadowControlPrefab;
     public GameObject riverSectionPrefab;
     public refobj refobject;
-    public GameObject riverParent;
     public float width = 1;
     public float height = 1;
     MeshFilter meshFilter;
@@ -89,8 +88,7 @@ public class SceneController : MonoBehaviour
         // GameObject
         var startPos = transform.position;
         startPos.z = -0.2f;
-        //var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
-        var rsGameObject = Instantiate(riverSectionPrefab, riverParent.transform);
+        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
 
         // MeshRenderer
         var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();

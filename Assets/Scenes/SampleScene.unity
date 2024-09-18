@@ -2524,7 +2524,7 @@ MonoBehaviour:
   shadowControlPrefab: {fileID: 9201924445058020500, guid: e228024eb4c67fdd19d72d2022609b02, type: 3}
   riverSectionPrefab: {fileID: 3673043693166868737, guid: ecf23279296cc9c4ebadc1f867beca57, type: 3}
   refobject: {fileID: 608621884}
-  riverParent: {fileID: 1493549903}
+  riverParent: {fileID: 0}
   width: 1
   height: 1
   riverSectionHeight: 20
@@ -2706,7 +2706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4085032723083785691, guid: 5b4e7effecb5648df9d9410c628972d4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.54
+      value: -0.47
       objectReference: {fileID: 0}
     - target: {fileID: 4085032723083785691, guid: 5b4e7effecb5648df9d9410c628972d4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2749,11 +2749,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b4e7effecb5648df9d9410c628972d4, type: 3}
---- !u!1 &1493549903 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3766328598959550892, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-  m_PrefabInstance: {fileID: 6453682929859905388}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1962323915
 GameObject:
   m_ObjectHideFlags: 0
@@ -3835,63 +3830,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
---- !u!1001 &6453682929859905388
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.96293116
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.5081418
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3538326999032000192, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3766328598959550892, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
-      propertyPath: m_Name
-      value: River
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 13f3471447645c0ecaec99c4cd125268, type: 3}
 --- !u!1001 &6524511349329939288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3966,4 +3904,3 @@ SceneRoots:
   - {fileID: 6524511349329939288}
   - {fileID: 1310563049}
   - {fileID: 1273622318}
-  - {fileID: 6453682929859905388}
