@@ -67,8 +67,9 @@ Make river sections as quads
       x sections with restrictions to get close to the river.
       y sections without slope restrictions
       z sections with restrictions to get away from the river
-    Parent game object with sprite renderer to get the right sort order layer
-    
+    Correct river material to get the right color and rendering over background according to z coordinate.*
+
+
 
 Color change temporarily on explosion (river and ground):
   https://discussions.unity.com/t/change-color-and-glow-for-a-while/924415/5

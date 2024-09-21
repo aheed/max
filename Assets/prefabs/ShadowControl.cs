@@ -15,7 +15,6 @@ public class ShadowControl : MonoBehaviour
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         plane = PositionObservableHelper.GetPositionObservable(gameObject.transform.parent.gameObject);
-        Debug.Log($"plane refffff {plane}");
     }
 
     void Update()

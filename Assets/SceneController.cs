@@ -11,82 +11,28 @@ public class SceneController : MonoBehaviour
     public refobj refobject;
     public float width = 1;
     public float height = 1;
-    MeshFilter meshFilter;
-    MeshRenderer meshRenderer;
     public float riverSectionHeight = 20f;
     public float riverWidth = 4.0f;
     public float maxSegmentHeight = 3.0f;
     public float minSegmentHeight = 0.5f;
+    public float minDistanceRiverAirstrip = 5.0f;
+    public float maxDistanceRiverToAdjust = 2.0f;
+    public float approachQuotient = 0.2f;
     public Material riverMaterial;
     float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 1.0f, 2.0f};
+    static readonly int neutralRiverSlopeIndex = 1;
 
     void AddPlaneShadow(Transform parent)
     {        
         Instantiate(shadowControlPrefab, transform.position, Quaternion.identity, parent);
     }
 
-    void CreateMesh(Vector3[] vertices)
-    {
-        Mesh mesh = new Mesh();
-        
-        mesh.vertices = vertices;
-
-        int[] tris = new int[6]
-        {
-            // lower left triangle
-            0, 2, 1,
-            // upper right triangle
-            2, 3, 1
-        };
-        mesh.triangles = tris;
-
-        Vector3[] normals = new Vector3[4]
-        {
-            -Vector3.forward,
-            -Vector3.forward,
-            -Vector3.forward,
-            -Vector3.forward
-        };
-        mesh.normals = normals;
-
-        Vector2[] uv = new Vector2[4]
-        {
-            new Vector2(0, 0),
-            new Vector2(1, 0),
-            new Vector2(0, 1),
-            new Vector2(1, 1)
-        };
-        mesh.uv = uv;
-
-        meshFilter.mesh = mesh;
-    }
-
-    public void CreateBackground()
-    {
-        CreateMesh(new Vector3[4]
-        {
-            new Vector3(0, 0, 0),
-            new Vector3(width, 0, 0),
-            new Vector3(0, height, 0),
-            new Vector3(width, height, 0)
-        });
-
-        float xskew = 0.2f;
-        float yoffset = 1.2f;
-        CreateMesh(new Vector3[4]
-        {
-            new Vector3(0, 0 + yoffset, 0),
-            new Vector3(width, 0 + yoffset, 0),
-            new Vector3(0 + xskew, height +  yoffset, 0),
-            new Vector3(width + xskew, height + yoffset, 0)
-        });
-    }
-
     void CreateRiverSection()
     {
         // GameObject
-        var startPos = transform.position;
+        //var startPos = transform.position;
+        var startPos = refobject.transform.position;
         startPos.z = -0.2f;
         var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
 
@@ -97,7 +43,9 @@ public class SceneController : MonoBehaviour
         rsMeshRenderer.material = riverMaterial;
 
         // Mesh
-        var y = refobject.transform.position.y;
+        //var y = rsGameObject.transform.position.y;
+        var startY = 0f;
+        var y = startY;
         var maxY = y + riverSectionHeight;
         var vertices = new List<Vector3>();
         var triangles = new List<int>();
@@ -111,8 +59,43 @@ public class SceneController : MonoBehaviour
             {
                 segmentHeight = maxY - y;
             }
-            var slopeIndex = Random.Range(0, riverSlopes.Length);
+
+            var midRiverX = riverLowerLeftCornerX + (riverWidth / 2);
+            var refXatY = riverSlopes[neutralRiverSlopeIndex] * (y - startY);
+            bool riverLeftOfAirstrip = midRiverX < refXatY;
+            var minSlopeIndex = 0;
+            var maxSlopeIndexExclusive = riverSlopes.Length;
+            bool approaching = maxY - y < riverSectionHeight * approachQuotient;
+            bool takingOff = y - startY < riverSectionHeight * approachQuotient;
+            if (approaching)
+            {
+                // Airstrip approaching. River must not bend toward next airstrip location.
+                if (riverLeftOfAirstrip)
+                {
+                    maxSlopeIndexExclusive -= 1;
+                }
+                else
+                {
+                    minSlopeIndex += 1;
+                }
+            }
+            if (takingOff)
+            {
+                // Leaving Airstrip. River must not bend away from next airstrip location.
+                if (riverLeftOfAirstrip)
+                {
+                    minSlopeIndex += 1;
+                }
+                else
+                {
+                    maxSlopeIndexExclusive -= 1;
+                }
+            }
+            var slopeIndex = Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
+
             var slopeX = riverSlopes[slopeIndex] * segmentHeight;
+
+            //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + slopeX, y + segmentHeight, 0));
@@ -152,11 +135,6 @@ public class SceneController : MonoBehaviour
 
     void Start()
     {
-        meshFilter = gameObject.AddComponent<MeshFilter>();
-        meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
-        CreateBackground();
-
         //var refobject = GetComponent<refobj>();
         var startPos = refobject.transform.position;
         /*startPos.x += 1.0f;
