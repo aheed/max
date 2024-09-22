@@ -20,8 +20,8 @@ public class SceneController : MonoBehaviour
     public float approachQuotient = 0.2f;
     public Material riverMaterial;
     float riverLowerLeftCornerX = 0f;
-    static readonly float[] riverSlopes = new float[] {0.5f, 1.0f, 2.0f};
-    static readonly int neutralRiverSlopeIndex = 1;
+    static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
+    static readonly int neutralRiverSlopeIndex = 2;
 
     void AddPlaneShadow(Transform parent)
     {        
@@ -63,39 +63,28 @@ public class SceneController : MonoBehaviour
             var midRiverX = riverLowerLeftCornerX + (riverWidth / 2);
             var refXatY = riverSlopes[neutralRiverSlopeIndex] * (y - startY);
             bool riverLeftOfAirstrip = midRiverX < refXatY;
-            var minSlopeIndex = 0;
-            var maxSlopeIndexExclusive = riverSlopes.Length;
+            var minSlopeIndex = 1;
+            var maxSlopeIndexExclusive = riverSlopes.Length - 1;
             bool approaching = maxY - y < riverSectionHeight * approachQuotient;
             bool takingOff = y - startY < riverSectionHeight * approachQuotient;
+            int slopeIndexOffset = 0;
             if (approaching)
             {
                 // Airstrip approaching. River must not bend toward next airstrip location.
-                if (riverLeftOfAirstrip)
-                {
-                    maxSlopeIndexExclusive -= 1;
-                }
-                else
-                {
-                    minSlopeIndex += 1;
-                }
+                slopeIndexOffset =  riverLeftOfAirstrip ? -1 : 1;
             }
             if (takingOff)
             {
                 // Leaving Airstrip. River must not bend away from next airstrip location.
-                if (riverLeftOfAirstrip)
-                {
-                    minSlopeIndex += 1;
-                }
-                else
-                {
-                    maxSlopeIndexExclusive -= 1;
-                }
+                slopeIndexOffset =  riverLeftOfAirstrip ? 1 : -1;
             }
+            minSlopeIndex += slopeIndexOffset;
+            maxSlopeIndexExclusive += slopeIndexOffset;
             var slopeIndex = Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
 
             var slopeX = riverSlopes[slopeIndex] * segmentHeight;
 
-            //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
+            Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + slopeX, y + segmentHeight, 0));

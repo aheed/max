@@ -61,6 +61,7 @@ Make river sections as quads
     Select the closest side of the river to land.
     The slope going the other way can not occur anymore at that point => inevitable drift to the correct side.
     Landing strip shows up when the river is out of the picture.
+      Stack the odds even more in favor of bending river the preferred direction.
     Similar on start until river shows up.
     One mesh per gameobject.
     The river of a level could be a gameobject with a single mesh.
@@ -69,6 +70,7 @@ Make river sections as quads
       z sections with restrictions to get away from the river
     Correct river material to get the right color and rendering over background according to z coordinate.*
 
+Landing strip gameObject at start and end of river section.
 
 
 Color change temporarily on explosion (river and ground):
