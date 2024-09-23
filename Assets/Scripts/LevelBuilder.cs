@@ -23,6 +23,12 @@ public class RiverSegment
     public int slopeIndex;
 }
 
+public class HousePosition
+{
+    public int x;
+    public int y;
+}
+
 public class LevelBuilder 
 {
     public readonly int gridHeight = 300;
@@ -33,12 +39,17 @@ public class LevelBuilder
     public readonly float roadProbability = 0.1f;
     public readonly int roadHeight = 2;
     static readonly int[] riverSlopes = new int[] {-1, -1, 0, 1, 1};
-    static readonly int neutralRiverSlopeIndex = 2;
     public int minDistanceRiverAirstrip = 10;
     public int riverWidth = 6;
     public int maxRiverSegmentHeight = 7;
     public int minRiverSegmentHeight = 2;
     public float approachQuotient = 0.2f;
+    public int houseHeight = 3;
+    public int houseWidth = 3;
+    public float houseProbability = 0.01f;
+    public float tankProbability = 0.1f;
+    public float flackGunProbability = 0.1f;
+    public float treeProbability = 0.1f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -46,6 +57,7 @@ public class LevelBuilder
     {
         var ret = new CellContent[gridWidth, gridHeight];
         var midX = gridWidth / 2;
+        var approachLength = (int)(gridHeight * approachQuotient);
 
         // Landing Strip
         var lsllcX = midX - (landingStripWidth / 2);
@@ -95,7 +107,6 @@ public class LevelBuilder
             riverLeftOfAirstrip = midRiverX < midX;
             var minSlopeIndex = 1;
             var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-            var approachLength = (int)(gridHeight * approachQuotient);
             bool approaching = gridHeight - y < approachLength;
             bool takingOff = y < approachLength;
             int slopeIndexOffset = 0;
@@ -142,10 +153,63 @@ public class LevelBuilder
             ytmp = newY;
         }
 
-        // Houses
-        // Tanks
-        // Flack guns
-        // Trees
+        var houses = new List<HousePosition>();
+        for (var y = 0; y < gridHeight; y++)
+        {
+            for (var x = 0; x < gridWidth; x++)
+            {
+                var randVal = UnityEngine.Random.Range(0f, 1.0f);
+
+                // Houses
+                if (randVal < houseProbability)
+                {
+                    var spaceEnough = true;
+                    for (var xtmp = x; xtmp < xtmp + houseWidth && spaceEnough; x++)
+                    {
+                        for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
+                        {
+                            spaceEnough = ret[xtmp, ytmp] == CellContent.GRASS;
+                        }
+                    }
+
+                    if (spaceEnough)
+                    {
+                        houses.Add(new HousePosition {x = x, y = y});
+                        for (var xtmp = x; xtmp < xtmp + houseWidth && spaceEnough; x++)
+                        {
+                            for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
+                            {
+                                ret[xtmp, ytmp] = CellContent.HOUSE;
+                            }
+                        }
+                    }
+                }
+                
+                // Tanks
+                if (randVal < tankProbability && ret[x, y] == CellContent.GRASS)
+                {
+                    ret[x, y] = CellContent.TANK;
+                }
+
+                // Flack guns
+                if (randVal < flackGunProbability && ret[x, y] == CellContent.GRASS)
+                {
+                    ret[x, y] = CellContent.FLACK_GUN;
+                }
+
+                // Trees
+                if (randVal < treeProbability && ret[x, y] == CellContent.GRASS)
+                {
+                    ret[x, y] = CellContent.TREE1;
+                }
+
+                if (randVal < treeProbability && ret[x, y] == CellContent.GRASS)
+                {
+                    ret[x, y] = CellContent.TREE2;
+                }
+            }
+        }
+        
         return ret;
     }
 }
