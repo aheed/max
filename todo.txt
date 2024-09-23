@@ -69,11 +69,14 @@ Make river sections as quads
       y sections without slope restrictions
       z sections with restrictions to get away from the river
     Correct river material to get the right color and rendering over background according to z coordinate.*
+    Original game: Bridges need a long stretch of neutral slope river. Unless it's approaching landing in which case another slope makes the river bank look incorrect (!) at bridge end.
 
 Landing strip gameObject at start and end of river section.
-
 
 Color change temporarily on explosion (river and ground):
   https://discussions.unity.com/t/change-color-and-glow-for-a-while/924415/5
   Might be trickier for sprites
+
+Temporary color swap at detonation:
+https://www.youtube.com/watch?v=u4Iz5AJa31Q&t=75s
 
