@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ public enum CellContent
 public class RiverSegment
 {
     public int height;
-    public int slope;
+    public float slope;
 }
 
 public class HousePosition
@@ -45,7 +46,7 @@ public static class LevelBuilder
     public static readonly int minSpaceBetweenRoads = 10;
     public static readonly float roadProbability = 0.1f;
     public static readonly int roadHeight = 2;
-    static readonly int[] riverSlopes = new int[] {-1, -1, 0, 1, 1};
+    static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
     public static int minDistanceRiverAirstrip = 10;
     public static int riverWidth = 6;
     public static int maxRiverSegmentHeight = 7;
@@ -110,10 +111,14 @@ public static class LevelBuilder
         for (var y = 0; y < LevelContents.gridHeight;)
         {
             var segmentHeight = UnityEngine.Random.Range(minRiverSegmentHeight, maxRiverSegmentHeight);
-            var maxSegmentY = LevelContents.gridHeight - y;
-            if (segmentHeight > maxSegmentY)
+            var maxSegmentHeight = LevelContents.gridHeight - y;
+            if (segmentHeight > maxSegmentHeight)
             {
-                segmentHeight = maxSegmentY;
+                segmentHeight = maxSegmentHeight;
+            }
+            if (segmentHeight % 2 != 0)
+            {
+                segmentHeight -= 1;
             }
 
             var midRiverX = riverLowerLeftCornerX + (riverWidth / 2);
@@ -139,7 +144,7 @@ public static class LevelBuilder
             var slope = riverSlopes[slopeIndex];
             riverSegments.Add(new RiverSegment {height = segmentHeight, slope = slope});
 
-            var slopeX = slope * segmentHeight;
+            var slopeX = (int)(slope * segmentHeight);
 
             //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
             
@@ -149,7 +154,7 @@ public static class LevelBuilder
         ret.riverSegments = riverSegments;
 
         var ytmp = 0;
-        var startX = riverLowerLeftCornerXStart;
+        var startX = (float)riverLowerLeftCornerXStart;
         foreach (var segment in riverSegments)
         {
             var newY = ytmp + segment.height;            
@@ -160,7 +165,7 @@ public static class LevelBuilder
                 {
                     if (x >= 0 && x < LevelContents.gridWidth)
                     {
-                        ret.cells[x, y] = CellContent.WATER;
+                        ret.cells[(int)x, y] = CellContent.WATER;
                     }
                 }
             }
