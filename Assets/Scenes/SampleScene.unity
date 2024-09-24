@@ -286,7 +286,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 20
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2534,6 +2534,8 @@ MonoBehaviour:
   maxDistanceRiverToAdjust: 2
   approachQuotient: 0.2
   riverMaterial: {fileID: 2100000, guid: ea8d7ce4ef66b3210b86d629dd1c00c2, type: 2}
+  levelWidth: 8
+  levelHeight: 80
 --- !u!1001 &775083968
 PrefabInstance:
   m_ObjectHideFlags: 0

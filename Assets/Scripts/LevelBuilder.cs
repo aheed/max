@@ -38,29 +38,29 @@ public class LevelContents
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
 }
 
-public class LevelBuilder 
+public static class LevelBuilder 
 {    
-    public readonly int landingStripHeight = 30;
-    public readonly int landingStripWidth = 30;
-    public readonly int minSpaceBetweenRoads = 10;
-    public readonly float roadProbability = 0.1f;
-    public readonly int roadHeight = 2;
+    public static readonly int landingStripHeight = 30;
+    public static readonly int landingStripWidth = 6;
+    public static readonly int minSpaceBetweenRoads = 10;
+    public static readonly float roadProbability = 0.1f;
+    public static readonly int roadHeight = 2;
     static readonly int[] riverSlopes = new int[] {-1, -1, 0, 1, 1};
-    public int minDistanceRiverAirstrip = 10;
-    public int riverWidth = 6;
-    public int maxRiverSegmentHeight = 7;
-    public int minRiverSegmentHeight = 2;
-    public float approachQuotient = 0.2f;
-    public int houseHeight = 3;
-    public int houseWidth = 3;
-    public float houseProbability = 0.01f;
-    public float tankProbability = 0.1f;
-    public float flackGunProbability = 0.1f;
-    public float treeProbability = 0.1f;
+    public static int minDistanceRiverAirstrip = 10;
+    public static int riverWidth = 6;
+    public static int maxRiverSegmentHeight = 7;
+    public static int minRiverSegmentHeight = 2;
+    public static float approachQuotient = 0.2f;
+    public static int houseHeight = 3;
+    public static int houseWidth = 3;
+    public static float houseProbability = 0.01f;
+    public static float tankProbability = 0.1f;
+    public static float flackGunProbability = 0.1f;
+    public static float treeProbability = 0.1f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
-    public LevelContents Build(bool riverLeftOfAirstrip)
+    public static LevelContents Build(bool riverLeftOfAirstrip)
     {
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
@@ -84,16 +84,20 @@ public class LevelBuilder
             if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
             {
                 roads.Add(y);
-                for (var x = 0; x <= LevelContents.gridWidth; x++)
+                for (var x = 0; x < LevelContents.gridWidth; x++)
                 {
-                    for (var i = 0; y < (y + roadHeight); y++, i++)
+                    for (var i = 0; i < roadHeight; i++)
                     {
-                        ret.cells[x, y] = CellContent.ROAD;
+                        //Debug.Log($"{x} {y} {i} {roadHeight}");
+                        ret.cells[x, y+i] = CellContent.ROAD;
                     }
                 }
                 cooldown = minSpaceBetweenRoads;
             }
-            cooldown--;
+            if (cooldown > 0)
+            {
+                cooldown--;
+            }
         }
         ret.roads = roads;
         
@@ -132,11 +136,12 @@ public class LevelBuilder
             minSlopeIndex += slopeIndexOffset;
             maxSlopeIndexExclusive += slopeIndexOffset;
             var slopeIndex = UnityEngine.Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
-            riverSegments.Add(new RiverSegment {height = segmentHeight, slope = riverSlopes[slopeIndex]});
+            var slope = riverSlopes[slopeIndex];
+            riverSegments.Add(new RiverSegment {height = segmentHeight, slope = slope});
 
-            var slopeX = riverSlopes[slopeIndex] * segmentHeight;
+            var slopeX = slope * segmentHeight;
 
-            Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
+            //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
             
             y += segmentHeight;
             riverLowerLeftCornerX += slopeX;
@@ -150,7 +155,7 @@ public class LevelBuilder
             var newY = ytmp + segment.height;            
             for (var y = ytmp; y < newY; y++)
             {
-                startX += riverSlopes[segment.slope];
+                startX += segment.slope;
                 for (var x = startX; x < riverWidth; x++)
                 {
                     if (x >= 0 && x < LevelContents.gridWidth)
@@ -173,11 +178,14 @@ public class LevelBuilder
                 // Houses
                 if (randVal < houseProbability)
                 {
-                    var spaceEnough = true;
-                    for (var xtmp = x; xtmp < xtmp + houseWidth && spaceEnough; x++)
+                    //Debug.Log($"House please!");
+                    var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
+                                        y < (LevelContents.gridHeight - houseHeight);
+                    for (var xtmp = x; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
                     {
-                        for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
+                        for (ytmp = y; (ytmp < (y + houseHeight)) && spaceEnough; ytmp++)
                         {
+                            //Debug.Log($"{x} {y} {xtmp} {ytmp}");
                             spaceEnough = ret.cells[xtmp, ytmp] == CellContent.GRASS;
                         }
                     }
@@ -185,9 +193,9 @@ public class LevelBuilder
                     if (spaceEnough)
                     {
                         houses.Add(new HousePosition {x = x, y = y});
-                        for (var xtmp = x; xtmp < xtmp + houseWidth && spaceEnough; x++)
+                        for (var xtmp = x; xtmp < x + houseWidth; xtmp++)
                         {
-                            for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
+                            for (ytmp = y; ytmp < y + houseHeight; ytmp++)
                             {
                                 ret.cells[xtmp, ytmp] = CellContent.HOUSE;
                             }

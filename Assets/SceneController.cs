@@ -34,7 +34,7 @@ public class SceneController : MonoBehaviour
 
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public void PopulateScene(LevelContents levelContents, int llcx, int llcy)
+    public void PopulateScene(LevelContents levelContents, float llcx, float llcy)
     {
         float cellWidth = levelWidth / LevelContents.gridWidth;
         float cellHeight = levelHeight / LevelContents.gridHeight;
@@ -67,7 +67,7 @@ public class SceneController : MonoBehaviour
 
             var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * riverSlopes[neutralRiverSlopeIndex];
 
-            Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
+            //Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + xOffset, y + segmentHeight, 0));
@@ -104,6 +104,7 @@ public class SceneController : MonoBehaviour
         
         rsMeshFilter.mesh = mesh;
 
+        
         
         // Roads
         // Bridges
@@ -232,7 +233,9 @@ public class SceneController : MonoBehaviour
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane2.transform);
 
-        CreateRiverSection();
+        //CreateRiverSection();
+        var level = LevelBuilder.Build(true);
+        PopulateScene(level, refobject.transform.position.x, refobject.transform.position.y);
     }
 
     // Update is called once per frame
