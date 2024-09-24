@@ -153,7 +153,7 @@ public class SceneController : MonoBehaviour
         // Roads
         foreach (var road in levelContents.roads)
         {
-            var roadPos = new Vector3(llcx, llcy + road * cellHeight, -0.2f);
+            var roadPos = new Vector3(llcx + road * cellHeight * riverSlopes[neutralRiverSlopeIndex], llcy + road * cellHeight, -0.2f);
             var roadGameObject = Instantiate(roadPrefab, roadPos, Quaternion.identity);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
@@ -163,11 +163,13 @@ public class SceneController : MonoBehaviour
             var meshRenderer = roadGameObject.AddComponent<MeshRenderer>();
             meshRenderer.material = roadMaterial;
 
-            var roadVerts = new List<Vector2>();
-            vertices.Add(new Vector2(0, 0));
-            vertices.Add(new Vector2(roadWidth, 0));
-            vertices.Add(new Vector2(0, roadHeight));
-            vertices.Add(new Vector2(roadWidth, roadHeight));
+            var roadVerts = new List<Vector2>
+            {
+                new Vector2(0, 0),
+                new Vector2(roadWidth, 0),
+                new Vector2(0, roadHeight),
+                new Vector2(roadWidth, roadHeight)
+            };
 
             var roadMesh = CreateQuadMesh(roadVerts);
             meshFilter.mesh = roadMesh;

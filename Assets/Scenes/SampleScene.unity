@@ -286,7 +286,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2523,6 +2523,7 @@ MonoBehaviour:
   enemyPlanePrefab: {fileID: 2165493113498992378, guid: 21e9beeb29cf4c9959214f56a5089997, type: 3}
   shadowControlPrefab: {fileID: 9201924445058020500, guid: e228024eb4c67fdd19d72d2022609b02, type: 3}
   riverSectionPrefab: {fileID: 3673043693166868737, guid: ecf23279296cc9c4ebadc1f867beca57, type: 3}
+  roadPrefab: {fileID: 5513747941671286812, guid: ae24cdd56d13f660d90c0c6dd31559e7, type: 3}
   refobject: {fileID: 608621884}
   width: 1
   height: 1
@@ -2534,6 +2535,7 @@ MonoBehaviour:
   maxDistanceRiverToAdjust: 2
   approachQuotient: 0.2
   riverMaterial: {fileID: 2100000, guid: ea8d7ce4ef66b3210b86d629dd1c00c2, type: 2}
+  roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
   levelWidth: 8
   levelHeight: 80
 --- !u!1001 &775083968
