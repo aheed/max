@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SceneController : MonoBehaviour
@@ -8,6 +10,7 @@ public class SceneController : MonoBehaviour
     public EnemyPlane enemyPlanePrefab;
     public ShadowControl shadowControlPrefab;
     public GameObject riverSectionPrefab;
+    public GameObject roadPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -19,6 +22,7 @@ public class SceneController : MonoBehaviour
     public float maxDistanceRiverToAdjust = 2.0f;
     public float approachQuotient = 0.2f;
     public Material riverMaterial;
+    public Material roadMaterial;
     float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     static readonly int neutralRiverSlopeIndex = 2;
@@ -30,6 +34,46 @@ public class SceneController : MonoBehaviour
     void AddPlaneShadow(Transform parent)
     {        
         Instantiate(shadowControlPrefab, transform.position, Quaternion.identity, parent);
+    }
+
+    Mesh CreateQuadMesh(IEnumerable<Vector2> coords)
+    {
+        var verts = coords.Select(v => new Vector3(v.x, v.y)).ToArray();
+        if (verts.Length % 4 != 0)
+        {
+            throw new System.Exception("Length of param must a multiple of 4");
+        }
+        
+        var triangles = new List<int>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        for (int i = 0; i < verts.Length / 4; i++)
+        {
+            var triIndexOffset = i * 4;
+            triangles.Add(triIndexOffset + 0);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 1);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 3);
+            triangles.Add(triIndexOffset + 1);
+
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(1, 1));
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = verts;
+        mesh.triangles = triangles.ToArray();
+        mesh.normals = normals.ToArray();
+        mesh.uv = uvs.ToArray();
+        return mesh;
     }
 
     // Create game objects
@@ -107,6 +151,28 @@ public class SceneController : MonoBehaviour
         
         
         // Roads
+        foreach (var road in levelContents.roads)
+        {
+            var roadPos = new Vector3(llcx, llcy + road * cellHeight, -0.2f);
+            var roadGameObject = Instantiate(roadPrefab, roadPos, Quaternion.identity);
+
+            var roadWidth = LevelContents.gridWidth * cellWidth;
+            var roadHeight = LevelBuilder.roadHeight * cellHeight;
+
+            var meshFilter = roadGameObject.AddComponent<MeshFilter>();
+            var meshRenderer = roadGameObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = roadMaterial;
+
+            var roadVerts = new List<Vector2>();
+            vertices.Add(new Vector2(0, 0));
+            vertices.Add(new Vector2(roadWidth, 0));
+            vertices.Add(new Vector2(0, roadHeight));
+            vertices.Add(new Vector2(roadWidth, roadHeight));
+
+            var roadMesh = CreateQuadMesh(roadVerts);
+            meshFilter.mesh = roadMesh;
+        }
+
         // Bridges
         // Houses
         // Flack guns

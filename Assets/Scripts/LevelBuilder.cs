@@ -80,7 +80,7 @@ public static class LevelBuilder
         // Roads        
         var cooldown = 0;
         List<int> roads = new List<int>();
-        for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - cooldown); y++)
+        for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - roadHeight - cooldown); y++)
         {
             if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
             {
@@ -89,7 +89,7 @@ public static class LevelBuilder
                 {
                     for (var i = 0; i < roadHeight; i++)
                     {
-                        //Debug.Log($"{x} {y} {i} {roadHeight}");
+                        Debug.Log($"{x} {y} {i} {roadHeight}");
                         ret.cells[x, y+i] = CellContent.ROAD;
                     }
                 }
