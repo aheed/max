@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum CellContent
@@ -19,8 +17,8 @@ public enum CellContent
 
 public class RiverSegment
 {
-    public int Height;
-    public int slopeIndex;
+    public int height;
+    public int slope;
 }
 
 public class HousePosition
@@ -29,10 +27,19 @@ public class HousePosition
     public int y;
 }
 
-public class LevelBuilder 
+public class LevelContents
 {
-    public readonly int gridHeight = 300;
-    public readonly int gridWidth = 30;
+    public static readonly int gridHeight = 300;
+    public static readonly int gridWidth = 30;
+    public IEnumerable<HousePosition> houses = new List<HousePosition>();
+    public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
+    public int riverLowerLeftCornerX;
+    public IEnumerable<int> roads = new List<int>();
+    public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
+}
+
+public class LevelBuilder 
+{    
     public readonly int landingStripHeight = 30;
     public readonly int landingStripWidth = 30;
     public readonly int minSpaceBetweenRoads = 10;
@@ -53,11 +60,11 @@ public class LevelBuilder
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
-    public CellContent[,] Build(bool riverLeftOfAirstrip)
+    public LevelContents Build(bool riverLeftOfAirstrip)
     {
-        var ret = new CellContent[gridWidth, gridHeight];
-        var midX = gridWidth / 2;
-        var approachLength = (int)(gridHeight * approachQuotient);
+        var ret = new LevelContents();
+        var midX = LevelContents.gridWidth / 2;
+        var approachLength = (int)(LevelContents.gridHeight * approachQuotient);
 
         // Landing Strip
         var lsllcX = midX - (landingStripWidth / 2);
@@ -65,39 +72,41 @@ public class LevelBuilder
         {
             for (var y = 0; y < landingStripHeight; y++)
             {
-                ret[x, y] = CellContent.LANDING_STRIP;
+                ret.cells[x, y] = CellContent.LANDING_STRIP;
             }
         }
 
         // Roads        
         var cooldown = 0;
         List<int> roads = new List<int>();
-        for (var y = landingStripHeight + cooldown; y < (gridHeight - cooldown); y++)
+        for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - cooldown); y++)
         {
             if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
             {
                 roads.Add(y);
-                for (var x = 0; x <= gridWidth; x++)
+                for (var x = 0; x <= LevelContents.gridWidth; x++)
                 {
                     for (var i = 0; y < (y + roadHeight); y++, i++)
                     {
-                        ret[x, y] = CellContent.ROAD;
+                        ret.cells[x, y] = CellContent.ROAD;
                     }
                 }
                 cooldown = minSpaceBetweenRoads;
             }
             cooldown--;
         }
+        ret.roads = roads;
         
         // River
         var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
         int riverLowerLeftCornerXStart = midX + directionMultiplier * minDistanceRiverAirstrip - (riverWidth / 2);
         int riverLowerLeftCornerX = riverLowerLeftCornerXStart;
+        ret.riverLowerLeftCornerX = riverLowerLeftCornerXStart;
         List<RiverSegment> riverSegments = new List<RiverSegment>();
-        for (var y = 0; y < gridHeight;)
+        for (var y = 0; y < LevelContents.gridHeight;)
         {
             var segmentHeight = UnityEngine.Random.Range(minRiverSegmentHeight, maxRiverSegmentHeight);
-            var maxSegmentY = gridHeight - y;
+            var maxSegmentY = LevelContents.gridHeight - y;
             if (segmentHeight > maxSegmentY)
             {
                 segmentHeight = maxSegmentY;
@@ -107,7 +116,7 @@ public class LevelBuilder
             riverLeftOfAirstrip = midRiverX < midX;
             var minSlopeIndex = 1;
             var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-            bool approaching = gridHeight - y < approachLength;
+            bool approaching = LevelContents.gridHeight - y < approachLength;
             bool takingOff = y < approachLength;
             int slopeIndexOffset = 0;
             if (approaching)
@@ -123,7 +132,7 @@ public class LevelBuilder
             minSlopeIndex += slopeIndexOffset;
             maxSlopeIndexExclusive += slopeIndexOffset;
             var slopeIndex = UnityEngine.Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
-            riverSegments.Add(new RiverSegment {Height = segmentHeight, slopeIndex = slopeIndex});
+            riverSegments.Add(new RiverSegment {height = segmentHeight, slope = riverSlopes[slopeIndex]});
 
             var slopeX = riverSlopes[slopeIndex] * segmentHeight;
 
@@ -132,20 +141,21 @@ public class LevelBuilder
             y += segmentHeight;
             riverLowerLeftCornerX += slopeX;
         }
+        ret.riverSegments = riverSegments;
 
         var ytmp = 0;
         var startX = riverLowerLeftCornerXStart;
         foreach (var segment in riverSegments)
         {
-            var newY = ytmp + segment.Height;            
+            var newY = ytmp + segment.height;            
             for (var y = ytmp; y < newY; y++)
             {
-                startX += riverSlopes[segment.slopeIndex];
+                startX += riverSlopes[segment.slope];
                 for (var x = startX; x < riverWidth; x++)
                 {
-                    if (x >= 0 && x < gridWidth)
+                    if (x >= 0 && x < LevelContents.gridWidth)
                     {
-                        ret[x, y] = CellContent.WATER;
+                        ret.cells[x, y] = CellContent.WATER;
                     }
                 }
             }
@@ -154,9 +164,9 @@ public class LevelBuilder
         }
 
         var houses = new List<HousePosition>();
-        for (var y = 0; y < gridHeight; y++)
+        for (var y = 0; y < LevelContents.gridHeight; y++)
         {
-            for (var x = 0; x < gridWidth; x++)
+            for (var x = 0; x < LevelContents.gridWidth; x++)
             {
                 var randVal = UnityEngine.Random.Range(0f, 1.0f);
 
@@ -168,7 +178,7 @@ public class LevelBuilder
                     {
                         for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
                         {
-                            spaceEnough = ret[xtmp, ytmp] == CellContent.GRASS;
+                            spaceEnough = ret.cells[xtmp, ytmp] == CellContent.GRASS;
                         }
                     }
 
@@ -179,37 +189,38 @@ public class LevelBuilder
                         {
                             for (ytmp = y; ytmp < ytmp + houseHeight && spaceEnough; y++)
                             {
-                                ret[xtmp, ytmp] = CellContent.HOUSE;
+                                ret.cells[xtmp, ytmp] = CellContent.HOUSE;
                             }
                         }
                     }
                 }
                 
                 // Tanks
-                if (randVal < tankProbability && ret[x, y] == CellContent.GRASS)
+                if (randVal < tankProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
-                    ret[x, y] = CellContent.TANK;
+                    ret.cells[x, y] = CellContent.TANK;
                 }
 
                 // Flack guns
-                if (randVal < flackGunProbability && ret[x, y] == CellContent.GRASS)
+                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
-                    ret[x, y] = CellContent.FLACK_GUN;
+                    ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
 
                 // Trees
-                if (randVal < treeProbability && ret[x, y] == CellContent.GRASS)
+                if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
-                    ret[x, y] = CellContent.TREE1;
+                    ret.cells[x, y] = CellContent.TREE1;
                 }
 
-                if (randVal < treeProbability && ret[x, y] == CellContent.GRASS)
+                if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
-                    ret[x, y] = CellContent.TREE2;
+                    ret.cells[x, y] = CellContent.TREE2;
                 }
             }
         }
-        
+
+        ret.houses = houses;       
         return ret;
     }
 }

@@ -23,9 +23,94 @@ public class SceneController : MonoBehaviour
     static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     static readonly int neutralRiverSlopeIndex = 2;
 
+    //
+    public float levelWidth = 8f;
+    public float levelHeight = 80f;
+
     void AddPlaneShadow(Transform parent)
     {        
         Instantiate(shadowControlPrefab, transform.position, Quaternion.identity, parent);
+    }
+
+    // Create game objects
+    // llcx, llcy: Lower Left Corner of the level
+    public void PopulateScene(LevelContents levelContents, int llcx, int llcy)
+    {
+        float cellWidth = levelWidth / LevelContents.gridWidth;
+        float cellHeight = levelHeight / LevelContents.gridHeight;
+
+        // Landing Strip        
+
+        // River
+        var startPos = new Vector3(llcx + levelContents.riverLowerLeftCornerX * cellWidth, llcy, -0.2f);
+        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
+
+        // MeshRenderer
+        var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
+        var rsMeshRenderer = rsGameObject.AddComponent<MeshRenderer>();
+
+        rsMeshRenderer.material = riverMaterial;
+
+        // Mesh
+        //var startY = 0f;
+        //var y = startY;
+        //var maxY = y + riverSectionHeight;
+        var vertices = new List<Vector3>();
+        var triangles = new List<int>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        int segments = 0;
+        var y = 0f;
+        foreach (var segment in levelContents.riverSegments)
+        {
+            var segmentHeight = segment.height * cellHeight;
+
+            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * riverSlopes[neutralRiverSlopeIndex];
+
+            Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
+            vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + xOffset, y + segmentHeight, 0));
+            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth + xOffset, y + segmentHeight, 0));
+
+            var triIndexOffset = segments * 4;
+            triangles.Add(triIndexOffset + 0);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 1);
+            triangles.Add(triIndexOffset + 2);
+            triangles.Add(triIndexOffset + 3);
+            triangles.Add(triIndexOffset + 1);
+
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+            normals.Add(-Vector3.forward);
+
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(1, 1));
+
+            y += segmentHeight;
+            riverLowerLeftCornerX += xOffset;
+            segments += 1;
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.normals = normals.ToArray();
+        mesh.uv = uvs.ToArray();
+        
+        rsMeshFilter.mesh = mesh;
+
+        
+        // Roads
+        // Bridges
+        // Houses
+        // Flack guns
+        // Tanks
+        // Trees
     }
 
     void CreateRiverSection()
