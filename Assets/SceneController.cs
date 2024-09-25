@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
     public ShadowControl shadowControlPrefab;
+    public GameObject groundPrefab;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
@@ -28,6 +29,7 @@ public class SceneController : MonoBehaviour
     public float approachQuotient = 0.2f;
     public Material riverMaterial;
     public Material roadMaterial;
+    public Material groundMaterial;
     public Material landingStripMaterial;
     float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
@@ -90,6 +92,27 @@ public class SceneController : MonoBehaviour
         float cellHeight = levelHeight / LevelContents.gridHeight;
         float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
         var midX = LevelContents.gridWidth / 2;
+
+        // Ground
+        var grPos = new Vector3(llcx, llcy, -0.2f);
+        var grGameObject = Instantiate(groundPrefab, grPos, Quaternion.identity);
+        
+        var grUpperCornerOffsetX = levelHeight * neutralSlope;
+
+        var grMeshFilter = grGameObject.AddComponent<MeshFilter>();
+        var grMeshRenderer = grGameObject.AddComponent<MeshRenderer>();
+        grMeshRenderer.material = groundMaterial;
+
+        var grVerts = new List<Vector2>
+        {
+            new Vector2(0f, 0f),
+            new Vector2(levelWidth, 0),
+            new Vector2(grUpperCornerOffsetX, levelHeight),
+            new Vector2(levelWidth + grUpperCornerOffsetX, levelHeight)
+        };
+
+        var grMesh = CreateQuadMesh(grVerts);
+        grMeshFilter.mesh = grMesh;
 
         // Landing Strip
         var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
