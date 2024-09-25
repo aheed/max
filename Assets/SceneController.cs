@@ -11,6 +11,7 @@ public class SceneController : MonoBehaviour
     public ShadowControl shadowControlPrefab;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
+    public GameObject landingStripPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -23,6 +24,7 @@ public class SceneController : MonoBehaviour
     public float approachQuotient = 0.2f;
     public Material riverMaterial;
     public Material roadMaterial;
+    public Material landingStripMaterial;
     float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     static readonly int neutralRiverSlopeIndex = 2;
@@ -82,11 +84,45 @@ public class SceneController : MonoBehaviour
     {
         float cellWidth = levelWidth / LevelContents.gridWidth;
         float cellHeight = levelHeight / LevelContents.gridHeight;
+        float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
+        var midX = LevelContents.gridWidth / 2;
 
-        // Landing Strip        
+        // Landing Strip
+        var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
+        var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
+
+        var startPos = new Vector3(llcx + (LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), llcy, -0.2f);
+        var lsGameObject = Instantiate(landingStripPrefab, startPos, Quaternion.identity);
+        
+        var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+        var lsllcX = 0;
+        var lslrcX = lsWidth;
+        var lsulcX = lsUpperCornerOffsetX;
+        var lsurcX = lslrcX + lsUpperCornerOffsetX;
+        var lsllcY = 0;
+        var lslrcY = 0;
+        var lsulcY = lsHeight;
+        var lsurcY = lsHeight;
+
+        var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
+        var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
+        lsMeshRenderer.material = landingStripMaterial;
+
+        var lsVerts = new List<Vector2>
+        {
+            new Vector2(lsllcX, lsllcY),
+            new Vector2(lslrcX, lslrcY),
+            new Vector2(lsulcX, lsulcY),
+            new Vector2(lsurcX, lsurcY)
+        };
+
+        var lsMesh = CreateQuadMesh(lsVerts);
+        lsMeshFilter.mesh = lsMesh;
+
 
         // River
-        var startPos = new Vector3(llcx + levelContents.riverLowerLeftCornerX * cellWidth, llcy, -0.2f);
+        startPos = new Vector3(llcx + levelContents.riverLowerLeftCornerX * cellWidth, llcy, -0.2f);
         var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
 
         // MeshRenderer
@@ -109,7 +145,7 @@ public class SceneController : MonoBehaviour
         {
             var segmentHeight = segment.height * cellHeight;
 
-            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * riverSlopes[neutralRiverSlopeIndex];
+            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
 
             //Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
@@ -153,7 +189,7 @@ public class SceneController : MonoBehaviour
         // Roads
         foreach (var road in levelContents.roads)
         {
-            var roadPos = new Vector3(llcx + road * cellHeight * riverSlopes[neutralRiverSlopeIndex], llcy + road * cellHeight, -0.2f);
+            var roadPos = new Vector3(llcx + road * cellHeight * neutralSlope, llcy + road * cellHeight, -0.2f);
             var roadGameObject = Instantiate(roadPrefab, roadPos, Quaternion.identity);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
@@ -303,7 +339,8 @@ public class SceneController : MonoBehaviour
 
         //CreateRiverSection();
         var level = LevelBuilder.Build(true);
-        PopulateScene(level, refobject.transform.position.x, refobject.transform.position.y);
+        var levelLowerLeftCornerX = refobject.transform.position.x - levelWidth / 2;
+        PopulateScene(level, levelLowerLeftCornerX, refobject.transform.position.y);
     }
 
     // Update is called once per frame
