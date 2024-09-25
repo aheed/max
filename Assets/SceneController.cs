@@ -118,7 +118,7 @@ public class SceneController : MonoBehaviour
         var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
         var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
-        var startPos = new Vector3(llcx + (LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), llcy, -0.2f);
+        var startPos = new Vector3(llcx + (LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), llcy, -0.21f);
         var lsGameObject = Instantiate(landingStripPrefab, startPos, Quaternion.identity);
         
         var lsUpperCornerOffsetX = lsHeight * neutralSlope;

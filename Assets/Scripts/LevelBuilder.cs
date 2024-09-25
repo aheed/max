@@ -69,7 +69,7 @@ public static class LevelBuilder
 
         // Landing Strip
         var lsllcX = midX - (landingStripWidth / 2);
-        for (var x = lsllcX; x <= landingStripWidth; x++)
+        for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
         {
             for (var y = 0; y < landingStripHeight; y++)
             {
