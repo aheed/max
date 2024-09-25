@@ -54,10 +54,10 @@ public static class LevelBuilder
     public static float approachQuotient = 0.2f;
     public static int houseHeight = 3;
     public static int houseWidth = 3;
-    public static float houseProbability = 0.01f;
-    public static float tankProbability = 0.008f;
+    public static float houseProbability = 0.003f;
+    public static float tankProbability = 0.012f;
     public static float flackGunProbability = 0.01f;
-    public static float treeProbability = 0.009f;
+    public static float treeProbability = 0.03f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -216,19 +216,10 @@ public static class LevelBuilder
                 }
 
                 // Flack guns
-                //if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
                 randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < flackGunProbability)
+                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
-                    if (ret.cells[x, y] == CellContent.GRASS)
-                    {
-                        Debug.Log($"Flack gun at {x} {y}");
-                        ret.cells[x, y] = CellContent.FLACK_GUN;
-                    }
-                    else
-                    {
-                        Debug.Log($"No space for a flack gun at {x} {y} {ret.cells[x, y]}");
-                    }
+                    ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
 
                 // Trees

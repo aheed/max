@@ -80,3 +80,8 @@ Color change temporarily on explosion (river and ground):
 Temporary color swap at detonation:
 https://www.youtube.com/watch?v=u4Iz5AJa31Q&t=75s
 
+Min distance river -> house, tank...
+No houses, flack or tanks beside landing strip
+  Houses are never side by side in the Original game
+Extra tanks around houses
+River should be farther away from landing strip. No overlapping or near.

@@ -14,11 +14,13 @@ public class SceneController : MonoBehaviour
     public GameObject landingStripPrefab;
     public GameObject housePrefab;
     public GameObject flackGunPrefab;
+    public GameObject tankPrefab;
+    public GameObject tree1Prefab;
+    public GameObject tree2Prefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
-    public float riverWidth = 4.0f;
     public float maxSegmentHeight = 3.0f;
     public float minSegmentHeight = 0.5f;
     public float minDistanceRiverAirstrip = 5.0f;
@@ -150,6 +152,7 @@ public class SceneController : MonoBehaviour
             var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
 
             //Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
+            var riverWidth = LevelBuilder.riverWidth * cellWidth;
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + xOffset, y + segmentHeight, 0));
@@ -222,115 +225,39 @@ public class SceneController : MonoBehaviour
             Instantiate(housePrefab, housePos, Quaternion.identity);
         }
 
-        // Flack guns
+        // Single cell items: Flack guns, trees, tanks
         for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)
         {
             for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
             {
-                if (levelContents.cells[xtmp, ytmp] == CellContent.FLACK_GUN)
+                GameObject selectedPrefab = null;
+                switch (levelContents.cells[xtmp, ytmp])
                 {
-                    var flackPos = new Vector3(llcx + xtmp * cellWidth + ytmp * cellHeight * neutralSlope, llcy + ytmp * cellHeight, -0.2f);
-                    Instantiate(flackGunPrefab, flackPos, Quaternion.identity);
+                    case CellContent.FLACK_GUN:
+                        selectedPrefab = flackGunPrefab;
+                        break;
+
+                    case CellContent.TANK:
+                        selectedPrefab = tankPrefab;
+                        break;
+
+                    case CellContent.TREE1:
+                        selectedPrefab = tree1Prefab;
+                        break;
+
+                    case CellContent.TREE2:
+                        selectedPrefab = tree2Prefab;
+                        break;
                 }
+
+                if (selectedPrefab != null)
+                {
+                    var itemPos = new Vector3(llcx + xtmp * cellWidth + ytmp * cellHeight * neutralSlope, llcy + ytmp * cellHeight, -0.2f);
+                    Instantiate(selectedPrefab, itemPos, Quaternion.identity);
+                }
+
             }
-        }
-
-        // Tanks
-        // Trees
-    }
-
-    void CreateRiverSection()
-    {
-        // GameObject
-        //var startPos = transform.position;
-        var startPos = refobject.transform.position;
-        startPos.z = -0.2f;
-        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
-
-        // MeshRenderer
-        var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
-        var rsMeshRenderer = rsGameObject.AddComponent<MeshRenderer>();
-
-        rsMeshRenderer.material = riverMaterial;
-
-        // Mesh
-        //var y = rsGameObject.transform.position.y;
-        var startY = 0f;
-        var y = startY;
-        var maxY = y + riverSectionHeight;
-        var vertices = new List<Vector3>();
-        var triangles = new List<int>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        int segments = 0;
-        while (y < maxY)
-        {
-            var segmentHeight = Random.Range(minSegmentHeight, maxSegmentHeight);
-            if (y + segmentHeight > maxY)
-            {
-                segmentHeight = maxY - y;
-            }
-
-            var midRiverX = riverLowerLeftCornerX + (riverWidth / 2);
-            var refXatY = riverSlopes[neutralRiverSlopeIndex] * (y - startY);
-            bool riverLeftOfAirstrip = midRiverX < refXatY;
-            var minSlopeIndex = 1;
-            var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-            bool approaching = maxY - y < riverSectionHeight * approachQuotient;
-            bool takingOff = y - startY < riverSectionHeight * approachQuotient;
-            int slopeIndexOffset = 0;
-            if (approaching)
-            {
-                // Airstrip approaching. River must not bend toward next airstrip location.
-                slopeIndexOffset =  riverLeftOfAirstrip ? -1 : 1;
-            }
-            if (takingOff)
-            {
-                // Leaving Airstrip. River must not bend away from next airstrip location.
-                slopeIndexOffset =  riverLeftOfAirstrip ? 1 : -1;
-            }
-            minSlopeIndex += slopeIndexOffset;
-            maxSlopeIndexExclusive += slopeIndexOffset;
-            var slopeIndex = Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
-
-            var slopeX = riverSlopes[slopeIndex] * segmentHeight;
-
-            Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
-            vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + slopeX, y + segmentHeight, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth + slopeX, y + segmentHeight, 0));
-
-            var triIndexOffset = segments * 4;
-            triangles.Add(triIndexOffset + 0);
-            triangles.Add(triIndexOffset + 2);
-            triangles.Add(triIndexOffset + 1);
-            triangles.Add(triIndexOffset + 2);
-            triangles.Add(triIndexOffset + 3);
-            triangles.Add(triIndexOffset + 1);
-
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-
-            uvs.Add(new Vector2(0, 0));
-            uvs.Add(new Vector2(1, 0));
-            uvs.Add(new Vector2(0, 1));
-            uvs.Add(new Vector2(1, 1));
-
-            y += segmentHeight;
-            riverLowerLeftCornerX += slopeX;
-            segments += 1;
-        }
-
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.normals = normals.ToArray();
-        mesh.uv = uvs.ToArray();
-        
-        rsMeshFilter.mesh = mesh;
+        }        
     }
 
     void Start()
