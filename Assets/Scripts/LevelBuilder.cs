@@ -31,7 +31,7 @@ public class HousePosition
 public class LevelContents
 {
     public static readonly int gridHeight = 300;
-    public static readonly int gridWidth = 30;
+    public static readonly int gridWidth = 100;
     public IEnumerable<HousePosition> houses = new List<HousePosition>();
     public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
     public int riverLowerLeftCornerX;
@@ -47,8 +47,8 @@ public static class LevelBuilder
     public static readonly float roadProbability = 0.1f;
     public static readonly int roadHeight = 2;
     static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
-    public static int minDistanceRiverAirstrip = 10;
-    public static int riverWidth = 6;
+    public static int minDistanceRiverAirstrip = 60;
+    public static int riverWidth = 12;
     public static int maxRiverSegmentHeight = 7;
     public static int minRiverSegmentHeight = 2;
     public static float approachQuotient = 0.2f;

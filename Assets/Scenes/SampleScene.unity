@@ -2430,7 +2430,7 @@ MonoBehaviour:
   roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
   groundMaterial: {fileID: 2100000, guid: 8cb2155c8f83a733884b98d9308266d1, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
-  levelWidth: 8
+  levelWidth: 20
   levelHeight: 80
 --- !u!1 &958610452
 GameObject:
