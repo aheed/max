@@ -12,6 +12,8 @@ public class SceneController : MonoBehaviour
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
+    public GameObject housePrefab;
+    public GameObject flackGunPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -212,8 +214,27 @@ public class SceneController : MonoBehaviour
         }
 
         // Bridges
+
         // Houses
+        foreach (var house in levelContents.houses)
+        {
+            var housePos = new Vector3(llcx + house.x * cellWidth + house.y * cellHeight * neutralSlope, llcy + house.y * cellHeight, -0.2f);
+            Instantiate(housePrefab, housePos, Quaternion.identity);
+        }
+
         // Flack guns
+        for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)
+        {
+            for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
+            {
+                if (levelContents.cells[xtmp, ytmp] == CellContent.FLACK_GUN)
+                {
+                    var flackPos = new Vector3(llcx + xtmp * cellWidth + ytmp * cellHeight * neutralSlope, llcy + ytmp * cellHeight, -0.2f);
+                    Instantiate(flackGunPrefab, flackPos, Quaternion.identity);
+                }
+            }
+        }
+
         // Tanks
         // Trees
     }

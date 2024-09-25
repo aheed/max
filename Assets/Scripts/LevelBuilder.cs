@@ -55,9 +55,9 @@ public static class LevelBuilder
     public static int houseHeight = 3;
     public static int houseWidth = 3;
     public static float houseProbability = 0.01f;
-    public static float tankProbability = 0.1f;
-    public static float flackGunProbability = 0.1f;
-    public static float treeProbability = 0.1f;
+    public static float tankProbability = 0.008f;
+    public static float flackGunProbability = 0.01f;
+    public static float treeProbability = 0.009f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -89,7 +89,7 @@ public static class LevelBuilder
                 {
                     for (var i = 0; i < roadHeight; i++)
                     {
-                        Debug.Log($"{x} {y} {i} {roadHeight}");
+                        //Debug.Log($"{x} {y} {i} {roadHeight}");
                         ret.cells[x, y+i] = CellContent.ROAD;
                     }
                 }
@@ -161,7 +161,7 @@ public static class LevelBuilder
             for (var y = ytmp; y < newY; y++)
             {
                 startX += segment.slope;
-                for (var x = startX; x < riverWidth; x++)
+                for (var x = startX; x < (startX + riverWidth); x++)
                 {
                     if (x >= 0 && x < LevelContents.gridWidth)
                     {
@@ -209,23 +209,36 @@ public static class LevelBuilder
                 }
                 
                 // Tanks
+                randVal = UnityEngine.Random.Range(0f, 1.0f);
                 if (randVal < tankProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TANK;
                 }
 
                 // Flack guns
-                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
+                //if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
+                randVal = UnityEngine.Random.Range(0f, 1.0f);
+                if (randVal < flackGunProbability)
                 {
-                    ret.cells[x, y] = CellContent.FLACK_GUN;
+                    if (ret.cells[x, y] == CellContent.GRASS)
+                    {
+                        Debug.Log($"Flack gun at {x} {y}");
+                        ret.cells[x, y] = CellContent.FLACK_GUN;
+                    }
+                    else
+                    {
+                        Debug.Log($"No space for a flack gun at {x} {y} {ret.cells[x, y]}");
+                    }
                 }
 
                 // Trees
+                randVal = UnityEngine.Random.Range(0f, 1.0f);
                 if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE1;
                 }
 
+                randVal = UnityEngine.Random.Range(0f, 1.0f);
                 if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE2;
