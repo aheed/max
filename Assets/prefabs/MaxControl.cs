@@ -43,7 +43,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         {
             //GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
             //Debug.Log($"Creating bullet at {transform.position}");
-            GameObject projectileObject = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            GameObject projectileObject = Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
             bulletCooldown = bulletIntervalSeconds;
         }
     }

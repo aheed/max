@@ -2417,6 +2417,7 @@ MonoBehaviour:
   tankPrefab: {fileID: 5775457082546256396, guid: a053b216515f468bdbd3490c9be8d377, type: 3}
   tree1Prefab: {fileID: 6927612615246131860, guid: 5f9a76b741a63f5108c7cd11b113577e, type: 3}
   tree2Prefab: {fileID: 5270899202881402391, guid: 0d96269627e824ccaa1fa3b2a1ce3139, type: 3}
+  levelPrefab: {fileID: 5100127474471888836, guid: 389b9a52308d225e7a9a7180215c694f, type: 3}
   refobject: {fileID: 608621884}
   width: 1
   height: 1
@@ -2432,6 +2433,7 @@ MonoBehaviour:
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
   levelWidth: 20
   levelHeight: 80
+  acceleration: 0.01
 --- !u!1 &958610452
 GameObject:
   m_ObjectHideFlags: 0

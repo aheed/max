@@ -4,6 +4,19 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum GameStatus
+{
+    ACCELERATING = 0,
+    DECELERATING,
+    FLYING,
+    COLLIDED,
+    OUT_OF_FUEL,
+    KILLED_BY_FLACK,
+    REFUELLING,
+    DEAD,
+    FINISHED  // Rule Britannia!
+}
+
 public class SceneController : MonoBehaviour
 {
     public MaxControl maxPlanePrefab;
@@ -18,6 +31,7 @@ public class SceneController : MonoBehaviour
     public GameObject tankPrefab;
     public GameObject tree1Prefab;
     public GameObject tree2Prefab;
+    public GameObject levelPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -31,13 +45,42 @@ public class SceneController : MonoBehaviour
     public Material roadMaterial;
     public Material groundMaterial;
     public Material landingStripMaterial;
-    float riverLowerLeftCornerX = 0f;
     static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     static readonly int neutralRiverSlopeIndex = 2;
-
-    //
     public float levelWidth = 8f;
     public float levelHeight = 80f;
+    public float acceleration = 0.01f;
+
+    //// Game status
+    int level = -1;
+    GameStatus gameStatus = GameStatus.ACCELERATING;
+    float speed = 0f;
+    float prepTimeForNextLevelQuotient = 0.98f;
+    float lastLevelLowerEdgeX = 0f;
+    int currentLevelIndex = 0;
+    static int nofLevels = 2;
+    GameObject[] levels = new GameObject[nofLevels];
+    ////
+    
+    GameObject GetLevel() => levels[currentLevelIndex];
+
+    void RotateLevels()
+    {
+        currentLevelIndex = (currentLevelIndex + 1) % 2; 
+        var oldLevel = levels[currentLevelIndex];
+        if (oldLevel != null)
+        {
+            Destroy(oldLevel);
+        }
+        
+        level++;
+        var llcx = level * levelHeight * riverSlopes[neutralRiverSlopeIndex];
+        var llcy = level * levelHeight;
+        var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
+        levels[currentLevelIndex] = newLevel;
+        lastLevelLowerEdgeX = llcx;
+    }
+
 
     void AddPlaneShadow(Transform parent)
     {        
@@ -93,9 +136,12 @@ public class SceneController : MonoBehaviour
         float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
         var midX = LevelContents.gridWidth / 2;
 
+        var lvlTransform = GetLevel().transform;
+
         // Ground
         var grPos = new Vector3(llcx, llcy, -0.2f);
-        var grGameObject = Instantiate(groundPrefab, grPos, Quaternion.identity);
+        //var grGameObject = Instantiate(groundPrefab, grPos, Quaternion.identity, lvlTransform);
+        var grGameObject = Instantiate(groundPrefab, lvlTransform);
         
         var grUpperCornerOffsetX = levelHeight * neutralSlope;
 
@@ -106,7 +152,7 @@ public class SceneController : MonoBehaviour
         var grVerts = new List<Vector2>
         {
             new Vector2(0f, 0f),
-            new Vector2(levelWidth, 0),
+            new Vector2(levelWidth, 0f),
             new Vector2(grUpperCornerOffsetX, levelHeight),
             new Vector2(levelWidth + grUpperCornerOffsetX, levelHeight)
         };
@@ -119,7 +165,10 @@ public class SceneController : MonoBehaviour
         var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
         var startPos = new Vector3(llcx + (LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), llcy, -0.21f);
-        var lsGameObject = Instantiate(landingStripPrefab, startPos, Quaternion.identity);
+        //var lsGameObject = Instantiate(landingStripPrefab, startPos, Quaternion.identity, lvlTransform);
+        var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+        var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
+        lsGameObject.transform.localPosition = lsLocalTransform;
         
         var lsUpperCornerOffsetX = lsHeight * neutralSlope;
 
@@ -150,7 +199,10 @@ public class SceneController : MonoBehaviour
 
         // River
         startPos = new Vector3(llcx + levelContents.riverLowerLeftCornerX * cellWidth, llcy, -0.2f);
-        var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity);
+        //var rsGameObject = Instantiate(riverSectionPrefab, startPos, Quaternion.identity, lvlTransform);
+        var rsGameObject = Instantiate(riverSectionPrefab, lvlTransform);
+        var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0f, -0.2f);
+        rsGameObject.transform.localPosition = rsLocalTransform;
 
         // MeshRenderer
         var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
@@ -168,6 +220,7 @@ public class SceneController : MonoBehaviour
         var uvs = new List<Vector2>();
         int segments = 0;
         var y = 0f;
+        float riverLowerLeftCornerX = 0f;
         foreach (var segment in levelContents.riverSegments)
         {
             var segmentHeight = segment.height * cellHeight;
@@ -176,6 +229,7 @@ public class SceneController : MonoBehaviour
 
             //Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
             var riverWidth = LevelBuilder.riverWidth * cellWidth;
+            
             vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
             vertices.Add(new Vector3(riverLowerLeftCornerX + xOffset, y + segmentHeight, 0));
@@ -218,7 +272,10 @@ public class SceneController : MonoBehaviour
         foreach (var road in levelContents.roads)
         {
             var roadPos = new Vector3(llcx + road * cellHeight * neutralSlope, llcy + road * cellHeight, -0.2f);
-            var roadGameObject = Instantiate(roadPrefab, roadPos, Quaternion.identity);
+            //var roadGameObject = Instantiate(roadPrefab, roadPos, Quaternion.identity, lvlTransform);
+            var roadGameObject = Instantiate(roadPrefab, lvlTransform);
+            var roadLocalTransform = new Vector3(road * cellHeight * neutralSlope, road * cellHeight, -0.2f);
+            roadGameObject.transform.localPosition = roadLocalTransform;            
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
             var roadHeight = LevelBuilder.roadHeight * cellHeight;
@@ -245,7 +302,10 @@ public class SceneController : MonoBehaviour
         foreach (var house in levelContents.houses)
         {
             var housePos = new Vector3(llcx + house.x * cellWidth + house.y * cellHeight * neutralSlope, llcy + house.y * cellHeight, -0.2f);
-            Instantiate(housePrefab, housePos, Quaternion.identity);
+            //Instantiate(housePrefab, housePos, Quaternion.identity, lvlTransform);
+            var houseGameObject = Instantiate(housePrefab, lvlTransform);
+            var houseLocalTransform = new Vector3(house.x * cellWidth + house.y * cellHeight * neutralSlope, house.y * cellHeight, -0.2f);
+            houseGameObject.transform.localPosition = houseLocalTransform;
         }
 
         // Single cell items: Flack guns, trees, tanks
@@ -276,11 +336,14 @@ public class SceneController : MonoBehaviour
                 if (selectedPrefab != null)
                 {
                     var itemPos = new Vector3(llcx + xtmp * cellWidth + ytmp * cellHeight * neutralSlope, llcy + ytmp * cellHeight, -0.2f);
-                    Instantiate(selectedPrefab, itemPos, Quaternion.identity);
+                    //Instantiate(selectedPrefab, itemPos, Quaternion.identity, lvlTransform);
+                    var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
+                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.2f);
+                    itemGameObject.transform.localPosition = itemLocalTransform;
                 }
 
             }
-        }        
+        }    
     }
 
     void Start()
@@ -310,13 +373,23 @@ public class SceneController : MonoBehaviour
 
         //CreateRiverSection();
         var level = LevelBuilder.Build(true);
-        var levelLowerLeftCornerX = refobject.transform.position.x - levelWidth / 2;
+        //var levelLowerLeftCornerX = refobject.transform.position.x - levelWidth / 2;
+        var levelLowerLeftCornerX = 0f;
+        var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
+        refobject.transform.position = newRefObjPos;
+        RotateLevels();
         PopulateScene(level, levelLowerLeftCornerX, refobject.transform.position.y);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (refobject.transform.position.x > (lastLevelLowerEdgeX + levelHeight * prepTimeForNextLevelQuotient))
+        {
+            Debug.Log("Time to add new level ***************");
+            var level = LevelBuilder.Build(true);
+            RotateLevels();
+            PopulateScene(level, 0f, 0f);
+        }
     }
 }

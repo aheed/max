@@ -87,3 +87,30 @@ Extra tanks around houses
 River should be farther away from landing strip. No overlapping or near.
 Flight restrictions
   should match camera view size
+MaxControl: refObject member not necessary. Only used to set parent object for bombs. Could be done by getting maxcontrol's own parent object.
+
+Easiest: let SceneController keep track of everything
+  refobj position vs end of level
+  Plane status
+    accelerating
+    decelerating
+    flying as normal
+    collided w enemy plane
+    out of fuel
+    killed by flack
+    refuelling/repairing
+  SceneController controls the status, MaxControl acts accordingly when status changes and also reacts to input based on status.
+  
+IGameEventReporter, implemented by SceneController
+  Info flow:
+    Any active object -> gameEventReporter -> refobj, max, ...
+To decouple: new gameobject with sole purpose to delegate implementation of IGameEventReporter (to SceneController).
+
+Keep all game objects under a parent object (Level). Swap out levels as needed.
+  Some things, like enemy planes, can be without parent level object.
+
+----
+New level:
+  RiverLeftOfAirStrip should be set according to how old level ends.
+  Cleanup unused params llcx, llcy
+
