@@ -49,6 +49,8 @@ public static class LevelBuilder
     public static readonly int roadHeight = 2;
     static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
     public static int minDistanceRiverAirstrip = 60;
+    public static int maxNormalDistanceRiverMidLevelLeft = 18;
+    public static int maxNormalDistanceRiverMidLevelRight = 9;
     public static int riverWidth = 12;
     public static int maxRiverSegmentHeight = 7;
     public static int minRiverSegmentHeight = 2;
@@ -124,23 +126,55 @@ public static class LevelBuilder
 
             var midRiverX = riverLowerLeftCornerX + (riverWidth / 2);
             riverLeftOfAirstrip = midRiverX < midX;
-            var minSlopeIndex = 1;
+            var minSlopeIndex = 0;
             var maxSlopeIndexExclusive = riverSlopes.Length - 1;
             bool approaching = LevelContents.gridHeight - y < approachLength;
             bool takingOff = y < approachLength;
-            int slopeIndexOffset = 0;
+            //int slopeIndexOffset = 0;
             if (approaching)
             {
                 // Airstrip approaching. River must not bend toward next airstrip location.
-                slopeIndexOffset =  riverLeftOfAirstrip ? -1 : 1;
+                //slopeIndexOffset = riverLeftOfAirstrip ? -1 : 1;
+                if (riverLeftOfAirstrip)
+                {
+                    maxSlopeIndexExclusive -= 1;
+                }
+                else
+                {
+                    minSlopeIndex += 2;
+                    maxSlopeIndexExclusive += 1;
+                }
+                
             }
-            if (takingOff)
+            else if (takingOff)
             {
                 // Leaving Airstrip. River must not bend away from next airstrip location.
-                slopeIndexOffset =  riverLeftOfAirstrip ? 1 : -1;
+                //slopeIndexOffset =  riverLeftOfAirstrip ? 1 : -1;
+                if (riverLeftOfAirstrip)
+                {
+                    minSlopeIndex += 2;
+                    maxSlopeIndexExclusive += 1;
+                }
+                else
+                {
+                    maxSlopeIndexExclusive -= 1;
+                }
             }
-            minSlopeIndex += slopeIndexOffset;
-            maxSlopeIndexExclusive += slopeIndexOffset;
+            else
+            {
+                if (midRiverX - midX > maxNormalDistanceRiverMidLevelRight)
+                {
+                    // Too far to the right
+                    maxSlopeIndexExclusive -= 1;
+                }
+                else if (midRiverX - midX < -maxNormalDistanceRiverMidLevelLeft)
+                {
+                    // Too far to the left
+                    minSlopeIndex += 2;
+                }
+            }
+            //minSlopeIndex += slopeIndexOffset;
+            //maxSlopeIndexExclusive += slopeIndexOffset;
             var slopeIndex = UnityEngine.Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
             var slope = riverSlopes[slopeIndex];
             riverSegments.Add(new RiverSegment {height = segmentHeight, slope = slope});
