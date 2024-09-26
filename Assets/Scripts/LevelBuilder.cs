@@ -35,6 +35,7 @@ public class LevelContents
     public IEnumerable<HousePosition> houses = new List<HousePosition>();
     public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
     public int riverLowerLeftCornerX;
+    public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
 }
@@ -152,6 +153,7 @@ public static class LevelBuilder
             riverLowerLeftCornerX += slopeX;
         }
         ret.riverSegments = riverSegments;
+        ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip;
 
         var ytmp = 0;
         var startX = (float)riverLowerLeftCornerXStart;

@@ -106,11 +106,15 @@ IGameEventReporter, implemented by SceneController
     Any active object -> gameEventReporter -> refobj, max, ...
 To decouple: new gameobject with sole purpose to delegate implementation of IGameEventReporter (to SceneController).
 
-Keep all game objects under a parent object (Level). Swap out levels as needed.
+Keep all game objects under a parent object (Level). Swap out levels as needed.*
   Some things, like enemy planes, can be without parent level object.
 
 ----
 New level:
   RiverLeftOfAirStrip should be set according to how old level ends.
-  Cleanup unused params llcx, llcy
+  Cleanup unused params llcx, llcy*
+
+---
+River veers off to the right. Adjust probabilities.
+
 
