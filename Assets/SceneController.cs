@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ public class SceneController : MonoBehaviour
 
     //// Game status
     int level = -1;
-    GameStatus gameStatus = GameStatus.ACCELERATING;
+    GameStatus gameStatus = GameStatus.FLYING;
     float speed = 0f;
     float prepTimeForNextLevelQuotient = 0.98f;
     float lastLevelLowerEdgeX = 0f;
@@ -61,6 +62,10 @@ public class SceneController : MonoBehaviour
     static int nofLevels = 2;
     GameObject[] levels = new GameObject[nofLevels];
     LevelContents lastestLevel;
+    MaxControl maxPlane;
+    float landingStripBottomY;
+    float landingStripTopY;
+    float landingStripWidth;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -166,6 +171,9 @@ public class SceneController : MonoBehaviour
         var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
         var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
         lsGameObject.transform.localPosition = lsLocalTransform;
+        landingStripBottomY = lsGameObject.transform.position.y;
+        landingStripTopY = landingStripBottomY + lsHeight;
+        landingStripWidth = lsWidth;
         
         var lsUpperCornerOffsetX = lsHeight * neutralSlope;
 
@@ -342,7 +350,7 @@ public class SceneController : MonoBehaviour
         /*startPos.x += 1.0f;
         startPos.y += 1.0f;
         startPos.z = 0.8f;*/
-        MaxControl maxPlane = Instantiate(maxPlanePrefab, startPos, Quaternion.identity, refobject.transform);
+        maxPlane = Instantiate(maxPlanePrefab, startPos, Quaternion.identity, refobject.transform);
         maxPlane.refObject = refobject.transform;
         AddPlaneShadow(maxPlane.transform);
 
@@ -368,6 +376,18 @@ public class SceneController : MonoBehaviour
         PopulateScene(lastestLevel);
     }
 
+    bool IsOverLandingStrip(Vector2 position)
+    {
+        return position.y > landingStripBottomY && 
+            position.y < landingStripTopY &&
+            Math.Abs(refobject.transform.position.y - maxPlane.transform.position.y) < landingStripWidth / 2;
+    }
+
+    void PreventRelanding()
+    {
+        landingStripTopY = landingStripBottomY;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -378,5 +398,23 @@ public class SceneController : MonoBehaviour
             RotateLevels();
             PopulateScene(lastestLevel);
         }
+
+        // Update game state
+        if (gameStatus == GameStatus.FLYING)
+        {
+            //Debug.Log($"Alt: {maxPlane.GetAltitude()} ({MaxControl.landingAltitude})");
+            if (maxPlane.GetAltitude() <= MaxControl.landingAltitude) 
+            {
+                //Debug.Log("Low");
+                if (IsOverLandingStrip(maxPlane.GetPosition()))
+                {
+                    Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
+                    PreventRelanding();
+                    //gameStatus = GameStatus.DECELERATING;
+                }
+            }
+        }
+
+        // Update refobject position
     }
 }

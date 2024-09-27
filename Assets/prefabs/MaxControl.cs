@@ -9,9 +9,10 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public Transform refObject;
     public float horizontalSpeed = 3.0f;
     public float verticalSpeed = 2.0f;
-    public float bulletIntervalSeconds = 0.1f;
-    public float bombIntervalSeconds = 0.5f;
-    public float minAltitude = 0.1f;
+    public static readonly float bulletIntervalSeconds = 0.1f;
+    public static readonly float bombIntervalSeconds = 0.5f;
+    public static readonly float minAltitude = 0.1f;
+    public static readonly float landingAltitude = 0.11f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     public InputAction MoveAction;

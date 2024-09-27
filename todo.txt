@@ -109,12 +109,24 @@ To decouple: new gameobject with sole purpose to delegate implementation of IGam
 Keep all game objects under a parent object (Level). Swap out levels as needed.*
   Some things, like enemy planes, can be without parent level object.
 
-----
-New level:
-  RiverLeftOfAirStrip should be set according to how old level ends.
-  Cleanup unused params llcx, llcy*
-
 ---
-River veers off to the right. Adjust probabilities.
+River veers off to the right. Adjust probabilities.*
+
+To do:
+Disable/destroy out-of-range flack guns
+Keep all objects out of range deactivated. Reactivate when getting in range.
+  Big square collider, viewport size?
+    It should be possible for a disabled game object to collide, as long as its collider is not disabled.
+  Better than a collider: keep one collection of game objects per row
+    => Easy to detect when a new row is in range or out of range. Objects and their colliders can be turned off when out of range.
+       Objects going out of range can be immediately destroyed.
+     This is also a good way to trigger cars driving on the roads just as the plane passes.
+
+Landing:
+  Low altitude, plane over runway.
+    Super simple implementation: y coordinate of plane is within y coordinates of the runway.
+     and abs(refobject.x - plane.x) < half runway width
+
+
 
 
