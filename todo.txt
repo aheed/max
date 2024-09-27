@@ -130,6 +130,10 @@ Keep all objects out of range deactivated. Reactivate when getting in range.
        Objects going out of range can be immediately destroyed.
      This is also a good way to trigger cars driving on the roads just as the plane passes.
 Restrict response to user input based on game status.
+Make enemy planes move at speeds proportional to max speed.
+Disable prop on DEAD or KILLED_BY_FLACK.
+Disable shadow on DEAD.
+  Prop and shadow can implement IGameStateObserver to achieve this in a decoupled way.
 
 
 

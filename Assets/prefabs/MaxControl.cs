@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MaxControl : MonoBehaviour, IPositionObservable
+public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
 {
     public Transform refObject;
     public float horizontalSpeed = 3.0f;
@@ -26,8 +26,10 @@ public class MaxControl : MonoBehaviour, IPositionObservable
     public Sprite leftSprite;
     public Sprite rightSprite;
     public Sprite straightSprite;
+    public Sprite crashedSprite;
     private SpriteRenderer spriteR;
     private bool initialized = false;
+    GameState gameState;
 
     // Start is called before the first frame update
     void Start()
@@ -38,41 +40,63 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
-    void FireBullet()
+    void FireBullet(GameStatus gameStatus)
     {
-        if (bulletCooldown <= 0)
+        switch (gameStatus)
         {
-            //GameObject projectileObject = Instantiate(bulletPrefab, rigidbody2d.position, Quaternion.identity);
-            //Debug.Log($"Creating bullet at {transform.position}");
-            GameObject projectileObject = Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
-            bulletCooldown = bulletIntervalSeconds;
+            case GameStatus.FINISHED:
+            case GameStatus.DEAD:
+                // Todo: start a new game
+                return;
+            case GameStatus.FLYING:
+            case GameStatus.COLLIDED:
+            case GameStatus.OUT_OF_FUEL:
+                break;
+            default:
+                return;
         }
+
+        if (bulletCooldown > 0)
+        {
+            return;
+        }
+
+        Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
+        bulletCooldown = bulletIntervalSeconds;
     }
 
-    // Update is called once per frame
-    void Update()
+    void HandleMove(Vector2 move, GameStatus gameStatus)
     {
-        move = MoveAction.ReadValue<Vector2>();
-        if (FireAction.IsPressed())
-        {
-            FireBullet();
-            if (move.y > 0)
-            {
-                DropBomb();
-            }
-        }
-        
-        bulletCooldown -= Time.deltaTime;
-        bombCooldown -= Time.deltaTime;
-    }
+        Vector2 apparentMove = move;
 
-    void FixedUpdate()
-    {
-        if (move != Vector2.zero || !initialized)
+        switch(gameStatus)
+        {
+            case GameStatus.FINISHED:
+            case GameStatus.DEAD:
+            case GameStatus.KILLED_BY_FLACK:
+                return;
+            case GameStatus.ACCELERATING:
+            case GameStatus.DECELERATING:
+            case GameStatus.REFUELLING:
+                apparentMove.y = 0;
+                if (move.x != 0)
+                {
+                    gameState.SetStatus(GameStatus.DEAD);
+                    return;
+                }
+                break;
+            case GameStatus.COLLIDED:
+                // Todo: reassign apparentMove to left,right,neutral randomly + down
+                break;
+            default:
+                break;
+        }
+
+        if (apparentMove != Vector2.zero || !initialized)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
-            tmpLocalPosition.x += move.x * horizontalSpeed * Time.deltaTime;
-            tmpLocalPosition.z -= move.y * verticalSpeed * Time.deltaTime;
+            tmpLocalPosition.x += apparentMove.x * horizontalSpeed * Time.deltaTime;
+            tmpLocalPosition.z -= apparentMove.y * verticalSpeed * Time.deltaTime;
             if (tmpLocalPosition.z < minAltitude) 
             {
                 tmpLocalPosition.z = minAltitude;
@@ -81,21 +105,47 @@ public class MaxControl : MonoBehaviour, IPositionObservable
             transform.localPosition = tmpLocalPosition;
             initialized = true;
         }
-        //Debug.Log($"zzzzzz {offset} {refObject.transform.position} {transform.position}");
-        if (move.x != lastMove.x)
+
+        if (apparentMove.x != lastMove.x)
         {
             var newSprite = straightSprite;
-            if (move.x < 0)
+            if (apparentMove.x < 0)
             {
                 newSprite = leftSprite;
             }
-            else if (move.x > 0)
+            else if (apparentMove.x > 0)
             {
                 newSprite = rightSprite;
             }
             spriteR.sprite = newSprite;
-            lastMove = move;
+            lastMove = apparentMove;
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (gameState == null)
+        {
+            gameState = FindObjectOfType<GameState>();
+            gameState.RegisterObserver(this);
+        }
+        GameStateContents stateContents = gameState.GetStateContents();
+
+        move = MoveAction.ReadValue<Vector2>();
+        if (FireAction.IsPressed())
+        {
+            FireBullet(stateContents.gameStatus);
+            if (move.y > 0)
+            {
+                DropBomb(stateContents.gameStatus);
+            }
+        }
+        
+        bulletCooldown -= Time.deltaTime;
+        bombCooldown -= Time.deltaTime;
+
+        HandleMove(move, stateContents.gameStatus);
 
         if (GetAltitude() != lastAltitude)
         {
@@ -133,8 +183,17 @@ public class MaxControl : MonoBehaviour, IPositionObservable
         }                
     }
 
-    void DropBomb()
+    void DropBomb(GameStatus gameStatus)
     {
+        switch (gameStatus)
+        {
+            case GameStatus.FLYING:
+            case GameStatus.OUT_OF_FUEL:
+                break;
+            default:
+                return;
+        }
+    
         if (bombCooldown > 0)
         {
             return;
@@ -142,5 +201,13 @@ public class MaxControl : MonoBehaviour, IPositionObservable
 
         var bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
+    }
+
+    public void OnGameStatusChanged(GameStatus gameStatus)
+    {
+        if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
+        {
+            spriteR.sprite = crashedSprite;
+        }
     }
 }

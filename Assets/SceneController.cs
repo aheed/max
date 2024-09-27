@@ -18,7 +18,7 @@ public enum GameStatus
     FINISHED  // Rule Britannia!
 }
 
-public class SceneController : MonoBehaviour
+public class SceneController : MonoBehaviour, IGameStateObserver
 {
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
@@ -389,6 +389,7 @@ public class SceneController : MonoBehaviour
         if (gameState == null)
         {
             gameState = FindObjectOfType<GameState>();
+            gameState.RegisterObserver(this);
         }
         GameStateContents stateContents = gameState.GetStateContents();
 
@@ -444,5 +445,13 @@ public class SceneController : MonoBehaviour
         Vector2 levelVelocity = new(stateContents.speed, stateContents.speed);
         Vector3 delta = levelVelocity * Time.deltaTime;
         refobject.transform.position += delta;
+    }
+
+    public void OnGameStatusChanged(GameStatus gameStatus)
+    {
+        if(gameStatus == GameStatus.DEAD)
+        {
+            gameState.GetStateContents().speed = 0f;
+        }
     }
 }
