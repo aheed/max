@@ -12,6 +12,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
+    public static readonly float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
@@ -65,25 +66,27 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         bulletCooldown = bulletIntervalSeconds;
     }
 
-    void HandleMove(Vector2 move, GameStatus gameStatus)
+    void HandleMove(Vector2 move)
     {
+        GameStateContents stateContents = gameState.GetStateContents();
         Vector2 apparentMove = move;
 
-        switch(gameStatus)
+        switch(stateContents.gameStatus)
         {
             case GameStatus.FINISHED:
             case GameStatus.DEAD:
             case GameStatus.KILLED_BY_FLACK:
                 return;
             case GameStatus.ACCELERATING:
-            case GameStatus.DECELERATING:
-            case GameStatus.REFUELLING:
-                apparentMove.y = 0;
-                if (move.x != 0)
+                var safeTakeoffSpeed = gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed;
+                if (move.y < 0f && stateContents.speed < safeTakeoffSpeed)
                 {
                     gameState.SetStatus(GameStatus.DEAD);
-                    return;
                 }
+                break;
+            case GameStatus.DECELERATING:
+            case GameStatus.REFUELLING:
+                apparentMove.y = 0;                
                 break;
             case GameStatus.COLLIDED:
                 // Todo: reassign apparentMove to left,right,neutral randomly + down
@@ -120,6 +123,11 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             spriteR.sprite = newSprite;
             lastMove = apparentMove;
         }
+
+        if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
+        {
+            gameState.SetStatus(GameStatus.DEAD);
+        }
     }
 
     // Update is called once per frame
@@ -145,7 +153,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         bulletCooldown -= Time.deltaTime;
         bombCooldown -= Time.deltaTime;
 
-        HandleMove(move, stateContents.gameStatus);
+        HandleMove(move);
 
         if (GetAltitude() != lastAltitude)
         {

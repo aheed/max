@@ -16,6 +16,7 @@ public interface IGameStateObserver
 public class GameState : MonoBehaviour
 {
     public float maxSpeed = 2.0f;
+    public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;

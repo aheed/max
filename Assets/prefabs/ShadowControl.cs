@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShadowControl : MonoBehaviour
+public class ShadowControl : MonoBehaviour, IGameStateObserver
 {
     public float shadowCoeffX = 0.0f;
     public float shadowCoeffY = -1.0f;
@@ -10,6 +10,7 @@ public class ShadowControl : MonoBehaviour
     public Sprite straightSprite;
     private SpriteRenderer spriteR;
     private IPositionObservable plane;
+    private GameState gameState;
 
     void Start()
     {
@@ -19,6 +20,12 @@ public class ShadowControl : MonoBehaviour
 
     void Update()
     {
+        if (gameState == null)
+        {
+            gameState = FindObjectOfType<GameState>();
+            gameState.RegisterObserver(this);
+        }
+
         var planeAltitude = plane.GetAltitude();
         transform.localPosition = new Vector3(planeAltitude * shadowCoeffX, planeAltitude * shadowCoeffY);
 
@@ -28,5 +35,10 @@ public class ShadowControl : MonoBehaviour
         {
             spriteR.sprite = newSprite;
         }
-    }    
+    }
+
+    public void OnGameStatusChanged(GameStatus gameStatus)
+    {
+        gameObject.SetActive(gameStatus != GameStatus.DEAD);
+    }
 }
