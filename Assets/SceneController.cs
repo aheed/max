@@ -50,22 +50,23 @@ public class SceneController : MonoBehaviour
     static readonly int neutralRiverSlopeIndex = 2;
     public float levelWidth = 8f;
     public float levelHeight = 80f;
-    public float acceleration = 0.01f;
 
     //// Game status
     int level = -1;
-    GameStatus gameStatus = GameStatus.FLYING;
-    float speed = 0f;
+    GameStatus gameStatus = GameStatus.ACCELERATING;
     float prepTimeForNextLevelQuotient = 0.98f;
     float lastLevelLowerEdgeX = 0f;
     int currentLevelIndex = 0;
     static int nofLevels = 2;
     GameObject[] levels = new GameObject[nofLevels];
-    LevelContents lastestLevel;
+    LevelContents latestLevel;
     MaxControl maxPlane;
     float landingStripBottomY;
     float landingStripTopY;
     float landingStripWidth;
+    public float maxSpeed = 2.0f;
+    public float acceleration = 0.4f;
+    float speed = 0f;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -368,12 +369,13 @@ public class SceneController : MonoBehaviour
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane2.transform);
 
-        lastestLevel = LevelBuilder.Build(true);
+        latestLevel = LevelBuilder.Build(true);
         var levelLowerLeftCornerX = 0f;
         var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
         refobject.transform.position = newRefObjPos;
         RotateLevels();
-        PopulateScene(lastestLevel);
+        PopulateScene(latestLevel);
+        PreventRelanding();
     }
 
     bool IsOverLandingStrip(Vector2 position)
@@ -394,9 +396,9 @@ public class SceneController : MonoBehaviour
         if (refobject.transform.position.x > (lastLevelLowerEdgeX + levelHeight * prepTimeForNextLevelQuotient))
         {
             Debug.Log("Time to add new level ***************");
-            lastestLevel = LevelBuilder.Build(lastestLevel.riverEndsLeftOfAirstrip);
+            latestLevel = LevelBuilder.Build(latestLevel.riverEndsLeftOfAirstrip);
             RotateLevels();
-            PopulateScene(lastestLevel);
+            PopulateScene(latestLevel);
         }
 
         // Update game state
@@ -410,11 +412,41 @@ public class SceneController : MonoBehaviour
                 {
                     Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
                     PreventRelanding();
-                    //gameStatus = GameStatus.DECELERATING;
+                    gameStatus = GameStatus.DECELERATING;
                 }
             }
         }
 
+        if (gameStatus == GameStatus.ACCELERATING)
+        {
+            speed += acceleration * maxSpeed * Time.deltaTime;
+            if (speed > maxSpeed)
+            {
+                speed = maxSpeed;
+                gameStatus = GameStatus.FLYING;
+            }
+        }
+
+        if (gameStatus == GameStatus.DECELERATING)
+        {
+            speed -= acceleration * maxSpeed * Time.deltaTime;
+            if (speed < 0f)
+            {
+                speed = 0f;
+                gameStatus = GameStatus.REFUELLING;
+            }
+        }
+
+        if (gameStatus == GameStatus.REFUELLING)
+        {
+            // Todo: Refuelling and repair
+            
+            gameStatus = GameStatus.ACCELERATING;
+        }
+
         // Update refobject position
+        Vector2 levelVelocity = new(speed, speed);
+        Vector3 delta = levelVelocity * Time.deltaTime;
+        refobject.transform.position += delta;
     }
 }

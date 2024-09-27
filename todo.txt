@@ -122,7 +122,7 @@ Keep all objects out of range deactivated. Reactivate when getting in range.
        Objects going out of range can be immediately destroyed.
      This is also a good way to trigger cars driving on the roads just as the plane passes.
 
-Landing:
+Landing:*
   Low altitude, plane over runway.
     Super simple implementation: y coordinate of plane is within y coordinates of the runway.
      and abs(refobject.x - plane.x) < half runway width
