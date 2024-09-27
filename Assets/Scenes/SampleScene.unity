@@ -2433,7 +2433,6 @@ MonoBehaviour:
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
   levelWidth: 20
   levelHeight: 80
-  acceleration: 0.01
 --- !u!1 &958610452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,6 +3381,52 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &2110362360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2110362362}
+  - component: {fileID: 2110362361}
+  m_Layer: 0
+  m_Name: GameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2110362361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110362360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff12e963211403c6b370f7e0116e4e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 2
+  acceleration: 0.4
+--- !u!4 &2110362362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110362360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.96293116, y: -1.5081418, z: 0.008797536}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2853367615520477439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3409,6 +3454,14 @@ PrefabInstance:
     - target: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
       propertyPath: levelSpeed.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
+      propertyPath: levelVelocity.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
+      propertyPath: levelVelocity.y
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5340390649717109972, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3464,3 +3517,4 @@ SceneRoots:
   - {fileID: 958610454}
   - {fileID: 2853367615520477439}
   - {fileID: 763321430}
+  - {fileID: 2110362362}

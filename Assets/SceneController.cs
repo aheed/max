@@ -53,7 +53,6 @@ public class SceneController : MonoBehaviour
 
     //// Game status
     int level = -1;
-    GameStatus gameStatus = GameStatus.ACCELERATING;
     float prepTimeForNextLevelQuotient = 0.98f;
     float lastLevelLowerEdgeX = 0f;
     int currentLevelIndex = 0;
@@ -64,9 +63,7 @@ public class SceneController : MonoBehaviour
     float landingStripBottomY;
     float landingStripTopY;
     float landingStripWidth;
-    public float maxSpeed = 2.0f;
-    public float acceleration = 0.4f;
-    float speed = 0f;
+    GameState gameState;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -215,9 +212,6 @@ public class SceneController : MonoBehaviour
         rsMeshRenderer.material = riverMaterial;
 
         // Mesh
-        //var startY = 0f;
-        //var y = startY;
-        //var maxY = y + riverSectionHeight;
         var vertices = new List<Vector3>();
         var triangles = new List<int>();
         var normals = new List<Vector3>();
@@ -346,7 +340,6 @@ public class SceneController : MonoBehaviour
 
     void Start()
     {
-        //var refobject = GetComponent<refobj>();
         var startPos = refobject.transform.position;
         /*startPos.x += 1.0f;
         startPos.y += 1.0f;
@@ -393,6 +386,12 @@ public class SceneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameState == null)
+        {
+            gameState = FindObjectOfType<GameState>();
+        }
+        GameStateContents stateContents = gameState.GetStateContents();
+
         if (refobject.transform.position.x > (lastLevelLowerEdgeX + levelHeight * prepTimeForNextLevelQuotient))
         {
             Debug.Log("Time to add new level ***************");
@@ -402,7 +401,7 @@ public class SceneController : MonoBehaviour
         }
 
         // Update game state
-        if (gameStatus == GameStatus.FLYING)
+        if (stateContents.gameStatus == GameStatus.FLYING)
         {
             //Debug.Log($"Alt: {maxPlane.GetAltitude()} ({MaxControl.landingAltitude})");
             if (maxPlane.GetAltitude() <= MaxControl.landingAltitude) 
@@ -412,40 +411,37 @@ public class SceneController : MonoBehaviour
                 {
                     Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
                     PreventRelanding();
-                    gameStatus = GameStatus.DECELERATING;
+                    stateContents.gameStatus = GameStatus.DECELERATING;
                 }
             }
         }
-
-        if (gameStatus == GameStatus.ACCELERATING)
+        else if (stateContents.gameStatus == GameStatus.ACCELERATING)
         {
-            speed += acceleration * maxSpeed * Time.deltaTime;
-            if (speed > maxSpeed)
+            stateContents.speed += gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
+            if (stateContents.speed > gameState.maxSpeed)
             {
-                speed = maxSpeed;
-                gameStatus = GameStatus.FLYING;
+                stateContents.speed = gameState.maxSpeed;
+                stateContents.gameStatus = GameStatus.FLYING;
             }
         }
-
-        if (gameStatus == GameStatus.DECELERATING)
+        else if (stateContents.gameStatus == GameStatus.DECELERATING)
         {
-            speed -= acceleration * maxSpeed * Time.deltaTime;
-            if (speed < 0f)
+            stateContents.speed -= gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
+            if (stateContents.speed < 0f)
             {
-                speed = 0f;
-                gameStatus = GameStatus.REFUELLING;
+                stateContents.speed = 0f;
+                stateContents.gameStatus = GameStatus.REFUELLING;
             }
         }
-
-        if (gameStatus == GameStatus.REFUELLING)
+        else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
             // Todo: Refuelling and repair
             
-            gameStatus = GameStatus.ACCELERATING;
+            stateContents.gameStatus = GameStatus.ACCELERATING;
         }
 
         // Update refobject position
-        Vector2 levelVelocity = new(speed, speed);
+        Vector2 levelVelocity = new(stateContents.speed, stateContents.speed);
         Vector3 delta = levelVelocity * Time.deltaTime;
         refobject.transform.position += delta;
     }

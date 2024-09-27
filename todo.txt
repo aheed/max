@@ -90,7 +90,7 @@ Flight restrictions
 MaxControl: refObject member not necessary. Only used to set parent object for bombs. Could be done by getting maxcontrol's own parent object.
 
 Easiest: let SceneController keep track of everything
-  refobj position vs end of level
+  refobj position vs end of level*
   Plane status
     accelerating
     decelerating
@@ -105,12 +105,20 @@ IGameEventReporter, implemented by SceneController
   Info flow:
     Any active object -> gameEventReporter -> refobj, max, ...
 To decouple: new gameobject with sole purpose to delegate implementation of IGameEventReporter (to SceneController).
+  A single static instance: GameState
+    Allows game events to be reported and echoed to any registered observer.
+    Also allows stats and info, like airplane speed, to be read.
 
 Keep all game objects under a parent object (Level). Swap out levels as needed.*
   Some things, like enemy planes, can be without parent level object.
 
 ---
 River veers off to the right. Adjust probabilities.*
+
+Landing:*
+  Low altitude, plane over runway.
+    Super simple implementation: y coordinate of plane is within y coordinates of the runway.
+     and abs(refobject.x - plane.x) < half runway width
 
 To do:
 Disable/destroy out-of-range flack guns
@@ -121,11 +129,9 @@ Keep all objects out of range deactivated. Reactivate when getting in range.
     => Easy to detect when a new row is in range or out of range. Objects and their colliders can be turned off when out of range.
        Objects going out of range can be immediately destroyed.
      This is also a good way to trigger cars driving on the roads just as the plane passes.
+Restrict response to user input based on game status.
 
-Landing:*
-  Low altitude, plane over runway.
-    Super simple implementation: y coordinate of plane is within y coordinates of the runway.
-     and abs(refobject.x - plane.x) < half runway width
+
 
 
 
