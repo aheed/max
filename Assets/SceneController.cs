@@ -18,6 +18,12 @@ public enum GameStatus
     FINISHED  // Rule Britannia!
 }
 
+public class GameObjectCollection
+{
+    public float yCoord;
+    public List<GameObject> gameObjects;
+}
+
 public class SceneController : MonoBehaviour, IGameStateObserver
 {
     public MaxControl maxPlanePrefab;
@@ -50,11 +56,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     static readonly int neutralRiverSlopeIndex = 2;
     public float levelWidth = 8f;
     public float levelHeight = 80f;
+    public float activationDistance = 20f;
+    public float deactivationDistance = 20f;
 
     //// Game status
     int level = -1;
-    float prepTimeForNextLevelQuotient = 0.98f;
-    float lastLevelLowerEdgeX = 0f;
+    float prepTimeForNextLevelQuotient = 0.90f;
+    float lastLevelLowerEdgeY = 0f;
     int currentLevelIndex = 0;
     static int nofLevels = 2;
     GameObject[] levels = new GameObject[nofLevels];
@@ -64,6 +72,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float landingStripTopY;
     float landingStripWidth;
     GameState gameState;
+    List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
+    List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -82,7 +92,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var llcy = level * levelHeight;
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
-        lastLevelLowerEdgeX = llcx;
+        lastLevelLowerEdgeY = llcy;
     }
 
 
@@ -133,7 +143,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public void PopulateScene(LevelContents levelContents)
+    public List<GameObjectCollection> PopulateScene(LevelContents levelContents)
     {
         float cellWidth = levelWidth / LevelContents.gridWidth;
         float cellHeight = levelHeight / LevelContents.gridHeight;
@@ -302,10 +312,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             houseGameObject.transform.localPosition = houseLocalTransform;
         }
 
+        List<GameObjectCollection> ret = new();
+
         // Single cell items: Flack guns, trees, tanks
-        for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)
+        for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
+            var gameObjects = new List<GameObject>();
+            ret.Add(new GameObjectCollection {
+                yCoord = ytmp * cellHeight, // level relative coordinate
+                gameObjects = gameObjects
+            });
+            for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)    
             {
                 GameObject selectedPrefab = null;
                 switch (levelContents.cells[xtmp, ytmp])
@@ -332,10 +349,34 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.2f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
+                    gameObjects.Add(itemGameObject);
                 }
 
             }
-        }    
+        }
+
+        return ret;
+    }
+
+    void CreateLevel()
+    {
+        RotateLevels();
+        var newGameObjects = PopulateScene(latestLevel)
+        .Select(goc => new GameObjectCollection {yCoord = goc.yCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
+        .ToList();
+        foreach (var collection in newGameObjects)
+        {
+            foreach (var gameObject in collection.gameObjects)
+            {
+                var collider = gameObject.GetComponent<Collider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+                gameObject.SetActive(false);
+            }
+        }
+        pendingActivation.AddRange(newGameObjects);
     }
 
     void Start()
@@ -362,12 +403,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane2.transform);
 
-        latestLevel = LevelBuilder.Build(true);
         var levelLowerLeftCornerX = 0f;
         var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
         refobject.transform.position = newRefObjPos;
-        RotateLevels();
-        PopulateScene(latestLevel);
+
+        latestLevel = LevelBuilder.Build(true);        
+        CreateLevel();
         PreventRelanding();
     }
 
@@ -393,12 +434,46 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
         GameStateContents stateContents = gameState.GetStateContents();
 
-        if (refobject.transform.position.x > (lastLevelLowerEdgeX + levelHeight * prepTimeForNextLevelQuotient))
+        if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
         {
             Debug.Log("Time to add new level ***************");
             latestLevel = LevelBuilder.Build(latestLevel.riverEndsLeftOfAirstrip);
-            RotateLevels();
-            PopulateScene(latestLevel);
+            CreateLevel();
+        }
+
+        while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().yCoord)
+        {
+            //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
+
+            // Activate objects
+            var collection = pendingActivation.First();
+            foreach (var gameObject in collection.gameObjects)
+            {
+                var collider = gameObject.GetComponent<Collider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = true;
+                }
+                gameObject.SetActive(true);
+
+            }
+
+            // Move collection to the activeObjects collection
+            pendingActivation.RemoveAt(0);
+            activeObjects.Add(collection);
+        }
+
+        while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().yCoord)
+        {
+            //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
+
+            var collection = activeObjects.First();
+            foreach (var gameObject in collection.gameObjects)
+            {
+                Destroy(gameObject);
+            }
+
+            activeObjects.RemoveAt(0);
         }
 
         // Update game state
