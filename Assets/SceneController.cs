@@ -513,27 +513,37 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Update game state
-        if (stateContents.gameStatus == GameStatus.FLYING)
+
+        if (stateContents.gameStatus == GameStatus.FLYING ||
+            stateContents.gameStatus == GameStatus.ACCELERATING)
         {
-            //Debug.Log($"Alt: {maxPlane.GetAltitude()} ({MaxControl.landingAltitude})");
-            if (maxPlane.GetAltitude() <= MaxControl.landingAltitude) 
+            if (stateContents.gameStatus == GameStatus.FLYING)
             {
-                //Debug.Log("Low");
-                if (IsOverLandingStrip(maxPlane.GetPosition()))
+                //Debug.Log($"Alt: {maxPlane.GetAltitude()} ({MaxControl.landingAltitude})");
+                if (maxPlane.GetAltitude() <= MaxControl.landingAltitude) 
                 {
-                    Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
-                    PreventRelanding();
-                    stateContents.gameStatus = GameStatus.DECELERATING;
+                    //Debug.Log("Low");
+                    if (IsOverLandingStrip(maxPlane.GetPosition()))
+                    {
+                        Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
+                        PreventRelanding();
+                        gameState.SetStatus(GameStatus.DECELERATING);
+                    }
                 }
             }
-        }
-        else if (stateContents.gameStatus == GameStatus.ACCELERATING)
-        {
-            stateContents.speed += gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
-            if (stateContents.speed > gameState.maxSpeed)
+
+            if (stateContents.speed < gameState.maxSpeed)
             {
-                stateContents.speed = gameState.maxSpeed;
-                stateContents.gameStatus = GameStatus.FLYING;
+                stateContents.speed += gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
+                if (stateContents.speed > gameState.maxSpeed)
+                {
+                    stateContents.speed = gameState.maxSpeed;
+                }
+                if (stateContents.speed >= gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed)
+                {
+                    stateContents.speed = gameState.maxSpeed;
+                    gameState.SetStatus(GameStatus.FLYING);
+                }
             }
         }
         else if (stateContents.gameStatus == GameStatus.DECELERATING)
@@ -542,14 +552,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             if (stateContents.speed < 0f)
             {
                 stateContents.speed = 0f;
-                stateContents.gameStatus = GameStatus.REFUELLING;
+                gameState.SetStatus(GameStatus.REFUELLING);
             }
         }
         else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
             // Todo: Refuelling and repair
             
-            stateContents.gameStatus = GameStatus.ACCELERATING;
+            gameState.SetStatus(GameStatus.ACCELERATING);
         }
         else if (stateContents.gameStatus == GameStatus.DEAD || 
                  stateContents.gameStatus == GameStatus.FINISHED)
@@ -568,6 +578,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
+        Debug.Log($"New State: {gameStatus}");
         if(gameStatus == GameStatus.DEAD ||
            gameStatus == GameStatus.FINISHED)
         {
@@ -582,7 +593,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         {
             if (restartCoolDownSeconds > 0f)
             {
-                Debug.Log("Too early to restart");
+                //Debug.Log("Too early to restart");
                 return;
             }
 

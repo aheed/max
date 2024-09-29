@@ -207,7 +207,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             return;
         }
 
-        var bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
+        Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
     }
 
@@ -219,5 +219,17 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         }
     }
 
-    public void OnGameEvent(GameEvent _) {}
+    public void OnGameEvent(GameEvent gameEvent) {
+        if (gameEvent == GameEvent.START)
+        {
+            Vector3 tmpLocalPosition = transform.localPosition;
+            if (tmpLocalPosition.z < minAltitude) 
+            {
+                tmpLocalPosition.z = minAltitude;
+            }
+            tmpLocalPosition.y = tmpLocalPosition.z;
+            transform.localPosition = tmpLocalPosition;
+            spriteR.sprite = straightSprite;
+        }
+    }
 }
