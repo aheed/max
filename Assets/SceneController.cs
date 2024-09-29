@@ -58,6 +58,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float levelHeight = 80f;
     public float activationDistance = 20f;
     public float deactivationDistance = 20f;
+    public float minRestartWaitSeconds = 1.0f;
 
     //// Game status
     int level = -1;
@@ -74,6 +75,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     GameState gameState;
     List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
     List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
+    float restartCoolDownSeconds = 0;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -515,6 +517,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             
             stateContents.gameStatus = GameStatus.ACCELERATING;
         }
+        else if (stateContents.gameStatus == GameStatus.DEAD || 
+                 stateContents.gameStatus == GameStatus.FINISHED)
+        {
+            if (restartCoolDownSeconds > 0f)
+            {
+                restartCoolDownSeconds -= Time.deltaTime;
+            }
+        }
 
         // Update refobject position
         Vector2 levelVelocity = new(stateContents.speed, stateContents.speed);
@@ -524,9 +534,29 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
-        if(gameStatus == GameStatus.DEAD)
+        if(gameStatus == GameStatus.DEAD ||
+           gameStatus == GameStatus.FINISHED)
         {
             gameState.GetStateContents().speed = 0f;
+            restartCoolDownSeconds = minRestartWaitSeconds;
+        }
+    }
+
+    public void OnGameEvent(GameEvent gameEvent)
+    {
+        if (gameEvent == GameEvent.RESTART_REQUESTED)
+        {
+            if (restartCoolDownSeconds > 0f)
+            {
+                Debug.Log("Too early to restart");
+                return;
+            }
+
+            Debug.Log("Starting a new game");
+
+            
+
+            gameState.ReportEvent(GameEvent.START);
         }
     }
 }

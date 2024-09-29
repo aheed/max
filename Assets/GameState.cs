@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameEvent
+{
+    START,
+    RESTART_REQUESTED
+}
+
 public class GameStateContents
 {
     public float speed = 0f;    
@@ -11,6 +17,7 @@ public class GameStateContents
 public interface IGameStateObserver
 {
     void OnGameStatusChanged(GameStatus gameStatus);
+    void OnGameEvent(GameEvent gameEvent);
 }
 
 public class GameState : MonoBehaviour
@@ -30,11 +37,24 @@ public class GameState : MonoBehaviour
 
     public void SetStatus(GameStatus gameStatus)
     {
+        if (gameStatus == gameStateContents.gameStatus)
+        {
+            return;
+        }
+        
         gameStateContents.gameStatus = gameStatus;
 
         foreach (var observer in observers)
         {
             observer.OnGameStatusChanged(gameStatus);
+        }
+    }
+
+    public void ReportEvent(GameEvent gameEvent)
+    {
+        foreach (var observer in observers)
+        {
+            observer.OnGameEvent(gameEvent);
         }
     }
 

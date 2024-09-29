@@ -121,8 +121,8 @@ Landing:*
      and abs(refobject.x - plane.x) < half runway width
 
 To do:
-Disable/destroy out-of-range flack guns
-Keep all objects out of range deactivated. Reactivate when getting in range.
+Disable/destroy out-of-range flack guns*
+Keep all objects out of range deactivated. Reactivate when getting in range.*
   Big square collider, viewport size?
     It should be possible for a disabled game object to collide, as long as its collider is not disabled.
   Better than a collider: keep one collection of game objects per row
@@ -137,7 +137,15 @@ Disable shadow on DEAD.*
 Change/split the ACCELERATING state to more resemble FLYING when the plane has reached takeoff speed but is still accelerating.
 Restart the game (after cooldown period to avoid accidental restart. New state?)
 
+----------
+Do we need this?
+public enum GameEvent
+{
+    START,
+    RESTART_REQUESTED
+}
 
-
+void OnGameEvent(GameEvent gameEvent);
+--------
 
 

@@ -41,4 +41,6 @@ public class ShadowControl : MonoBehaviour, IGameStateObserver
     {
         gameObject.SetActive(gameStatus != GameStatus.DEAD);
     }
+
+    public void OnGameEvent(GameEvent _) {}
 }

@@ -38,4 +38,6 @@ public class prop : MonoBehaviour, IGameStateObserver
     {
         gameObject.SetActive(!(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK));
     }
+
+    public void OnGameEvent(GameEvent _) {}
 }

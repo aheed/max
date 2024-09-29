@@ -47,7 +47,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         {
             case GameStatus.FINISHED:
             case GameStatus.DEAD:
-                // Todo: start a new game
+                gameState.ReportEvent(GameEvent.RESTART_REQUESTED);
                 return;
             case GameStatus.FLYING:
             case GameStatus.COLLIDED:
@@ -218,4 +218,6 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             spriteR.sprite = crashedSprite;
         }
     }
+
+    public void OnGameEvent(GameEvent _) {}
 }
