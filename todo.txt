@@ -136,6 +136,7 @@ Disable shadow on DEAD.*
   Prop and shadow can implement IGameStateObserver to achieve this in a decoupled way.*
 Change/split the ACCELERATING state to more resemble FLYING when the plane has reached takeoff speed but is still accelerating.
 Restart the game (after cooldown period to avoid accidental restart. New state?)
+Create GameState instance dynamically (otherwise problems on switching scenes?)
 
 ----------
 Do we need this?

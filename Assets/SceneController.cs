@@ -66,7 +66,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float lastLevelLowerEdgeY = 0f;
     int currentLevelIndex = 0;
     static int nofLevels = 2;
-    GameObject[] levels = new GameObject[nofLevels];
+    GameObject[] levels;
     LevelContents latestLevel;
     MaxControl maxPlane;
     float landingStripBottomY;
@@ -82,7 +82,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     void RotateLevels()
     {
-        currentLevelIndex = (currentLevelIndex + 1) % 2; 
+        currentLevelIndex = (currentLevelIndex + 1) % nofLevels; 
         var oldLevel = levels[currentLevelIndex];
         if (oldLevel != null)
         {
@@ -381,15 +381,49 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.AddRange(newGameObjects);
     }
 
+    void StartNewGame()
+    {
+        level = -1;
+        var levelLowerLeftCornerX = 0f;
+        var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
+        refobject.transform.position = newRefObjPos;
+
+        if (maxPlane == null)
+        {
+            maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
+            maxPlane.refObject = refobject.transform;            
+            AddPlaneShadow(maxPlane.transform);
+        }
+        maxPlane.transform.localPosition = Vector3.zero;
+
+        if (levels != null)
+        {
+            foreach (var level in levels)
+            {
+                if (level != null)
+                {
+                    Destroy(level);
+                }
+            }
+        }
+        levels = new GameObject[nofLevels];
+
+        pendingActivation.Clear();
+        activeObjects.Clear();
+
+        latestLevel = LevelBuilder.Build(true);
+        CreateLevel();
+        PreventRelanding();
+        gameState = GetGameState();
+        gameState.ReportEvent(GameEvent.START);
+    }
+
     void Start()
     {
         var startPos = refobject.transform.position;
         /*startPos.x += 1.0f;
         startPos.y += 1.0f;
-        startPos.z = 0.8f;*/
-        maxPlane = Instantiate(maxPlanePrefab, startPos, Quaternion.identity, refobject.transform);
-        maxPlane.refObject = refobject.transform;
-        AddPlaneShadow(maxPlane.transform);
+        startPos.z = 0.8f;*/        
 
         startPos = transform.position;
         startPos.x += 2.0f;
@@ -405,13 +439,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         AddPlaneShadow(enemyPlane2.transform);
 
-        var levelLowerLeftCornerX = 0f;
-        var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
-        refobject.transform.position = newRefObjPos;
-
-        latestLevel = LevelBuilder.Build(true);        
-        CreateLevel();
-        PreventRelanding();
+        StartNewGame();
     }
 
     bool IsOverLandingStrip(Vector2 position)
@@ -426,14 +454,20 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         landingStripTopY = landingStripBottomY;
     }
 
-    // Update is called once per frame
-    void Update()
+    GameState GetGameState() 
     {
         if (gameState == null)
         {
             gameState = FindObjectOfType<GameState>();
             gameState.RegisterObserver(this);
         }
+        return gameState;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        gameState = GetGameState();
         GameStateContents stateContents = gameState.GetStateContents();
 
         if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
@@ -554,9 +588,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             Debug.Log("Starting a new game");
 
-            
-
-            gameState.ReportEvent(GameEvent.START);
+            StartNewGame();            
+        }
+        else if (gameEvent == GameEvent.START)
+        {
+            gameState.GetStateContents().speed = 0f;
+            gameState.SetStatus(GameStatus.ACCELERATING);
         }
     }
 }
