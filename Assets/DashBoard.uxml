@@ -1,4 +1,25 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="TmpVisualElement" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Art/Characters/airstrip.png?fileID=21300000&amp;guid=ca6708b116320f9a99360fbe11d8e6c7&amp;type=3#airstrip&quot;); width: 10%; height: 5%; -unity-background-scale-mode: scale-to-fit;" />
-    <ui:Label tabindex="-1" text="Nothing to see here..." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Speed" style="color: rgb(255, 255, 255); -unity-font-style: bold;" />
+    <ui:VisualElement name="DashBase" style="flex-grow: 0; background-color: rgb(0, 0, 0); min-width: auto; min-height: auto; height: 20%; align-self: auto; width: 100%; color: rgb(255, 255, 255); bottom: -80%; -unity-font-style: bold; font-size: 36px;">
+        <ui:VisualElement name="TopRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%; justify-content: flex-start;">
+            <ui:Label tabindex="-1" text="Alt" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AltText" />
+            <ui:Label tabindex="-1" text="99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alt" />
+            <ui:Label tabindex="-1" text="         " parse-escape-sequences="true" display-tooltip-when-elided="true" name="AlertPlaceholderTop" />
+            <ui:Label tabindex="-1" text="Fuel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FuelText" />
+            <ui:Label tabindex="-1" text="999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fuel" />
+            <ui:Label tabindex="-1" text="F" parse-escape-sequences="true" display-tooltip-when-elided="true" name="F" />
+            <ui:Label tabindex="-1" text="B" parse-escape-sequences="true" display-tooltip-when-elided="true" name="B" />
+            <ui:Label tabindex="-1" text="M" parse-escape-sequences="true" display-tooltip-when-elided="true" name="M" />
+            <ui:Label tabindex="-1" text="G" parse-escape-sequences="true" display-tooltip-when-elided="true" name="G" />
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%;">
+            <ui:Label tabindex="-1" text="Speed" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpeedText" />
+            <ui:Label tabindex="-1" text="999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Speed" style="color: rgb(255, 255, 255); -unity-font-style: bold;" />
+            <ui:Label tabindex="-1" text="           " parse-escape-sequences="true" display-tooltip-when-elided="true" name="AlertPlaceholder" />
+            <ui:Label tabindex="-1" text="Bombs" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BombsText" />
+            <ui:Label tabindex="-1" text="99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Bombs" />
+            <ui:Label tabindex="-1" text="Score" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ScoreText" />
+            <ui:Label tabindex="-1" text="99999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Score" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="W" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alert" style="font-size: 72px; position: absolute; top: 104px; left: 253px;" />
+    </ui:VisualElement>
 </ui:UXML>
