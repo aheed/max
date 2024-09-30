@@ -78,8 +78,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             case GameStatus.KILLED_BY_FLACK:
                 return;
             case GameStatus.ACCELERATING:
-                var safeTakeoffSpeed = gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed;
-                if (move.y < 0f && stateContents.speed < safeTakeoffSpeed)
+                if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
                     gameState.SetStatus(GameStatus.DEAD);
                 }

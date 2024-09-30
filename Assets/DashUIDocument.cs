@@ -34,6 +34,8 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             lastDisplayedSpeed = speed;
             speedLabel.text = speed.ToString();
+            var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
+            speedLabel.style.color = color;
         }
     }
 

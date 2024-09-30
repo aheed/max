@@ -60,6 +60,8 @@ public class GameState : MonoBehaviour
         }
     }
 
+    public float GetSafeTakeoffSpeed() => safeTakeoffSpeedQuotient * maxSpeed;
+
     public void ReportEvent(GameEvent gameEvent)
     {
         foreach (var observer in observers)

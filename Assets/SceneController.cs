@@ -539,7 +539,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 {
                     newSpeed = gameState.maxSpeed;
                 }
-                if (newSpeed >= gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed)
+                if (newSpeed >= gameState.GetSafeTakeoffSpeed())
                 {
                     gameState.SetStatus(GameStatus.FLYING);
                 }

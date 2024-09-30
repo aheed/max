@@ -3394,6 +3394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2054397212}
   - component: {fileID: 2054397211}
+  - component: {fileID: 2054397213}
   m_Layer: 5
   m_Name: DashUIDocument
   m_TagString: Untagged
@@ -3432,6 +3433,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2054397213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054397210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4958ed5bcd6fac6f9a5e90f1c6eb420d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeedDisplayed: 130
 --- !u!1 &2110362360
 GameObject:
   m_ObjectHideFlags: 0
