@@ -534,26 +534,27 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             if (stateContents.speed < gameState.maxSpeed)
             {
-                stateContents.speed += gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
-                if (stateContents.speed > gameState.maxSpeed)
+                var newSpeed = stateContents.speed + gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
+                if (newSpeed > gameState.maxSpeed)
                 {
-                    stateContents.speed = gameState.maxSpeed;
+                    newSpeed = gameState.maxSpeed;
                 }
-                if (stateContents.speed >= gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed)
+                if (newSpeed >= gameState.safeTakeoffSpeedQuotient * gameState.maxSpeed)
                 {
-                    stateContents.speed = gameState.maxSpeed;
                     gameState.SetStatus(GameStatus.FLYING);
                 }
+                gameState.SetSpeed(newSpeed);
             }
         }
         else if (stateContents.gameStatus == GameStatus.DECELERATING)
         {
-            stateContents.speed -= gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
-            if (stateContents.speed < 0f)
+            var newSpeed = stateContents.speed - gameState.acceleration * gameState.maxSpeed * Time.deltaTime;
+            if (newSpeed < 0f)
             {
-                stateContents.speed = 0f;
+                newSpeed = 0f;
                 gameState.SetStatus(GameStatus.REFUELLING);
             }
+            gameState.SetSpeed(newSpeed);
         }
         else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
@@ -582,7 +583,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if(gameStatus == GameStatus.DEAD ||
            gameStatus == GameStatus.FINISHED)
         {
-            gameState.GetStateContents().speed = 0f;
+            gameState.SetSpeed(0f);
             restartCoolDownSeconds = minRestartWaitSeconds;
         }
     }
@@ -603,7 +604,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
         else if (gameEvent == GameEvent.START)
         {
-            gameState.GetStateContents().speed = 0f;
+            gameState.SetSpeed(0f);
             gameState.SetStatus(GameStatus.ACCELERATING);
         }
     }

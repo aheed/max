@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="TmpVisualElement" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Art/Characters/airstrip.png?fileID=21300000&amp;guid=ca6708b116320f9a99360fbe11d8e6c7&amp;type=3#airstrip&quot;); width: 10%; height: 5%; -unity-background-scale-mode: scale-to-fit;" />
+    <ui:Label tabindex="-1" text="Nothing to see here..." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Speed" style="color: rgb(255, 255, 255); -unity-font-style: bold;" />
+</ui:UXML>

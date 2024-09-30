@@ -5,7 +5,8 @@ using UnityEngine;
 public enum GameEvent
 {
     START,
-    RESTART_REQUESTED
+    RESTART_REQUESTED,
+    SPEED_CHANGED
 }
 
 public class GameStateContents
@@ -41,12 +42,21 @@ public class GameState : MonoBehaviour
         {
             return;
         }
-        
+
         gameStateContents.gameStatus = gameStatus;
 
         foreach (var observer in observers)
         {
             observer.OnGameStatusChanged(gameStatus);
+        }
+    }
+
+    public void SetSpeed(float speed)
+    {
+        if (speed != gameStateContents.speed)
+        {
+            gameStateContents.speed = speed;
+            ReportEvent(GameEvent.SPEED_CHANGED);
         }
     }
 

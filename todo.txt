@@ -134,9 +134,11 @@ Make enemy planes move at speeds proportional to max speed.
 Disable prop on DEAD or KILLED_BY_FLACK.*
 Disable shadow on DEAD.*
   Prop and shadow can implement IGameStateObserver to achieve this in a decoupled way.*
-Change/split the ACCELERATING state to more resemble FLYING when the plane has reached takeoff speed but is still accelerating.
+Change/split the ACCELERATING state to more resemble FLYING when the plane has reached takeoff speed but is still accelerating.*
 Restart the game (after cooldown period to avoid accidental restart. New state?)*
 Create GameState instance dynamically (otherwise problems on switching scenes?)
+Dash board with UI toolkit
+
 
 ----------
 Do we need this?
