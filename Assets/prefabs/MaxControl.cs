@@ -104,6 +104,10 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
                 tmpLocalPosition.z = minAltitude;
             }
             tmpLocalPosition.y = tmpLocalPosition.z;
+            if (transform.localPosition.z != tmpLocalPosition.z)
+            {
+                gameState.SetAltitude(tmpLocalPosition.z);
+            }
             transform.localPosition = tmpLocalPosition;
             initialized = true;
         }

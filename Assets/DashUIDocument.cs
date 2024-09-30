@@ -4,16 +4,43 @@ using UnityEngine.UIElements;
 public class DashUIDocument : MonoBehaviour, IGameStateObserver
 {
     UIDocument uiDocument;
+    
+    Label altLabel;
+    Label fuelLabel;
+    Label FLabel;
+    Label BLabel;
+    Label MLabel;
+    Label GLabel;
     Label speedLabel;
+    Label bombsLabel;
+    Label scoreLabel;
+    Label alertLabel;
+    Label rankLabel;
+    
     public int maxSpeedDisplayed = 130;
     int lastDisplayedSpeed;
-
+    public int maxAltitudeDisplayed = 99;
+    int lastDisplayedAltitude;
+    public int maxFuelDisplayed = 200;
+    int lastDisplayedFuel;
+    bool dirty = true;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
+        altLabel = uiDocument.rootVisualElement.Q<Label>("Alt");
+        fuelLabel = uiDocument.rootVisualElement.Q<Label>("Fuel");
+        FLabel = uiDocument.rootVisualElement.Q<Label>("F");
+        BLabel = uiDocument.rootVisualElement.Q<Label>("B");
+        MLabel = uiDocument.rootVisualElement.Q<Label>("M");
+        GLabel = uiDocument.rootVisualElement.Q<Label>("G");
         speedLabel = uiDocument.rootVisualElement.Q<Label>("Speed");
+        bombsLabel = uiDocument.rootVisualElement.Q<Label>("Bombs");
+        scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
+        alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
+        //rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
 
         GameState gameState = FindObjectOfType<GameState>();
         gameState.RegisterObserver(this);
@@ -22,7 +49,10 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     // Update is called once per frame
     void Update()
     {
-        
+        if (dirty)
+        {
+            UpdateContents();
+        }
     }
 
     void UpdateContents()
@@ -37,15 +67,39 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
             speedLabel.style.color = color;
         }
+
+        var altitude = (int)((gameStateContents.altitude * maxAltitudeDisplayed) / gameState.maxAltitude);
+        if (altitude != lastDisplayedAltitude)
+        {
+            lastDisplayedAltitude = altitude;
+            altLabel.text = altitude.ToString();            
+        }
+
+        var fuel = (int)((gameStateContents.fuel * maxFuelDisplayed) / gameState.maxFuel);
+        if (fuel != lastDisplayedFuel)
+        {
+            lastDisplayedFuel = fuel;
+            fuelLabel.text = fuel.ToString();            
+        }
+
+        bombsLabel.text = gameStateContents.bombs.ToString();
+        scoreLabel.text = gameStateContents.score.ToString();
+        alertLabel.text = gameStateContents.alert.ToString();
+        FLabel.text = gameStateContents.damages[(int)DamageIndex.F] ? "F" : "";
+        BLabel.text = gameStateContents.damages[(int)DamageIndex.B] ? "B" : "";
+        MLabel.text = gameStateContents.damages[(int)DamageIndex.M] ? "M" : "";
+        GLabel.text = gameStateContents.damages[(int)DamageIndex.G] ? "G" : "";
+
+        dirty = false;
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
-        UpdateContents();
+        dirty = true;
     }
 
     public void OnGameEvent(GameEvent _)
     {
-        UpdateContents();
+        dirty = true;
     }
 }

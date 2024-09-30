@@ -415,6 +415,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         CreateLevel();
         PreventRelanding();
         gameState = GetGameState();
+        gameState.Reset();
         gameState.ReportEvent(GameEvent.START);
     }
 
