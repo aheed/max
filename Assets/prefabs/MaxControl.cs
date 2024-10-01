@@ -10,6 +10,9 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     public Transform refObject;
     public float horizontalSpeed = 3.0f;
     public float verticalSpeed = 2.0f;
+    public float glideDescentRate = 0.3f;
+    public float deadDescentRate = 0.7f;
+    public float collidedDescentRate = 1.2f;
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
@@ -71,12 +74,16 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     {
         GameStateContents stateContents = gameState.GetStateContents();
         Vector2 apparentMove = move;
+        var forcedDescent = 0f;
 
         switch(stateContents.gameStatus)
         {
             case GameStatus.FINISHED:
             case GameStatus.DEAD:
+                return;
             case GameStatus.KILLED_BY_FLACK:
+                forcedDescent = deadDescentRate;
+                apparentMove = Vector2.zero;
                 return;
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
@@ -90,18 +97,25 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             case GameStatus.REPAIRING:
                 apparentMove.y = 0;                
                 break;
+            case GameStatus.OUT_OF_FUEL:
+                forcedDescent = glideDescentRate;
+                apparentMove.y = Math.Max(apparentMove.y, 0f);
+                break;
             case GameStatus.COLLIDED:
+                forcedDescent = collidedDescentRate;
                 // Todo: reassign apparentMove to left,right,neutral randomly + down
+                apparentMove = new Vector2(0f, 0f);
                 break;
             default:
                 break;
         }
 
-        if (apparentMove != Vector2.zero || !initialized)
+        if (apparentMove != Vector2.zero || !initialized || forcedDescent != 0f)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
             tmpLocalPosition.x += apparentMove.x * horizontalSpeed * Time.deltaTime;
             tmpLocalPosition.z -= apparentMove.y * verticalSpeed * Time.deltaTime;
+            tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
             if (tmpLocalPosition.z < minAltitude) 
             {
                 tmpLocalPosition.z = minAltitude;

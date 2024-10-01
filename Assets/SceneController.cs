@@ -527,14 +527,16 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Update game state
 
         if (stateContents.gameStatus == GameStatus.FLYING ||
-            stateContents.gameStatus == GameStatus.ACCELERATING)
+            stateContents.gameStatus == GameStatus.ACCELERATING ||
+            stateContents.gameStatus == GameStatus.OUT_OF_FUEL)
         {
-            if (stateContents.gameStatus == GameStatus.FLYING)
+            if (stateContents.gameStatus == GameStatus.FLYING ||
+                stateContents.gameStatus == GameStatus.OUT_OF_FUEL)
             {
                 //Debug.Log($"Alt: {maxPlane.GetAltitude()} ({MaxControl.landingAltitude})");
-                if (maxPlane.GetAltitude() <= MaxControl.landingAltitude) 
+                if (maxPlane.GetAltitude() <= MaxControl.landingAltitude)
                 {
-                    //Debug.Log("Low");
+                    //Debug.Log($"Low {maxPlane.GetPosition()}");
                     if (IsOverLandingStrip(maxPlane.GetPosition()))
                     {
                         Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
@@ -621,10 +623,16 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         if (!(stateContents.gameStatus == GameStatus.FINISHED ||
               stateContents.gameStatus == GameStatus.DEAD ||
-              stateContents.gameStatus == GameStatus.KILLED_BY_FLACK))
+              stateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
+              stateContents.gameStatus == GameStatus.DECELERATING ||
+              stateContents.gameStatus == GameStatus.REFUELLING))
         {
             var fuelRate = gameState.GotDamage(DamageIndex.F) ? fuelRateHigh : fuelRateLow;
             gameState.SetFuel(Math.Max(stateContents.fuel - fuelRate * Time.deltaTime, 0f));
+            if (stateContents.fuel <= 0f)
+            {
+                gameState.SetStatus(GameStatus.OUT_OF_FUEL);
+            }
         }
 
         // Update refobject position
