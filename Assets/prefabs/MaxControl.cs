@@ -149,7 +149,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
             {
-                DropBomb(stateContents.gameStatus);
+                DropBomb();
             }
         }
         
@@ -194,9 +194,9 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         }                
     }
 
-    void DropBomb(GameStatus gameStatus)
+    void DropBomb()
     {
-        switch (gameStatus)
+        switch (gameState.GetStateContents().gameStatus)
         {
             case GameStatus.FLYING:
             case GameStatus.OUT_OF_FUEL:
@@ -205,13 +205,14 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
                 return;
         }
     
-        if (bombCooldown > 0)
+        if (bombCooldown > 0 || gameState.GetStateContents().bombs <= 0)
         {
             return;
         }
 
         Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
+        gameState.DecrementBombs();
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

@@ -92,6 +92,12 @@ public class GameState : MonoBehaviour
         }
     }
 
+    public void DecrementBombs()
+    {
+        gameStateContents.bombs -= 1;
+        ReportEvent(GameEvent.BOMBS_CHANGED);
+    }
+
     public float GetSafeTakeoffSpeed() => safeTakeoffSpeedQuotient * maxSpeed;
 
     public void ReportEvent(GameEvent gameEvent)

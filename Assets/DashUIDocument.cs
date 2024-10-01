@@ -63,7 +63,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         if (speed != lastDisplayedSpeed)
         {
             lastDisplayedSpeed = speed;
-            speedLabel.text = speed.ToString();
+            speedLabel.text = $"{speed:000}";
             var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
             speedLabel.style.color = color;
         }
@@ -72,18 +72,18 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         if (altitude != lastDisplayedAltitude)
         {
             lastDisplayedAltitude = altitude;
-            altLabel.text = altitude.ToString();            
+            altLabel.text = $"{altitude:00}";
         }
 
         var fuel = (int)((gameStateContents.fuel * maxFuelDisplayed) / gameState.maxFuel);
         if (fuel != lastDisplayedFuel)
         {
             lastDisplayedFuel = fuel;
-            fuelLabel.text = fuel.ToString();            
+            fuelLabel.text = $"{fuel:000}";
         }
 
-        bombsLabel.text = gameStateContents.bombs.ToString();
-        scoreLabel.text = gameStateContents.score.ToString();
+        bombsLabel.text = $"{gameStateContents.bombs:00}";
+        scoreLabel.text = $"{gameStateContents.score:0000}";
         alertLabel.text = gameStateContents.alert.ToString();
         FLabel.text = gameStateContents.damages[(int)DamageIndex.F] ? "F" : "";
         BLabel.text = gameStateContents.damages[(int)DamageIndex.B] ? "B" : "";
