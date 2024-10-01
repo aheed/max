@@ -14,6 +14,8 @@ public enum GameStatus
     OUT_OF_FUEL,
     KILLED_BY_FLACK,
     REFUELLING,
+    LOADING_BOMBS,
+    REPAIRING,
     DEAD,
     FINISHED  // Rule Britannia!
 }
@@ -59,6 +61,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float activationDistance = 20f;
     public float deactivationDistance = 20f;
     public float minRestartWaitSeconds = 1.0f;
+    public float fuelRateLow = 0.6f;
+    public float fuelRateHigh = 0.9f;
+    public float refuelRate = 4.1f;
+    public float fuelFullTankMargin = 0.01f;
+    public float fuelRefillMargin = 0.05f;
+    public float bombLoadTimeSec = 0.08f;
+    public float repairTimeSec = 0.8f;
 
     //// Game status
     int level = -1;
@@ -75,7 +84,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     GameState gameState;
     List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
     List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
-    float restartCoolDownSeconds = 0;
+    float restartCoolDownSeconds = 0f;
+    float bombLoadCooldownSec = 0f;
+    float repairCooldownSec = 0f;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -559,9 +570,45 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
         else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
-            // Todo: Refuelling and repair
             
-            gameState.SetStatus(GameStatus.ACCELERATING);
+            if (stateContents.fuel < (gameState.maxFuel - fuelFullTankMargin))
+            {
+                gameState.SetFuel(Math.Min(stateContents.fuel + refuelRate * Time.deltaTime, gameState.maxFuel));
+            }
+            else
+            {
+                bombLoadCooldownSec = bombLoadTimeSec;
+                gameState.SetStatus(GameStatus.LOADING_BOMBS);
+            }
+        }
+        else if (stateContents.gameStatus == GameStatus.LOADING_BOMBS)
+        {
+            if (stateContents.bombs < gameState.maxBombs)
+            {
+                if (bombLoadCooldownSec <= 0)
+                {
+                    gameState.IncrementBombs(1);
+                    bombLoadCooldownSec = bombLoadTimeSec;    
+                }
+                bombLoadCooldownSec -= Time.deltaTime;
+            }
+            else
+            {
+                gameState.SetStatus(GameStatus.REPAIRING);
+            }
+        }
+        else if (stateContents.gameStatus == GameStatus.REPAIRING)
+        {
+            // todo: repair
+
+            if (stateContents.fuel < (gameState.maxFuel - fuelRefillMargin))
+            {
+                gameState.SetStatus(GameStatus.REFUELLING);
+            }
+            else
+            {
+                gameState.SetStatus(GameStatus.ACCELERATING);
+            }
         }
         else if (stateContents.gameStatus == GameStatus.DEAD || 
                  stateContents.gameStatus == GameStatus.FINISHED)
@@ -570,6 +617,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             {
                 restartCoolDownSeconds -= Time.deltaTime;
             }
+        }
+
+        if (!(stateContents.gameStatus == GameStatus.FINISHED ||
+              stateContents.gameStatus == GameStatus.DEAD ||
+              stateContents.gameStatus == GameStatus.KILLED_BY_FLACK))
+        {
+            var fuelRate = gameState.GotDamage(DamageIndex.F) ? fuelRateHigh : fuelRateLow;
+            gameState.SetFuel(Math.Max(stateContents.fuel - fuelRate * Time.deltaTime, 0f));
         }
 
         // Update refobject position
@@ -606,7 +661,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         else if (gameEvent == GameEvent.START)
         {
             gameState.SetSpeed(0f);
-            gameState.SetStatus(GameStatus.ACCELERATING);
+            gameState.SetStatus(GameStatus.REFUELLING);
         }
     }
 }

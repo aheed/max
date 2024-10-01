@@ -49,6 +49,8 @@ public class GameState : MonoBehaviour
     public float acceleration = 0.4f;
     public int maxBombs = 30;
     public float maxFuel = 100f;
+    public float startFuelQuotient = 0.90f;
+
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;
 
@@ -92,10 +94,19 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public void DecrementBombs()
+    public void IncrementBombs(int deltaBombs)
     {
-        gameStateContents.bombs -= 1;
+        gameStateContents.bombs += deltaBombs;
         ReportEvent(GameEvent.BOMBS_CHANGED);
+    }
+
+    public void SetFuel(float fuel)
+    {
+        if (fuel != gameStateContents.fuel)
+        {
+            gameStateContents.fuel = fuel;
+            ReportEvent(GameEvent.FUEL_CHANGED);
+        }
     }
 
     public float GetSafeTakeoffSpeed() => safeTakeoffSpeedQuotient * maxSpeed;
@@ -108,12 +119,14 @@ public class GameState : MonoBehaviour
         }
     }
 
+    public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
+
     public void Reset()
     {
         gameStateContents.speed = 0f;
         gameStateContents.gameStatus = GameStatus.REFUELLING;
         gameStateContents.altitude = 0f;
-        gameStateContents.fuel = maxFuel;
+        gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;
         gameStateContents.alert = "";

@@ -2436,6 +2436,13 @@ MonoBehaviour:
   activationDistance: 20
   deactivationDistance: 20
   minRestartWaitSeconds: 1
+  fuelRateLow: 0.6
+  fuelRateHigh: 1.2
+  refuelRate: 14.1
+  fuelFullTankMargin: 0.05
+  fuelRefillMargin: 0.05
+  bombLoadTimeSec: 0.08
+  repairTimeSec: 0.8
 --- !u!1 &958610452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3446,6 +3453,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeedDisplayed: 130
+  maxAltitudeDisplayed: 99
+  maxFuelDisplayed: 200
 --- !u!1 &2110362360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3476,8 +3485,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 2
+  maxAltitude: 2
   safeTakeoffSpeedQuotient: 0.8
   acceleration: 0.4
+  maxBombs: 30
+  maxFuel: 100
+  startFuelQuotient: 0.9
 --- !u!4 &2110362362
 Transform:
   m_ObjectHideFlags: 0

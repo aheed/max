@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -85,6 +86,8 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
                 break;
             case GameStatus.DECELERATING:
             case GameStatus.REFUELLING:
+            case GameStatus.LOADING_BOMBS:
+            case GameStatus.REPAIRING:
                 apparentMove.y = 0;                
                 break;
             case GameStatus.COLLIDED:
@@ -162,8 +165,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         {
             lastAltitude = GetAltitude();
             spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
-        }
-        
+        }        
     }
 
     public Vector2 GetPosition()
@@ -212,7 +214,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
 
         Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
-        gameState.DecrementBombs();
+        gameState.IncrementBombs(-1);
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

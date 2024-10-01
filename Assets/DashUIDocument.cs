@@ -85,10 +85,10 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         bombsLabel.text = $"{gameStateContents.bombs:00}";
         scoreLabel.text = $"{gameStateContents.score:0000}";
         alertLabel.text = gameStateContents.alert.ToString();
-        FLabel.text = gameStateContents.damages[(int)DamageIndex.F] ? "F" : "";
-        BLabel.text = gameStateContents.damages[(int)DamageIndex.B] ? "B" : "";
-        MLabel.text = gameStateContents.damages[(int)DamageIndex.M] ? "M" : "";
-        GLabel.text = gameStateContents.damages[(int)DamageIndex.G] ? "G" : "";
+        FLabel.text = gameState.GotDamage(DamageIndex.F) ? "F" : "";
+        BLabel.text = gameState.GotDamage(DamageIndex.B) ? "B" : "";
+        MLabel.text = gameState.GotDamage(DamageIndex.M) ? "M" : "";
+        GLabel.text = gameState.GotDamage(DamageIndex.G) ? "G" : "";
 
         dirty = false;
     }
