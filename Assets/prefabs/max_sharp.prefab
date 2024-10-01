@@ -103,6 +103,9 @@ MonoBehaviour:
   refObject: {fileID: 0}
   horizontalSpeed: 3
   verticalSpeed: 2
+  glideDescentRate: 0.3
+  deadDescentRate: 0.7
+  collidedDescentRate: 1.2
   MoveAction:
     m_Name: Move
     m_Type: 0
@@ -167,6 +170,23 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Fire
+      m_Flags: 0
+    m_Flags: 0
+  DebugFlackAction:
+    m_Name: Debug Flack
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: bf529201-1529-47ca-9669-f724f0a3ca82
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d1868ec6-93c5-4852-9013-96c79d968b89
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Flack
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}

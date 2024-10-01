@@ -137,8 +137,11 @@ Disable shadow on DEAD.*
 Change/split the ACCELERATING state to more resemble FLYING when the plane has reached takeoff speed but is still accelerating.*
 Restart the game (after cooldown period to avoid accidental restart. New state?)*
 Create GameState instance dynamically (otherwise problems on switching scenes?)
-Dash board with UI toolkit
-
+Dash board with UI toolkit*
+Sustain damage on flack hit
+Repair damage
+Enemy aircraft
+Remove OUT_OF_FUEL state?
 
 ----------
 Do we need this?
