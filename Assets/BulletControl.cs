@@ -63,6 +63,4 @@ public class BulletControl : MonoBehaviour, IPositionObservable
     {
         return 0.0f;
     }
-
-    public float GetMoveX() => 0;
 }

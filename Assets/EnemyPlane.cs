@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPlane : MonoBehaviour, IPositionObservable
+public class EnemyPlane : MonoBehaviour, IPlaneObservable
 {
     public float enemyPlaneSpeed = 0.1f;
     float lastAltitude;
@@ -25,6 +25,8 @@ public class EnemyPlane : MonoBehaviour, IPositionObservable
     }
 
     public float GetMoveX() => 0;
+
+    public bool IsAlive() => true;
 
     // Start is called before the first frame update
     void Start()

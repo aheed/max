@@ -33,5 +33,4 @@ public class House : MonoBehaviour, IPositionObservable
     public Vector2 GetPosition() => transform.position;
     public float GetAltitude() => 0.1f;
     public float GetHeight() => 0.2f;
-    public float GetMoveX() => 0;
 }

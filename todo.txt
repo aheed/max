@@ -146,6 +146,8 @@ Implement B damage
 Implement G damage
 Enemy aircraft
 Remove OUT_OF_FUEL state?
+bug: no shadows shown for enemy planes in DEAD state*
+
 
 ----------
 Do we need this?

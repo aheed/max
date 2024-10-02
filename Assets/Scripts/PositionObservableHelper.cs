@@ -2,17 +2,17 @@ using UnityEngine;
 
 public static class PositionObservableHelper
 {
-    public static IPositionObservable GetPositionObservable(GameObject go)
+    public static T GetPositionObservable<T>(GameObject go)
     {
         var tempMonoArray = go.GetComponents<MonoBehaviour>();
 
         foreach (var monoBehaviour in tempMonoArray)
         {
-            if (monoBehaviour is IPositionObservable posobs)
+            if (monoBehaviour is T posobs)
             {
                 return posobs;
             }
         }
-        return null;
+        return default(T);
     }
 }

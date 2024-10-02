@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
+public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 {
     public Transform refObject;
     public float horizontalSpeed = 3.0f;
@@ -224,6 +224,8 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     {
         return move.x;
     }
+
+    public bool IsAlive() => gameState != null && gameState.GetStateContents().gameStatus != GameStatus.DEAD;
 
     void OnTriggerEnter2D(Collider2D col)
     {

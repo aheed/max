@@ -39,5 +39,4 @@ public class Bomb : MonoBehaviour, IPositionObservable
     public Vector2 GetPosition() => transform.position;
     public float GetAltitude() => transform.localPosition.z;
     public float GetHeight() => 0.2f;
-    public float GetMoveX() => 0;
 }
