@@ -525,6 +525,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Update game state
+        if (stateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
+            stateContents.gameStatus == GameStatus.COLLIDED)
+        {
+            if (maxPlane.GetAltitude() <= MaxControl.minAltitude)
+            {
+                gameState.SetStatus(GameStatus.DEAD);
+            }
+        }
 
         if (stateContents.gameStatus == GameStatus.FLYING ||
             stateContents.gameStatus == GameStatus.ACCELERATING ||

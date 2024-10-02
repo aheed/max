@@ -12,7 +12,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     public float horizontalSpeed = 3.0f;
     public float verticalSpeed = 2.0f;
     public float glideDescentRate = 0.3f;
-    public float deadDescentRate = 0.7f;
+    public float deadDescentRate = 1.5f;
     public float collidedDescentRate = 1.2f;
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
@@ -87,7 +87,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             case GameStatus.KILLED_BY_FLACK:
                 forcedDescent = deadDescentRate;
                 apparentMove = Vector2.zero;
-                return;
+                break;
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
@@ -132,7 +132,9 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
             initialized = true;
         }
 
-        if (apparentMove.x != lastMove.x)
+        if (apparentMove.x != lastMove.x &&
+            stateContents.gameStatus != GameStatus.DEAD &&
+            stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
             var newSprite = straightSprite;
             if (apparentMove.x < 0)
@@ -156,10 +158,6 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     void HandleFlackHit()
     {
         Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
-        /*if (gameState.GetStateContents().damages.All(f => f))
-        {
-            gameState.SetStatus(GameStatus.KILLED_BY_FLACK);
-        }*/
         gameState.SetRandomDamage();
     }
 
@@ -261,9 +259,9 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         if (gameEvent == GameEvent.START)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
-            if (tmpLocalPosition.z < minAltitude) 
+            if (tmpLocalPosition.z < landingAltitude) 
             {
-                tmpLocalPosition.z = minAltitude;
+                tmpLocalPosition.z = landingAltitude;
             }
             tmpLocalPosition.y = tmpLocalPosition.z;
             transform.localPosition = tmpLocalPosition;
