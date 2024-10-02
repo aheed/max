@@ -14,6 +14,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float glideDescentRate = 0.3f;
     public float deadDescentRate = 1.5f;
     public float collidedDescentRate = 1.2f;
+    public float speedDamageFactor = 0.5f;
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
@@ -118,8 +119,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (apparentMove != Vector2.zero || !initialized || forcedDescent != 0f)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
-            tmpLocalPosition.x += apparentMove.x * horizontalSpeed * Time.deltaTime;
-            tmpLocalPosition.z -= apparentMove.y * verticalSpeed * Time.deltaTime;
+            var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
+            tmpLocalPosition.x += apparentMove.x * horizontalSpeed * speedFactor * Time.deltaTime;
+            tmpLocalPosition.z -= apparentMove.y * verticalSpeed * speedFactor * Time.deltaTime;
             tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
             if (tmpLocalPosition.z < minAltitude) 
             {
