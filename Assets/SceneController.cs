@@ -604,20 +604,31 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
             else
             {
+                repairCooldownSec = repairTimeSec;
                 gameState.SetStatus(GameStatus.REPAIRING);
             }
         }
         else if (stateContents.gameStatus == GameStatus.REPAIRING)
         {
-            // todo: repair
-
-            if (stateContents.fuel < (gameState.maxFuel - fuelRefillMargin))
+            if (stateContents.damages.Any(d => d))
             {
-                gameState.SetStatus(GameStatus.REFUELLING);
+                if (repairCooldownSec <= 0)
+                {
+                    gameState.SetRandomDamage(false);
+                    repairCooldownSec = repairTimeSec;
+                }
+                repairCooldownSec -= Time.deltaTime;
             }
-            else
+            else 
             {
-                gameState.SetStatus(GameStatus.ACCELERATING);
+                if (stateContents.fuel < (gameState.maxFuel - fuelRefillMargin))
+                {
+                    gameState.SetStatus(GameStatus.REFUELLING);
+                }
+                else
+                {
+                    gameState.SetStatus(GameStatus.ACCELERATING);
+                }
             }
         }
         else if (stateContents.gameStatus == GameStatus.DEAD || 

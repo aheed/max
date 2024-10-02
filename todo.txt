@@ -139,8 +139,8 @@ Restart the game (after cooldown period to avoid accidental restart. New state?)
 Create GameState instance dynamically (otherwise problems on switching scenes?)
 Dash board with UI toolkit*
 Sustain damage on flack hit*
-Repair damage
-Debug repair input action
+Repair damage*
+Debug repair input action*
 Implement M damage
 Implement B damage
 Implement G damage
