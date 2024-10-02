@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum GameEvent
@@ -122,23 +123,27 @@ public class GameState : MonoBehaviour
 
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
 
-    public void SetRandomDamage()
+    public void SetRandomDamage(bool damage)
     {
         var nofDamages = gameStateContents.damages.Length;
         var index = UnityEngine.Random.Range(0, nofDamages);
         var candidates = 0;
         while (candidates < nofDamages)
         {
-            if (!gameStateContents.damages[index])
+            if (gameStateContents.damages[index] != damage)
             {
-                gameStateContents.damages[index] = true;
+                gameStateContents.damages[index] = damage;
                 ReportEvent(GameEvent.DAMAGE_CHANGED);
                 return;
             }
             index = (index + 1) % nofDamages;
             candidates++;
         }
-        SetStatus(GameStatus.KILLED_BY_FLACK);
+        
+        if (damage)
+        {
+            SetStatus(GameStatus.KILLED_BY_FLACK);
+        }
     }
 
     public void Reset()

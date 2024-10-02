@@ -24,6 +24,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     public InputAction MoveAction;
     public InputAction FireAction;
     public InputAction DebugFlackAction;
+    public InputAction DebugRepairAction;
     Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
@@ -44,6 +45,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         MoveAction.Enable();
         FireAction.Enable();
         DebugFlackAction.Enable();
+        DebugRepairAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
@@ -158,7 +160,7 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     void HandleFlackHit()
     {
         Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
-        gameState.SetRandomDamage();
+        gameState.SetRandomDamage(true);
     }
 
     // Update is called once per frame
@@ -184,6 +186,11 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
         if (DebugFlackAction.WasPressedThisFrame())
         {
             HandleFlackHit();
+        }
+
+        if (DebugRepairAction.WasPressedThisFrame())
+        {
+            gameState.SetRandomDamage(false);
         }
         
         bulletCooldown -= Time.deltaTime;

@@ -189,6 +189,23 @@ MonoBehaviour:
       m_Action: Debug Flack
       m_Flags: 0
     m_Flags: 0
+  DebugRepairAction:
+    m_Name: Debug Repair
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 00446e9b-4b8b-4a54-9d15-135b89a9ad81
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 053c3e6c-5c1a-4175-90c7-25891461c435
+      m_Path: <Keyboard>/g
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Repair
+      m_Flags: 0
+    m_Flags: 0
   bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}
   bombPrefab: {fileID: 2491784354435162974, guid: e47afaf0420b8b758a9245a7d5a64f81, type: 3}
   leftSprite: {fileID: 21300000, guid: 03f2eb85b5a66a9388688e77e0edb76c, type: 3}
