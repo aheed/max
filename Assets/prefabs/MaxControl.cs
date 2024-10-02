@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -155,6 +156,11 @@ public class MaxControl : MonoBehaviour, IPositionObservable, IGameStateObserver
     void HandleFlackHit()
     {
         Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+        /*if (gameState.GetStateContents().damages.All(f => f))
+        {
+            gameState.SetStatus(GameStatus.KILLED_BY_FLACK);
+        }*/
+        gameState.SetRandomDamage();
     }
 
     // Update is called once per frame

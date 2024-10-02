@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -120,6 +121,25 @@ public class GameState : MonoBehaviour
     }
 
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
+
+    public void SetRandomDamage()
+    {
+        var nofDamages = gameStateContents.damages.Length;
+        var index = UnityEngine.Random.Range(0, nofDamages);
+        var candidates = 0;
+        while (candidates < nofDamages)
+        {
+            if (!gameStateContents.damages[index])
+            {
+                gameStateContents.damages[index] = true;
+                ReportEvent(GameEvent.DAMAGE_CHANGED);
+                return;
+            }
+            index = (index + 1) % nofDamages;
+            candidates++;
+        }
+        SetStatus(GameStatus.KILLED_BY_FLACK);
+    }
 
     public void Reset()
     {
