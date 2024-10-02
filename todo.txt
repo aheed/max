@@ -141,7 +141,7 @@ Dash board with UI toolkit*
 Sustain damage on flack hit*
 Repair damage*
 Debug repair input action*
-Implement M damage
+Implement M damage*
 Implement B damage
 Implement G damage
 Enemy aircraft

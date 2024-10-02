@@ -15,6 +15,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float deadDescentRate = 1.5f;
     public float collidedDescentRate = 1.2f;
     public float speedDamageFactor = 0.5f;
+    public float bombDamageProbability = 0.5f;
+    public float gunDamageProbability = 0.5f;
+    public float damagePeriodSec = 2.0f;
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
@@ -22,6 +25,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public static readonly float landingAltitude = 0.11f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
+    float damageCooldown = 0f;
+    bool bombDamage = false;
+    bool gunDamage = false;
     public InputAction MoveAction;
     public InputAction FireAction;
     public InputAction DebugFlackAction;
@@ -67,7 +73,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 return;
         }
 
-        if (bulletCooldown > 0)
+        if (bulletCooldown > 0 || 
+            (gameState.GotDamage(DamageIndex.G) && gunDamage))
         {
             return;
         }
@@ -197,6 +204,13 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         
         bulletCooldown -= Time.deltaTime;
         bombCooldown -= Time.deltaTime;
+        damageCooldown -= Time.deltaTime;
+        if (damageCooldown <= 0)
+        {
+            bombDamage = UnityEngine.Random.Range(0f, 1f) < bombDamageProbability;
+            gunDamage = UnityEngine.Random.Range(0f, 1f) < gunDamageProbability;
+            damageCooldown = damagePeriodSec;
+        }
 
         HandleMove(move);
 
@@ -248,7 +262,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 return;
         }
     
-        if (bombCooldown > 0 || gameState.GetStateContents().bombs <= 0)
+        if (bombCooldown > 0 || 
+            gameState.GetStateContents().bombs <= 0 ||
+            (gameState.GotDamage(DamageIndex.B) && bombDamage))
         {
             return;
         }
