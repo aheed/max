@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class EnemyPlane : MonoBehaviour, IPlaneObservable
 {
-    public float enemyPlaneSpeed = 0.1f;
+    public Transform refObject;
+    public float speed = 0.1f;
+    public float maxDistance = 50f;
     float lastAltitude;
     private SpriteRenderer spriteR;
 
@@ -37,7 +39,13 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
     // Update is called once per frame
     void Update()
     {
-        Vector3 progress = new (enemyPlaneSpeed * Time.deltaTime, enemyPlaneSpeed * Time.deltaTime, 0.0f);
+        if (Math.Abs(transform.position.x - refObject.transform.position.x) > maxDistance)
+        {
+            Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
+            gameObject.SetActive(false);
+        }
+
+        Vector3 progress = new (speed * Time.deltaTime, speed * Time.deltaTime, 0.0f);
         transform.position += progress;
 
         if (GetAltitude() != lastAltitude)

@@ -142,11 +142,23 @@ Sustain damage on flack hit*
 Repair damage*
 Debug repair input action*
 Implement M damage*
-Implement B damage
-Implement G damage
-Enemy aircraft
+Implement B damage*
+Implement G damage*
 Remove OUT_OF_FUEL state?
 bug: no shadows shown for enemy planes in DEAD state*
+Enemy aircraft
+Collided state
+Format Dashboard
+Set/blink dashboard background color based on state
+Tree/house collisions
+Bomb effect
+Gun effect on ground objects
+Bridges
+Cars
+Make the plane move relative the camera with diagonal movement
+  altitude + relativeY <= maxAltitude
+Make it possible to destroy enemyplane game objects without causing dangling pointer problems.
+  Unregister prop as listener on destruction?
 
 
 ----------

@@ -134,6 +134,18 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             {
                 tmpLocalPosition.z = minAltitude;
             }
+            if (tmpLocalPosition.z > gameState.maxAltitude)
+            {
+                tmpLocalPosition.z = gameState.maxAltitude;
+            }
+            if (tmpLocalPosition.x > gameState.maxHorizPosition)
+            {
+                tmpLocalPosition.x = gameState.maxHorizPosition;
+            }
+            if (tmpLocalPosition.x < -gameState.maxHorizPosition)
+            {
+                tmpLocalPosition.x = -gameState.maxHorizPosition;
+            }
             tmpLocalPosition.y = tmpLocalPosition.z;
             if (transform.localPosition.z != tmpLocalPosition.z)
             {

@@ -68,6 +68,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float fuelRefillMargin = 0.05f;
     public float bombLoadTimeSec = 0.08f;
     public float repairTimeSec = 0.8f;
+    public float enemyPlaneSpeedMax = 2.5f;
+    public float enemyPlaneSpeedMin = 1.5f;
+    public float enemyPlaneIntervalSecMax = 15f;
+    public float enemyPlaneIntervalSecMin = 5f;
 
     //// Game status
     int level = -1;
@@ -87,6 +91,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
+    float enemyPlaneCooldown = 0f;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -432,25 +437,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     void Start()
     {
-        var startPos = refobject.transform.position;
-        /*startPos.x += 1.0f;
-        startPos.y += 1.0f;
-        startPos.z = 0.8f;*/        
-
-        startPos = transform.position;
-        startPos.x += 2.0f;
-        startPos.y += 2.0f;
-        startPos.z = 0.8f;
-        EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
-        AddPlaneShadow(enemyPlane.transform);
-
-        startPos = transform.position;
-        startPos.x += 0.0f;
-        startPos.y += 2.0f;
-        startPos.z = 2.8f;
-        EnemyPlane enemyPlane2 = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
-        AddPlaneShadow(enemyPlane2.transform);
-
         StartNewGame();
     }
 
@@ -474,6 +460,27 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             gameState.RegisterObserver(this);
         }
         return gameState;
+    }
+
+    void SetEnemyPlaneCooldown()
+    {
+        enemyPlaneCooldown = UnityEngine.Random.Range(enemyPlaneIntervalSecMin, enemyPlaneIntervalSecMax);
+    }
+
+    void SpawnEnemyPlane()
+    {
+        var startPos = refobject.transform.position;
+        //startPos = transform.position;
+        startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition - 2 * gameState.maxAltitude, gameState.maxHorizPosition - 2 * gameState.maxAltitude);
+        startPos.y += -gameState.maxAltitude;
+        startPos.z = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
+        EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
+        enemyPlane.refObject = refobject.transform;
+        enemyPlane.speed = 
+            UnityEngine.Random.Range(
+                enemyPlaneSpeedMin * gameState.maxSpeed,
+                enemyPlaneSpeedMax * gameState.maxSpeed);
+        AddPlaneShadow(enemyPlane.transform);
     }
 
     // Update is called once per frame
@@ -551,6 +558,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         PreventRelanding();
                         gameState.SetStatus(GameStatus.DECELERATING);
                     }
+                }
+
+                enemyPlaneCooldown -= Time.deltaTime;
+                if (enemyPlaneCooldown <= 0)
+                {
+                    SpawnEnemyPlane();
+                    SetEnemyPlaneCooldown();
                 }
             }
 
