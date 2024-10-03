@@ -16,6 +16,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float bombDamageProbability = 0.5f;
     public float gunDamageProbability = 0.5f;
     public float damagePeriodSec = 2.0f;
+    public float offsetDecreaseRate = 0.3f;
     public static readonly float bulletIntervalSeconds = 0.1f;
     public static readonly float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
@@ -41,7 +42,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public Sprite straightSprite;
     public Sprite crashedSprite;
     private SpriteRenderer spriteR;
-    private bool initialized = false;
     float offsetY = 0;
     GameState gameState;
 
@@ -122,59 +122,64 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 break;
         }
 
-        if (apparentMove != Vector2.zero || !initialized || forcedDescent != 0f)
+        
+        Vector3 tmpLocalPosition = transform.localPosition;
+        var deltaOffsetY = 0f;
+        var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
+        tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime;
+
+        var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
+        //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
+        if (apparentMove.x == 0f)
         {
-            Vector3 tmpLocalPosition = transform.localPosition;
-            var tmpOffsetY = offsetY;
-            var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
-            tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime;
-
-            var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
-            //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
-            if (apparentMove.x == 0f)
-            {
-                tmpLocalPosition.z += moveY;
-            }
-            else 
-            {
-                tmpOffsetY += moveY;
-            }
-
-            tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
-            if (tmpLocalPosition.z < minAltitude) 
-            {
-                tmpLocalPosition.z = minAltitude;
-            }
-            if (tmpLocalPosition.z > gameState.maxAltitude)
-            {
-                tmpLocalPosition.z = gameState.maxAltitude;
-            }
-            if (tmpLocalPosition.z + tmpOffsetY > gameState.maxAltitude)
-            {
-                tmpLocalPosition.z = transform.localPosition.z;
-                tmpOffsetY = offsetY;
-            }
-            if (tmpOffsetY < 0f)
-            {
-                tmpOffsetY = 0f;
-            }
-            if (tmpLocalPosition.x > gameState.maxHorizPosition)
-            {
-                tmpLocalPosition.x = gameState.maxHorizPosition;
-            }
-            if (tmpLocalPosition.x < -gameState.maxHorizPosition)
-            {
-                tmpLocalPosition.x = -gameState.maxHorizPosition;
-            }
-            tmpLocalPosition.y = tmpLocalPosition.z + offsetY;
-            if (transform.localPosition.z != tmpLocalPosition.z)
-            {
-                gameState.SetAltitude(tmpLocalPosition.z);
-            }
-            transform.localPosition = tmpLocalPosition;
-            offsetY = tmpOffsetY;
-            initialized = true;
+            tmpLocalPosition.z += moveY;
         }
+        else if (moveY != 0f)
+        {
+            deltaOffsetY = moveY;
+        }
+        
+        //if (stateContents.gameStatus == GameStatus.FLYING &&
+        if (GetAltitude() > landingAltitude &&
+            deltaOffsetY == 0f)
+        {
+            deltaOffsetY = -offsetDecreaseRate * Time.deltaTime;
+        }
+        var tmpOffsetY = offsetY + deltaOffsetY;
+
+        tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
+        if (tmpLocalPosition.z < minAltitude) 
+        {
+            tmpLocalPosition.z = minAltitude;
+        }
+        if (tmpLocalPosition.z > gameState.maxAltitude)
+        {
+            tmpLocalPosition.z = gameState.maxAltitude;
+        }
+        if (tmpLocalPosition.z + tmpOffsetY > gameState.maxAltitude)
+        {
+            tmpLocalPosition.z = transform.localPosition.z;
+            tmpOffsetY = offsetY;
+        }
+        if (tmpOffsetY < 0f)
+        {
+            tmpOffsetY = 0f;
+        }
+        if (tmpLocalPosition.x > gameState.maxHorizPosition)
+        {
+            tmpLocalPosition.x = gameState.maxHorizPosition;
+        }
+        if (tmpLocalPosition.x < -gameState.maxHorizPosition)
+        {
+            tmpLocalPosition.x = -gameState.maxHorizPosition;
+        }
+        tmpLocalPosition.y = tmpLocalPosition.z + offsetY;
+        if (transform.localPosition.z != tmpLocalPosition.z)
+        {
+            gameState.SetAltitude(tmpLocalPosition.z);
+        }
+        transform.localPosition = tmpLocalPosition;
+        offsetY = tmpOffsetY;        
 
         if (apparentMove.x != lastMove.x &&
             stateContents.gameStatus != GameStatus.DEAD &&

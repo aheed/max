@@ -155,13 +155,13 @@ Bomb effect
 Gun effect on ground objects
 Bridges
 Cars
-Make the plane move relative the camera with diagonal movement
-  altitude + relativeY <= maxAltitude
-  Does not drop altitude if down + left and min offset
-  Landing strip calculation is wrong regarding x coord
+Make the plane move relative the camera with diagonal movement*
+  altitude + relativeY <= maxAltitude*
+  (Does not drop altitude if down + left and min offset) Not a bug*
+  Y offset shall drift slowly to 0 if not actively controlled by user input
 Make it possible to destroy enemyplane game objects without causing dangling pointer problems.
   Unregister prop as listener on destruction?
-
+Alerts
 
 ----------
 Do we need this?

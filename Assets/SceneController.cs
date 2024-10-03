@@ -561,6 +561,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     }
                 }
 
+                //// TEMP !!!!!!!!!!!!!!!!!11
+                if (IsOverLandingStrip(maxPlane.GetPosition()))
+                {
+                    gameState.SetAlert(GameState.landingAlert);
+                }
+                else
+                {
+                    gameState.SetAlert("-");
+                }
+                ////
+
                 enemyPlaneCooldown -= Time.deltaTime;
                 if (enemyPlaneCooldown <= 0)
                 {

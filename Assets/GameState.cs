@@ -33,7 +33,7 @@ public class GameStateContents
     public float fuel = 0f;
     public int bombs = 0;
     public int score = 0;
-    public string alert = "";
+    public string alert = "";    
     public bool[] damages = new bool[] { false, false, false, false};
 }
 
@@ -53,6 +53,9 @@ public class GameState : MonoBehaviour
     public float acceleration = 0.4f;
     public static float horizontalSpeed = 3.0f;
     public static float verticalSpeed = 2.0f;
+    public static string landingAlert = "L";
+    public static string windAlert = "W";
+    public static string enemyPlaneAlert = "P";
     public int maxBombs = 30;
     public float maxFuel = 100f;
     public float startFuelQuotient = 0.90f;
@@ -112,6 +115,15 @@ public class GameState : MonoBehaviour
         {
             gameStateContents.fuel = fuel;
             ReportEvent(GameEvent.FUEL_CHANGED);
+        }
+    }
+
+    public void SetAlert(string alert)
+    {
+        if (alert != gameStateContents.alert)
+        {
+            gameStateContents.alert = alert;
+            ReportEvent(GameEvent.ALERT);
         }
     }
 
