@@ -51,6 +51,8 @@ public class GameState : MonoBehaviour
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
+    public static float horizontalSpeed = 3.0f;
+    public static float verticalSpeed = 2.0f;
     public int maxBombs = 30;
     public float maxFuel = 100f;
     public float startFuelQuotient = 0.90f;

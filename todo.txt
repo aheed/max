@@ -146,7 +146,7 @@ Implement B damage*
 Implement G damage*
 Remove OUT_OF_FUEL state?
 bug: no shadows shown for enemy planes in DEAD state*
-Enemy aircraft
+Enemy aircraft*
 Collided state
 Format Dashboard
 Set/blink dashboard background color based on state

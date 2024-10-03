@@ -8,9 +8,7 @@ using UnityEngine.InputSystem;
 
 public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 {
-    public Transform refObject;
-    public float horizontalSpeed = 3.0f;
-    public float verticalSpeed = 2.0f;
+    public Transform refObject;    
     public float glideDescentRate = 0.3f;
     public float deadDescentRate = 1.5f;
     public float collidedDescentRate = 1.2f;
@@ -127,8 +125,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             Vector3 tmpLocalPosition = transform.localPosition;
             var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
-            tmpLocalPosition.x += apparentMove.x * horizontalSpeed * speedFactor * Time.deltaTime;
-            tmpLocalPosition.z -= apparentMove.y * verticalSpeed * speedFactor * Time.deltaTime;
+            tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime;
+            tmpLocalPosition.z -= apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
             tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
             if (tmpLocalPosition.z < minAltitude) 
             {
