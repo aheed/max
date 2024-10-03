@@ -158,10 +158,13 @@ Cars
 Make the plane move relative the camera with diagonal movement*
   altitude + relativeY <= maxAltitude*
   (Does not drop altitude if down + left and min offset) Not a bug*
-  Y offset shall drift slowly to 0 if not actively controlled by user input
+  Y offset shall drift slowly to 0 if not actively controlled by user input*
+  Y offset shall also mean corresponding x offset
 Make it possible to destroy enemyplane game objects without causing dangling pointer problems.
   Unregister prop as listener on destruction?
 Alerts
+Bug: IsOverLandingStrip seems to be a half landing strip width off.
+
 
 ----------
 Do we need this?

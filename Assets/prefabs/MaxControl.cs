@@ -141,11 +141,13 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         
         //if (stateContents.gameStatus == GameStatus.FLYING &&
         if (GetAltitude() > landingAltitude &&
-            deltaOffsetY == 0f)
+            deltaOffsetY == 0f &&
+            offsetY > 0)
         {
             deltaOffsetY = -offsetDecreaseRate * Time.deltaTime;
+            tmpLocalPosition.x += deltaOffsetY * SceneController.riverSlopes[SceneController.neutralRiverSlopeIndex];
         }
-        var tmpOffsetY = offsetY + deltaOffsetY;
+        var tmpOffsetY = offsetY + deltaOffsetY;        
 
         tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
         if (tmpLocalPosition.z < minAltitude) 

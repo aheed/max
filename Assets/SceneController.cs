@@ -54,8 +54,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Material roadMaterial;
     public Material groundMaterial;
     public Material landingStripMaterial;
-    static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
-    static readonly int neutralRiverSlopeIndex = 2;
+    public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
+    public static readonly int neutralRiverSlopeIndex = 2;
     public float levelWidth = 8f;
     public float levelHeight = 80f;
     public float activationDistance = 20f;
