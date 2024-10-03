@@ -2443,6 +2443,10 @@ MonoBehaviour:
   fuelRefillMargin: 0.05
   bombLoadTimeSec: 0.08
   repairTimeSec: 0.8
+  enemyPlaneSpeedMax: 2.5
+  enemyPlaneSpeedMin: 1.5
+  enemyPlaneIntervalSecMax: 15
+  enemyPlaneIntervalSecMin: 5
 --- !u!1 &958610452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3486,6 +3490,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 2
   maxAltitude: 2
+  minSafeAltitude: 0.3
+  maxHorizPosition: 2
   safeTakeoffSpeedQuotient: 0.8
   acceleration: 0.4
   maxBombs: 30
@@ -3521,6 +3527,14 @@ PrefabInstance:
     - target: {fileID: 3598460748232834513, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555202265367138385, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c5af1e78ba0e0536ba5194c784d391df, type: 3}
+    - target: {fileID: 4555202265367138385, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
       propertyPath: maxY

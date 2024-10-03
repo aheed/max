@@ -445,7 +445,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var offsetX = (position.y - refobject.transform.position.y) * riverSlopes[neutralRiverSlopeIndex];
         return position.y > landingStripBottomY && 
             position.y < landingStripTopY &&            
-            Math.Abs((refobject.transform.position.x + offsetX) - position.x) < landingStripWidth / 2;
+            Math.Abs((refobject.transform.position.x + offsetX - position.x)) < landingStripWidth / 2;
     }
 
     void PreventRelanding()
