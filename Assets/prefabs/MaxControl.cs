@@ -42,6 +42,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public Sprite crashedSprite;
     private SpriteRenderer spriteR;
     private bool initialized = false;
+    float offsetY = 0;
     GameState gameState;
 
     // Start is called before the first frame update
@@ -124,9 +125,21 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (apparentMove != Vector2.zero || !initialized || forcedDescent != 0f)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
+            var tmpOffsetY = offsetY;
             var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
             tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime;
-            tmpLocalPosition.z -= apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
+
+            var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
+            //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
+            if (apparentMove.x == 0f)
+            {
+                tmpLocalPosition.z += moveY;
+            }
+            else 
+            {
+                tmpOffsetY += moveY;
+            }
+
             tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
             if (tmpLocalPosition.z < minAltitude) 
             {
@@ -136,6 +149,15 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             {
                 tmpLocalPosition.z = gameState.maxAltitude;
             }
+            if (tmpLocalPosition.z + tmpOffsetY > gameState.maxAltitude)
+            {
+                tmpLocalPosition.z = transform.localPosition.z;
+                tmpOffsetY = offsetY;
+            }
+            if (tmpOffsetY < 0f)
+            {
+                tmpOffsetY = 0f;
+            }
             if (tmpLocalPosition.x > gameState.maxHorizPosition)
             {
                 tmpLocalPosition.x = gameState.maxHorizPosition;
@@ -144,12 +166,13 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             {
                 tmpLocalPosition.x = -gameState.maxHorizPosition;
             }
-            tmpLocalPosition.y = tmpLocalPosition.z;
+            tmpLocalPosition.y = tmpLocalPosition.z + offsetY;
             if (transform.localPosition.z != tmpLocalPosition.z)
             {
                 gameState.SetAltitude(tmpLocalPosition.z);
             }
             transform.localPosition = tmpLocalPosition;
+            offsetY = tmpOffsetY;
             initialized = true;
         }
 
@@ -303,6 +326,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             tmpLocalPosition.y = tmpLocalPosition.z;
             transform.localPosition = tmpLocalPosition;
             spriteR.sprite = straightSprite;
+            offsetY = 0f;
         }
     }
 }

@@ -20,8 +20,9 @@ public class Bomb : MonoBehaviour, IPositionObservable
     void Update()
     {
         var tmpPos = transform.localPosition;
-        tmpPos.z -= verticalSpeed * Time.deltaTime;
-        tmpPos.y = tmpPos.z;
+        var deltaVertical = -verticalSpeed * Time.deltaTime;
+        tmpPos.z += deltaVertical; 
+        tmpPos.y += deltaVertical;
         transform.localPosition = tmpPos;
 
         if (!bombCollider.enabled && tmpPos.z <= maxCollisionAltitude)

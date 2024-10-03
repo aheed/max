@@ -442,9 +442,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     bool IsOverLandingStrip(Vector2 position)
     {
+        var offsetX = (position.y - refobject.transform.position.y) * riverSlopes[neutralRiverSlopeIndex];
         return position.y > landingStripBottomY && 
-            position.y < landingStripTopY &&
-            Math.Abs(refobject.transform.position.y - maxPlane.transform.position.y) < landingStripWidth / 2;
+            position.y < landingStripTopY &&            
+            Math.Abs((refobject.transform.position.x + offsetX) - position.x) < landingStripWidth / 2;
     }
 
     void PreventRelanding()
