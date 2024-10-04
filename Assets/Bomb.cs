@@ -38,8 +38,6 @@ public class Bomb : MonoBehaviour, IPositionObservable
 
         if (tmpPos.z <= 0)
         {
-            //Debug.Log("Boooooooooooooooooooooooooooooooooooooom!");
-            //Destroy(gameObject);
             gameState.BombLanded(this);
         }
     }

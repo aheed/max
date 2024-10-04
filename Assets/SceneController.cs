@@ -41,6 +41,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject tree1Prefab;
     public GameObject tree2Prefab;
     public GameObject levelPrefab;
+    public GameObject bombSplashPrefab;
+    public GameObject bombCraterPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -727,9 +729,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     }
 
     public void OnBombLanded(Bomb bomb) 
-    {
-        var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
-        Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s}");
+    {        
+        var prefab = IsOverRiver(bomb.GetPosition()) ? bombSplashPrefab : bombCraterPrefab;
+        Vector3 craterPosition = bomb.GetPosition();
+        craterPosition.z = -0.22f;
+        var c = Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
+        //var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
+        //Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s} {bomb.transform.position} {c.transform.position}");
         Destroy(bomb.gameObject);
     }
 }
