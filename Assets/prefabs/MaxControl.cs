@@ -22,9 +22,12 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public static readonly float minAltitude = 0.1f;
     public static readonly float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
+    public static readonly float collidedMoveInterval = 0.05f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     float damageCooldown = 0f;
+    float collidedCooldown = 0f;
+    Vector2 lastCollidedMove;
     bool bombDamage = false;
     bool gunDamage = false;
     public InputAction MoveAction;
@@ -54,6 +57,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugRepairAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
+        lastCollidedMove = new Vector2(0, 0);
     }
 
     void FireBullet(GameStatus gameStatus)
@@ -115,8 +119,13 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 break;
             case GameStatus.COLLIDED:
                 forcedDescent = collidedDescentRate;
-                // Todo: reassign apparentMove to left,right,neutral randomly + down
-                apparentMove = new Vector2(0f, 0f);
+                collidedCooldown -= Time.deltaTime;
+                if (collidedCooldown <= 0f)
+                {
+                    lastCollidedMove.x = UnityEngine.Random.Range(-1, 2);
+                    collidedCooldown = collidedMoveInterval;
+                }
+                apparentMove = lastCollidedMove;
                 break;
             default:
                 break;
@@ -212,6 +221,17 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         gameState.SetRandomDamage(true);
     }
 
+    void HandlePlaneCollision(Collider2D col)
+    {
+        var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
+        if (!collObjName.StartsWith("enemy"))
+        {
+            return; //no collision
+        }
+        
+        gameState.SetStatus(GameStatus.COLLIDED);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -288,7 +308,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (col.name.StartsWith("flack_expl"))
         {
             HandleFlackHit();
-        }                
+        }
+        else if (col.name.StartsWith("enemy"))
+        {
+            HandlePlaneCollision(col);
+        }
     }
 
     void DropBomb()

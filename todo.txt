@@ -152,6 +152,12 @@ Format Dashboard
 Set/blink dashboard background color based on state
 Tree/house collisions
 Bomb effect
+  ground*
+  river*
+  trees
+  tanks
+  flack guns
+  roads
 Gun effect on ground objects
 Bridges
 Cars

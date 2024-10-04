@@ -112,15 +112,29 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
     void OnTriggerEnter2D(Collider2D col)
     {
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
-        if (!collObjName.StartsWith("bullet"))
+
+        if (collObjName.StartsWith("bullet"))
         {
-            return; //no bullet collision
-        }                
+            // Todo: report the victory
+        }
+        else if (collObjName.StartsWith("max"))
+        {
+            // mid air collision
+        }
+        else 
+        {
+            return; //no collision
+        }
 
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
         crashed = true;
         crashCooldownSec = crashDurationSec;
         spriteR.sprite = crashedSprite;
+        var collider = gameObject.GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
     }
 
 }
