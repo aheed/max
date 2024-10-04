@@ -121,7 +121,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     Mesh CreateQuadMesh(IEnumerable<Vector2> coords)
     {
-        var verts = coords.Select(v => new Vector3(v.x, v.y)).ToArray();
+        var verts = coords.Select(v => (Vector3)v).ToArray();
         if (verts.Length % 4 != 0)
         {
             throw new System.Exception("Length of param must a multiple of 4");
@@ -240,56 +240,28 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         rsMeshRenderer.material = riverMaterial;
 
         // Mesh
-        var vertices = new List<Vector3>();
-        var triangles = new List<int>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        int segments = 0;
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
-        foreach (var segment in levelContents.riverSegments)
+
+        var riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
-
             var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
-
-            //Debug.Log($"{riverLowerLeftCornerX} {riverWidth} {xOffset} {y} {segmentHeight}");
             var riverWidth = LevelBuilder.riverWidth * cellWidth;
             
-            vertices.Add(new Vector3(riverLowerLeftCornerX, y, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth, y, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + xOffset, y + segmentHeight, 0));
-            vertices.Add(new Vector3(riverLowerLeftCornerX + riverWidth + xOffset, y + segmentHeight, 0));
-
-            var triIndexOffset = segments * 4;
-            triangles.Add(triIndexOffset + 0);
-            triangles.Add(triIndexOffset + 2);
-            triangles.Add(triIndexOffset + 1);
-            triangles.Add(triIndexOffset + 2);
-            triangles.Add(triIndexOffset + 3);
-            triangles.Add(triIndexOffset + 1);
-
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-            normals.Add(-Vector3.forward);
-
-            uvs.Add(new Vector2(0, 0));
-            uvs.Add(new Vector2(1, 0));
-            uvs.Add(new Vector2(0, 1));
-            uvs.Add(new Vector2(1, 1));
-
+            var ret = new List<Vector2>
+            {
+                new Vector2(riverLowerLeftCornerX, y),
+                new Vector2(riverLowerLeftCornerX + riverWidth, y),
+                new Vector2(riverLowerLeftCornerX + xOffset, y + segmentHeight),
+                new Vector2(riverLowerLeftCornerX + riverWidth + xOffset, y + segmentHeight)
+            };
             y += segmentHeight;
             riverLowerLeftCornerX += xOffset;
-            segments += 1;
-        }
-
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.normals = normals.ToArray();
-        mesh.uv = uvs.ToArray();
+            return ret;
+        }).ToList();
         
+        var mesh = CreateQuadMesh(riverVerts);
         rsMeshFilter.mesh = mesh;
 
         
