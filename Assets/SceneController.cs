@@ -92,6 +92,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
     float enemyPlaneCooldown = 0f;
+    GameObject riverSectionGameObject;
+    List<Vector2> riverVerts;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -229,13 +231,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
 
         // River
-        var rsGameObject = Instantiate(riverSectionPrefab, lvlTransform);
+        riverSectionGameObject = Instantiate(riverSectionPrefab, lvlTransform);
         var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0f, -0.2f);
-        rsGameObject.transform.localPosition = rsLocalTransform;
+        riverSectionGameObject.transform.localPosition = rsLocalTransform;
 
         // MeshRenderer
-        var rsMeshFilter = rsGameObject.AddComponent<MeshFilter>();
-        var rsMeshRenderer = rsGameObject.AddComponent<MeshRenderer>();
+        var rsMeshFilter = riverSectionGameObject.AddComponent<MeshFilter>();
+        var rsMeshRenderer = riverSectionGameObject.AddComponent<MeshRenderer>();
 
         rsMeshRenderer.material = riverMaterial;
 
@@ -243,7 +245,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
 
-        var riverVerts = levelContents.riverSegments.SelectMany(segment => 
+        riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
             var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
@@ -418,6 +420,40 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         return position.y > landingStripBottomY && 
             position.y < landingStripTopY &&            
             Math.Abs((refobject.transform.position.x + offsetX - position.x)) < landingStripWidth / 2;
+    }
+
+    bool IsOverRiver(Vector2 position)
+    {
+        var xOffset = riverSectionGameObject.transform.position.x;
+        var yOffset = riverSectionGameObject.transform.position.y;
+
+        // find segment
+        var segmentIndex = 0;
+        var maxSegmentIndex = (riverVerts.Count - 1) / 4;
+        while (segmentIndex <= maxSegmentIndex)
+        {
+            if ((riverVerts[segmentIndex * 4].y + yOffset) < position.y &&
+                (riverVerts[segmentIndex * 4 + 2].y + yOffset) >= position.y)
+            {
+                break;
+            }
+            segmentIndex++;
+        }
+
+        if (segmentIndex > maxSegmentIndex)
+        {
+            return false;
+        }
+
+        // interpolate river edges x
+        var ydiff = position.y - (riverVerts[segmentIndex*4].y + yOffset);
+        var xdiff = ydiff * ((riverVerts[segmentIndex*4 + 2].x + xOffset) - (riverVerts[segmentIndex*4].x + xOffset)) / ((riverVerts[segmentIndex*4 + 2].y + yOffset) - (riverVerts[segmentIndex*4].y + yOffset));
+
+        // compare to position x
+        var overRiverSegment =
+            position.x > ((riverVerts[segmentIndex*4].x + xOffset) + xdiff) &&
+            position.x < ((riverVerts[segmentIndex*4+1].x + xOffset) + xdiff);
+        return overRiverSegment;
     }
 
     void PreventRelanding()
@@ -688,5 +724,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             gameState.SetSpeed(0f);
             gameState.SetStatus(GameStatus.REFUELLING);
         }
+    }
+
+    public void OnBombLanded(Bomb bomb) 
+    {
+        var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
+        Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s}");
+        Destroy(bomb.gameObject);
     }
 }

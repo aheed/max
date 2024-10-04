@@ -102,4 +102,6 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     {
         dirty = true;
     }
+
+    public void OnBombLanded(Bomb bomb) {}
 }

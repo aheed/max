@@ -8,6 +8,7 @@ public class Bomb : MonoBehaviour, IPositionObservable
     public float maxCollisionAltitude = 0.2f;
 
     BoxCollider2D bombCollider;
+    GameState gameState;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,11 @@ public class Bomb : MonoBehaviour, IPositionObservable
     // Update is called once per frame
     void Update()
     {
+        if (gameState == null)
+        {
+            gameState = FindObjectOfType<GameState>();
+        }
+
         var tmpPos = transform.localPosition;
         var deltaVertical = -verticalSpeed * Time.deltaTime;
         tmpPos.z += deltaVertical; 
@@ -33,7 +39,8 @@ public class Bomb : MonoBehaviour, IPositionObservable
         if (tmpPos.z <= 0)
         {
             //Debug.Log("Boooooooooooooooooooooooooooooooooooooom!");
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameState.BombLanded(this);
         }
     }
 

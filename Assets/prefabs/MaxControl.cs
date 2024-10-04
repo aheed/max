@@ -208,7 +208,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     void HandleFlackHit()
     {
-        Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+        //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
         gameState.SetRandomDamage(true);
     }
 
@@ -336,4 +336,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             offsetY = 0f;
         }
     }
+
+    public void OnBombLanded(Bomb bomb) {}
 }
