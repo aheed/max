@@ -158,7 +158,7 @@ Bomb effect
   tanks*
   flack guns*
   roads
-  house
+  house*
 Gun effect on ground objects
   flack guns*
   tanks*
@@ -178,6 +178,8 @@ Divide colliders into layers in a smart way
 Change box collider into polygon colliders?
 Make it possible to fire gun in collided state
 Boats
+  type1
+  type2
 Tank and FlackGun should share code (inheritance?).
 Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
 Make all ground/water objects uniform height, a configurable safe height.

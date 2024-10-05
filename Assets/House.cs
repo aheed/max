@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class House : MonoBehaviour, IPositionObservable
 {
+    public Sprite bombedSprite;
+    private SpriteRenderer spriteR;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -25,7 +28,8 @@ public class House : MonoBehaviour, IPositionObservable
             return;
         }
 
-        Debug.Log($"House!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.name}");
+        //Debug.Log($"House!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.name}");
+        spriteR.sprite = bombedSprite;
         //Destroy(gameObject);
         //gameObject.SetActive(false);
     }
