@@ -741,6 +741,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         else 
         {
             Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
+            Destroy(hitObject);
         }
         //var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
         //Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s} {bomb.transform.position} {c.transform.position}");

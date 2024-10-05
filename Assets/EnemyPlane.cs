@@ -54,6 +54,15 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
         SetMoveCooldown();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
+    void Deactivate()
+    {
+        var collider = gameObject.GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+        gameObject.SetActive(false);
+    }
 
     // Update is called once per frame
     void Update()
@@ -64,7 +73,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
             if (crashCooldownSec <= 0f)
             {
                 //Destroy(gameObject);
-                gameObject.SetActive(false);
+                Deactivate();
             }
             return;
         }
@@ -72,7 +81,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
         if (Math.Abs(transform.position.x - refObject.transform.position.x) > maxDistance)
         {
             Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
-            gameObject.SetActive(false);
+            Deactivate();
         }
 
         moveCooldownSec -= Time.deltaTime;

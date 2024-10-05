@@ -156,9 +156,11 @@ Bomb effect
   river*
   trees (none)*
   tanks
-  flack guns
+  flack guns*
   roads
 Gun effect on ground objects
+  flack guns
+  tanks
 Bridges
 Cars
 Make the plane move relative the camera with diagonal movement*
@@ -172,6 +174,10 @@ Alerts
 Bug: IsOverLandingStrip seems to be a half landing strip width off.
 Divide colliders into layers in a smart way
 Change box collider into polygon colliders?
+Make it possible to fire gun in collided state
+Boats
+Tank and FlackGun should share code (inheritance?).
+
 
 ----------
 Do we need this?
