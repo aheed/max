@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flackProjectilePrefab: {fileID: 5005078640043132052, guid: 1a0525ae8ebaf1137905d389f845a55b, type: 3}
+  shotSprite: {fileID: 21300000, guid: 569c9f8814edffa35af2d93142aec782, type: 3}
   avgTimeToShootSeconds: 2
 --- !u!61 &-1189084651149204698
 BoxCollider2D:
