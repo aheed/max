@@ -101,11 +101,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   refObject: {fileID: 0}
-  horizontalSpeed: 3
-  verticalSpeed: 2
   glideDescentRate: 0.3
   deadDescentRate: 0.7
   collidedDescentRate: 1.2
+  speedDamageFactor: 0.5
+  bombDamageProbability: 0.5
+  gunDamageProbability: 0.5
+  damagePeriodSec: 2
+  offsetDecreaseRate: 0.3
   MoveAction:
     m_Name: Move
     m_Type: 0
@@ -282,7 +285,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.59, y: 0.43}
+  m_Size: {x: 0.3, y: 0.21}
   m_EdgeRadius: 0
 --- !u!1001 &4742559290695725460
 PrefabInstance:

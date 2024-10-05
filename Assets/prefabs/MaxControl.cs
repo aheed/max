@@ -221,15 +221,22 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         gameState.SetRandomDamage(true);
     }
 
-    void HandlePlaneCollision(Collider2D col)
+    void HandleCollision(Collider2D col)
     {
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
-        if (!collObjName.StartsWith("enemy"))
+        //Debug.Log($"========== {col.name} {collObjName}");
+        if (collObjName.StartsWith("enemy"))
         {
-            return; //no collision
+            gameState.SetStatus(GameStatus.COLLIDED);
         }
-        
-        gameState.SetStatus(GameStatus.COLLIDED);
+        else if (collObjName.StartsWith("house") ||
+                 collObjName.StartsWith("tree") ||
+                 collObjName.StartsWith("bridge"))
+        {
+            gameState.SetStatus(GameStatus.DEAD);
+        }
+
+        //no collision
     }
 
     // Update is called once per frame
@@ -309,9 +316,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             HandleFlackHit();
         }
-        else if (col.name.StartsWith("enemy"))
+        else
         {
-            HandlePlaneCollision(col);
+            HandleCollision(col);
         }
     }
 

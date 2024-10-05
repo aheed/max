@@ -170,7 +170,8 @@ Make it possible to destroy enemyplane game objects without causing dangling poi
   Unregister prop as listener on destruction?
 Alerts
 Bug: IsOverLandingStrip seems to be a half landing strip width off.
-
+Divide colliders into layers in a smart way
+Change box collider into polygon colliders?
 
 ----------
 Do we need this?
