@@ -44,6 +44,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
+    public GameObject boat1Prefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -336,6 +337,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
                     case CellContent.TREE2:
                         selectedPrefab = tree2Prefab;
+                        break;
+
+                    case CellContent.BOAT1:
+                        selectedPrefab = boat1Prefab;
                         break;
                 }
 
@@ -740,7 +745,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
         else 
         {
-            Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
+            if (!IsOverRiver(hitObject.transform.position))
+            {
+                Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
+            }
             Destroy(hitObject);
         }
         //var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";

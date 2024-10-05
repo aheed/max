@@ -155,12 +155,14 @@ Bomb effect
   ground*
   river*
   trees (none)*
-  tanks
+  tanks*
   flack guns*
   roads
+  house
 Gun effect on ground objects
-  flack guns
-  tanks
+  flack guns*
+  tanks*
+  boats
 Bridges
 Cars
 Make the plane move relative the camera with diagonal movement*
@@ -177,7 +179,8 @@ Change box collider into polygon colliders?
 Make it possible to fire gun in collided state
 Boats
 Tank and FlackGun should share code (inheritance?).
-
+Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
+Make all ground/water objects uniform height, a configurable safe height.
 
 ----------
 Do we need this?

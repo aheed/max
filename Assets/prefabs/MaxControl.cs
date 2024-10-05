@@ -231,7 +231,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }
         else if (collObjName.StartsWith("house") ||
                  collObjName.StartsWith("tree") ||
-                 collObjName.StartsWith("bridge"))
+                 collObjName.StartsWith("bridge") ||
+                 collObjName.StartsWith("boat"))
         {
             gameState.SetStatus(GameStatus.DEAD);
         }

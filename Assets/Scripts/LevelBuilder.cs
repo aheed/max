@@ -13,7 +13,8 @@ public enum CellContent
     TANK,
     FLACK_GUN,
     TREE1,
-    TREE2
+    TREE2,
+    BOAT1
 }
 
 public class RiverSegment
@@ -61,6 +62,7 @@ public static class LevelBuilder
     public static float tankProbability = 0.012f;
     public static float flackGunProbability = 0.01f;
     public static float treeProbability = 0.03f;
+    public static float boat1Probability = 0.03f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -269,6 +271,12 @@ public static class LevelBuilder
                 if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE2;
+                }
+
+                randVal = UnityEngine.Random.Range(0f, 1.0f);
+                if (randVal < boat1Probability && ret.cells[x, y] == CellContent.WATER)
+                {
+                    ret.cells[x, y] = CellContent.BOAT1;
                 }
             }
         }
