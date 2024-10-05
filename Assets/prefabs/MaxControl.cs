@@ -368,5 +368,5 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }
     }
 
-    public void OnBombLanded(Bomb bomb) {}
+    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
 }

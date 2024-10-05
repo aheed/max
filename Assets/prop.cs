@@ -41,5 +41,5 @@ public class prop : MonoBehaviour, IGameStateObserver
 
     public void OnGameEvent(GameEvent _) {}
 
-    public void OnBombLanded(Bomb bomb) {}
+    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
 }

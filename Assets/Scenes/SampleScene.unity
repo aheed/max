@@ -2420,6 +2420,7 @@ MonoBehaviour:
   levelPrefab: {fileID: 5100127474471888836, guid: 389b9a52308d225e7a9a7180215c694f, type: 3}
   bombSplashPrefab: {fileID: 3838414699679397617, guid: 4118bf71f30a1fa54b941b9f1ec59ef0, type: 3}
   bombCraterPrefab: {fileID: 1867543578383990134, guid: 7a308833ef767b2798be2dc5e57f0b22, type: 3}
+  mushroomCloudPrefab: {fileID: 350556346819579458, guid: 2512bce25b70e56dc91a559e805eddc4, type: 3}
   refobject: {fileID: 608621884}
   width: 1
   height: 1
