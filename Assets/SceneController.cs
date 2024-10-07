@@ -98,6 +98,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float enemyPlaneCooldown = 0f;
     GameObject riverSectionGameObject;
     List<Vector2> riverVerts;
+    List<float> roadLowerEdgesY;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -276,8 +277,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         foreach (var road in levelContents.roads)
         {
             var roadGameObject = Instantiate(roadPrefab, lvlTransform);
-            var roadLocalTransform = new Vector3(road * cellHeight * neutralSlope, road * cellHeight, -0.2f);
+            var lowerEdgeY = road * cellHeight;
+            
+            var roadLocalTransform = new Vector3(road * cellHeight * neutralSlope, lowerEdgeY, -0.2f);
             roadGameObject.transform.localPosition = roadLocalTransform;            
+            roadLowerEdgesY.Add(roadGameObject.transform.position.y);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
             var roadHeight = LevelBuilder.roadHeight * cellHeight;
@@ -408,6 +412,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         pendingActivation.Clear();
         activeObjects.Clear();
+        roadLowerEdgesY = new();
 
         latestLevel = LevelBuilder.Build(true);
         CreateLevel();
@@ -420,6 +425,19 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     void Start()
     {
         StartNewGame();
+    }
+
+    bool IsOverRoad(Vector2 position)
+    {
+        var roadHeight = (LevelBuilder.roadHeight * levelHeight) / LevelContents.gridHeight;
+        foreach (var lowerEdgeY in roadLowerEdgesY)
+        {
+            if (position.y < (lowerEdgeY + roadHeight))
+            {
+                return position.y > lowerEdgeY;
+            }
+        }
+        return false;
     }
 
     bool IsOverLandingStrip(Vector2 position)
@@ -546,6 +564,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
 
             activeObjects.RemoveAt(0);
+        }
+
+        while (roadLowerEdgesY.Count > 0 && refobject.transform.position.y - deactivationDistance > roadLowerEdgesY.First())
+        {
+            roadLowerEdgesY.RemoveAt(0);
         }
 
         // Update game state
@@ -739,9 +762,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if (hitObject == null)
         {
             var prefab = IsOverRiver(bomb.GetPosition()) ? bombSplashPrefab : bombCraterPrefab;
+            if (IsOverRoad(bomb.GetPosition()))
+            {
+                prefab = mushroomCloudPrefab;
+                //todo: report road or bridge hit for scoring
+            }
             Vector3 craterPosition = bomb.GetPosition();
             craterPosition.z = -0.22f;
-            var c = Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
+            Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
         }
         else 
         {
