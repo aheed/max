@@ -102,6 +102,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2aba449151ee3f20bb517b28a8492723, type: 3}
   - {fileID: 21300000, guid: dd0375e0444f9439b953d69a8b23d1f0, type: 3}
   - {fileID: 21300000, guid: e5a3b78b1c21c446eb03f44adbe51224, type: 3}
+  - {fileID: 21300000, guid: 7acc7d4bc4036b05c89ed8c05556b921, type: 3}
   lifeSpanSec: 0.4
   totalSpriteChanges: 20
 --- !u!61 &-1740212992422634069
