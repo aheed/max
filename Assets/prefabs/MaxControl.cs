@@ -22,7 +22,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public static readonly float minAltitude = 0.1f;
     public static readonly float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
-    public static readonly float collidedMoveInterval = 0.05f;
+    public static readonly float collidedMoveInterval = 0.03f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     float damageCooldown = 0f;

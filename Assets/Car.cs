@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
-    public float speed = 1.5f;    
+    public float speedFactor = 1.0f;
+    public Sprite[] sprites;
     private SpriteRenderer spriteR;
     GameState gameState;
+    float speed;
 
 
     // Start is called before the first frame update
@@ -14,6 +16,9 @@ public class Car : MonoBehaviour
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = FindObjectOfType<GameState>();
+        speed = speedFactor * gameState.maxSpeed;
+        var spriteIndex = Random.Range(0, sprites.Length);
+        spriteR.sprite = sprites[spriteIndex];
     }
 
     // Update is called once per frame

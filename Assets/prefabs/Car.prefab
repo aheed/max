@@ -99,7 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6a3fe7d055536859bb5ecfcc33bff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
+  speedFactor: 0.75
+  sprites:
+  - {fileID: 21300000, guid: d0a64fce0b00c49a78fb162c1463d04e, type: 3}
+  - {fileID: 21300000, guid: 31c47cfab3a89e87caf8a801f7be003e, type: 3}
+  - {fileID: 21300000, guid: 8d4823677706eb243a27f060e8a30b2e, type: 3}
+  - {fileID: 21300000, guid: 446764003e31a41b381f9acc2d6ceafa, type: 3}
 --- !u!61 &-4669767454231379523
 BoxCollider2D:
   m_ObjectHideFlags: 0
