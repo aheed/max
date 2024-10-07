@@ -807,6 +807,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
         //var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
         //Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s} {bomb.transform.position} {c.transform.position}");
-        Destroy(bomb.gameObject);
+        if (bomb != null)
+        {
+            Destroy(bomb.gameObject);
+        }        
     }
 }
