@@ -195,5 +195,3 @@ public enum GameEvent
 void OnGameEvent(GameEvent gameEvent);
 --------
 
-Why is the bridge way to the left (a whole level width) on levels starting with river to the right?
-Why is the bridge x position off by half a river?

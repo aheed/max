@@ -46,6 +46,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject mushroomCloudPrefab;
     public GameObject boat1Prefab;
     public GameObject bridgePrefab;
+    public GameObject carPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -78,6 +79,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float enemyPlaneSpeedMin = 1.5f;
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
+    public float carOffsetX = -5f;
 
     //// Game status
     int level = -1;
@@ -273,7 +275,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var mesh = CreateQuadMesh(riverVerts);
         rsMeshFilter.mesh = mesh;
 
-        
+        GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
+        for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
+        {
+            ret[ytmp] = new GameObjectCollection {
+                yCoord = ytmp * cellHeight, // level relative coordinate
+                gameObjects = new List<GameObject>()
+            };
+        }        
         
         // Roads
         foreach (var road in levelContents.roads)
@@ -281,7 +290,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var lowerEdgeY = road * cellHeight;
             
-            var roadLocalTransform = new Vector3(road * cellHeight * neutralSlope, lowerEdgeY, -0.2f);
+            var roadLeftEdgeX = road * cellHeight * neutralSlope;
+            var roadLocalTransform = new Vector3(roadLeftEdgeX, lowerEdgeY, -0.2f);
             roadGameObject.transform.localPosition = roadLocalTransform;            
             roadLowerEdgesY.Add(roadGameObject.transform.position.y);
 
@@ -307,6 +317,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var bridgeGameObject = Instantiate(bridgePrefab, lvlTransform);
             var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
             bridgeGameObject.transform.localPosition = bridgeLocalTransform;
+
+            // Car
+            var carGameObject = Instantiate(carPrefab, lvlTransform);
+            var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
+            carGameObject.transform.localPosition = carLocalTransform;
+            ret[road].gameObjects.Add(carGameObject);
+
         }
 
         // Houses
@@ -317,16 +334,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             houseGameObject.transform.localPosition = houseLocalTransform;
         }
 
-        List<GameObjectCollection> ret = new();
+        
 
         // Single cell items: Flack guns, trees, tanks
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            var gameObjects = new List<GameObject>();
-            ret.Add(new GameObjectCollection {
-                yCoord = ytmp * cellHeight, // level relative coordinate
-                gameObjects = gameObjects
-            });
             for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)    
             {
                 GameObject selectedPrefab = null;
@@ -358,13 +370,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
-                    gameObjects.Add(itemGameObject);
+                    ret[ytmp].gameObjects.Add(itemGameObject);
                 }
 
             }
         }
 
-        return ret;
+        return ret.ToList();
     }
 
     void CreateLevel()
