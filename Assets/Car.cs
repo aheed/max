@@ -26,7 +26,8 @@ public class Car : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.name.StartsWith("bomb"))
+        if (col.name.StartsWith("bomb") ||
+            col.name.StartsWith("mushroom"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             gameState.BombLanded(bomb, gameObject);

@@ -797,9 +797,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
         }
-        else 
+        else
         {
-            if (!IsOverRiver(hitObject.transform.position))
+            if (!IsOverRiver(hitObject.transform.position) || IsOverRoad(hitObject.transform.position))
             {
                 Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
             }
