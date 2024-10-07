@@ -45,6 +45,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
     public GameObject boat1Prefab;
+    public GameObject bridgePrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -54,6 +55,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float minDistanceRiverAirstrip = 5.0f;
     public float maxDistanceRiverToAdjust = 2.0f;
     public float approachQuotient = 0.2f;
+    public float roadHeight = 0.4f;
     public Material riverMaterial;
     public Material roadMaterial;
     public Material groundMaterial;
@@ -249,12 +251,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Mesh
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
+        var riverWidth = LevelBuilder.riverWidth * cellWidth;
 
         riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
             var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
-            var riverWidth = LevelBuilder.riverWidth * cellWidth;
             
             var ret = new List<Vector2>
             {
@@ -284,7 +286,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             roadLowerEdgesY.Add(roadGameObject.transform.position.y);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
-            var roadHeight = LevelBuilder.roadHeight * cellHeight;
 
             var meshFilter = roadGameObject.AddComponent<MeshFilter>();
             var meshRenderer = roadGameObject.AddComponent<MeshRenderer>();
@@ -300,9 +301,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             var roadMesh = CreateQuadMesh(roadVerts);
             meshFilter.mesh = roadMesh;
-        }
 
-        // Bridges
+            // Bridge
+            var bridgeX = GetRiverLeftEdgeX(lowerEdgeY, riverSectionGameObject.transform.localPosition.x, 0f) + riverWidth / 2;
+            var bridgeGameObject = Instantiate(bridgePrefab, lvlTransform);
+            var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
+            bridgeGameObject.transform.localPosition = bridgeLocalTransform;
+        }
 
         // Houses
         foreach (var house in levelContents.houses)
@@ -351,7 +356,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 if (selectedPrefab != null)
                 {
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
-                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.2f);
+                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     gameObjects.Add(itemGameObject);
                 }
@@ -429,7 +434,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     bool IsOverRoad(Vector2 position)
     {
-        var roadHeight = (LevelBuilder.roadHeight * levelHeight) / LevelContents.gridHeight;
         foreach (var lowerEdgeY in roadLowerEdgesY)
         {
             if (position.y < (lowerEdgeY + roadHeight))
@@ -448,18 +452,15 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             Math.Abs((refobject.transform.position.x + offsetX - position.x)) < landingStripWidth / 2;
     }
 
-    bool IsOverRiver(Vector2 position)
+    float GetRiverLeftEdgeX(float yCoord, float xOffset, float yOffset)
     {
-        var xOffset = riverSectionGameObject.transform.position.x;
-        var yOffset = riverSectionGameObject.transform.position.y;
-
         // find segment
         var segmentIndex = 0;
         var maxSegmentIndex = (riverVerts.Count - 1) / 4;
         while (segmentIndex <= maxSegmentIndex)
         {
-            if ((riverVerts[segmentIndex * 4].y + yOffset) < position.y &&
-                (riverVerts[segmentIndex * 4 + 2].y + yOffset) >= position.y)
+            if ((riverVerts[segmentIndex * 4].y + yOffset) < yCoord &&
+                (riverVerts[segmentIndex * 4 + 2].y + yOffset) >= yCoord)
             {
                 break;
             }
@@ -468,17 +469,30 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         if (segmentIndex > maxSegmentIndex)
         {
-            return false;
+            Debug.LogWarning("Could not find river edge coordinates");
+            return 0f;
         }
 
         // interpolate river edges x
-        var ydiff = position.y - (riverVerts[segmentIndex*4].y + yOffset);
+        var ydiff = yCoord - (riverVerts[segmentIndex*4].y + yOffset);
         var xdiff = ydiff * ((riverVerts[segmentIndex*4 + 2].x + xOffset) - (riverVerts[segmentIndex*4].x + xOffset)) / ((riverVerts[segmentIndex*4 + 2].y + yOffset) - (riverVerts[segmentIndex*4].y + yOffset));
+
+        return riverVerts[segmentIndex*4].x + xOffset + xdiff;
+    }
+
+
+    bool IsOverRiver(Vector2 position)
+    {
+        var xOffset = riverSectionGameObject.transform.position.x;
+        var yOffset = riverSectionGameObject.transform.position.y;
+
+        var leftEdgeX = GetRiverLeftEdgeX(position.y, xOffset, yOffset);
+        var rightEdgeX = leftEdgeX + LevelBuilder.riverWidth * (levelWidth / LevelContents.gridWidth);
 
         // compare to position x
         var overRiverSegment =
-            position.x > ((riverVerts[segmentIndex*4].x + xOffset) + xdiff) &&
-            position.x < ((riverVerts[segmentIndex*4+1].x + xOffset) + xdiff);
+            position.x > leftEdgeX &&
+            position.x < rightEdgeX;
         return overRiverSegment;
     }
 
@@ -768,7 +782,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 //todo: report road or bridge hit for scoring
             }
             Vector3 craterPosition = bomb.GetPosition();
-            craterPosition.z = -0.22f;
+            craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
         }
         else 
