@@ -15,6 +15,11 @@ public class BulletControl : MonoBehaviour, IPositionObservable
         rigidbody2d = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
         speed = new Vector3(4.0f, 4.0f, 0);
+
+        SpriteRenderer spriteR = gameObject.GetComponent<SpriteRenderer>();
+        spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);
+        Debug.Log($"Bullet altitude/sortingorder {GetAltitude()}/{spriteR.sortingOrder}");
+        
     }
 
     // Update is called once per frame

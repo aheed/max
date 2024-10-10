@@ -195,3 +195,14 @@ public enum GameEvent
 void OnGameEvent(GameEvent gameEvent);
 --------
 
+Bridge:
+  Split into 2 sprites. Only the middle one shall have z value possible to fly under.
+  One bridge top collider. Possible to go over or under.
+  The pylons could be a single polygon collider with 2 paths.
+  No need for a bridge script at all?
+    We still need it to implement IPositionObservable
+  How to make cars and mushroom clouds appear on top of bridges?
+  Bridge midsection must be sorted in same (or higher) layer as Max (aircraft) to appear above it.
+  In fact cars, vip targets etc on bridges must also appear over Max when Max goes under a bridge.
+    Kill airplane layer?
+    Switch to ground layer when under a bridge?
