@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bridge : MonoBehaviour, IPositionObservable
+public class bridge_midsection : MonoBehaviour, IPositionObservable
 {
     // Start is called before the first frame update
     void Start()
@@ -17,6 +17,6 @@ public class bridge : MonoBehaviour, IPositionObservable
     }
 
     public Vector2 GetPosition() => transform.position;
-    public float GetAltitude() => 0.1f;
-    public float GetHeight() => 0.4f;
+    public float GetAltitude() => 0.25f;
+    public float GetHeight() => 0.1f;
 }

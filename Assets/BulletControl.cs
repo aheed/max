@@ -18,7 +18,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
 
         SpriteRenderer spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);
-        Debug.Log($"Bullet altitude/sortingorder {GetAltitude()}/{spriteR.sortingOrder}");
+        //Debug.Log($"Bullet altitude/sortingorder {GetAltitude()}/{spriteR.sortingOrder}");
         
     }
 
