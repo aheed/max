@@ -164,7 +164,7 @@ Gun effect on ground objects
   tanks*
   boats*
 Bridges
-Cars
+Cars*
 Make the plane move relative the camera with diagonal movement*
   altitude + relativeY <= maxAltitude*
   (Does not drop altitude if down + left and min offset) Not a bug*
@@ -178,11 +178,13 @@ Divide colliders into layers in a smart way
 Change box collider into polygon colliders?
 Make it possible to fire gun in collided state
 Boats
-  type1
+  type1*
   type2
 Tank and FlackGun should share code (inheritance?).
 Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
 Make all ground/water objects uniform height, a configurable safe height.
+Change airplane colliders from box to polygon
+
 
 ----------
 Do we need this?
