@@ -286,7 +286,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             lastAltitude = GetAltitude();
             spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
-            Debug.Log($"Max new altitude/sortingorder {lastAltitude}/{spriteR.sortingOrder}");
+            //Debug.Log($"Max new altitude/sortingorder {lastAltitude}/{spriteR.sortingOrder}");
         }
     }
 

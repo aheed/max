@@ -151,7 +151,7 @@ Collided state*
 Format Dashboard
 Set/blink dashboard background color based on state
 Tree/house collisions*
-Bomb effect
+Bomb effect*
   ground*
   river*
   trees (none)*
@@ -159,11 +159,11 @@ Bomb effect
   flack guns*
   roads*
   house*
-Gun effect on ground objects
+Gun effect on ground objects*
   flack guns*
   tanks*
   boats*
-Bridges
+Bridges*
 Cars*
 Make the plane move relative the camera with diagonal movement*
   altitude + relativeY <= maxAltitude*
@@ -197,14 +197,15 @@ public enum GameEvent
 void OnGameEvent(GameEvent gameEvent);
 --------
 
-Bridge:
+Bridge:*
   Split into 2 sprites. Only the middle one shall have z value possible to fly under.
   One bridge top collider. Possible to go over or under.
   The pylons could be a single polygon collider with 2 paths.
-  No need for a bridge script at all?
-    We still need it to implement IPositionObservable
+  Need for a bridge script at all?
+    Yes, we still need it to implement IPositionObservable
   How to make cars and mushroom clouds appear on top of bridges?
   Bridge midsection must be sorted in same (or higher) layer as Max (aircraft) to appear above it.
   In fact cars, vip targets etc on bridges must also appear over Max when Max goes under a bridge.
-    Kill airplane layer?
+    Kill airplane layer?*
     Switch to ground layer when under a bridge?
+  Possible improvement: cars could change its sorting order when entering/leaving bridge to avoid appearing under a low passing plane.
