@@ -62,7 +62,7 @@ public static class LevelBuilder
     public static float tankProbability = 0.012f;
     public static float flackGunProbability = 0.01f;
     public static float treeProbability = 0.03f;
-    public static float boat1Probability = 0.03f;
+    public static float boat1Probability = 0.005f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
