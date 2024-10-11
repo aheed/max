@@ -209,3 +209,9 @@ Bridge:*
     Kill airplane layer?*
     Switch to ground layer when under a bridge?
   Possible improvement: cars could change its sorting order when entering/leaving bridge to avoid appearing under a low passing plane.
+
+Did not work well but may be the way to go eventually:
+docker run -it --rm -p 80:80 --name web -v /home/anders/Documents/github/max/webbuild:/usr/share/nginx/html -v /home/anders/Documents/github/max/nginx.conf:/etc/nginx/nginx.conf:ro nginx
+
+works:
+docker run -it --rm -p 80:80 --name web -v /home/anders/Documents/github/max/webbuild:/usr/share/nginx/html nginx
