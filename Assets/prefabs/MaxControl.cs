@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 {
@@ -37,6 +38,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
+    Vector2 lastApparentMove;
     float lastAltitude;
     public GameObject bulletPrefab;
     public Bomb bombPrefab;
@@ -46,7 +48,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public Sprite crashedSprite;
     private SpriteRenderer spriteR;
     float offsetY = 0;
-    GameState gameState;
+    GameState gameState;    
+    private Vector2 touchStartPosition, touchEndPosition;
+    private float maxTouch = 10f;
+    private float maxMove = 1.0f;
+    private float minMove = 4.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -192,7 +198,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         transform.localPosition = tmpLocalPosition;
         offsetY = tmpOffsetY;        
 
-        if (apparentMove.x != lastMove.x &&
+        if (apparentMove.x != lastApparentMove.x &&
             stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
@@ -206,7 +212,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 newSprite = rightSprite;
             }
             spriteR.sprite = newSprite;
-            lastMove = apparentMove;
+            lastApparentMove = apparentMove;
         }
 
         if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
@@ -251,7 +257,53 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         GameStateContents stateContents = gameState.GetStateContents();
 
         move = MoveAction.ReadValue<Vector2>();
-        if (FireAction.IsPressed())
+
+        ///////////////////
+        bool fireTouch = false;
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            Touch theTouch;
+            theTouch = Input.GetTouch(i);
+
+            if (theTouch.phase == UnityEngine.TouchPhase.Began)
+            {
+                if (theTouch.position.x < (Screen.width / 2))
+                {
+                    fireTouch = true;
+                    Debug.Log($"Touch Fire at {theTouch.position}");
+                }
+                else
+                {
+                    touchStartPosition = theTouch.position;
+                }
+            }
+            else if ((theTouch.phase == UnityEngine.TouchPhase.Moved || theTouch.phase == UnityEngine.TouchPhase.Ended) && theTouch.position.x > (Screen.width / 2))
+            {
+                touchEndPosition = theTouch.position;
+
+                float x = touchEndPosition.x - touchStartPosition.x;
+                float y = touchEndPosition.y - touchStartPosition.y;
+
+                Debug.Log($"Move {x} {y}");
+
+                if (Mathf.Abs(x) > minMove)
+                {
+                    //move.x = Math.Min(x * maxMove / maxTouch, maxMove);
+                    move.x = x > 0f ? maxMove : -maxMove;
+                }
+
+                if (Mathf.Abs(y) > minMove)
+                {
+                    //move.y = Math.Min(y * maxMove / maxTouch, maxMove);
+                    move.y = y > 0f ? maxMove : -maxMove;
+                }
+
+                touchStartPosition = theTouch.position;
+            }
+        }
+        
+        //////////////////
+        if (fireTouch || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
@@ -280,6 +332,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             damageCooldown = damagePeriodSec;
         }
 
+        if (move != lastMove)
+        {
+            Debug.Log($"MMMMove {move}");
+            lastMove = move;
+        }
         HandleMove(move);
 
         if (GetAltitude() != lastAltitude)
