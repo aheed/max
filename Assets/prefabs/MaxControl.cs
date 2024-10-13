@@ -53,6 +53,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     private float maxTouch = 10f;
     private float maxMove = 1.0f;
     private float minMove = 4.0f;
+    private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41
 
     // Start is called before the first frame update
     void Start()
@@ -265,43 +266,52 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             Touch theTouch;
             theTouch = Input.GetTouch(i);
 
-            if (theTouch.phase == UnityEngine.TouchPhase.Began)
+            //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
+
+            if (theTouch.position.x < (Screen.width / 2))
+                //&& theTouch.fingerId != moveFingerId)
             {
-                if (theTouch.position.x < (Screen.width / 2))
+                fireTouch = true;
+                //Debug.Log($"Touch Fire at {theTouch.position}");
+            }
+            else 
+            {
+                if ((theTouch.phase == UnityEngine.TouchPhase.Moved ||
+                     theTouch.phase == UnityEngine.TouchPhase.Ended))// &&
+                        //theTouch.position.x > (Screen.width / 2) &&
+                        //theTouch.fingerId == moveFingerId)
                 {
-                    fireTouch = true;
-                    Debug.Log($"Touch Fire at {theTouch.position}");
+                    touchEndPosition = theTouch.position;
+
+                    float x = touchEndPosition.x - touchStartPosition.x;
+                    float y = touchEndPosition.y - touchStartPosition.y;
+
+                    float x2 = Mathf.Abs(x) > minMove ? x : 0f;
+                    float y2 = Mathf.Abs(y) > minMove ? y : 0f;
+
+                    float x3 = x2;
+                    float y3 = y2;
+
+                    if (x3 != 0f && Mathf.Abs(y3/x3) < directionFactor)
+                    {
+                        y3 = 0f;
+                    }
+
+                    if (y3 != 0f && Mathf.Abs(x3/y3) < directionFactor)
+                    {
+                        x3 = 0f;
+                    }
+
+                    move.x = x3 == 0f? 0f : x3 > 0f ? maxMove : -maxMove;
+                    move.y = y3 == 0f? 0f : y3 > 0f ? -maxMove : maxMove;
+
+                    Debug.Log($"Got Move {x},{y} {x2},{y2} {x3},{y3} {move.x},{move.y}");
+                    //touchStartPosition = theTouch.position;
                 }
-                else
+                else if (theTouch.phase == UnityEngine.TouchPhase.Began)
                 {
                     touchStartPosition = theTouch.position;
                 }
-            }
-            else if ((theTouch.phase == UnityEngine.TouchPhase.Moved || theTouch.phase == UnityEngine.TouchPhase.Ended) && theTouch.position.x > (Screen.width / 2))
-            {
-                touchEndPosition = theTouch.position;
-
-                float x = touchEndPosition.x - touchStartPosition.x;
-                float y = touchEndPosition.y - touchStartPosition.y;
-
-                
-
-                if (Mathf.Abs(x) > minMove)
-                {
-                    //move.x = Math.Min(x * maxMove / maxTouch, maxMove);
-                    move.x = x > 0f ? maxMove : -maxMove;
-                }
-
-                if (Mathf.Abs(y) > minMove)
-                {
-                    //move.y = Math.Min(y * maxMove / maxTouch, maxMove);
-                    move.y = y > 0f ? maxMove : -maxMove;
-                }
-
-
-                Debug.Log($"Got Move {x} {y} {move.x} {move.y}");
-
-                touchStartPosition = theTouch.position;
             }
         }
         
@@ -337,7 +347,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         if (move != lastMove)
         {
-            Debug.Log($"MMMMove {move}");
             lastMove = move;
         }
         HandleMove(move);
