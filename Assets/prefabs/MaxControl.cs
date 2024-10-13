@@ -284,7 +284,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                 float x = touchEndPosition.x - touchStartPosition.x;
                 float y = touchEndPosition.y - touchStartPosition.y;
 
-                Debug.Log($"Move {x} {y}");
+                
 
                 if (Mathf.Abs(x) > minMove)
                 {
@@ -297,6 +297,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                     //move.y = Math.Min(y * maxMove / maxTouch, maxMove);
                     move.y = y > 0f ? maxMove : -maxMove;
                 }
+
+
+                Debug.Log($"Got Move {x} {y} {move.x} {move.y}");
 
                 touchStartPosition = theTouch.position;
             }
