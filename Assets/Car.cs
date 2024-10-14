@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class Car : MonoBehaviour
@@ -32,7 +33,7 @@ public class Car : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name.StartsWith("bomb") ||
-            col.name.StartsWith("mushroom"))
+            col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             gameState.BombLanded(bomb, gameObject);
