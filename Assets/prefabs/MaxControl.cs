@@ -18,12 +18,12 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float gunDamageProbability = 0.5f;
     public float damagePeriodSec = 2.0f;
     public float offsetDecreaseRate = 0.3f;
-    public static readonly float bulletIntervalSeconds = 0.1f;
-    public static readonly float bombIntervalSeconds = 0.5f;
+    public float bulletIntervalSeconds = 0.1f;
+    public  float bombIntervalSeconds = 0.5f;
     public static readonly float minAltitude = 0.1f;
-    public static readonly float minSafeTurnAltitude = 0.2f;
+    public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
-    public static readonly float collidedMoveInterval = 0.03f;
+    public float collidedMoveInterval = 0.03f;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     float damageCooldown = 0f;
@@ -50,7 +50,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     float offsetY = 0;
     GameState gameState;    
     private Vector2 touchStartPosition, touchEndPosition;
-    private float maxTouch = 10f;
     private float maxMove = 1.0f;
     private float minMove = 4.0f;
     private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41

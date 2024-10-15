@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class BulletControl : MonoBehaviour, IPositionObservable
 {
-    Vector3 speed;
+    public float speed = 8.0f;
+    public float range = 10.0f;
+    Vector3 velocity;
     Vector3 startPosition;
-    float range = 10.0f;
+    
     Rigidbody2D rigidbody2d;
 
     // Start is called before the first frame update
@@ -14,7 +16,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
-        speed = new Vector3(4.0f, 4.0f, 0);
+        velocity = new Vector3(speed, speed, 0);
 
         SpriteRenderer spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);
@@ -26,7 +28,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
     void Update()
     {
         Vector3 position = transform.position;
-        position += speed * Time.deltaTime;
+        position += velocity * Time.deltaTime;
         transform.position = position;
         if (transform.position.x > (startPosition.x + range))
         {

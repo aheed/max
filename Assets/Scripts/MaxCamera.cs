@@ -6,11 +6,12 @@ public class MaxCamera : MonoBehaviour
 {
 
    public Transform refObject;
+   public float yOffset = 1.0f;
 
    void Start() {}
 
    void Update()
    {
-      transform.position = new Vector3(refObject.position.x, refObject.position.y, -10);
+      transform.position = new Vector3(refObject.position.x, refObject.position.y + yOffset, -10);
    }
 }

@@ -2,31 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlopAnimation : MonoBehaviour
+public class Plop : MonoBehaviour
 {
-    public float horizSpeed = 0.1f;
-    float offset = 0f;
-    float maxOffset;
+    public float lifeSpanSec = 1.2f;
+    float timeToLiveSec;
 
     // Start is called before the first frame update
     void Start()
     {
-        var spriteM = gameObject.GetComponent<SpriteMask>();
-        maxOffset = spriteM.bounds.size.x / 4;
-        
+        timeToLiveSec = lifeSpanSec;        
     }
 
     // Update is called once per frame
     void Update()
     {
-        offset += horizSpeed * Time.deltaTime;
-        if (offset > maxOffset)
+        timeToLiveSec -= Time.deltaTime;
+        if (timeToLiveSec < 0f)
         {
-            offset = -maxOffset;
+            Destroy(gameObject);
         }
-
-        var localPos = transform.localPosition;
-        localPos.x = offset;
-        transform.localPosition = localPos;
     }
 }

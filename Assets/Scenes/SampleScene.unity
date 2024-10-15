@@ -229,7 +229,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   refObject: {fileID: 608621886}
+  yOffset: 1.4
 --- !u!114 &608621884 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
@@ -559,9 +560,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 2
-  maxAltitude: 2
+  maxAltitude: 4
   minSafeAltitude: 0.3
-  maxHorizPosition: 2
+  maxHorizPosition: 4
   safeTakeoffSpeedQuotient: 0.8
   acceleration: 0.4
   maxBombs: 30
