@@ -79,6 +79,8 @@ Color change temporarily on explosion (river and ground):
 
 Temporary color swap at detonation:
 https://www.youtube.com/watch?v=u4Iz5AJa31Q&t=75s
+https://www.youtube.com/watch?v=OYfk_CYORos
+  post processing for 2D game??
 
 Min distance river -> house, tank...
 No houses, flack or tanks beside landing strip

@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class House : MonoBehaviour, IPositionObservable
 {
-    public Sprite bombedSprite;
-    private SpriteRenderer spriteR;
+    public GameObject bombedPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
+
     }
 
     // Update is called once per frame
@@ -29,9 +28,10 @@ public class House : MonoBehaviour, IPositionObservable
         }
 
         //Debug.Log($"House!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.name}");
-        spriteR.sprite = bombedSprite;
         //Destroy(gameObject);
-        //gameObject.SetActive(false);
+        gameObject.SetActive(false);
+        var parent = gameObject.transform.parent;
+        Instantiate(bombedPrefab, transform.position, Quaternion.identity, parent);
     }
 
     public Vector2 GetPosition() => transform.position;
