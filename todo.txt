@@ -219,3 +219,9 @@ docker run -it --rm -p 80:80 --name web -v /home/anders/Documents/github/max/web
 --
 works better (no caching):
 docker run -it --rm -p 80:80 --name web -v /home/anders/Documents/github/max/Temp/webbuild:/usr/share/nginx/html -v /home/anders/Documents/github/max/nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx
+
+---
+Why is it not possible to hit boat2 with bombs??*
+  Seems IsTrigger must be checked
+Todo next: introduce sunk boat prefab
+

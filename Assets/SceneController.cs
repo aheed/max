@@ -429,7 +429,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         level = -1;
         var levelLowerLeftCornerX = 0f;
-        var refObjStartOffset = 1.0f;
+        var refObjStartOffset = 0.8f;
         var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
         refobject.transform.position = newRefObjPos;
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class boat2 : MonoBehaviour, IPositionObservable
 {
+    public GameObject sunkBoatPrefab;
     public float speed = 0.8f;
     GameState gameState;
     Vector3 velocity;
@@ -23,8 +24,10 @@ public class boat2 : MonoBehaviour, IPositionObservable
             collider.enabled = false;
         }
 
-        Debug.Log($"Boat2 sunk!");
-        // Todo: change appearance
+        var parent = gameObject.transform.parent;
+        Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
+        gameObject.SetActive(false);
+
         // Todo: report destroyed boat for scoring
     }
 
