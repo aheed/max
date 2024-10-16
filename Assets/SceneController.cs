@@ -55,7 +55,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float minSegmentHeight = 0.5f;
     public float minDistanceRiverAirstrip = 5.0f;
     public float maxDistanceRiverToAdjust = 2.0f;
-    public float approachQuotient = 0.2f;
     public float roadHeight = 0.4f;
     public Material riverMaterial;
     public Material roadMaterial;

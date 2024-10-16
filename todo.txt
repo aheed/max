@@ -87,7 +87,7 @@ No houses, flack or tanks beside landing strip
   Houses are never side by side in the Original game
 Extra tanks around houses
 River should be farther away from landing strip. No overlapping or near.
-Flight restrictions
+Flight restrictions*
   should match camera view size
 MaxControl: refObject member not necessary. Only used to set parent object for bombs. Could be done by getting maxcontrol's own parent object.
 
@@ -176,7 +176,7 @@ Make it possible to destroy enemyplane game objects without causing dangling poi
   Unregister prop as listener on destruction?
 Alerts
 Bug: IsOverLandingStrip seems to be a half landing strip width off.
-Divide colliders into layers in a smart way
+(Divide colliders into layers in a smart way)
 Change box collider into polygon colliders?
 Make it possible to fire gun in collided state
 Boats

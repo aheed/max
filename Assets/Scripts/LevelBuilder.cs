@@ -49,13 +49,14 @@ public static class LevelBuilder
     public static readonly float roadProbability = 0.1f;
     public static readonly int roadHeight = 2;
     static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
-    public static int minDistanceRiverAirstrip = 60;
+    public static int minDistanceRiverAirstrip = 80;
     public static int maxNormalDistanceRiverMidLevelLeft = 18;
     public static int maxNormalDistanceRiverMidLevelRight = 9;
     public static int riverWidth = 12;
     public static int maxRiverSegmentHeight = 7;
     public static int minRiverSegmentHeight = 2;
-    public static float approachQuotient = 0.2f;
+    public static float approachQuotient = 0.35f;
+    public static float finalApproachQuotient = 0.3f;
     public static int houseHeight = 3;
     public static int houseWidth = 3;
     public static float houseProbability = 0.003f;
@@ -71,6 +72,7 @@ public static class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         var approachLength = (int)(LevelContents.gridHeight * approachQuotient);
+        var finalApproachLength = (int)(LevelContents.gridHeight * finalApproachQuotient);
 
         // Landing Strip
         var lsllcX = midX - (landingStripWidth / 2);
@@ -130,21 +132,39 @@ public static class LevelBuilder
             riverLeftOfAirstrip = midRiverX < midX;
             var minSlopeIndex = 0;
             var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-            bool approaching = LevelContents.gridHeight - y < approachLength;
+            var yDistanceToEnd = LevelContents.gridHeight - y;
+            bool approaching = yDistanceToEnd < approachLength;
+            bool finalApproaching = yDistanceToEnd < finalApproachLength;
             bool takingOff = y < approachLength;
-            //int slopeIndexOffset = 0;
+            var midRiverOffset = midRiverX - midX;
             if (approaching)
             {
                 // Airstrip approaching. River must not bend toward next airstrip location.
                 //slopeIndexOffset = riverLeftOfAirstrip ? -1 : 1;
                 if (riverLeftOfAirstrip)
                 {
-                    maxSlopeIndexExclusive -= 1;
+                    if (finalApproaching)
+                    {
+                        minSlopeIndex = 0;
+                        maxSlopeIndexExclusive = 1;
+                    }
+                    else
+                    {
+                        maxSlopeIndexExclusive -= 1;
+                    }
                 }
                 else
                 {
-                    minSlopeIndex += 2;
-                    maxSlopeIndexExclusive += 1;
+                    if (finalApproaching)
+                    {
+                        minSlopeIndex = riverSlopes.Length-1;
+                        maxSlopeIndexExclusive = riverSlopes.Length;
+                    }
+                    else
+                    {
+                        minSlopeIndex += 2;
+                        maxSlopeIndexExclusive += 1;
+                    }
                 }
                 
             }
@@ -159,19 +179,19 @@ public static class LevelBuilder
                 }
                 else
                 {
-                    maxSlopeIndexExclusive -= 1;
+                    maxSlopeIndexExclusive -= 2;
                 }
             }
             else
             {
-                if (midRiverX - midX > maxNormalDistanceRiverMidLevelRight)
+                if (midRiverOffset > maxNormalDistanceRiverMidLevelRight)
                 {
-                    // Too far to the right
-                    maxSlopeIndexExclusive -= 1;
+                    // River too far to the right
+                    maxSlopeIndexExclusive -= 2;
                 }
-                else if (midRiverX - midX < -maxNormalDistanceRiverMidLevelLeft)
+                else if (midRiverOffset < -maxNormalDistanceRiverMidLevelLeft)
                 {
-                    // Too far to the left
+                    // River too far to the left
                     minSlopeIndex += 2;
                 }
             }
