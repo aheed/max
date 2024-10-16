@@ -291,7 +291,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var lowerEdgeY = road * cellHeight;
             
             var roadLeftEdgeX = road * cellHeight * neutralSlope;
-            var roadLocalTransform = new Vector3(roadLeftEdgeX, lowerEdgeY, -0.2f);
+            var roadLocalTransform = new Vector3(roadLeftEdgeX, lowerEdgeY, -0.21f);
             roadGameObject.transform.localPosition = roadLocalTransform;            
             roadLowerEdgesY.Add(roadGameObject.transform.position.y);
 
