@@ -6,10 +6,12 @@ public class BoatSunk : MonoBehaviour
 {
     public float lifeSpanSec = 1.2f;
     float timeToLiveSec;
+    private SpriteRenderer spriteR;
 
     // Start is called before the first frame update
     void Start()
     {
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
         timeToLiveSec = lifeSpanSec;    
     }
 
@@ -21,5 +23,9 @@ public class BoatSunk : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        var newOpacity = timeToLiveSec / lifeSpanSec;
+        var newColor = new Color(1f, 1f, 1f, newOpacity);
+        spriteR.color = newColor;
     }
 }
