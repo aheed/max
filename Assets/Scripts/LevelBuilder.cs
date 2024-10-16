@@ -14,7 +14,8 @@ public enum CellContent
     FLACK_GUN,
     TREE1,
     TREE2,
-    BOAT1
+    BOAT1,
+    HANGAR
 }
 
 public class RiverSegment
@@ -39,6 +40,7 @@ public class LevelContents
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
+    public HousePosition hangar;
 }
 
 public static class LevelBuilder 
@@ -229,6 +231,19 @@ public static class LevelBuilder
             }
 
             ytmp = newY;
+        }
+
+        // Hangar
+        ret.hangar = new HousePosition {x = LevelContents.gridWidth / 2 - 6, y = 12};
+        var hangarWidth = 4;
+        var hangarHeight = 6;
+        for (var y = ret.hangar.y - hangarHeight / 2; y < ret.hangar.y + hangarHeight / 2; y++)
+        {
+            for (var x = ret.hangar.x - hangarWidth / 2; x < ret.hangar.x + hangarWidth / 2; x++)
+            {
+                var cellContents = x == ret.hangar.x && y == ret.hangar.y ? CellContent.HANGAR : CellContent.HOUSE;
+                ret.cells[x, y] = cellContents;
+            }
         }
 
         var houses = new List<HousePosition>();

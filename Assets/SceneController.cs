@@ -47,6 +47,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat1Prefab;
     public GameObject bridgePrefab;
     public GameObject carPrefab;
+    public GameObject airstripEndPrefab;
+    public GameObject hangarPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -204,14 +206,29 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
         var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
+        var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+        var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+        var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
+        var endSpriteHeight = topSpriteR.bounds.size.y;
+
         var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+        
         var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
         lsGameObject.transform.localPosition = lsLocalTransform;
+
+        lsLocalTransform.x += lsWidth / 2;
+        lsLocalTransform.y += endSpriteHeight / 2;
+        lsBottomEnd.transform.localPosition = lsLocalTransform;        
+        
         landingStripBottomY = lsGameObject.transform.position.y;
         landingStripTopY = landingStripBottomY + lsHeight;
         landingStripWidth = lsWidth;
         
         var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+        lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
+        lsLocalTransform.y += lsHeight - endSpriteHeight;
+        lsTopEnd.transform.localPosition = lsLocalTransform;
 
         var lsllcX = 0;
         var lslrcX = lsWidth;
@@ -333,6 +350,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             houseGameObject.transform.localPosition = houseLocalTransform;
         }
 
+        // Hangar
+        var haGameObject = Instantiate(hangarPrefab, lvlTransform);
+        var haLocalTransform = new Vector3(levelContents.hangar.x * cellWidth + levelContents.hangar.y * cellHeight * neutralSlope, levelContents.hangar.y * cellHeight, -0.2f);
+        haGameObject.transform.localPosition = haLocalTransform;
         
 
         // Single cell items: Flack guns, trees, tanks
@@ -403,7 +424,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         level = -1;
         var levelLowerLeftCornerX = 0f;
-        var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2, 0f, 0f);
+        var refObjStartOffset = 1.0f;
+        var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
         refobject.transform.position = newRefObjPos;
 
         if (maxPlane == null)
