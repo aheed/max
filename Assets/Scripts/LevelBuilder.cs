@@ -85,31 +85,6 @@ public static class LevelBuilder
                 ret.cells[x, y] = CellContent.LANDING_STRIP;
             }
         }
-
-        // Roads        
-        var cooldown = 0;
-        List<int> roads = new List<int>();
-        for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - roadHeight - cooldown); y++)
-        {
-            if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
-            {
-                roads.Add(y);
-                for (var x = 0; x < LevelContents.gridWidth; x++)
-                {
-                    for (var i = 0; i < roadHeight; i++)
-                    {
-                        //Debug.Log($"{x} {y} {i} {roadHeight}");
-                        ret.cells[x, y+i] = CellContent.ROAD;
-                    }
-                }
-                cooldown = minSpaceBetweenRoads;
-            }
-            if (cooldown > 0)
-            {
-                cooldown--;
-            }
-        }
-        ret.roads = roads;
         
         // River
         var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -233,6 +208,31 @@ public static class LevelBuilder
             ytmp = newY;
         }
 
+        // Roads        
+        var cooldown = 0;
+        List<int> roads = new List<int>();
+        for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - roadHeight - cooldown); y++)
+        {
+            if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
+            {
+                roads.Add(y);
+                for (var x = 0; x < LevelContents.gridWidth; x++)
+                {
+                    for (var i = 0; i < roadHeight; i++)
+                    {
+                        //Debug.Log($"{x} {y} {i} {roadHeight}");
+                        ret.cells[x, y+i] = CellContent.ROAD;
+                    }
+                }
+                cooldown = minSpaceBetweenRoads;
+            }
+            if (cooldown > 0)
+            {
+                cooldown--;
+            }
+        }
+        ret.roads = roads;
+
         // Hangar
         ret.hangar = new HousePosition {x = LevelContents.gridWidth / 2 - 6, y = 12};
         var hangarWidth = 4;
@@ -254,7 +254,7 @@ public static class LevelBuilder
                 var randVal = UnityEngine.Random.Range(0f, 1.0f);
 
                 // Houses
-                if (randVal < houseProbability)
+                if (randVal < houseProbability && y > landingStripHeight)
                 {
                     //Debug.Log($"House please!");
                     var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
@@ -283,14 +283,14 @@ public static class LevelBuilder
                 
                 // Tanks
                 randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < tankProbability && ret.cells[x, y] == CellContent.GRASS)
+                if (randVal < tankProbability && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
                 {
                     ret.cells[x, y] = CellContent.TANK;
                 }
 
                 // Flack guns
                 randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS)
+                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
                 {
                     ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
