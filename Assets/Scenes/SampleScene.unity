@@ -433,6 +433,7 @@ MonoBehaviour:
   bombCraterPrefab: {fileID: 1867543578383990134, guid: 7a308833ef767b2798be2dc5e57f0b22, type: 3}
   mushroomCloudPrefab: {fileID: 4545007370004883388, guid: 34e00a960b6ca067caa3f03468dd4bdf, type: 3}
   boat1Prefab: {fileID: 2878459979805281793, guid: f08e038dc0ef295a4b13e7a16e464aed, type: 3}
+  boat2Prefab: {fileID: 2233345942563649688, guid: 90dcf23d027c9502db5f80c4b0f5be42, type: 3}
   bridgePrefab: {fileID: 4179966384292442719, guid: a3f135951deccef9588fb757b1063606, type: 3}
   carPrefab: {fileID: 2074072185544907474, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}

@@ -15,6 +15,7 @@ public enum CellContent
     TREE1,
     TREE2,
     BOAT1,
+    BOAT2,
     HANGAR
 }
 
@@ -66,6 +67,7 @@ public static class LevelBuilder
     public static float flackGunProbability = 0.01f;
     public static float treeProbability = 0.03f;
     public static float boat1Probability = 0.005f;
+    public static float boat2Probability = 0.2f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -181,6 +183,12 @@ public static class LevelBuilder
             var slopeX = (int)(slope * segmentHeight);
 
             //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
+
+            var randVal = UnityEngine.Random.Range(0f, 1.0f);
+            if (randVal < boat2Probability && midRiverX >= 0 && midRiverX < LevelContents.gridWidth)
+            {
+                ret.cells[midRiverX, y] = CellContent.BOAT2;
+            }
             
             y += segmentHeight;
             riverLowerLeftCornerX += slopeX;
@@ -198,7 +206,7 @@ public static class LevelBuilder
                 startX += segment.slope;
                 for (var x = startX; x < (startX + riverWidth); x++)
                 {
-                    if (x >= 0 && x < LevelContents.gridWidth)
+                    if (x >= 0 && x < LevelContents.gridWidth && ret.cells[(int)x, y] == CellContent.GRASS)
                     {
                         ret.cells[(int)x, y] = CellContent.WATER;
                     }
@@ -301,18 +309,19 @@ public static class LevelBuilder
                 {
                     ret.cells[x, y] = CellContent.TREE1;
                 }
-
+                
                 randVal = UnityEngine.Random.Range(0f, 1.0f);
                 if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE2;
                 }
 
+                // Boats
                 randVal = UnityEngine.Random.Range(0f, 1.0f);
                 if (randVal < boat1Probability && ret.cells[x, y] == CellContent.WATER)
                 {
                     ret.cells[x, y] = CellContent.BOAT1;
-                }
+                }                
             }
         }
 

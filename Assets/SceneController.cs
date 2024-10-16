@@ -45,6 +45,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
     public GameObject boat1Prefab;
+    public GameObject boat2Prefab;
     public GameObject bridgePrefab;
     public GameObject carPrefab;
     public GameObject airstripEndPrefab;
@@ -382,6 +383,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
                     case CellContent.BOAT1:
                         selectedPrefab = boat1Prefab;
+                        break;
+
+                    case CellContent.BOAT2:
+                        selectedPrefab = boat2Prefab;
                         break;
                 }
 
