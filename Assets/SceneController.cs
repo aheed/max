@@ -83,6 +83,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float enemyPlaneIntervalSecMin = 5f;
     public float carOffsetX = -5f;
     public float vipProbability = 0.5f;
+    public float carProbability = 0.5f;
 
     //// Game status
     int level = -1;
@@ -337,11 +338,20 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             bridgeGameObject.transform.localPosition = bridgeLocalTransform;
 
             // Car
-            var carGameObject = Instantiate(carPrefab, lvlTransform);
-            var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-            carGameObject.transform.localPosition = carLocalTransform;
-            ret[road].gameObjects.Add(carGameObject);
+            
+            if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
+            {
+                var carGameObject = Instantiate(carPrefab, lvlTransform);
+                var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
+                carGameObject.transform.localPosition = carLocalTransform;
+                ret[road].gameObjects.Add(carGameObject);
 
+                if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                {
+                    var vipCar = PositionObservableHelper.GetPositionObservable<IVip>(carGameObject);
+                    vipCar.SetVip();
+                }
+            }
         }
 
         // Houses
@@ -401,7 +411,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                     {
                         possibleVip.SetVip();
-                    }   
+                    }
                 }
 
             }

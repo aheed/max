@@ -224,7 +224,10 @@ docker run -it --rm -p 80:80 --name web -v /home/anders/Documents/github/max/Tem
 Why is it not possible to hit boat2 with bombs??*
   Seems IsTrigger must be checked
 
-Todo: Cars arrive too late. Change level width or car timing.
+Todo:
+(Cars arrive too late. Change level width or car timing.)
 Boats should collide with other boats? And bridges? Would be fun.
 Sunk animation for boat1.
+Vip animations for enemy planes, cars
+Targets (vip bridges and houses)
 
