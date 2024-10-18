@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class VipBlinker
 {
-    public static readonly float intervalSec = 1f;
+    public static readonly float intervalSec = 0.7f;
     public static readonly float minIntensity = 0.5f;
     public static readonly float maxIntensity = 1.0f;
     private SpriteRenderer spriteR;

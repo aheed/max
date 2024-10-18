@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class EnemyPlane : MonoBehaviour, IPlaneObservable
+public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 {
     public Transform refObject;
     public float speed = 0.1f;
@@ -23,6 +23,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
     int moveX = 0;
     int lastMoveX = 0;
     bool crashed =  false;
+    VipBlinker vipBlinker;
 
     public Vector2 GetPosition()
     {
@@ -43,6 +44,16 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
 
     public bool IsAlive() => !crashed;
 
+    public void SetVip()
+    {
+        vipBlinker = new(gameObject.GetComponent<SpriteRenderer>());
+    }
+
+    public bool IsVip()
+    {
+        return vipBlinker != null;
+    }
+
     void SetMoveCooldown()
     {
         moveCooldownSec = UnityEngine.Random.Range(moveIntervalSecMin, moveIntervalSecMax);
@@ -53,6 +64,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
     {
         SetMoveCooldown();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
+        spriteR.color = new Color(1f, 1f, 0.1f); // yellow
     }
     void Deactivate()
     {
@@ -116,6 +128,8 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable
             lastAltitude = GetAltitude();
             spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
         }
+
+        vipBlinker?.Update(Time.deltaTime);
     }
 
     void OnTriggerEnter2D(Collider2D col)

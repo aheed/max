@@ -47,7 +47,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
     public GameObject bridgePrefab;
-    public GameObject carPrefab;
+    public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public refobj refobject;
@@ -341,15 +341,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                var carGameObject = Instantiate(carPrefab, lvlTransform);
+                Car car = Instantiate(carPrefab, lvlTransform);
                 var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-                carGameObject.transform.localPosition = carLocalTransform;
-                ret[road].gameObjects.Add(carGameObject);
+                car.transform.localPosition = carLocalTransform;
+                ret[road].gameObjects.Add(car.gameObject);
 
                 if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                 {
-                    var vipCar = PositionObservableHelper.GetPositionObservable<IVip>(carGameObject);
-                    vipCar.SetVip();
+                    car.SetVip();
                 }
             }
         }
@@ -583,6 +582,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             UnityEngine.Random.Range(
                 enemyPlaneSpeedMin * gameState.maxSpeed,
                 enemyPlaneSpeedMax * gameState.maxSpeed);
+        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+        {
+            enemyPlane.SetVip();
+        }
         AddPlaneShadow(enemyPlane.transform);
     }
 
