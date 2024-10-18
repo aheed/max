@@ -35,7 +35,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
-    public GameObject housePrefab;
+    public House housePrefab;
     public GameObject flackGunPrefab;
     public GameObject tankPrefab;
     public GameObject tree1Prefab;
@@ -354,11 +354,16 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Houses
-        foreach (var house in levelContents.houses)
+        foreach (var housePosition in levelContents.houses)
         {
-            var houseGameObject = Instantiate(housePrefab, lvlTransform);
-            var houseLocalTransform = new Vector3(house.x * cellWidth + house.y * cellHeight * neutralSlope, house.y * cellHeight, -0.2f);
-            houseGameObject.transform.localPosition = houseLocalTransform;
+            House house = Instantiate(housePrefab, lvlTransform);
+            var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
+            house.transform.localPosition = houseLocalTransform;
+
+            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            {
+                house.SetVip();
+            }
         }
 
         // Hangar
