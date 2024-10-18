@@ -46,7 +46,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject mushroomCloudPrefab;
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
-    public GameObject bridgePrefab;
+    public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
@@ -333,9 +333,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             // Bridge
             var bridgeX = GetRiverLeftEdgeX(lowerEdgeY, riverSectionGameObject.transform.localPosition.x, 0f) + riverWidth / 2;
-            var bridgeGameObject = Instantiate(bridgePrefab, lvlTransform);
+            bridge bridge = Instantiate(bridgePrefab, lvlTransform);
             var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
-            bridgeGameObject.transform.localPosition = bridgeLocalTransform;
+            bridge.transform.localPosition = bridgeLocalTransform;
+            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            {
+                bridge.SetVip();
+            }
 
             // Car
             

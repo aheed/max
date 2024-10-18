@@ -7,7 +7,6 @@ public class House : MonoBehaviour, IPositionObservable, IVip
     public GameObject bombedPrefab;
     public Target targetPrefab;
     public float targetOffset;
-
     Target target;
 
     // Start is called before the first frame update

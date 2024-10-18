@@ -2,12 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bridge : MonoBehaviour, IPositionObservable
+public class bridge : MonoBehaviour, IPositionObservable, IVip
 {
+    public Target targetPrefab;
+    public float targetOffset = 0.1f;
+    Target target;
+
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    public void SetVip()
+    {
+        target = Instantiate(targetPrefab, gameObject.transform);
+        var localPos = target.transform.localPosition;
+        localPos.y += targetOffset;
+        target.transform.localPosition = localPos;
+    }
+
+    public bool IsVip()
+    {
+        return target != null;
     }
 
     // Update is called once per frame
