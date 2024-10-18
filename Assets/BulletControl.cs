@@ -52,7 +52,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
             return; //no actual collision, different altitudes
         }
 
-        Debug.Log($"Hit!!!!!!!!!!!!!!! Bullet at altitude {GetAltitude()} collided with {col.name} {collObjName}");
+        //Debug.Log($"Hit!!!!!!!!!!!!!!! Bullet at altitude {GetAltitude()} collided with {col.name} {collObjName}");
         Destroy(gameObject);
     }
 

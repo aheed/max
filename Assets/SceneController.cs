@@ -82,6 +82,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
     public float carOffsetX = -5f;
+    public float vipProbability = 0.5f;
 
     //// Game status
     int level = -1;
@@ -396,6 +397,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     ret[ytmp].gameObjects.Add(itemGameObject);
+                    var possibleVip = PositionObservableHelper.GetPositionObservable<IVip>(itemGameObject);
+                    if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                    {
+                        possibleVip.SetVip();
+                    }   
                 }
 
             }
