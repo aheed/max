@@ -415,7 +415,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     ret[ytmp].gameObjects.Add(itemGameObject);
-                    var possibleVip = PositionObservableHelper.GetPositionObservable<IVip>(itemGameObject);
+                    var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
                     if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                     {
                         possibleVip.SetVip();

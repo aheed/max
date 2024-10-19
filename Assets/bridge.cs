@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bridge : MonoBehaviour, IPositionObservable, IVip
+public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
 {
     public Target targetPrefab;
     public float targetOffset = 0.1f;
@@ -31,6 +31,12 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip
     void Update()
     {
         
+    }
+
+    public void OnTriggerEnter2D(Collider2D col)
+    {
+        
+        Debug.Log($"bridge collided with {col.name}");
     }
 
     public Vector2 GetPosition() => transform.position;

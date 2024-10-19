@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public static class PositionObservableHelper
+public static class InterfaceHelper
 {
-    public static T GetPositionObservable<T>(GameObject go)
+    public static T GetInterface<T>(GameObject go)
     {
         var tempMonoArray = go.GetComponents<MonoBehaviour>();
 
