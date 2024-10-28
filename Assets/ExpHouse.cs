@@ -4,14 +4,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class ExpHouse : MonoBehaviour
+public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
 {
-    public GameObject front;
-    public GameObject roof;
-    public GameObject side;
+    public FlipBook front;
+    public FlipBook roof;
+    public FlipBook side;
     public GameObject tl_mask;
     public GameObject tr_mask;
     public GameObject lr_mask;
+    public Target targetPrefab;
+    public float targetOffset;
+    Target target;
     
     public float q = 0.16f; // size quantum
 
@@ -68,6 +71,19 @@ public class ExpHouse : MonoBehaviour
         lr_mask.transform.localPosition = new Vector2(lr_x, lr_y);
     }
 
+    public void SetVip()
+    {
+        target = Instantiate(targetPrefab, gameObject.transform);
+        var localPos = target.transform.localPosition;
+        localPos.y += targetOffset;
+        target.transform.localPosition = localPos;
+    }
+
+    public bool IsVip()
+    {
+        return target != null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,4 +95,26 @@ public class ExpHouse : MonoBehaviour
     {
         
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
+        if (!collObjName.StartsWith("bomb"))
+        {
+            return;
+        }
+
+        front.Activate();
+        side.Activate();
+        roof.Activate();
+        if (target != null)
+        {
+            Destroy(target.gameObject);
+            target = null;
+        }
+    }
+
+    public Vector2 GetPosition() => transform.position;
+    public float GetAltitude() => 0.1f;
+    public float GetHeight() => 0.4f;
 }

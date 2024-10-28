@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class House : MonoBehaviour, IPositionObservable, IVip
 {
-    public GameObject bombedPrefab;
+    public FlipBook bombedPrefab;
     public Target targetPrefab;
     public float targetOffset;
     Target target;
@@ -47,7 +47,8 @@ public class House : MonoBehaviour, IPositionObservable, IVip
         //Destroy(gameObject);
         gameObject.SetActive(false);
         var parent = gameObject.transform.parent;
-        Instantiate(bombedPrefab, transform.position, Quaternion.identity, parent);
+        var bombed_house = Instantiate(bombedPrefab, transform.position, Quaternion.identity, parent);
+        bombed_house.Activate();
     }
 
     public Vector2 GetPosition() => transform.position;

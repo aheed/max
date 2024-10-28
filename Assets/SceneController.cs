@@ -35,7 +35,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
-    public House housePrefab;
+    public ExpHouse housePrefab;
     public GameObject flackGunPrefab;
     public GameObject tankPrefab;
     public GameObject tree1Prefab;
@@ -360,7 +360,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Houses
         foreach (var housePosition in levelContents.houses)
         {
-            House house = Instantiate(housePrefab, lvlTransform);
+            ExpHouse house = Instantiate(housePrefab, lvlTransform);
             var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 

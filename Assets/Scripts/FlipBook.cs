@@ -10,6 +10,13 @@ public class FlipBook : MonoBehaviour
     private SpriteRenderer spriteR;
     private float timerSec;
     private int spriteIndex = 0;
+    private bool active = false;
+
+    public void Activate()
+    {
+        ResetSpriteClock();
+        active = true;
+    }
 
     void ResetSpriteClock() => timerSec = timeToChangeSpriteSec;
 
@@ -21,7 +28,7 @@ public class FlipBook : MonoBehaviour
             return;
         }
 
-        if (spriteIndex++ >= sprites.Length)
+        if (++spriteIndex >= sprites.Length)
         {
             spriteIndex = 0;
         }
@@ -37,6 +44,11 @@ public class FlipBook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!active)
+        {
+            return;
+        }
+
         timerSec -= Time.deltaTime;
         if (timerSec < 0f)
         {

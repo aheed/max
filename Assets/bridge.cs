@@ -36,7 +36,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
     public void OnTriggerEnter2D(Collider2D col)
     {
         
-        Debug.Log($"bridge collided with {col.name}");
+        //Debug.Log($"bridge collided with {col.name}");
     }
 
     public Vector2 GetPosition() => transform.position;
