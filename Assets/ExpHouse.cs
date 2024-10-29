@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[ExecuteInEditMode]
+
 public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
 {
     public FlipBook front;
@@ -12,8 +12,9 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
     public GameObject tl_mask;
     public GameObject tr_mask;
     public GameObject lr_mask;
+    public GameObject tr_side_mask;
     public Target targetPrefab;
-    public float targetOffset;
+    float targetOffset = 0.25f;
     Target target;
     
     public float q = 0.16f; // size quantum
@@ -55,6 +56,7 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         tl_mask.transform.localScale = mask_scale;
         tr_mask.transform.localScale = mask_scale;
         lr_mask.transform.localScale = mask_scale;
+        tr_side_mask.transform.localScale = mask_scale;        
 
         float half_mask_width = depth * q / 2;
         
@@ -65,10 +67,40 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         float tr_x = tl_x + frontw;
         float tr_y = tl_y;
         tr_mask.transform.localPosition = new Vector2(tr_x, tr_y);
+        tr_side_mask.transform.localPosition = new Vector2(tr_x, tr_y);
 
         float lr_x = tr_x;
         float lr_y = yOffset + half_mask_width;
         lr_mask.transform.localPosition = new Vector2(lr_x, lr_y);
+
+        PolygonCollider2D collider = GetComponent<PolygonCollider2D>();
+        var colliderPoints = new Vector2[6];
+
+        //clockwise, starting in lower left corner
+        float x = xOffset;
+        float y = yOffset;
+        colliderPoints[0] = new Vector2(x, y);
+
+        y += fronth;
+        colliderPoints[1] = new Vector2(x, y);
+
+        x += roofh;
+        y += roofh;
+        colliderPoints[2] = new Vector2(x, y);
+
+        x += frontw;
+        colliderPoints[3] = new Vector2(x, y);
+        
+        y -= fronth;
+        colliderPoints[4] = new Vector2(x, y);
+        
+        x -= roofh;
+        y -= roofh;
+        colliderPoints[5] = new Vector2(x, y);
+
+        collider.points = colliderPoints;
+
+        targetOffset = yOffset + fronth + roofh / 2;
     }
 
     public void SetVip()
@@ -87,7 +119,7 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
     // Start is called before the first frame update
     void Start()
     {
-        SetSize(5, 2, 2); //TEMP
+
     }
 
     // Update is called once per frame

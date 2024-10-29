@@ -361,6 +361,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         foreach (var housePosition in levelContents.houses)
         {
             ExpHouse house = Instantiate(housePrefab, lvlTransform);
+            house.SetSize(5, 2, 2);
             var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 
