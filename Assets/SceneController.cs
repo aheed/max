@@ -60,6 +60,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float maxDistanceRiverToAdjust = 2.0f;
     public float roadHeight = 0.4f;
     public Material riverMaterial;
+    public Material riverBankMaterial;
     public Material roadMaterial;
     public Material groundMaterial;
     public Material landingStripMaterial;
@@ -84,6 +85,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float carOffsetX = -5f;
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
+    public float riverBankWidth = 0.1f;
 
     //// Game status
     int level = -1;
@@ -263,17 +265,23 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         riverSectionGameObject = Instantiate(riverSectionPrefab, lvlTransform);
         var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0f, -0.2f);
         riverSectionGameObject.transform.localPosition = rsLocalTransform;
+        var riverLeftBank = new GameObject("riverbank");
+        riverLeftBank.transform.parent = lvlTransform;
+        var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
+        riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
         // MeshRenderer
         var rsMeshFilter = riverSectionGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = riverSectionGameObject.AddComponent<MeshRenderer>();
-
         rsMeshRenderer.material = riverMaterial;
+        var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
+        var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
+        bankMeshRenderer.material = riverBankMaterial;
 
         // Mesh
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
-        var riverWidth = LevelBuilder.riverWidth * cellWidth;
+        var riverWidth = LevelBuilder.riverWidth * cellWidth;        
 
         riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
@@ -291,9 +299,16 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             riverLowerLeftCornerX += xOffset;
             return ret;
         }).ToList();
+
+        var riverBankVerts = riverVerts.Select((vert, index) => {
+            var x = index % 2 == 0 ? vert.x : vert.x - riverWidth + riverBankWidth;
+            return new Vector2(x, vert.y);
+        }).ToList();
         
         var mesh = CreateQuadMesh(riverVerts);
         rsMeshFilter.mesh = mesh;
+        var riverBankMesh = CreateQuadMesh(riverBankVerts);
+        bankMeshFilter.mesh = riverBankMesh;
 
         GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)

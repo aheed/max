@@ -448,6 +448,7 @@ MonoBehaviour:
   maxDistanceRiverToAdjust: 2
   roadHeight: 0.4
   riverMaterial: {fileID: 2100000, guid: ea8d7ce4ef66b3210b86d629dd1c00c2, type: 2}
+  riverBankMaterial: {fileID: 2100000, guid: b867665235b5f0ee7bc1a4e4c1811b6a, type: 2}
   roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
   groundMaterial: {fileID: 2100000, guid: 8cb2155c8f83a733884b98d9308266d1, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
@@ -470,6 +471,7 @@ MonoBehaviour:
   carOffsetX: -5
   vipProbability: 0.5
   carProbability: 0.5
+  riverBankWidth: 0.05
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0
