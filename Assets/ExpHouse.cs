@@ -116,6 +116,17 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         return target != null;
     }
 
+    public void SetColor(Color color)
+    {
+        SpriteRenderer frontRenderer = front.GetComponent<SpriteRenderer>();
+        SpriteRenderer sideRenderer = side.GetComponent<SpriteRenderer>();
+
+        frontRenderer.color = color;
+        //var sideColor = color * 0.8f;
+        var sideColor = new Color (color.r * 0.8f, color.g * 0.8f, color.b * 0.8f);
+        sideRenderer.color = sideColor;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -136,6 +147,7 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
             return;
         }
 
+        SetColor(Color.white);
         front.Activate();
         side.Activate();
         roof.Activate();

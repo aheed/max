@@ -233,11 +233,13 @@ Targets (vip bridges and houses)
 
 -----
 Generic house:
-  Make the box collider a polygon collider with 6 points and set calc each point at resize.
+  Make the box collider a polygon collider with 6 points and set calc each point at resize.*
   Remove target on bomb hit*
-  Set the color to white before activating flipbook
-  Implement SetColor
+  Set the color to white before activating flipbook*
+  Implement SetColor*
   Set altitude and height for collisions according to size (height)
+  Prevent houses from being close to each other.
+  Make a black house variation with green windows
 
 Bridge: remove target on bomb hit
 
