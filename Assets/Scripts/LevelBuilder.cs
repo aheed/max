@@ -10,6 +10,7 @@ public enum CellContent
     ROAD,
     BRIDGE,
     HOUSE,
+    HOUSE_FRONT,
     TANK,
     FLACK_GUN,
     TREE1,
@@ -61,9 +62,10 @@ public static class LevelBuilder
     public static float approachQuotient = 0.35f;
     public static float finalApproachQuotient = 0.3f;
     public static int houseHeight = 3;
-    public static int houseWidth = 3;
-    public static float houseProbability = 0.003f;
+    public static int houseWidth = 6;
+    public static float houseProbability = 0.01f;
     public static float tankProbability = 0.012f;
+    public static float tankProbabilityAtHouse = 0.7f;
     public static float flackGunProbability = 0.01f;
     public static float treeProbability = 0.03f;
     public static float boat1Probability = 0.005f;
@@ -262,14 +264,16 @@ public static class LevelBuilder
                 var randVal = UnityEngine.Random.Range(0f, 1.0f);
 
                 // Houses
-                if (randVal < houseProbability && y > landingStripHeight)
+                if (randVal < houseProbability && y > (landingStripHeight * 2))
                 {
                     //Debug.Log($"House please!");
                     var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
-                                        y < (LevelContents.gridHeight - houseHeight);
-                    for (var xtmp = x; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
+                                        y < (LevelContents.gridHeight - houseHeight) &&
+                                        x > houseWidth &&
+                                        y > houseHeight;
+                    for (var xtmp = x - houseWidth; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
                     {
-                        for (ytmp = y; (ytmp < (y + houseHeight)) && spaceEnough; ytmp++)
+                        for (ytmp = y - houseHeight; (ytmp < (y + houseHeight)) && spaceEnough; ytmp++)
                         {
                             //Debug.Log($"{x} {y} {xtmp} {ytmp}");
                             spaceEnough = ret.cells[xtmp, ytmp] == CellContent.GRASS;
@@ -279,19 +283,36 @@ public static class LevelBuilder
                     if (spaceEnough)
                     {
                         houses.Add(new HousePosition {x = x, y = y});
-                        for (var xtmp = x; xtmp < x + houseWidth; xtmp++)
+                        for (var xtmp = x - houseWidth / 2; xtmp < x + houseWidth / 2; xtmp++)
                         {
-                            for (ytmp = y; ytmp < y + houseHeight; ytmp++)
+                            for (ytmp = y-1; ytmp < y + houseHeight; ytmp++)
                             {
                                 ret.cells[xtmp, ytmp] = CellContent.HOUSE;
                             }
                         }
+
+                        var houseFrontWidth = 4;
+                        var houseFrontHeight = 3;
+                        for (var xtmp = x; xtmp < x + houseFrontWidth; xtmp++)
+                        {
+                            for (ytmp = y - houseFrontHeight; ytmp < y - 1; ytmp++)
+                            {
+                                ret.cells[xtmp, ytmp] = CellContent.HOUSE_FRONT;
+                            }
+                        }
                     }
                 }
-                
+            }
+        }
+
+        for (var y = 0; y < LevelContents.gridHeight; y++)
+        {
+            for (var x = 0; x < LevelContents.gridWidth; x++)
+            {   
                 // Tanks
-                randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < tankProbability && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
+                var randVal = UnityEngine.Random.Range(0f, 1.0f);
+                var localTankProbability = ret.cells[x, y] == CellContent.HOUSE_FRONT ? tankProbabilityAtHouse : tankProbability;
+                if (randVal < localTankProbability && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
                 {
                     ret.cells[x, y] = CellContent.TANK;
                 }
