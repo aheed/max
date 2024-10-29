@@ -143,6 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965fbbfc5a6c20bdd87490bbd67ff981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombedPrefab: {fileID: 5360877354748345717, guid: ab437f2a6f659e5bda14d9edcf725450, type: 3}
+  bombedPrefab: {fileID: 5402786162715624889, guid: ab437f2a6f659e5bda14d9edcf725450, type: 3}
   targetPrefab: {fileID: 5893471876305520666, guid: e3c52c5fcd798eaa1afa053b21df9cb0, type: 3}
   targetOffset: 0.25

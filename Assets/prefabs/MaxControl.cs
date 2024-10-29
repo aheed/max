@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -238,7 +239,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         else if (collObjName.StartsWith("house") ||
                  collObjName.StartsWith("tree") ||
                  collObjName.StartsWith("bridge") ||
-                 collObjName.StartsWith("boat"))
+                 collObjName.StartsWith("boat") ||
+                 collObjName.StartsWith("ExpHouse", true, CultureInfo.InvariantCulture))
         {
             gameState.SetStatus(GameStatus.DEAD);
         }

@@ -35,7 +35,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
-    public House housePrefab;
+    public ExpHouse housePrefab;
     public GameObject flackGunPrefab;
     public GameObject tankPrefab;
     public GameObject tree1Prefab;
@@ -107,6 +107,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     GameObject riverSectionGameObject;
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
+    public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -360,7 +361,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Houses
         foreach (var housePosition in levelContents.houses)
         {
-            House house = Instantiate(housePrefab, lvlTransform);
+            ExpHouse house = Instantiate(housePrefab, lvlTransform);
+            house.SetSize(5, 2, 2);
+            var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
+            house.SetColor(houseColors[colorIndex]);
             var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 

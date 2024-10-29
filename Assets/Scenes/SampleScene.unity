@@ -423,7 +423,7 @@ MonoBehaviour:
   riverSectionPrefab: {fileID: 3673043693166868737, guid: ecf23279296cc9c4ebadc1f867beca57, type: 3}
   roadPrefab: {fileID: 5513747941671286812, guid: ae24cdd56d13f660d90c0c6dd31559e7, type: 3}
   landingStripPrefab: {fileID: 6914347553027331206, guid: 8d2c5b9c51ffa2cb0ac62431f2e22ab1, type: 3}
-  housePrefab: {fileID: -5280682781914769585, guid: 5b4e7effecb5648df9d9410c628972d4, type: 3}
+  housePrefab: {fileID: 3493713553119499354, guid: 6e34e51143b446ab78d8f44e8cfcb25d, type: 3}
   flackGunPrefab: {fileID: 6335712394028609315, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
   tankPrefab: {fileID: 5775457082546256396, guid: a053b216515f468bdbd3490c9be8d377, type: 3}
   tree1Prefab: {fileID: 6927612615246131860, guid: 5f9a76b741a63f5108c7cd11b113577e, type: 3}
