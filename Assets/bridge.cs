@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
@@ -34,9 +35,20 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
     }
 
     public void OnTriggerEnter2D(Collider2D col)
-    {
+    {   
+        Debug.Log($"bridge collided with {col.name}");
+        if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
+        {
+            Debug.Log($"bridge bombed !!!!!!!!!!!!!!!!!!!!!!!!!!! collided with {col.name}");
+            if (target != null)
+            {
+                Destroy(target.gameObject);
+                target = null;
+            }
+
+            //todo: report road or bridge hit for scoring
+        }
         
-        //Debug.Log($"bridge collided with {col.name}");
     }
 
     public Vector2 GetPosition() => transform.position;
