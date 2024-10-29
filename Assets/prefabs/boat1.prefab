@@ -143,4 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f723b9761136db4c1b684f440fa007d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sunkSprite: {fileID: 21300000, guid: 29e2e5854be4e0252bd3e4e7bf2fa4a6, type: 3}
+  sunkBoatPrefab: {fileID: 7468246758641471402, guid: f571c14c88dcf88869e3098b32d2d701, type: 3}

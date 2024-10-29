@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Boat1 : MonoBehaviour, IPositionObservable
 {
-    public Sprite sunkSprite;
+    public GameObject sunkBoatPrefab;
     GameState gameState;
     private SpriteRenderer spriteR;
     int health = 3;
@@ -24,12 +24,15 @@ public class Boat1 : MonoBehaviour, IPositionObservable
 
     void Sink()
     {
-        spriteR.sprite = sunkSprite;
         var collider = gameObject.GetComponent<Collider2D>();
         if (collider != null)
         {
             collider.enabled = false;
         }
+
+        var parent = gameObject.transform.parent;
+        Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
+        gameObject.SetActive(false);
 
         // Todo: report destroyed boat for scoring
     }
