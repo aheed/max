@@ -255,3 +255,10 @@ River should have a black line at its left bank.*
 
 ----
 Enemy vip planes are yellow??
+
+Enemy air strips
+  reuse code for drawing friendly landing strip? Add parked plane sprites on top.
+  Set polygon collider (4 pts) in code.
+  bombable hangar (to be used for friendly hangars too? Negative score? :))
+  Fixed x offset from parallel road
+  Loop to populate before houses etc.

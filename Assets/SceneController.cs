@@ -212,56 +212,111 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         grMeshFilter.mesh = grMesh;
 
         // Landing Strip
-        var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
-        var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
-
-        var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
-        var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
-        var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
-        var endSpriteHeight = topSpriteR.bounds.size.y;
-
-        var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
-        
-        var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
-        lsGameObject.transform.localPosition = lsLocalTransform;
-
-        lsLocalTransform.x += lsWidth / 2;
-        lsLocalTransform.y += endSpriteHeight / 2;
-        lsBottomEnd.transform.localPosition = lsLocalTransform;        
-        
-        landingStripBottomY = lsGameObject.transform.position.y;
-        landingStripTopY = landingStripBottomY + lsHeight;
-        landingStripWidth = lsWidth;
-        
-        var lsUpperCornerOffsetX = lsHeight * neutralSlope;
-
-        lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
-        lsLocalTransform.y += lsHeight - endSpriteHeight;
-        lsTopEnd.transform.localPosition = lsLocalTransform;
-
-        var lsllcX = 0;
-        var lslrcX = lsWidth;
-        var lsulcX = lsUpperCornerOffsetX;
-        var lsurcX = lslrcX + lsUpperCornerOffsetX;
-        var lsllcY = 0;
-        var lslrcY = 0;
-        var lsulcY = lsHeight;
-        var lsurcY = lsHeight;
-
-        var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
-        var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
-        lsMeshRenderer.material = landingStripMaterial;
-
-        var lsVerts = new List<Vector2>
         {
-            new Vector2(lsllcX, lsllcY),
-            new Vector2(lslrcX, lslrcY),
-            new Vector2(lsulcX, lsulcY),
-            new Vector2(lsurcX, lsurcY)
-        };
+            var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
+            var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
-        var lsMesh = CreateQuadMesh(lsVerts);
-        lsMeshFilter.mesh = lsMesh;
+            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
+            var endSpriteHeight = topSpriteR.bounds.size.y;
+
+            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            
+            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
+            lsGameObject.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += lsWidth / 2;
+            lsLocalTransform.y += endSpriteHeight / 2;
+            lsBottomEnd.transform.localPosition = lsLocalTransform;        
+            
+            landingStripBottomY = lsGameObject.transform.position.y;
+            landingStripTopY = landingStripBottomY + lsHeight;
+            landingStripWidth = lsWidth;
+            
+            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+            lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += lsHeight - endSpriteHeight;
+            lsTopEnd.transform.localPosition = lsLocalTransform;
+
+            var lsllcX = 0;
+            var lslrcX = lsWidth;
+            var lsulcX = lsUpperCornerOffsetX;
+            var lsurcX = lslrcX + lsUpperCornerOffsetX;
+            var lsllcY = 0;
+            var lslrcY = 0;
+            var lsulcY = lsHeight;
+            var lsurcY = lsHeight;
+
+            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
+            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
+            lsMeshRenderer.material = landingStripMaterial;
+
+            var lsVerts = new List<Vector2>
+            {
+                new Vector2(lsllcX, lsllcY),
+                new Vector2(lslrcX, lslrcY),
+                new Vector2(lsulcX, lsulcY),
+                new Vector2(lsurcX, lsurcY)
+            };
+
+            var lsMesh = CreateQuadMesh(lsVerts);
+            lsMeshFilter.mesh = lsMesh;
+        }
+
+        // Enemy Airstrips
+        foreach(var enemyAirstrip in levelContents.enemyAirstrips)
+        {            
+            var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
+            var lsHeight = LevelBuilder.enemyAirstripHeight * cellHeight;
+
+            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
+            var endSpriteHeight = topSpriteR.bounds.size.y;
+
+            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+
+            var stripOffsetY = enemyAirstrip * cellHeight;            
+            var stripOffsetX = stripOffsetY * neutralSlope;
+            var lsLocalTransform = new Vector3(stripOffsetX + ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth, stripOffsetY, -0.21f);
+            lsGameObject.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += lsWidth / 2;
+            lsLocalTransform.y += endSpriteHeight / 2;
+            lsBottomEnd.transform.localPosition = lsLocalTransform;        
+            
+            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+            lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += lsHeight - endSpriteHeight;
+            lsTopEnd.transform.localPosition = lsLocalTransform;
+
+            var lsllcX = 0;
+            var lslrcX = lsWidth;
+            var lsulcX = lsUpperCornerOffsetX;
+            var lsurcX = lslrcX + lsUpperCornerOffsetX;
+            var lsllcY = 0;
+            var lslrcY = 0;
+            var lsulcY = lsHeight;
+            var lsurcY = lsHeight;
+
+            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
+            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
+            lsMeshRenderer.material = landingStripMaterial;
+
+            var lsVerts = new List<Vector2>
+            {
+                new Vector2(lsllcX, lsllcY),
+                new Vector2(lslrcX, lslrcY),
+                new Vector2(lsulcX, lsulcY),
+                new Vector2(lsurcX, lsurcY)
+            };
+
+            var lsMesh = CreateQuadMesh(lsVerts);
+            lsMeshFilter.mesh = lsMesh;
+        }
 
 
         // River

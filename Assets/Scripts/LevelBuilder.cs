@@ -65,6 +65,7 @@ public class LevelContents
     public int roadLowerLeftCornerX;
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
+    public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
     public HousePosition hangar;
 }
@@ -107,8 +108,14 @@ public static class LevelBuilder
     public static int normalHouseDepth = 2;
     public static int minHouseDepth = 2;
     public static int maxHouseDepth = 5;
-    
-        
+
+    public static int enemyAirstripHeight = 16;
+    public static int minSpaceBetweenEnemyAirstrips = 20;
+    public static int enemyAirstripMinDistance = 60;
+    public static int enemyAirstripXDistance = 8;
+    public static float enemyAirstripProbability = 0.3f;
+
+
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
     public static LevelContents Build(bool riverLeftOfAirstrip)
@@ -383,6 +390,31 @@ public static class LevelBuilder
 
                 ytmp = newY;
             }
+
+            // Enemy airstrips
+            var cooldown = 0;
+            List<int> strips = new List<int>();
+            for (var y = enemyAirstripMinDistance; y < (LevelContents.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
+            {
+                if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < enemyAirstripProbability)
+                {
+                    strips.Add(y);
+                    var stripStartX = midX - enemyAirstripXDistance;
+                    for (var x = stripStartX; x < stripStartX + landingStripWidth; x++)
+                    {
+                        for (var i = 0; i < enemyAirstripHeight; i++)
+                        {
+                            ret.cells[x, y+i] = CellContent.LANDING_STRIP;
+                        }
+                    }
+                    cooldown = minSpaceBetweenEnemyAirstrips;
+                }
+                if (cooldown > 0)
+                {
+                    cooldown--;
+                }
+            }
+            ret.enemyAirstrips = strips;
         }    
 
         var houses = new List<HouseSpec>();
