@@ -17,7 +17,8 @@ public enum CellContent
     TREE2,
     BOAT1,
     BOAT2,
-    HANGAR
+    HANGAR,
+    VEHICLE1
 }
 
 public enum LevelType
@@ -88,6 +89,7 @@ public static class LevelBuilder
     public static float treeProbability = 0.03f;
     public static float boat1Probability = 0.005f;
     public static float boat2Probability = 0.2f;
+    public static float vehicle1Probability = 0.1f;
     
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
@@ -313,8 +315,8 @@ public static class LevelBuilder
                 bool approaching = yDistanceToEnd < approachLength;
                 //bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 //bool takingOff = y < approachLength;
-                var midRiverOffset = Math.Abs(midRoadX - midX);
-                bool takingOff = midRiverOffset > 0.3f;
+                var midRoadOffset = Math.Abs(midRoadX - midX);
+                bool takingOff = midRoadOffset > 0.3f;
                 var slopeIndex = 1;
                 if (approaching)
                 {
@@ -332,13 +334,12 @@ public static class LevelBuilder
 
                 var slopeX = (int)(slope * segmentHeight);
 
-                /* Todo: mid-road cars
+                // Mid-road stationary vehicles
                 var randVal = UnityEngine.Random.Range(0f, 1.0f);
-                
-                if (randVal < boat2Probability && midRoadX >= 0 && midRoadX < LevelContents.gridWidth)
+                if (randVal < vehicle1Probability && !approaching && !takingOff)
                 {
-                    ret.cells[midRoadX, y] = CellContent.BOAT2;
-                }*/
+                    ret.cells[midRoadX, y] = CellContent.VEHICLE1;
+                }
                 
                 y += segmentHeight;
                 roadLowerLeftCornerX += slopeX;

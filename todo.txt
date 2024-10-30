@@ -182,7 +182,7 @@ Make it possible to fire gun in collided state*
 Boats*
   type1*
   type2*
-Tank and FlackGun should share code (inheritance?).
+Tank and FlackGun and level  2 cars should share code (inheritance? exactly the same script?).
 Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
 Make all ground/water objects uniform height, a configurable safe height.
 Change airplane colliders from box to polygon
