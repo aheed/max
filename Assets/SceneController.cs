@@ -86,6 +86,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
     public float riverBankWidth = 0.1f;
+    public float parallelRoadWidth = 0.9f;
 
     //// Game status
     int level = -1;
@@ -270,7 +271,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
         riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
-        // MeshRenderer
+        // River MeshRenderers
         var rsMeshFilter = riverSectionGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = riverSectionGameObject.AddComponent<MeshRenderer>();
         rsMeshRenderer.material = riverMaterial;
@@ -278,7 +279,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
         bankMeshRenderer.material = riverBankMaterial;
 
-        // Mesh
+        // River Meshes
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
         var riverWidth = LevelBuilder.riverWidth * cellWidth;        
@@ -309,6 +310,43 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         rsMeshFilter.mesh = mesh;
         var riverBankMesh = CreateQuadMesh(riverBankVerts);
         bankMeshFilter.mesh = riverBankMesh;
+
+
+        // Parallel Road
+        GameObject paraRoad = new GameObject("parallel road");
+        paraRoad.transform.parent = lvlTransform;
+        var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, 0f, -0.2f);
+        paraRoad.transform.localPosition = prLocalTransform;        
+
+        // MeshRenderer
+        var prMeshFilter = paraRoad.AddComponent<MeshFilter>();
+        var prMeshRenderer = paraRoad.AddComponent<MeshRenderer>();
+        prMeshRenderer.material = landingStripMaterial;
+
+        // Mesh
+        y = 0f;
+        float prLowerLeftCornerX = 0f;
+
+        var paraRoadVerts = levelContents.roadSegments.SelectMany(segment => 
+        {
+            var segmentHeight = segment.height * cellHeight;
+            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
+            
+            var ret = new List<Vector2>
+            {
+                new Vector2(prLowerLeftCornerX, y),
+                new Vector2(prLowerLeftCornerX + parallelRoadWidth, y),
+                new Vector2(prLowerLeftCornerX + xOffset, y + segmentHeight),
+                new Vector2(prLowerLeftCornerX + parallelRoadWidth + xOffset, y + segmentHeight)
+            };
+            y += segmentHeight;
+            prLowerLeftCornerX += xOffset;
+            return ret;
+        }).ToList();
+
+        var prMesh = CreateQuadMesh(paraRoadVerts);
+        prMeshFilter.mesh = prMesh;
+        ///////
 
         GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
@@ -537,7 +575,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         // find segment
         var segmentIndex = 0;
-        var maxSegmentIndex = (riverVerts.Count - 1) / 4;
+        var maxSegmentIndex = (int)Math.Floor ((double)(riverVerts.Count - 1) / 4);
         while (segmentIndex <= maxSegmentIndex)
         {
             if ((riverVerts[segmentIndex * 4].y + yOffset) < yCoord &&

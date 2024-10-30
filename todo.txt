@@ -243,3 +243,14 @@ Generic house:
 
 Bridge: remove target on bomb hit
 River should have a black line at its left bank.*
+
+
+---
+"(0.00, 0.00)"
+"(0.05, 0.00)"
+"(3.32, 1.60)"
+"(3.37, 1.60)"
+
+
+----
+Enemy vip planes are yellow??
