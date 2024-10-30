@@ -86,6 +86,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
     public float riverBankWidth = 0.1f;
+    public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
 
     //// Game status
@@ -314,14 +315,20 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         // Parallel Road
         GameObject paraRoad = new GameObject("parallel road");
+        GameObject paraRoadWide = new GameObject("parallel road wide");
         paraRoad.transform.parent = lvlTransform;
+        paraRoadWide.transform.parent = lvlTransform;
         var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, 0f, -0.2f);
-        paraRoad.transform.localPosition = prLocalTransform;        
+        paraRoad.transform.localPosition = prLocalTransform;
+        paraRoadWide.transform.localPosition = prLocalTransform;
 
         // MeshRenderer
         var prMeshFilter = paraRoad.AddComponent<MeshFilter>();
+        var prMeshFilterWide = paraRoadWide.AddComponent<MeshFilter>();
         var prMeshRenderer = paraRoad.AddComponent<MeshRenderer>();
+        var prMeshRendererWide = paraRoadWide.AddComponent<MeshRenderer>();
         prMeshRenderer.material = landingStripMaterial;
+        prMeshRendererWide.material = riverBankMaterial;
 
         // Mesh
         y = 0f;
@@ -344,9 +351,15 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             return ret;
         }).ToList();
 
+        var paraRoadWideVerts = paraRoadVerts.Select((vert, index) => {
+            var x = index % 2 == 0 ? vert.x - parllelRoadSideWidth : vert.x + parllelRoadSideWidth;
+            return new Vector2(x, vert.y);
+        }).ToList();
+
         var prMesh = CreateQuadMesh(paraRoadVerts);
+        var prMeshWide = CreateQuadMesh(paraRoadWideVerts);
         prMeshFilter.mesh = prMesh;
-        ///////
+        prMeshFilterWide.mesh = prMeshWide;
 
         GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)

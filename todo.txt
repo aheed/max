@@ -179,14 +179,15 @@ Bug: IsOverLandingStrip seems to be a half landing strip width off.*
 (Divide colliders into layers in a smart way)
 Change box collider into polygon colliders?
 Make it possible to fire gun in collided state*
-Boats
+Boats*
   type1*
-  type2
+  type2*
 Tank and FlackGun should share code (inheritance?).
 Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
 Make all ground/water objects uniform height, a configurable safe height.
 Change airplane colliders from box to polygon
 Correct spelling flack->flak
+Head-on enemy planes
 
 ----------
 Do we need this?
@@ -229,7 +230,7 @@ Todo:
 Boats should collide with other boats? And bridges? Would be fun.
 Sunk animation for boat1.*
 Vip animations for enemy planes, cars*
-Targets (vip bridges and houses)
+Targets (vip bridges and houses)*
 
 -----
 Generic house:
@@ -241,7 +242,7 @@ Generic house:
   Prevent houses from being close to each other.*
   Make a black house variation with green windows
 
-Bridge: remove target on bomb hit
+Bridge: remove target on bomb hit*
 River should have a black line at its left bank.*
 
 
