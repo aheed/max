@@ -426,13 +426,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Houses
-        foreach (var housePosition in levelContents.houses)
+        foreach (var houseSpec in levelContents.houses)
         {
             ExpHouse house = Instantiate(housePrefab, lvlTransform);
-            house.SetSize(5, 2, 2);
+            house.SetSize(houseSpec.width, houseSpec.height, houseSpec.depth);
             var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
             house.SetColor(houseColors[colorIndex]);
-            var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
+            var houseLocalTransform = new Vector3(houseSpec.position.x * cellWidth + houseSpec.position.y * cellHeight * neutralSlope, houseSpec.position.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 
             if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)

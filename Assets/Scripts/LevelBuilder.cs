@@ -46,11 +46,19 @@ public class HousePosition
     public int y;
 }
 
+public class HouseSpec
+{
+    public HousePosition position;
+    public int width;
+    public int height;
+    public int depth;
+}
+
 public class LevelContents
 {
     public static readonly int gridHeight = 300;
     public static readonly int gridWidth = 100;
-    public IEnumerable<HousePosition> houses = new List<HousePosition>();
+    public IEnumerable<HouseSpec> houses = new List<HouseSpec>();
     public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
     public IEnumerable<RoadSegment> roadSegments = new List<RoadSegment>();
     public int riverLowerLeftCornerX;
@@ -90,7 +98,17 @@ public static class LevelBuilder
     public static float boat1Probability = 0.005f;
     public static float boat2Probability = 0.2f;
     public static float vehicle1Probability = 0.1f;
+    public static int normalHouseWidth = 5;
+    public static int minHouseWidth = 2;
+    public static int maxHouseWidth = 6;
+    public static int normalHouseHeight = 2;
+    public static int minHouseHeight = 1;
+    public static int maxHouseHeight = 4;
+    public static int normalHouseDepth = 2;
+    public static int minHouseDepth = 2;
+    public static int maxHouseDepth = 5;
     
+        
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
     public static LevelContents Build(bool riverLeftOfAirstrip)
@@ -367,7 +385,7 @@ public static class LevelBuilder
             }
         }    
 
-        var houses = new List<HousePosition>();
+        var houses = new List<HouseSpec>();
         for (var y = 0; y < LevelContents.gridHeight; y++)
         {
             for (var x = 0; x < LevelContents.gridWidth; x++)
@@ -393,7 +411,24 @@ public static class LevelBuilder
 
                     if (spaceEnough)
                     {
-                        houses.Add(new HousePosition {x = x, y = y});
+                        var width = normalHouseWidth;
+                        var height = normalHouseHeight;
+                        var depth = normalHouseDepth;
+
+                        if (LevelType == LevelType.ROAD && x < midX)
+                        {
+                            width = UnityEngine.Random.Range(minHouseWidth, maxHouseWidth+1);
+                            height = UnityEngine.Random.Range(minHouseHeight, maxHouseHeight+1);
+                            depth = UnityEngine.Random.Range(minHouseDepth, maxHouseDepth+1);
+                        }
+
+                        houses.Add(new HouseSpec { 
+                            position = new HousePosition {x = x, y = y},
+                            width = width,
+                            height = height,
+                            depth = depth
+                            });
+
                         for (var xtmp = x - houseWidth / 2; xtmp < x + houseWidth / 2; xtmp++)
                         {
                             for (var ytmp = y-1; ytmp < y + houseHeight; ytmp++)
