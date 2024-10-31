@@ -52,6 +52,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public GameObject vipTargetPrefab;
+    public GameObject bigHousePrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -365,6 +366,23 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 var targetOffsetX = targetOffsetY * neutralSlope;
                 var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
                 targetGameObject.transform.localPosition = targetLocalTransform;
+            }
+
+            // Big houses
+            var sortedBigHouseList = levelContents.city.bigHouses
+                .OrderBy(h => h.y)
+                .ToList();
+            var zSortOrder = -0.23f;
+            var zSortOrderIncrement = 0.0001f;
+            foreach (var bigHouse in sortedBigHouseList)
+            {
+                var bigHouseGameObject = Instantiate(bigHousePrefab, lvlTransform);
+                var bigHouseOffsetY = bigHouse.y * cellHeight;
+                var bigHouseOffsetX = bigHouseOffsetY * neutralSlope;
+                var bigHouseXPosRel = bigHouse.x * cellWidth;
+                var bigHouseLocalTransform = new Vector3(bigHouseOffsetX + bigHouseXPosRel, bigHouseOffsetY, zSortOrder);
+                bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
+                zSortOrder += zSortOrderIncrement;
             }
         }
 

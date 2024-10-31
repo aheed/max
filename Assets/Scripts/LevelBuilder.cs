@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum CellContent
@@ -60,6 +61,8 @@ public class City
     public int yEnd;
 
     public IEnumerable<int> vipTargets;
+
+    public IEnumerable<HousePosition> bigHouses;
 }
 
 public class LevelContents
@@ -98,6 +101,7 @@ public static class LevelBuilder
     public static int roadSegmentHeight = 2;
     public static float approachQuotient = 0.35f;
     public static float outsideCityQuotient = 0.38f;
+    public static int bigHousesMargin = 8;
     public static float finalApproachQuotient = 0.3f;
     public static int houseHeight = 3;
     public static int houseWidth = 6;
@@ -124,6 +128,7 @@ public static class LevelBuilder
     public static int enemyAirstripMinDistance = 60;
     public static int enemyAirstripXDistance = 8;
     public static float enemyAirstripProbability = 0.3f;
+    public static int bigHouseRoadDistance = 10;
 
 
     // Builds a 2D level including landing strip at beginning.
@@ -522,14 +527,23 @@ public static class LevelBuilder
                 vipTargets = new List<int>{vip1, vip2, vip3}
             };
 
-            // Todo: mark the cells on and around VIP targets as occupied (house?)
+            foreach (var y in ret.city.vipTargets)
+            {
+                for (var xtmp = midX - houseWidth / 2; xtmp < midX + houseWidth / 2; xtmp++)
+                {
+                    for (var ytmp = y-1; ytmp < y + houseHeight; ytmp++)
+                    {
+                        ret.cells[xtmp, ytmp] = CellContent.HOUSE;
+                    }
+                }
+            }
         }
 
-
+        var bigHousesList = new List<HousePosition>();        
         for (var y = 0; y < LevelContents.gridHeight; y++)
         {
             var yDistanceToEnd = LevelContents.gridHeight - y;
-            var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;
+            var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;            
             if (inCity)
             {
                 var flakX = 0;
@@ -545,6 +559,16 @@ public static class LevelBuilder
                 if (flakX != 0 && ret.cells[flakX, y] != CellContent.HOUSE)
                 {
                     ret.cells[flakX, y] = CellContent.FLACK_GUN;
+                }
+
+                var housesApproachLength = cityApproachLength + bigHousesMargin;
+                if (y > housesApproachLength && yDistanceToEnd > housesApproachLength)
+                {
+                    if (y % 4 == 3)
+                    {
+                        bigHousesList.Add(new HousePosition {x = midX - bigHouseRoadDistance, y = y});
+                        bigHousesList.Add(new HousePosition {x = midX + bigHouseRoadDistance, y = y});
+                    }
                 }
                 continue;
             }
@@ -592,6 +616,8 @@ public static class LevelBuilder
                 }*/               
             }
         }
+
+        ret.city.bigHouses = bigHousesList;
         
         return ret;
     }
