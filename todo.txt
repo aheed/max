@@ -254,5 +254,5 @@ Enemy air strips
   Loop to populate before houses etc.
 
 Bugs
-Enemy vip planes are yellow??
-destroyed flak guns keep firing?
+Enemy vip planes are yellow??*
+destroyed flak guns keep firing?*
