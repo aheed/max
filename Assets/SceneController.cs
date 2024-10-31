@@ -51,6 +51,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
+    public GameObject vipTargetPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -316,6 +317,55 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             var lsMesh = CreateQuadMesh(lsVerts);
             lsMeshFilter.mesh = lsMesh;
+        }
+
+        if (levelContents.city != null)
+        {
+            var cityWidth = LevelContents.gridWidth * cellWidth;
+            var cityHeight = (levelContents.city.yEnd - levelContents.city.yStart) * cellHeight;
+
+            var cityGameObject = Instantiate(landingStripPrefab, lvlTransform);
+
+            var cityOffsetY = levelContents.city.yStart * cellHeight;
+            var cityOffsetX = cityOffsetY * neutralSlope;
+            var cityLocalTransform = new Vector3(cityOffsetX, cityOffsetY, -0.22f);
+            cityGameObject.transform.localPosition = cityLocalTransform;
+
+            var lsUpperCornerOffsetX = cityHeight * neutralSlope;
+
+            var cityllcX = 0;
+            var citylrcX = cityWidth;
+            var cityulcX = lsUpperCornerOffsetX;
+            var cityurcX = citylrcX + lsUpperCornerOffsetX;
+            var cityllcY = 0;
+            var citylrcY = 0;
+            var cityulcY = cityHeight;
+            var cityurcY = cityHeight;
+
+            var cityMeshFilter = cityGameObject.AddComponent<MeshFilter>();
+            var cityMeshRenderer = cityGameObject.AddComponent<MeshRenderer>();
+            cityMeshRenderer.material = landingStripMaterial;
+
+            var cityVerts = new List<Vector2>
+            {
+                new Vector2(cityllcX, cityllcY),
+                new Vector2(citylrcX, citylrcY),
+                new Vector2(cityulcX, cityulcY),
+                new Vector2(cityurcX, cityurcY)
+            };
+
+            var cityMesh = CreateQuadMesh(cityVerts);
+            cityMeshFilter.mesh = cityMesh;
+
+            // VIP targets
+            foreach (var targetY in levelContents.city.vipTargets)
+            {
+                var targetGameObject = Instantiate(vipTargetPrefab, lvlTransform);
+                var targetOffsetY = targetY * cellHeight;
+                var targetOffsetX = targetOffsetY * neutralSlope;
+                var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
+                targetGameObject.transform.localPosition = targetLocalTransform;
+            }
         }
 
 

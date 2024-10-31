@@ -54,6 +54,14 @@ public class HouseSpec
     public int depth;
 }
 
+public class City 
+{
+    public int yStart;
+    public int yEnd;
+
+    public IEnumerable<int> vipTargets;
+}
+
 public class LevelContents
 {
     public static readonly int gridHeight = 300;
@@ -68,6 +76,7 @@ public class LevelContents
     public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
     public HousePosition hangar;
+    public City city;
 }
 
 public static class LevelBuilder 
@@ -88,6 +97,7 @@ public static class LevelBuilder
     public static int minRiverSegmentHeight = 2;
     public static int roadSegmentHeight = 2;
     public static float approachQuotient = 0.35f;
+    public static float outsideCityQuotient = 0.38f;
     public static float finalApproachQuotient = 0.3f;
     public static int houseHeight = 3;
     public static int houseWidth = 6;
@@ -123,6 +133,7 @@ public static class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         var approachLength = (int)(LevelContents.gridHeight * approachQuotient);
+        var cityApproachLength = (int)(LevelContents.gridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.gridHeight * finalApproachQuotient);
 
         // Landing Strip
@@ -149,9 +160,9 @@ public static class LevelBuilder
         }
 
         // Todo: decide level type based on previous level outcome etc
-        LevelType LevelType = LevelType.ROAD;
+        LevelType levelType = LevelType.CITY;
         
-        if (LevelType == LevelType.NORMAL)
+        if (levelType == LevelType.NORMAL)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -309,7 +320,7 @@ public static class LevelBuilder
             ret.roads = roads;
         }
 
-        if (LevelType == LevelType.ROAD)
+        if (levelType == LevelType.ROAD || levelType == LevelType.CITY)
         {
             ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip;
 
@@ -359,11 +370,14 @@ public static class LevelBuilder
 
                 var slopeX = (int)(slope * segmentHeight);
 
-                // Mid-road stationary vehicles
-                var randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < vehicle1Probability && !approaching && !takingOff)
+                if (levelType == LevelType.ROAD )
                 {
-                    ret.cells[midRoadX, y] = CellContent.VEHICLE1;
+                    // Mid-road stationary vehicles
+                    var randVal = UnityEngine.Random.Range(0f, 1.0f);
+                    if (randVal < vehicle1Probability && !approaching && !takingOff)
+                    {
+                        ret.cells[midRoadX, y] = CellContent.VEHICLE1;
+                    }
                 }
                 
                 y += segmentHeight;
@@ -391,100 +405,150 @@ public static class LevelBuilder
                 ytmp = newY;
             }
 
-            // Enemy airstrips
-            var cooldown = 0;
-            List<int> strips = new List<int>();
-            for (var y = enemyAirstripMinDistance; y < (LevelContents.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
+            if (levelType == LevelType.ROAD )
             {
-                if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < enemyAirstripProbability)
+                // Enemy airstrips
+                var cooldown = 0;
+                List<int> strips = new List<int>();
+                for (var y = enemyAirstripMinDistance; y < (LevelContents.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
                 {
-                    strips.Add(y);
-                    var stripStartX = midX - enemyAirstripXDistance;
-                    for (var x = stripStartX; x < stripStartX + landingStripWidth; x++)
+                    if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < enemyAirstripProbability)
                     {
-                        for (var i = 0; i < enemyAirstripHeight; i++)
+                        strips.Add(y);
+                        var stripStartX = midX - enemyAirstripXDistance;
+                        for (var x = stripStartX; x < stripStartX + landingStripWidth; x++)
                         {
-                            ret.cells[x, y+i] = CellContent.LANDING_STRIP;
+                            for (var i = 0; i < enemyAirstripHeight; i++)
+                            {
+                                ret.cells[x, y+i] = CellContent.LANDING_STRIP;
+                            }
                         }
+                        cooldown = minSpaceBetweenEnemyAirstrips;
                     }
-                    cooldown = minSpaceBetweenEnemyAirstrips;
+                    if (cooldown > 0)
+                    {
+                        cooldown--;
+                    }
                 }
-                if (cooldown > 0)
-                {
-                    cooldown--;
-                }
+                ret.enemyAirstrips = strips;
             }
-            ret.enemyAirstrips = strips;
         }    
 
-        var houses = new List<HouseSpec>();
-        for (var y = 0; y < LevelContents.gridHeight; y++)
+        if (levelType == LevelType.ROAD || levelType == LevelType.NORMAL)
         {
-            for (var x = 0; x < LevelContents.gridWidth; x++)
+            var houses = new List<HouseSpec>();
+            for (var y = 0; y < LevelContents.gridHeight; y++)
             {
-                var randVal = UnityEngine.Random.Range(0f, 1.0f);
-
-                // Houses
-                if (randVal < houseProbability && y > (landingStripHeight * 2))
+                for (var x = 0; x < LevelContents.gridWidth; x++)
                 {
-                    //Debug.Log($"House please!");
-                    var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
-                                        y < (LevelContents.gridHeight - houseHeight) &&
-                                        x > houseWidth &&
-                                        y > houseHeight;
-                    for (var xtmp = x - houseWidth; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
+                    var randVal = UnityEngine.Random.Range(0f, 1.0f);
+
+                    // Houses
+                    if (randVal < houseProbability && y > (landingStripHeight * 2))
                     {
-                        for (var ytmp = y - houseHeight; (ytmp < (y + houseHeight)) && spaceEnough; ytmp++)
+                        //Debug.Log($"House please!");
+                        var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
+                                            y < (LevelContents.gridHeight - houseHeight) &&
+                                            x > houseWidth &&
+                                            y > houseHeight;
+                        for (var xtmp = x - houseWidth; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
                         {
-                            //Debug.Log($"{x} {y} {xtmp} {ytmp}");
-                            spaceEnough = ret.cells[xtmp, ytmp] == CellContent.GRASS;
-                        }
-                    }
-
-                    if (spaceEnough)
-                    {
-                        var width = normalHouseWidth;
-                        var height = normalHouseHeight;
-                        var depth = normalHouseDepth;
-
-                        if (LevelType == LevelType.ROAD && x < midX)
-                        {
-                            width = UnityEngine.Random.Range(minHouseWidth, maxHouseWidth+1);
-                            height = UnityEngine.Random.Range(minHouseHeight, maxHouseHeight+1);
-                            depth = UnityEngine.Random.Range(minHouseDepth, maxHouseDepth+1);
-                        }
-
-                        houses.Add(new HouseSpec { 
-                            position = new HousePosition {x = x, y = y},
-                            width = width,
-                            height = height,
-                            depth = depth
-                            });
-
-                        for (var xtmp = x - houseWidth / 2; xtmp < x + houseWidth / 2; xtmp++)
-                        {
-                            for (var ytmp = y-1; ytmp < y + houseHeight; ytmp++)
+                            for (var ytmp = y - houseHeight; (ytmp < (y + houseHeight)) && spaceEnough; ytmp++)
                             {
-                                ret.cells[xtmp, ytmp] = CellContent.HOUSE;
+                                //Debug.Log($"{x} {y} {xtmp} {ytmp}");
+                                spaceEnough = ret.cells[xtmp, ytmp] == CellContent.GRASS;
                             }
                         }
 
-                        var houseFrontWidth = 4;
-                        var houseFrontHeight = 3;
-                        for (var xtmp = x; xtmp < x + houseFrontWidth; xtmp++)
+                        if (spaceEnough)
                         {
-                            for (var ytmp = y - houseFrontHeight; ytmp < y - 1; ytmp++)
+                            var width = normalHouseWidth;
+                            var height = normalHouseHeight;
+                            var depth = normalHouseDepth;
+
+                            if (levelType == LevelType.ROAD && x < midX)
                             {
-                                ret.cells[xtmp, ytmp] = CellContent.HOUSE_FRONT;
+                                width = UnityEngine.Random.Range(minHouseWidth, maxHouseWidth+1);
+                                height = UnityEngine.Random.Range(minHouseHeight, maxHouseHeight+1);
+                                depth = UnityEngine.Random.Range(minHouseDepth, maxHouseDepth+1);
+                            }
+
+                            houses.Add(new HouseSpec { 
+                                position = new HousePosition {x = x, y = y},
+                                width = width,
+                                height = height,
+                                depth = depth
+                                });
+
+                            for (var xtmp = x - houseWidth / 2; xtmp < x + houseWidth / 2; xtmp++)
+                            {
+                                for (var ytmp = y-1; ytmp < y + houseHeight; ytmp++)
+                                {
+                                    ret.cells[xtmp, ytmp] = CellContent.HOUSE;
+                                }
+                            }
+
+                            var houseFrontWidth = 4;
+                            var houseFrontHeight = 3;
+                            for (var xtmp = x; xtmp < x + houseFrontWidth; xtmp++)
+                            {
+                                for (var ytmp = y - houseFrontHeight; ytmp < y - 1; ytmp++)
+                                {
+                                    ret.cells[xtmp, ytmp] = CellContent.HOUSE_FRONT;
+                                }
                             }
                         }
                     }
                 }
             }
+            ret.houses = houses;
         }
+
+
+        if (levelType == LevelType.CITY)
+        {
+            var yStart = cityApproachLength;
+            var yEnd = LevelContents.gridHeight - cityApproachLength;
+
+            //  VIP targets
+            var vipTargetDistance = (yEnd - yStart) / 4;
+            var vip1 = yStart + vipTargetDistance;
+            var vip2 = vip1 + vipTargetDistance;
+            var vip3 = vip2 + vipTargetDistance;
+
+            ret.city = new City {
+                yStart = yStart,
+                yEnd = yEnd,
+                vipTargets = new List<int>{vip1, vip2, vip3}
+            };
+
+            // Todo: mark the cells on and around VIP targets as occupied (house?)
+        }
+
 
         for (var y = 0; y < LevelContents.gridHeight; y++)
         {
+            var yDistanceToEnd = LevelContents.gridHeight - y;
+            var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;
+            if (inCity)
+            {
+                var flakX = 0;
+                switch (y % 6)
+                {
+                    case 0:
+                        flakX = midX - 2;
+                        break;
+                    case 3:
+                        flakX = midX - 3;
+                        break;
+                }
+                if (flakX != 0 && ret.cells[flakX, y] != CellContent.HOUSE)
+                {
+                    ret.cells[flakX, y] = CellContent.FLACK_GUN;
+                }
+                continue;
+            }
+
             for (var x = 0; x < LevelContents.gridWidth; x++)
             {   
                 // Tanks
@@ -528,8 +592,7 @@ public static class LevelBuilder
                 }*/               
             }
         }
-
-        ret.houses = houses;       
+        
         return ret;
     }
 }

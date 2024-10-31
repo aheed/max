@@ -246,19 +246,13 @@ Bridge: remove target on bomb hit*
 River should have a black line at its left bank.*
 
 
----
-"(0.00, 0.00)"
-"(0.05, 0.00)"
-"(3.32, 1.60)"
-"(3.37, 1.60)"
-
-
-----
-Enemy vip planes are yellow??
-
 Enemy air strips
   reuse code for drawing friendly landing strip? Add parked plane sprites on top.
   Set polygon collider (4 pts) in code.
   bombable hangar (to be used for friendly hangars too? Negative score? :))
   Fixed x offset from parallel road
   Loop to populate before houses etc.
+
+Bugs
+Enemy vip planes are yellow??
+destroyed flak guns keep firing?
