@@ -553,7 +553,7 @@ public static class LevelBuilder
                         flakX = midX - 2;
                         break;
                     case 3:
-                        flakX = midX - 3;
+                        flakX = midX - 4;
                         break;
                 }
                 if (flakX != 0 && ret.cells[flakX, y] != CellContent.HOUSE)
