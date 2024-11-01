@@ -36,7 +36,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
 
     public void OnTriggerEnter2D(Collider2D col)
     {   
-        Debug.Log($"bridge collided with {col.name}");
+        //Debug.Log($"bridge collided with {col.name}");
         if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
         {
             Debug.Log($"bridge bombed !!!!!!!!!!!!!!!!!!!!!!!!!!! collided with {col.name}");

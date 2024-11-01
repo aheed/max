@@ -51,6 +51,6 @@ public class VipTarget : MonoBehaviour, IPositionObservable
     }
 
     public Vector2 GetPosition() => transform.position;
-    public float GetAltitude() => 0.1f;
-    public float GetHeight() => 0.41f;
+    public float GetAltitude() => Altitudes.unsafeAltitude / 2;
+    public float GetHeight() => Altitudes.unsafeAltitude;
 }

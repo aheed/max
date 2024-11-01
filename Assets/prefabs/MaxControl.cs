@@ -372,7 +372,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     public float GetHeight()
     {
-        return 0.1f;
+        return Altitudes.planeHeight;
     }
 
     public float GetMoveX()

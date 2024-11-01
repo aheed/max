@@ -52,6 +52,6 @@ public class car_l2_1 : MonoBehaviour, IPositionObservable
     }
 
     public Vector2 GetPosition() => transform.position;
-    public float GetAltitude() => 0.1f;
-    public float GetHeight() => 0.41f;
+    public float GetAltitude() => Altitudes.strafeMaxAltitude / 2;
+    public float GetHeight() => Altitudes.strafeMaxAltitude;
 }
