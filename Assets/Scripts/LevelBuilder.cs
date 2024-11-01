@@ -65,6 +65,12 @@ public class City
     public IEnumerable<HousePosition> bigHouses;
 }
 
+public class LevelPrerequisite
+{
+    public LevelType levelType;
+    public bool riverLeftOfAirstrip;
+}
+
 public class LevelContents
 {
     public static readonly int gridHeight = 300;
@@ -79,7 +85,7 @@ public class LevelContents
     public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
     public HousePosition hangar;
-    public City city;
+    public City city;    
 }
 
 public static class LevelBuilder 
@@ -125,7 +131,7 @@ public static class LevelBuilder
 
     public static int enemyAirstripHeight = 16;
     public static int minSpaceBetweenEnemyAirstrips = 20;
-    public static int enemyAirstripMinDistance = 60;
+    public static int enemyAirstripMinDistance = 100;
     public static int enemyAirstripXDistance = 8;
     public static float enemyAirstripProbability = 0.3f;
     public static int bigHouseRoadDistance = 10;
@@ -133,7 +139,7 @@ public static class LevelBuilder
 
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
-    public static LevelContents Build(bool riverLeftOfAirstrip)
+    public static LevelContents Build(LevelPrerequisite levelPrerequisite)
     {
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
@@ -164,8 +170,9 @@ public static class LevelBuilder
             }
         }
 
-        // Todo: decide level type based on previous level outcome etc
-        LevelType levelType = LevelType.CITY;
+        LevelType levelType = levelPrerequisite.levelType;
+        var riverLeftOfAirstrip = levelPrerequisite.riverLeftOfAirstrip;
+        ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip; // May be overridden below
         
         if (levelType == LevelType.NORMAL)
         {
@@ -617,7 +624,10 @@ public static class LevelBuilder
             }
         }
 
-        ret.city.bigHouses = bigHousesList;
+        if (ret.city != null)
+        {
+            ret.city.bigHouses = bigHousesList;
+        }
         
         return ret;
     }

@@ -99,6 +99,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     int currentLevelIndex = 0;
     static int nofLevels = 2;
     GameObject[] levels;
+    LevelPrerequisite latestLevelPrereq;
     LevelContents latestLevel;
     MaxControl maxPlane;
     float landingStripBottomY;
@@ -274,7 +275,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var lsHeight = LevelBuilder.enemyAirstripHeight * cellHeight;
 
             var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsTopEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
             var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
             var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
             var endSpriteHeight = topSpriteR.bounds.size.y;
 
@@ -287,13 +290,21 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             lsLocalTransform.x += lsWidth / 2;
             lsLocalTransform.y += endSpriteHeight / 2;
-            lsBottomEnd.transform.localPosition = lsLocalTransform;        
+            lsBottomEnd.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += 2 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += 2 * endSpriteHeight;
+            lsBottomEnd2.transform.localPosition = lsLocalTransform;
             
             var lsUpperCornerOffsetX = lsHeight * neutralSlope;
 
-            lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
-            lsLocalTransform.y += lsHeight - endSpriteHeight;
+            lsLocalTransform.x += lsUpperCornerOffsetX - 3 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += lsHeight - 3 * endSpriteHeight;
             lsTopEnd.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x -= 2 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y -= 2 * endSpriteHeight;
+            lsTopEnd2.transform.localPosition = lsLocalTransform;
 
             var lsllcX = 0;
             var lslrcX = lsWidth;
@@ -678,8 +689,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-
-        latestLevel = LevelBuilder.Build(true);
+        latestLevelPrereq = new LevelPrerequisite {levelType = LevelType.NORMAL, riverLeftOfAirstrip=true};
+        latestLevel = LevelBuilder.Build(latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
         gameState = GetGameState();
@@ -805,7 +816,26 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
         {
             Debug.Log("Time to add new level ***************");
-            latestLevel = LevelBuilder.Build(latestLevel.riverEndsLeftOfAirstrip);
+
+            // Todo: implement decision what level type to build next.
+            //       Should be based on player performance, like number of VIP targets hit, score etc.
+            // Todo: copy over info about which HQ city buildings are already destroyed.
+            var newLevelType = LevelType.NORMAL;
+            if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+            {
+                newLevelType = LevelType.ROAD;
+            }
+            else if (latestLevelPrereq.levelType == LevelType.ROAD ||
+                     latestLevelPrereq.levelType == LevelType.CITY)
+            {
+                newLevelType = LevelType.CITY;
+            }
+            ////
+
+            latestLevelPrereq = new LevelPrerequisite {
+                levelType = newLevelType,
+                riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip};
+            latestLevel = LevelBuilder.Build(latestLevelPrereq);
             CreateLevel();
         }
 
