@@ -10,6 +10,7 @@ public class FlackGun : MonoBehaviour, IPositionObservable
     float timeToShoot = -1.0f;
     GameState gameState;
     private SpriteRenderer spriteR;
+    private bool alive = true;
 
     void RestartShotClock()
     {
@@ -32,6 +33,7 @@ public class FlackGun : MonoBehaviour, IPositionObservable
             {
                 collider.enabled = false;
             }
+            alive = false;
 
             // Todo: report destroyed flack gun for scoring
         }
@@ -64,6 +66,11 @@ public class FlackGun : MonoBehaviour, IPositionObservable
         if (gameState == null)
         {
             gameState = FindObjectOfType<GameState>();
+        }
+
+        if (!alive)
+        {
+            return;
         }
 
         timeToShoot -= Time.deltaTime;

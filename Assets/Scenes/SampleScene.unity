@@ -434,10 +434,13 @@ MonoBehaviour:
   mushroomCloudPrefab: {fileID: 4545007370004883388, guid: 34e00a960b6ca067caa3f03468dd4bdf, type: 3}
   boat1Prefab: {fileID: 2878459979805281793, guid: f08e038dc0ef295a4b13e7a16e464aed, type: 3}
   boat2Prefab: {fileID: 2233345942563649688, guid: 90dcf23d027c9502db5f80c4b0f5be42, type: 3}
+  vehicle1Prefab: {fileID: 4502306411438874035, guid: 9e069a6934df1ff508e1b70ff3c17022, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}
   carPrefab: {fileID: -8453423270569367082, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}
   hangarPrefab: {fileID: 3689998556768229833, guid: a7eb3e3f240af9eb99f8e4877e18965c, type: 3}
+  vipTargetPrefab: {fileID: 5632697302990334856, guid: 7b51d7590579fd5e498650daeae818f6, type: 3}
+  bigHousePrefab: {fileID: 94898319226785741, guid: 3762711ea378f301ba4fde2f4530af1a, type: 3}
   refobject: {fileID: 608621884}
   width: 1
   height: 1
@@ -472,6 +475,8 @@ MonoBehaviour:
   vipProbability: 0.5
   carProbability: 0.5
   riverBankWidth: 0.05
+  parllelRoadSideWidth: 0.05
+  parallelRoadWidth: 0.9
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0

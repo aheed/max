@@ -46,10 +46,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject mushroomCloudPrefab;
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
+    public GameObject vehicle1Prefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
+    public GameObject vipTargetPrefab;
+    public GameObject bigHousePrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -86,6 +89,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
     public float riverBankWidth = 0.1f;
+    public float parllelRoadSideWidth = 0.1f;
+    public float parallelRoadWidth = 0.9f;
 
     //// Game status
     int level = -1;
@@ -94,6 +99,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     int currentLevelIndex = 0;
     static int nofLevels = 2;
     GameObject[] levels;
+    LevelPrerequisite latestLevelPrereq;
     LevelContents latestLevel;
     MaxControl maxPlane;
     float landingStripBottomY;
@@ -209,56 +215,187 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         grMeshFilter.mesh = grMesh;
 
         // Landing Strip
-        var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
-        var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
-
-        var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
-        var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
-        var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
-        var endSpriteHeight = topSpriteR.bounds.size.y;
-
-        var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
-        
-        var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
-        lsGameObject.transform.localPosition = lsLocalTransform;
-
-        lsLocalTransform.x += lsWidth / 2;
-        lsLocalTransform.y += endSpriteHeight / 2;
-        lsBottomEnd.transform.localPosition = lsLocalTransform;        
-        
-        landingStripBottomY = lsGameObject.transform.position.y;
-        landingStripTopY = landingStripBottomY + lsHeight;
-        landingStripWidth = lsWidth;
-        
-        var lsUpperCornerOffsetX = lsHeight * neutralSlope;
-
-        lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
-        lsLocalTransform.y += lsHeight - endSpriteHeight;
-        lsTopEnd.transform.localPosition = lsLocalTransform;
-
-        var lsllcX = 0;
-        var lslrcX = lsWidth;
-        var lsulcX = lsUpperCornerOffsetX;
-        var lsurcX = lslrcX + lsUpperCornerOffsetX;
-        var lsllcY = 0;
-        var lslrcY = 0;
-        var lsulcY = lsHeight;
-        var lsurcY = lsHeight;
-
-        var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
-        var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
-        lsMeshRenderer.material = landingStripMaterial;
-
-        var lsVerts = new List<Vector2>
         {
-            new Vector2(lsllcX, lsllcY),
-            new Vector2(lslrcX, lslrcY),
-            new Vector2(lsulcX, lsulcY),
-            new Vector2(lsurcX, lsurcY)
-        };
+            var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
+            var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
-        var lsMesh = CreateQuadMesh(lsVerts);
-        lsMeshFilter.mesh = lsMesh;
+            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
+            var endSpriteHeight = topSpriteR.bounds.size.y;
+
+            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            
+            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
+            lsGameObject.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += lsWidth / 2;
+            lsLocalTransform.y += endSpriteHeight / 2;
+            lsBottomEnd.transform.localPosition = lsLocalTransform;        
+            
+            landingStripBottomY = lsGameObject.transform.position.y;
+            landingStripTopY = landingStripBottomY + lsHeight;
+            landingStripWidth = lsWidth;
+            
+            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+            lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += lsHeight - endSpriteHeight;
+            lsTopEnd.transform.localPosition = lsLocalTransform;
+
+            var lsllcX = 0;
+            var lslrcX = lsWidth;
+            var lsulcX = lsUpperCornerOffsetX;
+            var lsurcX = lslrcX + lsUpperCornerOffsetX;
+            var lsllcY = 0;
+            var lslrcY = 0;
+            var lsulcY = lsHeight;
+            var lsurcY = lsHeight;
+
+            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
+            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
+            lsMeshRenderer.material = landingStripMaterial;
+
+            var lsVerts = new List<Vector2>
+            {
+                new Vector2(lsllcX, lsllcY),
+                new Vector2(lslrcX, lslrcY),
+                new Vector2(lsulcX, lsulcY),
+                new Vector2(lsurcX, lsurcY)
+            };
+
+            var lsMesh = CreateQuadMesh(lsVerts);
+            lsMeshFilter.mesh = lsMesh;
+        }
+
+        // Enemy Airstrips
+        foreach(var enemyAirstrip in levelContents.enemyAirstrips)
+        {            
+            var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
+            var lsHeight = LevelBuilder.enemyAirstripHeight * cellHeight;
+
+            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsTopEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
+            var lsBottomEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
+            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
+            var endSpriteHeight = topSpriteR.bounds.size.y;
+
+            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+
+            var stripOffsetY = enemyAirstrip * cellHeight;            
+            var stripOffsetX = stripOffsetY * neutralSlope;
+            var lsLocalTransform = new Vector3(stripOffsetX + ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth, stripOffsetY, -0.21f);
+            lsGameObject.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += lsWidth / 2;
+            lsLocalTransform.y += endSpriteHeight / 2;
+            lsBottomEnd.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x += 2 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += 2 * endSpriteHeight;
+            lsBottomEnd2.transform.localPosition = lsLocalTransform;
+            
+            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+
+            lsLocalTransform.x += lsUpperCornerOffsetX - 3 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y += lsHeight - 3 * endSpriteHeight;
+            lsTopEnd.transform.localPosition = lsLocalTransform;
+
+            lsLocalTransform.x -= 2 * endSpriteHeight * neutralSlope;
+            lsLocalTransform.y -= 2 * endSpriteHeight;
+            lsTopEnd2.transform.localPosition = lsLocalTransform;
+
+            var lsllcX = 0;
+            var lslrcX = lsWidth;
+            var lsulcX = lsUpperCornerOffsetX;
+            var lsurcX = lslrcX + lsUpperCornerOffsetX;
+            var lsllcY = 0;
+            var lslrcY = 0;
+            var lsulcY = lsHeight;
+            var lsurcY = lsHeight;
+
+            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
+            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
+            lsMeshRenderer.material = landingStripMaterial;
+
+            var lsVerts = new List<Vector2>
+            {
+                new Vector2(lsllcX, lsllcY),
+                new Vector2(lslrcX, lslrcY),
+                new Vector2(lsulcX, lsulcY),
+                new Vector2(lsurcX, lsurcY)
+            };
+
+            var lsMesh = CreateQuadMesh(lsVerts);
+            lsMeshFilter.mesh = lsMesh;
+        }
+
+        if (levelContents.city != null)
+        {
+            var cityWidth = LevelContents.gridWidth * cellWidth;
+            var cityHeight = (levelContents.city.yEnd - levelContents.city.yStart) * cellHeight;
+
+            var cityGameObject = Instantiate(landingStripPrefab, lvlTransform);
+
+            var cityOffsetY = levelContents.city.yStart * cellHeight;
+            var cityOffsetX = cityOffsetY * neutralSlope;
+            var cityLocalTransform = new Vector3(cityOffsetX, cityOffsetY, -0.22f);
+            cityGameObject.transform.localPosition = cityLocalTransform;
+
+            var lsUpperCornerOffsetX = cityHeight * neutralSlope;
+
+            var cityllcX = 0;
+            var citylrcX = cityWidth;
+            var cityulcX = lsUpperCornerOffsetX;
+            var cityurcX = citylrcX + lsUpperCornerOffsetX;
+            var cityllcY = 0;
+            var citylrcY = 0;
+            var cityulcY = cityHeight;
+            var cityurcY = cityHeight;
+
+            var cityMeshFilter = cityGameObject.AddComponent<MeshFilter>();
+            var cityMeshRenderer = cityGameObject.AddComponent<MeshRenderer>();
+            cityMeshRenderer.material = landingStripMaterial;
+
+            var cityVerts = new List<Vector2>
+            {
+                new Vector2(cityllcX, cityllcY),
+                new Vector2(citylrcX, citylrcY),
+                new Vector2(cityulcX, cityulcY),
+                new Vector2(cityurcX, cityurcY)
+            };
+
+            var cityMesh = CreateQuadMesh(cityVerts);
+            cityMeshFilter.mesh = cityMesh;
+
+            // VIP targets
+            foreach (var targetY in levelContents.city.vipTargets)
+            {
+                var targetGameObject = Instantiate(vipTargetPrefab, lvlTransform);
+                var targetOffsetY = targetY * cellHeight;
+                var targetOffsetX = targetOffsetY * neutralSlope;
+                var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
+                targetGameObject.transform.localPosition = targetLocalTransform;
+            }
+
+            // Big houses
+            var sortedBigHouseList = levelContents.city.bigHouses
+                .OrderBy(h => h.y)
+                .ToList();
+            var zSortOrder = -0.23f;
+            var zSortOrderIncrement = 0.0001f;
+            foreach (var bigHouse in sortedBigHouseList)
+            {
+                var bigHouseGameObject = Instantiate(bigHousePrefab, lvlTransform);
+                var bigHouseOffsetY = bigHouse.y * cellHeight;
+                var bigHouseOffsetX = bigHouseOffsetY * neutralSlope;
+                var bigHouseXPosRel = bigHouse.x * cellWidth;
+                var bigHouseLocalTransform = new Vector3(bigHouseOffsetX + bigHouseXPosRel, bigHouseOffsetY, zSortOrder);
+                bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
+                zSortOrder += zSortOrderIncrement;
+            }
+        }
 
 
         // River
@@ -270,7 +407,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
         riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
-        // MeshRenderer
+        // River MeshRenderers
         var rsMeshFilter = riverSectionGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = riverSectionGameObject.AddComponent<MeshRenderer>();
         rsMeshRenderer.material = riverMaterial;
@@ -278,7 +415,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
         bankMeshRenderer.material = riverBankMaterial;
 
-        // Mesh
+        // River Meshes
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
         var riverWidth = LevelBuilder.riverWidth * cellWidth;        
@@ -309,6 +446,55 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         rsMeshFilter.mesh = mesh;
         var riverBankMesh = CreateQuadMesh(riverBankVerts);
         bankMeshFilter.mesh = riverBankMesh;
+
+
+        // Parallel Road
+        GameObject paraRoad = new GameObject("parallel road");
+        GameObject paraRoadWide = new GameObject("parallel road wide");
+        paraRoad.transform.parent = lvlTransform;
+        paraRoadWide.transform.parent = lvlTransform;
+        var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, 0f, -0.2f);
+        paraRoad.transform.localPosition = prLocalTransform;
+        paraRoadWide.transform.localPosition = prLocalTransform;
+
+        // MeshRenderer
+        var prMeshFilter = paraRoad.AddComponent<MeshFilter>();
+        var prMeshFilterWide = paraRoadWide.AddComponent<MeshFilter>();
+        var prMeshRenderer = paraRoad.AddComponent<MeshRenderer>();
+        var prMeshRendererWide = paraRoadWide.AddComponent<MeshRenderer>();
+        prMeshRenderer.material = landingStripMaterial;
+        prMeshRendererWide.material = riverBankMaterial;
+
+        // Mesh
+        y = 0f;
+        float prLowerLeftCornerX = 0f;
+
+        var paraRoadVerts = levelContents.roadSegments.SelectMany(segment => 
+        {
+            var segmentHeight = segment.height * cellHeight;
+            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
+            
+            var ret = new List<Vector2>
+            {
+                new Vector2(prLowerLeftCornerX, y),
+                new Vector2(prLowerLeftCornerX + parallelRoadWidth, y),
+                new Vector2(prLowerLeftCornerX + xOffset, y + segmentHeight),
+                new Vector2(prLowerLeftCornerX + parallelRoadWidth + xOffset, y + segmentHeight)
+            };
+            y += segmentHeight;
+            prLowerLeftCornerX += xOffset;
+            return ret;
+        }).ToList();
+
+        var paraRoadWideVerts = paraRoadVerts.Select((vert, index) => {
+            var x = index % 2 == 0 ? vert.x - parllelRoadSideWidth : vert.x + parllelRoadSideWidth;
+            return new Vector2(x, vert.y);
+        }).ToList();
+
+        var prMesh = CreateQuadMesh(paraRoadVerts);
+        var prMeshWide = CreateQuadMesh(paraRoadWideVerts);
+        prMeshFilter.mesh = prMesh;
+        prMeshFilterWide.mesh = prMeshWide;
 
         GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
@@ -374,13 +560,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Houses
-        foreach (var housePosition in levelContents.houses)
+        foreach (var houseSpec in levelContents.houses)
         {
             ExpHouse house = Instantiate(housePrefab, lvlTransform);
-            house.SetSize(5, 2, 2);
+            house.SetSize(houseSpec.width, houseSpec.height, houseSpec.depth);
             var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
             house.SetColor(houseColors[colorIndex]);
-            var houseLocalTransform = new Vector3(housePosition.x * cellWidth + housePosition.y * cellHeight * neutralSlope, housePosition.y * cellHeight, -0.2f);
+            var houseLocalTransform = new Vector3(houseSpec.position.x * cellWidth + houseSpec.position.y * cellHeight * neutralSlope, houseSpec.position.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 
             if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
@@ -425,6 +611,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
                     case CellContent.BOAT2:
                         selectedPrefab = boat2Prefab;
+                        break;
+
+                    case CellContent.VEHICLE1:
+                        selectedPrefab = vehicle1Prefab;
                         break;
                 }
 
@@ -499,8 +689,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-
-        latestLevel = LevelBuilder.Build(true);
+        latestLevelPrereq = new LevelPrerequisite {levelType = LevelType.NORMAL, riverLeftOfAirstrip=true};
+        latestLevel = LevelBuilder.Build(latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
         gameState = GetGameState();
@@ -537,7 +727,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         // find segment
         var segmentIndex = 0;
-        var maxSegmentIndex = (riverVerts.Count - 1) / 4;
+        var maxSegmentIndex = (int)Math.Floor ((double)(riverVerts.Count - 1) / 4);
         while (segmentIndex <= maxSegmentIndex)
         {
             if ((riverVerts[segmentIndex * 4].y + yOffset) < yCoord &&
@@ -626,7 +816,26 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
         {
             Debug.Log("Time to add new level ***************");
-            latestLevel = LevelBuilder.Build(latestLevel.riverEndsLeftOfAirstrip);
+
+            // Todo: implement decision what level type to build next.
+            //       Should be based on player performance, like number of VIP targets hit, score etc.
+            // Todo: copy over info about which HQ city buildings are already destroyed.
+            var newLevelType = LevelType.NORMAL;
+            if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+            {
+                newLevelType = LevelType.ROAD;
+            }
+            else if (latestLevelPrereq.levelType == LevelType.ROAD ||
+                     latestLevelPrereq.levelType == LevelType.CITY)
+            {
+                newLevelType = LevelType.CITY;
+            }
+            ////
+
+            latestLevelPrereq = new LevelPrerequisite {
+                levelType = newLevelType,
+                riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip};
+            latestLevel = LevelBuilder.Build(latestLevelPrereq);
             CreateLevel();
         }
 
