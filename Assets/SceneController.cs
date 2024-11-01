@@ -454,8 +454,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         paraRoad.transform.parent = lvlTransform;
         paraRoadWide.transform.parent = lvlTransform;
         var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, 0f, -0.2f);
-        paraRoad.transform.localPosition = prLocalTransform;
         paraRoadWide.transform.localPosition = prLocalTransform;
+        prLocalTransform.z -= 0.01f;
+        paraRoad.transform.localPosition = prLocalTransform;
 
         // MeshRenderer
         var prMeshFilter = paraRoad.AddComponent<MeshFilter>();
