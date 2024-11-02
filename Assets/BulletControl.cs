@@ -68,6 +68,6 @@ public class BulletControl : MonoBehaviour, IPositionObservable
 
     public float GetHeight()
     {
-        return 0.0f;
+        return Altitudes.planeHeight;
     }
 }

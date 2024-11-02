@@ -259,6 +259,11 @@ Enemy air strips
 Bugs
 Enemy vip planes are yellow??*
 destroyed flak guns keep firing?*
-Everything is tilted slightly to the left??
-  Straight road is not vertical on screen. Columns of objects are not straight.
+Everything is tilted slightly to the left??*
+  Straight road is not vertical on screen. Columns of objects are not straight.*
+  Caused by non-square cells and mixing visual slope with logical river/road slopes.
+    To do (?): support non-square cells
 Tree2 does not collide with anything*
+Props get destroyed and never removed from game observer collection.
+  Implement UnregisterObserver
+Bullet does not stop on flack gun collision. Stops on tanks though.

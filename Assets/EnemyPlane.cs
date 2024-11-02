@@ -8,7 +8,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 {
     public Transform refObject;
     public float speed = 0.1f;
-    public float maxDistance = 50f;
+    public float maxDistance = 15f;
     public float moveIntervalSecMin = 0.1f;
     public float moveIntervalSecMax = 3f;
     public float crashDurationSec = 0.4f;
@@ -24,6 +24,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
     int lastMoveX = 0;
     bool crashed =  false;
     VipBlinker vipBlinker;
+    GameState gameState;
 
     public Vector2 GetPosition()
     {
@@ -65,15 +66,24 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         SetMoveCooldown();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.color = new Color(1f, 1f, 0.1f); // yellow
+        gameState = FindObjectOfType<GameState>();
+        Register();
     }
+
+    void Register()
+    {
+        gameState.EnemyPlaneStatusChanged(this, true);
+    }
+
+    void Deregister()
+    {
+        gameState.EnemyPlaneStatusChanged(this, false);
+    }
+
     void Deactivate()
     {
-        var collider = gameObject.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
-        }
-        gameObject.SetActive(false);
+        Deregister();
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -84,7 +94,6 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             crashCooldownSec -= Time.deltaTime;
             if (crashCooldownSec <= 0f)
             {
-                //Destroy(gameObject);
                 Deactivate();
             }
             return;
@@ -92,7 +101,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
         if (Math.Abs(transform.position.x - refObject.transform.position.x) > maxDistance)
         {
-            //Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
+            Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
             Deactivate();
         }
 
@@ -152,6 +161,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
         crashed = true;
         crashCooldownSec = crashDurationSec;
+        spriteR.color = Color.white;
         spriteR.sprite = crashedSprite;
         var collider = gameObject.GetComponent<Collider2D>();
         if (collider != null)

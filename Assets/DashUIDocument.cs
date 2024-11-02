@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
 
 public class DashUIDocument : MonoBehaviour, IGameStateObserver
 {
@@ -25,6 +27,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     int lastDisplayedFuel;
     bool dirty = true;
     SimpleBlinker dashBlinker;
+    HashSet<EnemyPlane> enemyPlaneSet;
     
 
     // Start is called before the first frame update
@@ -44,6 +47,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
         //rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
 
+        enemyPlaneSet = new();
         GameState gameState = FindObjectOfType<GameState>();
         gameState.RegisterObserver(this);
     }
@@ -77,7 +81,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         
         var bgColor = Color.black;
         var planeLowestPoint = gameStateContents.altitude - Altitudes.planeHeight / 2;
-        if (planeLowestPoint < Altitudes.strafeMaxAltitude)
+        if (planeLowestPoint < (Altitudes.strafeMaxAltitude + Altitudes.planeHeight / 2))
         {
             if (planeLowestPoint < Altitudes.unsafeAltitude && gameStateContents.speed >= (gameState.maxSpeed - 0.001f))
             {
@@ -90,6 +94,15 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             {
                 bgColor = new Color(0.5f, 0.4f, 0f); // brown
             }
+        }
+
+        if (enemyPlaneSet.Any(e => CollisionHelper.IsOverlappingAltitude(
+                gameStateContents.altitude,
+                Altitudes.planeHeight,
+                e.GetAltitude(),
+                e.GetHeight()) && e.IsAlive()))
+        {
+            bgColor = Color.blue;
         }
 
         if (gameStateContents.gameStatus != GameStatus.FLYING || gameStateContents.speed < (gameState.maxSpeed - 0.001f))
@@ -131,10 +144,28 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         dirty = true;
     }
 
-    public void OnGameEvent(GameEvent _)
+    public void OnGameEvent(GameEvent ge)
     {
+        if (ge == GameEvent.START)
+        {
+            enemyPlaneSet = new();
+        }
         dirty = true;
     }
 
     public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
+
+    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
+    {
+        
+        if (active)
+        {
+            enemyPlaneSet.Add(enemyPlane);
+        }
+        else
+        {
+            enemyPlaneSet.Remove(enemyPlane);
+        }
+        Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
+    }
 }

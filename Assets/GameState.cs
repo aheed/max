@@ -42,6 +42,7 @@ public interface IGameStateObserver
     void OnGameStatusChanged(GameStatus gameStatus);
     void OnGameEvent(GameEvent gameEvent);
     void OnBombLanded(Bomb bomb, GameObject hitObject);
+    void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active);
 }
 
 public class GameState : MonoBehaviour
@@ -143,6 +144,14 @@ public class GameState : MonoBehaviour
         foreach (var observer in observers)
         {
             observer.OnBombLanded(bomb, hitObject);
+        }
+    }
+
+    public void EnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
+    {
+        foreach (var observer in observers)
+        {
+            observer.OnEnemyPlaneStatusChanged(enemyPlane, active);
         }
     }
 

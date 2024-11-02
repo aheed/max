@@ -1096,4 +1096,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             Destroy(bomb.gameObject);
         }        
     }
+
+    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

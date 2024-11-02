@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   refObject: {fileID: 0}
   speed: 0.1
-  maxDistance: 50
+  maxDistance: 10
   moveIntervalSecMin: 0.1
   moveIntervalSecMax: 2
   crashDurationSec: 0.6
