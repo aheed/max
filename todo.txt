@@ -266,4 +266,4 @@ Everything is tilted slightly to the left??*
 Tree2 does not collide with anything*
 Props get destroyed and never removed from game observer collection.
   Implement UnregisterObserver
-Bullet does not stop on flack gun collision. Stops on tanks though.
+Bullet does not stop on flack gun collision. Stops on tanks though.*

@@ -40,7 +40,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name.StartsWith("max") || 
-            col.name.StartsWith("flack") ||
+            col.name.StartsWith("flack_expl") ||
             col.name.StartsWith("bomb"))
         {
             return;

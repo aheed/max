@@ -109,6 +109,10 @@ MonoBehaviour:
   gunDamageProbability: 0.5
   damagePeriodSec: 2
   offsetDecreaseRate: 0.3
+  bulletIntervalSeconds: 0.2
+  bombIntervalSeconds: 0.5
+  minSafeTurnAltitude: 0.2
+  collidedMoveInterval: 0.03
   MoveAction:
     m_Name: Move
     m_Type: 0
