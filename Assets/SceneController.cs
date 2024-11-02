@@ -69,7 +69,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Material landingStripMaterial;
     public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     public static readonly int neutralRiverSlopeIndex = 2;
-    public float levelWidth = 8f;
+    float levelWidth;
     public float levelHeight = 80f;
     public float activationDistance = 20f;
     public float deactivationDistance = 20f;
@@ -423,7 +423,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
-            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
+            var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
             
             var ret = new List<Vector2>
             {
@@ -473,7 +473,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var paraRoadVerts = levelContents.roadSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
-            var xOffset = segment.slope * segment.height * cellWidth + segmentHeight * neutralSlope;
+            var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
             
             var ret = new List<Vector2>
             {
@@ -661,6 +661,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     void StartNewGame()
     {
+        levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.gridHeight;
         level = -1;
         var levelLowerLeftCornerX = 0f;
         var refObjStartOffset = 0.8f;

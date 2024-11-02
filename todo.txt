@@ -231,6 +231,7 @@ Boats should collide with other boats? And bridges? Would be fun.
 Sunk animation for boat1.*
 Vip animations for enemy planes, cars*
 Targets (vip bridges and houses)*
+Blue dash color when enemy plane is on sameish altitude
 
 -----
 Generic house:
@@ -260,3 +261,4 @@ Enemy vip planes are yellow??*
 destroyed flak guns keep firing?*
 Everything is tilted slightly to the left??
   Straight road is not vertical on screen. Columns of objects are not straight.
+Tree2 does not collide with anything*
