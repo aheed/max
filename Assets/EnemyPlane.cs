@@ -101,7 +101,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
         if (Math.Abs(transform.position.x - refObject.transform.position.x) > maxDistance)
         {
-            Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
+            //Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
             Deactivate();
         }
 

@@ -166,6 +166,6 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             enemyPlaneSet.Remove(enemyPlane);
         }
-        Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
+        //Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
     }
 }

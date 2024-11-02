@@ -72,6 +72,11 @@ public class GameState : MonoBehaviour
         observers.Add(observer);
     }
 
+    public void UnregisterObserver(IGameStateObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
     public void SetStatus(GameStatus gameStatus)
     {
         if (gameStatus == gameStateContents.gameStatus)

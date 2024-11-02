@@ -34,6 +34,11 @@ public class prop : MonoBehaviour, IGameStateObserver
         }
     }
 
+    void OnDestroy()
+    {
+        gameState?.UnregisterObserver(this);
+    }
+
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
         gameObject.SetActive(!(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK));
