@@ -151,7 +151,7 @@ bug: no shadows shown for enemy planes in DEAD state*
 Enemy aircraft*
 Collided state*
 Format Dashboard
-Set/blink dashboard background color based on state
+Set/blink dashboard background color based on state*
 Tree/house collisions*
 Bomb effect*
   ground*
@@ -172,8 +172,8 @@ Make the plane move relative the camera with diagonal movement*
   (Does not drop altitude if down + left and min offset) Not a bug*
   Y offset shall drift slowly to 0 if not actively controlled by user input*
   Y offset shall also mean corresponding x offset when decreasing*
-Make it possible to destroy enemyplane game objects without causing dangling pointer problems.
-  Unregister prop as listener on destruction?
+Make it possible to destroy enemyplane game objects without causing dangling pointer problems.*
+  Unregister prop as listener on destruction?*
 Alerts
 Bug: IsOverLandingStrip seems to be a half landing strip width off.*
 (Divide colliders into layers in a smart way)
@@ -184,7 +184,7 @@ Boats*
   type2*
 Tank and FlackGun and level  2 cars should share code (inheritance? exactly the same script?).
 Bug: sometimes collision with invisible enemy planes. Inactive ones from previous level?
-Make all ground/water objects uniform height, a configurable safe height.
+Make all ground/water objects uniform height, a configurable safe height.*
 Change airplane colliders from box to polygon
 Correct spelling flack->flak
 Head-on enemy planes
@@ -231,7 +231,7 @@ Boats should collide with other boats? And bridges? Would be fun.
 Sunk animation for boat1.*
 Vip animations for enemy planes, cars*
 Targets (vip bridges and houses)*
-Blue dash color when enemy plane is on sameish altitude
+Blue dash color when enemy plane is on sameish altitude*
 
 -----
 Generic house:
@@ -264,6 +264,7 @@ Everything is tilted slightly to the left??*
   Caused by non-square cells and mixing visual slope with logical river/road slopes.
     To do (?): support non-square cells
 Tree2 does not collide with anything*
-Props get destroyed and never removed from game observer collection.
-  Implement UnregisterObserver
+Props get destroyed and never removed from game observer collection.*
+  Implement UnregisterObserver*
 Bullet does not stop on flack gun collision. Stops on tanks though.*
+Sometimes ground targets (tanks..) can not be hit even though the dash is brown*

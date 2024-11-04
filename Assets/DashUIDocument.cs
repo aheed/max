@@ -81,7 +81,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         
         var bgColor = Color.black;
         var planeLowestPoint = gameStateContents.altitude - Altitudes.planeHeight / 2;
-        if (planeLowestPoint < (Altitudes.strafeMaxAltitude + Altitudes.planeHeight / 2))
+        if (planeLowestPoint < Altitudes.strafeMaxAltitude)
         {
             if (planeLowestPoint < Altitudes.unsafeAltitude && gameStateContents.speed >= (gameState.maxSpeed - 0.001f))
             {
