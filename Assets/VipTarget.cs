@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VipTarget : MonoBehaviour, IPositionObservable
+public class EnemyHQ : MonoBehaviour, IPositionObservable
 {
     public Sprite bombedSprite;
     GameState gameState;
     private SpriteRenderer spriteR;
+    private bool bombed = false;
 
     public void SetBombed()
     {
@@ -21,7 +22,11 @@ public class VipTarget : MonoBehaviour, IPositionObservable
         {
             collider.enabled = false;
         }
+
+        bombed = true;
     }
+
+    public bool IsBombed() => bombed;
 
     // Start is called before the first frame update
     void Start()

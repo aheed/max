@@ -51,7 +51,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
-    public GameObject vipTargetPrefab;
+    public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public refobj refobject;
     public float width = 1;
@@ -116,6 +116,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
+    List<EnemyHQ> enemyHQs;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -370,14 +371,19 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             cityMeshFilter.mesh = cityMesh;
 
             // VIP targets
-            foreach (var targetY in levelContents.city.vipTargets)
+            enemyHQs = levelContents.city.enemyHQs.Select(hq =>
             {
-                var targetGameObject = Instantiate(vipTargetPrefab, lvlTransform);
-                var targetOffsetY = targetY * cellHeight;
+                var hqInstance = Instantiate(enemyHqPrefab, lvlTransform);
+                if (hq.bombed)
+                {
+                    hqInstance.SetBombed();
+                }
+                var targetOffsetY = hq.y * cellHeight;
                 var targetOffsetX = targetOffsetY * neutralSlope;
                 var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
-                targetGameObject.transform.localPosition = targetLocalTransform;
-            }
+                hqInstance.transform.localPosition = targetLocalTransform;
+                return hqInstance;
+            }).ToList();
 
             // Big houses
             var sortedBigHouseList = levelContents.city.bigHouses
@@ -691,7 +697,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-        latestLevelPrereq = new LevelPrerequisite {levelType = LevelType.NORMAL, riverLeftOfAirstrip=true};
+        latestLevelPrereq = new LevelPrerequisite 
+            {
+                levelType = LevelType.NORMAL,
+                riverLeftOfAirstrip=true,
+                enemyHQsBombed = new List<bool> {false, false, false}
+            };
         latestLevel = LevelBuilder.Build(latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
@@ -821,7 +832,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
             // Todo: implement decision what level type to build next.
             //       Should be based on player performance, like number of VIP targets hit, score etc.
-            // Todo: copy over info about which HQ city buildings are already destroyed.
             var newLevelType = LevelType.NORMAL;
             if (latestLevelPrereq.levelType == LevelType.NORMAL) 
             {
@@ -834,9 +844,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
             ////
 
+            var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
+                enemyHQs.Select(hq => hq.IsBombed()) :
+                new List<bool> {false, false, false};
             latestLevelPrereq = new LevelPrerequisite {
                 levelType = newLevelType,
-                riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip};
+                riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+                enemyHQsBombed = enemyHQsBombed
+            };
             latestLevel = LevelBuilder.Build(latestLevelPrereq);
             CreateLevel();
         }

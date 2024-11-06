@@ -55,12 +55,18 @@ public class HouseSpec
     public int depth;
 }
 
+public class EnemyHQSpec
+{
+    public int y;
+    public bool bombed;
+}
+
 public class City 
 {
     public int yStart;
     public int yEnd;
 
-    public IEnumerable<int> vipTargets;
+    public IEnumerable<EnemyHQSpec> enemyHQs;
 
     public IEnumerable<HousePosition> bigHouses;
 }
@@ -69,6 +75,8 @@ public class LevelPrerequisite
 {
     public LevelType levelType;
     public bool riverLeftOfAirstrip;
+
+    public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
 }
 
 public class LevelContents
@@ -522,23 +530,27 @@ public static class LevelBuilder
             var yStart = cityApproachLength;
             var yEnd = LevelContents.gridHeight - cityApproachLength;
 
-            //  VIP targets
-            var vipTargetDistance = (yEnd - yStart) / 4;
-            var vip1 = yStart + vipTargetDistance;
-            var vip2 = vip1 + vipTargetDistance;
-            var vip3 = vip2 + vipTargetDistance;
+            //  VIP targets            
+            var vipTargetDistance = (yEnd - yStart) / (levelPrerequisite.enemyHQsBombed.Count() + 1);
+            var yOffset = yStart + vipTargetDistance;
+            var enemyHQs = levelPrerequisite.enemyHQsBombed.Select(bombed => 
+                {
+                    var ret = new EnemyHQSpec {y = yOffset, bombed = bombed};
+                    yOffset += vipTargetDistance;
+                    return ret;
+                }).ToList();
 
             ret.city = new City {
                 yStart = yStart,
                 yEnd = yEnd,
-                vipTargets = new List<int>{vip1, vip2, vip3}
+                enemyHQs = enemyHQs
             };
 
-            foreach (var y in ret.city.vipTargets)
+            foreach (var hq in ret.city.enemyHQs)
             {
                 for (var xtmp = midX - houseWidth / 2; xtmp < midX + houseWidth / 2; xtmp++)
                 {
-                    for (var ytmp = y-1; ytmp < y + houseHeight; ytmp++)
+                    for (var ytmp = hq.y-1; ytmp < hq.y + houseHeight; ytmp++)
                     {
                         ret.cells[xtmp, ytmp] = CellContent.HOUSE;
                     }
