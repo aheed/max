@@ -232,6 +232,10 @@ Sunk animation for boat1.*
 Vip animations for enemy planes, cars*
 Targets (vip bridges and houses)*
 Blue dash color when enemy plane is on sameish altitude*
+Go to state FINISHED when landing after all enemy HQs bombed*
+Blink green dash before landing to finish game
+  Fireworks or some visual clue the game is completed successfully
+
 
 -----
 Generic house:

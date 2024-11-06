@@ -697,6 +697,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
+        enemyHQs = null;
         latestLevelPrereq = new LevelPrerequisite 
             {
                 levelType = LevelType.NORMAL,
@@ -964,7 +965,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                gameState.SetStatus(GameStatus.REFUELLING);
+                gameState.SetStatus(enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed()) ?
+                    GameStatus.FINISHED : GameStatus.REFUELLING);
             }
             gameState.SetSpeed(newSpeed);
         }
