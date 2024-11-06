@@ -530,13 +530,12 @@ public static class LevelBuilder
             var yStart = cityApproachLength;
             var yEnd = LevelContents.gridHeight - cityApproachLength;
 
-            //  VIP targets            
-            var vipTargetDistance = (yEnd - yStart) / (levelPrerequisite.enemyHQsBombed.Count() + 1);
-            var yOffset = yStart + vipTargetDistance;
+            var enemyHqDistance = (yEnd - yStart) / (levelPrerequisite.enemyHQsBombed.Count() + 1);
+            var yOffset = yStart + enemyHqDistance;
             var enemyHQs = levelPrerequisite.enemyHQsBombed.Select(bombed => 
                 {
                     var ret = new EnemyHQSpec {y = yOffset, bombed = bombed};
-                    yOffset += vipTargetDistance;
+                    yOffset += enemyHqDistance;
                     return ret;
                 }).ToList();
 

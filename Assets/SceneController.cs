@@ -370,7 +370,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var cityMesh = CreateQuadMesh(cityVerts);
             cityMeshFilter.mesh = cityMesh;
 
-            // VIP targets
             enemyHQs = levelContents.city.enemyHQs.Select(hq =>
             {
                 var hqInstance = Instantiate(enemyHqPrefab, lvlTransform);

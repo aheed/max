@@ -52,7 +52,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable
 
         SetBombed();
 
-        // Todo: report destroyed VIP target
+        // Todo: report destroyed enemy HQ
     }
 
     public Vector2 GetPosition() => transform.position;
