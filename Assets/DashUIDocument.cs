@@ -19,6 +19,8 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     Label alertLabel;
     Label rankLabel;
     VisualElement dashBase;
+    VisualElement topRowInner;
+    VisualElement rankOuter;
     
     public int maxSpeedDisplayed = 130;
     int lastDisplayedSpeed;
@@ -35,6 +37,8 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     {
         uiDocument = GetComponent<UIDocument>();
         dashBase = uiDocument.rootVisualElement.Q<VisualElement>("DashBase");
+        topRowInner = uiDocument.rootVisualElement.Q<VisualElement>("TopRowInner");
+        rankOuter = uiDocument.rootVisualElement.Q<VisualElement>("RankOuter");
         altLabel = uiDocument.rootVisualElement.Q<Label>("Alt");
         fuelLabel = uiDocument.rootVisualElement.Q<Label>("Fuel");
         FLabel = uiDocument.rootVisualElement.Q<Label>("F");
@@ -45,7 +49,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         bombsLabel = uiDocument.rootVisualElement.Q<Label>("Bombs");
         scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
         alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
-        //rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
+        rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
 
         enemyPlaneSet = new();
         GameState gameState = FindObjectOfType<GameState>();
@@ -135,6 +139,22 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         BLabel.text = gameState.GotDamage(DamageIndex.B) ? "B" : "";
         MLabel.text = gameState.GotDamage(DamageIndex.M) ? "M" : "";
         GLabel.text = gameState.GotDamage(DamageIndex.G) ? "G" : "";
+
+        if (gameStateContents.gameStatus == GameStatus.DEAD ||
+            gameStateContents.gameStatus == GameStatus.FINISHED)
+        {
+            topRowInner.style.display = DisplayStyle.None;
+            rankOuter.style.display = DisplayStyle.Flex;
+            var rank = gameStateContents.gameStatus == GameStatus.FINISHED ?
+                "Blue Max class 1" :
+                "Kamikaze trainee class 4";
+            rankLabel.text = $"Rank: {rank}";
+        }
+        else
+        {
+            topRowInner.style.display = DisplayStyle.Flex;
+            rankOuter.style.display = DisplayStyle.None;
+        }
 
         dirty = false;
     }

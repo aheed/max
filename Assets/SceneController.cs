@@ -932,7 +932,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 }
                 else
                 {
-                    gameState.SetAlert("-");
+                    gameState.SetAlert("");
                 }
                 ////
 
