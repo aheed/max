@@ -274,6 +274,9 @@ Props get destroyed and never removed from game observer collection.*
 Bullet does not stop on flack gun collision. Stops on tanks though.*
 Sometimes ground targets (tanks..) can not be hit even though the dash is brown*
 Shadow of oncoming enemy plane is backward. Will anyone notice?
+Boat2 can go over road at right side of a bridge.
+  Add extra bridge child/collider specifically to solve this?
+
 
 ------
 After completing the game (bomb all 3 enemy HQs and land):

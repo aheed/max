@@ -41,16 +41,24 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
         var parent = gameObject.transform.parent;
         Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
         gameObject.SetActive(false);
-
-        // Todo: report destroyed boat for scoring
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log($"boat2 collided with {col.name}");
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             gameState.BombLanded(bomb, null);
+            Sink();
+            // Todo: report destroyed boat for scoring
+            return;
+        }
+
+        if ((col.name.StartsWith("bridge") && !col.name.StartsWith("bridge_mid")) ||
+            col.name.StartsWith("boat"))
+        {
+            Debug.Log($"boat2 collision !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {col.name}");
             Sink();
             return;
         }
@@ -59,6 +67,7 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
         if (collObjName.StartsWith("bullet"))
         {
             Sink();
+            // Todo: report destroyed boat for scoring
         }
     }
 
