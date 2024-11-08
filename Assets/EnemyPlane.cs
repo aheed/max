@@ -7,7 +7,8 @@ using UnityEngine;
 public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 {
     public Transform refObject;    
-    public float maxDistance = 15f;
+    public float maxDistance = 8f;
+    public float maxDistanceBehind = 1f;
     public float moveIntervalSecMin = 0.1f;
     public float moveIntervalSecMax = 3f;
     public float crashDurationSec = 0.4f;
@@ -116,9 +117,15 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             return;
         }
 
-        if (Math.Abs(transform.position.x - refObject.transform.position.x) > maxDistance)
+        if (speed > 0 && transform.position.y - refObject.transform.position.y > maxDistance)
         {
-            //Debug.Log($"Enemy plane too far away ({transform.position.x} vs {refObject.transform.position.x})");
+            Debug.Log($"Enemy plane too far in front ({transform.position.y} vs {refObject.transform.position.y})");
+            Deactivate();
+        }
+
+        if (speed < 0 && refObject.transform.position.y - transform.position.y > maxDistanceBehind)
+        {
+            Debug.Log($"Enemy plane too far behind ({transform.position.y} vs {refObject.transform.position.y})");
             Deactivate();
         }
 

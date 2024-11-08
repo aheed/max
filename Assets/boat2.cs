@@ -45,7 +45,6 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log($"boat2 collided with {col.name}");
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
@@ -56,9 +55,9 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
         }
 
         if ((col.name.StartsWith("bridge") && !col.name.StartsWith("bridge_mid")) ||
-            col.name.StartsWith("boat"))
+            col.name.StartsWith("boat") ||
+            col.name.StartsWith("road_end"))
         {
-            Debug.Log($"boat2 collision !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {col.name}");
             Sink();
             return;
         }
