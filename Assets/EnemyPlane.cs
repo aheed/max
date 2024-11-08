@@ -6,25 +6,42 @@ using UnityEngine;
 
 public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 {
-    public Transform refObject;
-    public float speed = 0.1f;
+    public Transform refObject;    
     public float maxDistance = 15f;
     public float moveIntervalSecMin = 0.1f;
     public float moveIntervalSecMax = 3f;
     public float crashDurationSec = 0.4f;
+    public float oncomingPropOffsetX = -0.1f;
+    public float oncomingPropOffsetY = -0.1f;
     public Sprite leftSprite;
     public Sprite rightSprite;
     public Sprite straightSprite;
     public Sprite crashedSprite;
+    public Sprite oncomingSprite;
     float lastAltitude;
     float moveCooldownSec;
     float crashCooldownSec;
+    float speed = 0.1f;
     private SpriteRenderer spriteR;
     int moveX = 0;
     int lastMoveX = 0;
     bool crashed =  false;
     VipBlinker vipBlinker;
     GameState gameState;
+
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed;
+        if (speed < 0)
+        {
+            spriteR = gameObject.GetComponent<SpriteRenderer>();
+            spriteR.sprite = oncomingSprite;
+
+            // assume prop is the only child
+            var propTransform = transform.GetChild(0);
+            propTransform.localPosition = new Vector3(oncomingPropOffsetX, oncomingPropOffsetY, 0f);
+        }
+    }
 
     public Vector2 GetPosition()
     {
@@ -108,7 +125,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         moveCooldownSec -= Time.deltaTime;
         if (moveCooldownSec <= 0)
         {
-            moveX = UnityEngine.Random.Range(-1, 2);
+            moveX = speed < 0 ? 0 : UnityEngine.Random.Range(-1, 2);
             SetMoveCooldown();
         }
 

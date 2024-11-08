@@ -83,11 +83,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float repairTimeSec = 0.8f;
     public float enemyPlaneSpeedMax = 2.5f;
     public float enemyPlaneSpeedMin = 1.5f;
+    public float enemyPlaneOncomingSpeedMin = -1.5f;
+    public float enemyPlaneOncomingSpeedMax = -0.5f;
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
     public float carOffsetX = -5f;
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
+    public float enemyPlaneOncomingProbability = 0.3f;
     public float riverBankWidth = 0.1f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
@@ -806,15 +809,26 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         var startPos = refobject.transform.position;
         //startPos = transform.position;
-        startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition - 2 * gameState.maxAltitude, gameState.maxHorizPosition - 2 * gameState.maxAltitude);
-        startPos.y += -gameState.maxAltitude;
+        bool oncoming = UnityEngine.Random.Range(0f, 1.0f) < enemyPlaneOncomingProbability;
+        if (oncoming)
+        {
+            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition, gameState.maxHorizPosition) + 2.0f * gameState.maxAltitude;
+            startPos.y += 2.0f * gameState.maxAltitude;
+        }
+        else
+        {
+            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition - 2 * gameState.maxAltitude, gameState.maxHorizPosition - 2 * gameState.maxAltitude);
+            startPos.y += -gameState.maxAltitude;
+        }
+
+        
         startPos.z = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
         EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
-        enemyPlane.speed = 
-            UnityEngine.Random.Range(
-                enemyPlaneSpeedMin * gameState.maxSpeed,
-                enemyPlaneSpeedMax * gameState.maxSpeed);
+        var minSpeed = oncoming ? enemyPlaneOncomingSpeedMin : enemyPlaneSpeedMin * gameState.maxSpeed;
+        var maxSpeed = oncoming ? enemyPlaneOncomingSpeedMax : enemyPlaneSpeedMax * gameState.maxSpeed;
+
+        enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
         {
             enemyPlane.SetVip();

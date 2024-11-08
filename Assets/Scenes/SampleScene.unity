@@ -468,11 +468,14 @@ MonoBehaviour:
   repairTimeSec: 0.8
   enemyPlaneSpeedMax: 2.5
   enemyPlaneSpeedMin: 1.5
+  enemyPlaneOncomingSpeedMin: -2
+  enemyPlaneOncomingSpeedMax: -0.5
   enemyPlaneIntervalSecMax: 15
   enemyPlaneIntervalSecMin: 5
   carOffsetX: -5
   vipProbability: 0.5
   carProbability: 0.5
+  enemyPlaneOncomingProbability: 0.3
   riverBankWidth: 0.05
   parllelRoadSideWidth: 0.05
   parallelRoadWidth: 0.9
