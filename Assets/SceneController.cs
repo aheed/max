@@ -320,16 +320,18 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
             lsMeshRenderer.material = landingStripMaterial;
 
-            var lsVerts = new List<Vector2>
-            {
-                new Vector2(lsllcX, lsllcY),
-                new Vector2(lslrcX, lslrcY),
-                new Vector2(lsulcX, lsulcY),
-                new Vector2(lsurcX, lsurcY)
-            };
+            var llc = new Vector2(lsllcX, lsllcY);
+            var lrc = new Vector2(lslrcX, lslrcY);
+            var ulc = new Vector2(lsulcX, lsulcY);
+            var urc = new Vector2(lsurcX, lsurcY);
+            var lsVerts = new List<Vector2> {llc, lrc, ulc, urc};
 
             var lsMesh = CreateQuadMesh(lsVerts);
             lsMeshFilter.mesh = lsMesh;
+
+            PolygonCollider2D polygonCollider = lsGameObject.AddComponent<PolygonCollider2D>();
+            polygonCollider.isTrigger = true;
+            polygonCollider.points = new Vector2[] {llc, lrc, urc, ulc};
         }
 
         if (levelContents.city != null)

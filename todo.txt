@@ -254,7 +254,7 @@ River should have a black line at its left bank.*
 Enemy air strips
   reuse code for drawing friendly landing strip?
   Add parked plane sprites on top.
-  Set polygon collider (4 pts) in code.
+  Set polygon collider (4 pts) in code.*
   bombable hangar (to be used for friendly hangars too? Negative score? :))
   Fixed x offset from parallel road*
   Loop to populate before houses etc.*
@@ -272,3 +272,19 @@ Props get destroyed and never removed from game observer collection.*
   Implement UnregisterObserver*
 Bullet does not stop on flack gun collision. Stops on tanks though.*
 Sometimes ground targets (tanks..) can not be hit even though the dash is brown*
+
+------
+After completing the game (bomb all 3 enemy HQs and land):
+  Fly into a 3D level
+  Whoa! What's happening? Where am I?
+  You appear to have entered the 21st century.
+  Oh. Do people still play video games?
+  They sure do.
+  The games are better?
+  Well... more advanced.
+  Is it still OK to simulate warfare for entertainment?
+  Sure. As long as there is no nudity or non-inclusive language.
+  Eh...what??
+  Just go bomb the **** out of some enemies, Max.
+  Aye sir!
+
