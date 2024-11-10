@@ -285,6 +285,7 @@ Build levels asynchronously.
         Requires Unity 2023.2 or newer?? I'm using 2022.3.4211
         Could use the vanilla C# System.Threading.Tasks.Task?
           Should be ok unless you create a huge amount of tasks.
+          Does not seem to work on webGL builds. No warnings, the task just never completes (!).
     coroutines?
       https://blog.logrocket.com/performance-unity-async-await-tasks-coroutines-c-job-system-burst-compiler/#unity-coroutines
         Will execute on main thread, no parallelism

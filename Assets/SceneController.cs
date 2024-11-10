@@ -95,6 +95,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float riverBankWidth = 0.1f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
+    public bool asyncLevelBuild = false;
 
     //// Game status
     int level = -1;
@@ -705,6 +706,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         activeObjects.Clear();
         roadLowerEdgesY = new();
         enemyHQs = null;
+        newLevelTask = null;
         latestLevelPrereq = new LevelPrerequisite 
             {
                 levelType = LevelType.NORMAL,
@@ -839,6 +841,32 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         AddPlaneShadow(enemyPlane.transform);
     }
 
+    LevelPrerequisite GetNewLevelPrereq()
+    {
+        // Todo: implement decision what level type to build next.
+        //       Should be based on player performance, like number of VIP targets hit, score etc.
+        var newLevelType = LevelType.NORMAL;
+        if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+        {
+            newLevelType = LevelType.ROAD;
+        }
+        else if (latestLevelPrereq.levelType == LevelType.ROAD ||
+                latestLevelPrereq.levelType == LevelType.CITY)
+        {
+            newLevelType = LevelType.CITY;
+        }
+        ////
+
+        var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
+            enemyHQs.Select(hq => hq.IsBombed()) :
+            new List<bool> {false, false, false};
+        return new LevelPrerequisite {
+            levelType = newLevelType,
+            riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+            enemyHQsBombed = enemyHQsBombed
+        };
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -847,45 +875,32 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
         {
-            if (newLevelTask == null)
+            if (!asyncLevelBuild)
             {
-                Debug.Log("Time to add new level ***************");
-
-                // Todo: implement decision what level type to build next.
-                //       Should be based on player performance, like number of VIP targets hit, score etc.
-                var newLevelType = LevelType.NORMAL;
-                if (latestLevelPrereq.levelType == LevelType.NORMAL) 
-                {
-                    newLevelType = LevelType.ROAD;
-                }
-                else if (latestLevelPrereq.levelType == LevelType.ROAD ||
-                        latestLevelPrereq.levelType == LevelType.CITY)
-                {
-                    newLevelType = LevelType.CITY;
-                }
-                ////
-
-                var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
-                    enemyHQs.Select(hq => hq.IsBombed()) :
-                    new List<bool> {false, false, false};
-                latestLevelPrereq = new LevelPrerequisite {
-                    levelType = newLevelType,
-                    riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
-                    enemyHQsBombed = enemyHQsBombed
-                };
-                
-                newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
-                framesToBuildLevelDbg = 0;
+                Debug.Log("Time to build new level (sync) ***************");
+                latestLevelPrereq = GetNewLevelPrereq();
+                latestLevel = new LevelBuilder().Build(latestLevelPrereq);
+                CreateLevel();
             }
             else 
             {
-                ++framesToBuildLevelDbg;
-                if (newLevelTask.IsCompleted)
+                if (newLevelTask == null)
                 {
-                    Debug.Log($"New level built in {framesToBuildLevelDbg} frames ***************");
-                    latestLevel = newLevelTask.Result;
-                    CreateLevel();
-                    newLevelTask = null;
+                    Debug.Log("Time to build new level asynchronously ***************");
+                    latestLevelPrereq = GetNewLevelPrereq();
+                    newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
+                    framesToBuildLevelDbg = 0;
+                }
+                else 
+                {
+                    ++framesToBuildLevelDbg;
+                    if (newLevelTask.IsCompleted)
+                    {
+                        Debug.Log($"New level built in {framesToBuildLevelDbg} frames ***************");
+                        latestLevel = newLevelTask.Result;
+                        CreateLevel();
+                        newLevelTask = null;
+                    }
                 }
             }
         }
