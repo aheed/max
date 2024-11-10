@@ -276,6 +276,21 @@ Sometimes ground targets (tanks..) can not be hit even though the dash is brown*
 Shadow of oncoming enemy plane is backward. Will anyone notice?
 Boat2 can go over road at right side of a bridge.*
   Add extra bridge child/collider specifically to solve this?*
+Build levels asynchronously.
+  Unity jobs system suitable?
+    https://docs.unity3d.com/Manual/job-system-creating-jobs.html
+      "you should design your jobs to complete in under a frame"
+    async is better? Probably better for tasks, like building a level, that may take multiple frames to complete.
+      https://docs.unity3d.com/Manual/async-await-support.html
+        Requires Unity 2023.2 or newer?? I'm using 2022.3.4211
+        Could use the vanilla C# System.Threading.Tasks.Task?
+          Should be ok unless you create a huge amount of tasks.
+    coroutines?
+      https://blog.logrocket.com/performance-unity-async-await-tasks-coroutines-c-job-system-burst-compiler/#unity-coroutines
+        Will execute on main thread, no parallelism
+  Done for LevelBuilder.Build (BuildAsync introduced). No unity code in LevelBuilder.
+    Maybe not so easy to populate the scene in other thread than main thread.
+
 
 
 ------

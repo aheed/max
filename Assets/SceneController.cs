@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -104,6 +105,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     GameObject[] levels;
     LevelPrerequisite latestLevelPrereq;
     LevelContents latestLevel;
+    Task<LevelContents> newLevelTask;
+    int framesToBuildLevelDbg;
     MaxControl maxPlane;
     float landingStripBottomY;
     float landingStripTopY;
@@ -708,7 +711,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
-        latestLevel = LevelBuilder.Build(latestLevelPrereq);
+        latestLevel = new LevelBuilder().Build(latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
         gameState = GetGameState();
@@ -844,32 +847,47 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         if (refobject.transform.position.y > (lastLevelLowerEdgeY + levelHeight * prepTimeForNextLevelQuotient))
         {
-            Debug.Log("Time to add new level ***************");
-
-            // Todo: implement decision what level type to build next.
-            //       Should be based on player performance, like number of VIP targets hit, score etc.
-            var newLevelType = LevelType.NORMAL;
-            if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+            if (newLevelTask == null)
             {
-                newLevelType = LevelType.ROAD;
-            }
-            else if (latestLevelPrereq.levelType == LevelType.ROAD ||
-                     latestLevelPrereq.levelType == LevelType.CITY)
-            {
-                newLevelType = LevelType.CITY;
-            }
-            ////
+                Debug.Log("Time to add new level ***************");
 
-            var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
-                enemyHQs.Select(hq => hq.IsBombed()) :
-                new List<bool> {false, false, false};
-            latestLevelPrereq = new LevelPrerequisite {
-                levelType = newLevelType,
-                riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
-                enemyHQsBombed = enemyHQsBombed
-            };
-            latestLevel = LevelBuilder.Build(latestLevelPrereq);
-            CreateLevel();
+                // Todo: implement decision what level type to build next.
+                //       Should be based on player performance, like number of VIP targets hit, score etc.
+                var newLevelType = LevelType.NORMAL;
+                if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+                {
+                    newLevelType = LevelType.ROAD;
+                }
+                else if (latestLevelPrereq.levelType == LevelType.ROAD ||
+                        latestLevelPrereq.levelType == LevelType.CITY)
+                {
+                    newLevelType = LevelType.CITY;
+                }
+                ////
+
+                var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
+                    enemyHQs.Select(hq => hq.IsBombed()) :
+                    new List<bool> {false, false, false};
+                latestLevelPrereq = new LevelPrerequisite {
+                    levelType = newLevelType,
+                    riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+                    enemyHQsBombed = enemyHQsBombed
+                };
+                
+                newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
+                framesToBuildLevelDbg = 0;
+            }
+            else 
+            {
+                ++framesToBuildLevelDbg;
+                if (newLevelTask.IsCompleted)
+                {
+                    Debug.Log($"New level built in {framesToBuildLevelDbg} frames ***************");
+                    latestLevel = newLevelTask.Result;
+                    CreateLevel();
+                    newLevelTask = null;
+                }
+            }
         }
 
         while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().yCoord)

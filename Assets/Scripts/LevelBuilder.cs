@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System.Threading.Tasks;
 
 public enum CellContent
 {
@@ -96,7 +96,7 @@ public class LevelContents
     public City city;    
 }
 
-public static class LevelBuilder 
+public class LevelBuilder 
 {    
     public static readonly int landingStripHeight = 30;
     public static readonly int landingStripWidth = 6;
@@ -143,11 +143,22 @@ public static class LevelBuilder
     public static int enemyAirstripXDistance = 8;
     public static float enemyAirstripProbability = 0.3f;
     public static int bigHouseRoadDistance = 10;
+    private static int maxRandom = 65535;
+    private System.Random _rnd = new Random();
 
+    public bool TrueByProbability(float probability)
+    {
+        return _rnd.Next(0, maxRandom) < (int)(probability * maxRandom);
+    }
+
+    public async Task<LevelContents> BuildAsync(LevelPrerequisite levelPrerequisite)
+    {
+        return await Task.Run(() => Build(levelPrerequisite));
+    }
 
     // Builds a 2D level including landing strip at beginning.
     // Never mind viewing perspective or screen position.
-    public static LevelContents Build(LevelPrerequisite levelPrerequisite)
+    public LevelContents Build(LevelPrerequisite levelPrerequisite)
     {
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
@@ -192,7 +203,7 @@ public static class LevelBuilder
             List<RiverSegment> riverSegments = new List<RiverSegment>();
             for (var y = 0; y < LevelContents.gridHeight;)
             {
-                var segmentHeight = UnityEngine.Random.Range(minRiverSegmentHeight, maxRiverSegmentHeight);
+                var segmentHeight = _rnd.Next(minRiverSegmentHeight, maxRiverSegmentHeight);
                 var maxSegmentHeight = LevelContents.gridHeight - y;
                 if (segmentHeight > maxSegmentHeight)
                 {
@@ -272,7 +283,7 @@ public static class LevelBuilder
                 }
                 //minSlopeIndex += slopeIndexOffset;
                 //maxSlopeIndexExclusive += slopeIndexOffset;
-                var slopeIndex = UnityEngine.Random.Range(minSlopeIndex, maxSlopeIndexExclusive);
+                var slopeIndex = _rnd.Next(minSlopeIndex, maxSlopeIndexExclusive);
                 var slope = riverSlopes[slopeIndex];
                 riverSegments.Add(new RiverSegment {height = segmentHeight, slope = slope});
 
@@ -280,8 +291,7 @@ public static class LevelBuilder
 
                 //Debug.Log($"riverLowerLeftCornerX riverWidth slopeX y segmentHeight: {riverLowerLeftCornerX} {riverWidth} {slopeX} {y} {segmentHeight} {approaching} {takingOff} {minSlopeIndex} {maxSlopeIndexExclusive} {riverLeftOfAirstrip}");
 
-                var randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < boat2Probability && midRiverX >= 0 && midRiverX < LevelContents.gridWidth)
+                if (TrueByProbability(boat2Probability) && midRiverX >= 0 && midRiverX < LevelContents.gridWidth)
                 {
                     ret.cells[midRiverX, y] = CellContent.BOAT2;
                 }
@@ -319,7 +329,7 @@ public static class LevelBuilder
             List<int> roads = new List<int>();
             for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - roadHeight - cooldown); y++)
             {
-                if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < roadProbability)
+                if (cooldown <= 0 && TrueByProbability(roadProbability))
                 {
                     roads.Add(y);
                     for (var x = 0; x < LevelContents.gridWidth; x++)
@@ -393,8 +403,7 @@ public static class LevelBuilder
                 if (levelType == LevelType.ROAD )
                 {
                     // Mid-road stationary vehicles
-                    var randVal = UnityEngine.Random.Range(0f, 1.0f);
-                    if (randVal < vehicle1Probability && !approaching && !takingOff)
+                    if (TrueByProbability(vehicle1Probability) && !approaching && !takingOff)
                     {
                         ret.cells[midRoadX, y] = CellContent.VEHICLE1;
                     }
@@ -432,7 +441,7 @@ public static class LevelBuilder
                 List<int> strips = new List<int>();
                 for (var y = enemyAirstripMinDistance; y < (LevelContents.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
                 {
-                    if (cooldown <= 0 && UnityEngine.Random.Range(0f, 1.0f) < enemyAirstripProbability)
+                    if (cooldown <= 0 && TrueByProbability(enemyAirstripProbability))
                     {
                         strips.Add(y);
                         var stripStartX = midX - enemyAirstripXDistance;
@@ -461,10 +470,8 @@ public static class LevelBuilder
             {
                 for (var x = 0; x < LevelContents.gridWidth; x++)
                 {
-                    var randVal = UnityEngine.Random.Range(0f, 1.0f);
-
                     // Houses
-                    if (randVal < houseProbability && y > (landingStripHeight * 2))
+                    if (TrueByProbability(houseProbability) && y > (landingStripHeight * 2))
                     {
                         //Debug.Log($"House please!");
                         var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
@@ -488,9 +495,9 @@ public static class LevelBuilder
 
                             if (levelType == LevelType.ROAD && x < midX)
                             {
-                                width = UnityEngine.Random.Range(minHouseWidth, maxHouseWidth+1);
-                                height = UnityEngine.Random.Range(minHouseHeight, maxHouseHeight+1);
-                                depth = UnityEngine.Random.Range(minHouseDepth, maxHouseDepth+1);
+                                width = _rnd.Next(minHouseWidth, maxHouseWidth+1);
+                                height = _rnd.Next(minHouseHeight, maxHouseHeight+1);
+                                depth = _rnd.Next(minHouseDepth, maxHouseDepth+1);
                             }
 
                             houses.Add(new HouseSpec { 
@@ -594,36 +601,31 @@ public static class LevelBuilder
             for (var x = 0; x < LevelContents.gridWidth; x++)
             {   
                 // Tanks
-                var randVal = UnityEngine.Random.Range(0f, 1.0f);
                 var localTankProbability = ret.cells[x, y] == CellContent.HOUSE_FRONT ? tankProbabilityAtHouse : tankProbability;
-                if (randVal < localTankProbability && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
+                if (TrueByProbability(localTankProbability) && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
                 {
                     ret.cells[x, y] = CellContent.TANK;
                 }
 
                 // Flack guns
-                randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < flackGunProbability && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
+                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
                 {
                     ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
 
                 // Trees
-                randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
+                if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE1;
                 }
                 
-                randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < treeProbability && ret.cells[x, y] == CellContent.GRASS)
+                if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE2;
                 }
 
                 // Boats
-                randVal = UnityEngine.Random.Range(0f, 1.0f);
-                if (randVal < boat1Probability && ret.cells[x, y] == CellContent.WATER)
+                if (TrueByProbability(boat1Probability) && ret.cells[x, y] == CellContent.WATER)
                 {
                     ret.cells[x, y] = CellContent.BOAT1;
                 }
