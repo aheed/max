@@ -1145,12 +1145,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             Vector3 craterPosition = bomb.GetPosition();
             craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
+            if (prefab != bombSplashPrefab)
+            {
+                gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            }
         }
         else
         {
             if (!IsOverRiver(hitObject.transform.position) || IsOverRoad(hitObject.transform.position))
             {
                 Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
+                gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             }
             Destroy(hitObject);
         }
@@ -1159,7 +1164,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if (bomb != null)
         {
             Destroy(bomb.gameObject);
-        }        
+        }
     }
 
     public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}

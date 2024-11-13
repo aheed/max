@@ -15,6 +15,7 @@ public enum GameEvent
     ALERT,
     BOMBS_CHANGED,
     SCORE_CHANGED,
+    SMALL_DETONATION,
 }
 
 public enum DamageIndex

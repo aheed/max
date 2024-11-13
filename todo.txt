@@ -236,7 +236,7 @@ Go to state FINISHED when landing after all enemy HQs bombed*
 Blink green dash before landing to finish game
   Fireworks or some visual clue the game is completed successfully
 Shadows should have animated prop (?)
-
+Damage letters should be blinking yellow
 
 -----
 Generic house:
@@ -308,4 +308,30 @@ After completing the game (bomb all 3 enemy HQs and land):
   Eh...what??
   Just go bomb the **** out of some enemies, Max.
   Aye sir!
+  ...
+  This doesn't make sense!
+  So? You are talking to me and your Sopwith Camel should not even have a radio. How does that make sense?
 
+
+
+-----
+https://c64.krissz.hu/blue-max/play-online/
+Explosions on land, no target hit: single cycle of color shifts
+Explosions on land, target hit: double cycle of color shifts
+Some boat2 go up river
+
+Post processing:
+  Film grain and saturatio=0 => old film like effect. 1920s like.
+    How to get fibers, vertical lines, fingerprints, black or white spots, etc to make it look more like an old film?
+    Round screen corners, black outside
+      Vignette effect?
+    Some chromatic aberration (temporarily sometimes)
+    Probably bloom as well
+    Blinking effect? Every 3rd frame extra bright?
+  1980s effect:
+    zoom out to expose the whole TV set. Effects to tone down saturation, make it grainy and cushion shaped.
+  https://www.youtube.com/watch?v=xxM6AUHqTMA
+    
+  https://docs.unity3d.com/Packages/com.unity.postprocessing@3.0/manual/Manipulating-the-Stack.html
+
+    
