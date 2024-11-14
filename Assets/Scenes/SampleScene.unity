@@ -610,6 +610,7 @@ MonoBehaviour:
   maxSpeedDisplayed: 130
   maxAltitudeDisplayed: 99
   maxFuelDisplayed: 200
+  avgAlpha: 0.01
 --- !u!1 &2110362360
 GameObject:
   m_ObjectHideFlags: 0

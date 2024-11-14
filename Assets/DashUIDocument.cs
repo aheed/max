@@ -18,6 +18,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     Label scoreLabel;
     Label alertLabel;
     Label rankLabel;
+    Label fpsLabel;
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
@@ -30,6 +31,9 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     bool dirty = true;
     SimpleBlinker dashBlinker;
     HashSet<EnemyPlane> enemyPlaneSet;
+    public float avgAlpha = 0.01f;
+    float fpsAvg;
+    int displayCnt = 0;
     
 
     // Start is called before the first frame update
@@ -50,6 +54,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
         alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
+        fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
 
         enemyPlaneSet = new();
         GameState gameState = FindObjectOfType<GameState>();
@@ -59,12 +64,20 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     // Update is called once per frame
     void Update()
     {
-        if (dirty)
-        {
-            UpdateContents();
-        }
-
+        var fps = 1f / Time.deltaTime;
+        fpsAvg = fpsAvg * (1-avgAlpha) + fps * avgAlpha;
+        
         dashBlinker?.Update(Time.deltaTime);
+
+        if (++displayCnt > 10)
+        {
+            displayCnt = 0;
+            fpsLabel.text = $"{fpsAvg:000}";
+            if (dirty)
+            {
+                UpdateContents();
+            }
+        }
     }
 
     void UpdateContents()
