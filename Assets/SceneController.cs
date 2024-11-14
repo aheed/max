@@ -72,8 +72,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public static readonly int neutralRiverSlopeIndex = 2;
     float levelWidth;
     public float levelHeight = 80f;
-    public float activationDistance = 20f;
-    public float deactivationDistance = 20f;
+    public float activationDistance = 8f;
+    public float deactivationDistance = 8f;
     public float minRestartWaitSeconds = 1.0f;
     public float fuelRateLow = 0.6f;
     public float fuelRateHigh = 0.9f;
