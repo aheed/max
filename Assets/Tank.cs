@@ -5,22 +5,12 @@ using UnityEngine;
 public class Tank : MonoBehaviour, IPositionObservable
 {
     public Sprite shotSprite;
-    GameState gameState;
     private SpriteRenderer spriteR;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (gameState == null)
-        {
-            gameState = FindObjectOfType<GameState>();
-        }
     }
 
     void HandleCollision(Collider2D col)
@@ -44,7 +34,7 @@ public class Tank : MonoBehaviour, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            gameState.BombLanded(bomb, gameObject);
+            FindObjectOfType<GameState>().BombLanded(bomb, gameObject);
             return;
         }
 

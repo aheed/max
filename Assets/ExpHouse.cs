@@ -133,12 +133,6 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnTriggerEnter2D(Collider2D col)
     {
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);

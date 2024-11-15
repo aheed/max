@@ -522,8 +522,8 @@ MonoBehaviour:
   groundMaterial: {fileID: 2100000, guid: 8cb2155c8f83a733884b98d9308266d1, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
   levelHeight: 80
-  activationDistance: 20
-  deactivationDistance: 20
+  activationDistance: 8
+  deactivationDistance: 6
   minRestartWaitSeconds: 1
   fuelRateLow: 0.6
   fuelRateHigh: 1.2
@@ -538,7 +538,7 @@ MonoBehaviour:
   enemyPlaneOncomingSpeedMax: -0.5
   enemyPlaneIntervalSecMax: 15
   enemyPlaneIntervalSecMin: 5
-  carOffsetX: -5
+  carOffsetX: 5
   vipProbability: 0.5
   carProbability: 0.5
   enemyPlaneOncomingProbability: 0.3

@@ -336,9 +336,10 @@ Post processing:
   https://docs.unity3d.com/Packages/com.unity.postprocessing@3.0/manual/Manipulating-the-Stack.html
 
 Profiling:
-  The Update() functions take a lot of time, even the empty ones!
-  Colliders inactive when pending activation?
-  Activate objects later, inactivate earlier
+  The Update() functions take a lot of time, even the empty ones!*
+  Colliders inactive when pending activation?*
+    yes
+  Activate objects later, inactivate earlier*
   Reduce level width
   
 
