@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class MaxCamera : MonoBehaviour
 {
-
-   public Transform refObject;
    public float yOffset = 1.0f;
 
-   void Start() {}
-
-   void Update()
+   void Start()
    {
-      transform.position = new Vector3(refObject.position.x, refObject.position.y + yOffset, -10);
+      var parentPos = gameObject.transform.parent.position;
+      transform.position = new Vector3(parentPos.x, parentPos.y + yOffset, -10f);
    }
 }
