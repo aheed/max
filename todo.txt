@@ -341,5 +341,11 @@ Profiling:
     yes
   Activate objects later, inactivate earlier*
   Reduce level width
-  
+  Use unlit materials and renderers
+  Use background and river section materials without texture.
+  Instantiate objects when needed instead of keeping inactive objects.
+  Turn off all physics? Takes ca 1% CPU
+  DashUIDocument.Update() is expensive
+  Optimize flipbook? Takes ca 2 %
+  Optimize vip blinker. Use a single color cycle to share for all vip targets.
 

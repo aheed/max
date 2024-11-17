@@ -33,6 +33,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public EnemyPlane enemyPlanePrefab;
     public ShadowControl shadowControlPrefab;
     public GameObject groundPrefab;
+    public GameObject visibleAreaMarkerPrefab;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
@@ -68,6 +69,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Material roadMaterial;
     public Material groundMaterial;
     public Material landingStripMaterial;
+    public Material visibleAreaMarkerMaterial;
     public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     public static readonly int neutralRiverSlopeIndex = 2;
     float levelWidth;
@@ -96,6 +98,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
     public bool asyncLevelBuild = false;
+
+    public float visibleAreaMarkerWidth = 4f;
+    public float visibleAreaMarkerHeight = 3f;
 
     //// Game status
     int level = -1;
@@ -722,7 +727,32 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     }
 
     void Start()
-    {
+    {        
+        // visible area marker
+        var camObject = GameObject.Find("Main Camera");
+        var vaGameObject = Instantiate(visibleAreaMarkerPrefab, camObject.transform);
+        var localPosition = new Vector3(-visibleAreaMarkerWidth/2, -visibleAreaMarkerHeight/2, 1f);
+        vaGameObject.transform.localPosition = localPosition;
+        
+        var vaMeshFilter = vaGameObject.AddComponent<MeshFilter>();
+        var vaMeshRenderer = vaGameObject.AddComponent<MeshRenderer>();
+
+        var vaColor = new Color(1f, 1f, 1f, 0.5f);
+        vaMeshRenderer.material = visibleAreaMarkerMaterial;
+        vaMeshRenderer.material.color = vaColor;
+
+        var vaVerts = new List<Vector2>
+        {
+            new Vector2(0f, 0f),
+            new Vector2(visibleAreaMarkerWidth, 0f),
+            new Vector2(0f, visibleAreaMarkerHeight),
+            new Vector2(visibleAreaMarkerWidth, visibleAreaMarkerHeight)
+        };
+
+        var vaMesh = CreateQuadMesh(vaVerts);
+        vaMeshFilter.mesh = vaMesh;
+        vaGameObject.SetActive(false);
+
         StartNewGame();
     }
 
