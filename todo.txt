@@ -321,7 +321,7 @@ Explosions on land, target hit: double cycle of color shifts
 Some boat2 go up river
 
 Post processing:
-  Film grain and saturatio=0 => old film like effect. 1920s like.
+  Film grain and saturation=0 => old film like effect. 1920s like.
     How to get fibers, vertical lines, fingerprints, black or white spots, etc to make it look more like an old film?
       Lens dirt? Or just a mostly transparent sprite on top of everything.
     Round screen corners, black outside
@@ -341,11 +341,12 @@ Profiling:
     yes
   Activate objects later, inactivate earlier*
   Reduce level width
-  Use unlit materials and renderers
+  Use unlit materials and renderers*
+    Does not seem to make any improvement
   Use background and river section materials without texture.
   Instantiate objects when needed instead of keeping inactive objects.
   Turn off all physics? Takes ca 1% CPU
-  DashUIDocument.Update() is expensive
+  DashUIDocument.Update() is expensive*
   Optimize flipbook? Takes ca 2 %
   Optimize vip blinker. Use a single color cycle to share for all vip targets.
 

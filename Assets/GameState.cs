@@ -11,7 +11,6 @@ public enum GameEvent
     SPEED_CHANGED,
     ALT_CHANGED,
     DAMAGE_CHANGED,
-    FUEL_CHANGED,
     ALERT,
     BOMBS_CHANGED,
     SCORE_CHANGED,
@@ -122,7 +121,6 @@ public class GameState : MonoBehaviour
         if (fuel != gameStateContents.fuel)
         {
             gameStateContents.fuel = fuel;
-            ReportEvent(GameEvent.FUEL_CHANGED);
         }
     }
 

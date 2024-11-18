@@ -24,16 +24,16 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     VisualElement rankOuter;
     
     public int maxSpeedDisplayed = 130;
-    int lastDisplayedSpeed;
     public int maxAltitudeDisplayed = 99;
     public int maxFuelDisplayed = 200;
     int lastDisplayedFuel;
-    bool dirty = true;
     SimpleBlinker dashBlinker;
     HashSet<EnemyPlane> enemyPlaneSet;
     public float avgAlpha = 0.01f;
     float fpsAvg;
     int displayCnt = 0;
+    GameState gameState;
+    GameStateContents gameStateContents;
     
 
     // Start is called before the first frame update
@@ -56,9 +56,12 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
 
-        enemyPlaneSet = new();
-        GameState gameState = FindObjectOfType<GameState>();
+        gameState = FindObjectOfType<GameState>();
+        gameStateContents = gameState.GetStateContents();
+        
         gameState.RegisterObserver(this);
+
+        Reset();
     }
 
     // Update is called once per frame
@@ -73,29 +76,12 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             displayCnt = 0;
             fpsLabel.text = $"{fpsAvg:000}";
-            if (dirty)
-            {
-                UpdateContents();
-            }
+            UpdateFuel();
         }
     }
 
-    void UpdateContents()
+    void UpdateDashColor()
     {
-        GameState gameState = FindObjectOfType<GameState>();
-        GameStateContents gameStateContents = gameState.GetStateContents();
-        var speed = (int)((gameStateContents.speed * maxSpeedDisplayed) / gameState.maxSpeed);
-        if (speed != lastDisplayedSpeed)
-        {
-            lastDisplayedSpeed = speed;
-            speedLabel.text = $"{speed:000}";
-            var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
-            speedLabel.style.color = color;
-        }
-
-        var altitude = (int)((gameStateContents.altitude * maxAltitudeDisplayed) / gameState.maxAltitude);
-        altLabel.text = $"{altitude:00}";
-        
         var bgColor = Color.black;
         var planeLowestPoint = gameStateContents.altitude - Altitudes.planeHeight / 2;
         if (planeLowestPoint < Altitudes.strafeMaxAltitude)
@@ -137,22 +123,49 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             dashBase.style.backgroundColor = bgColor;
         }
+    }
 
-        var fuel = (int)((gameStateContents.fuel * maxFuelDisplayed) / gameState.maxFuel);
-        if (fuel != lastDisplayedFuel)
-        {
-            lastDisplayedFuel = fuel;
-            fuelLabel.text = $"{fuel:000}";
-        }
+    void UpdateSpeed()
+    {
+        var speed = (int)((gameStateContents.speed * maxSpeedDisplayed) / gameState.maxSpeed);
+        speedLabel.text = $"{speed:000}";
+        var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
+        speedLabel.style.color = color;
+        UpdateDashColor();
+    }
 
+    void UpdateAlt()
+    {
+        var altitude = (int)((gameStateContents.altitude * maxAltitudeDisplayed) / gameState.maxAltitude);
+        altLabel.text = $"{altitude:00}";
+        UpdateDashColor();
+    }
+
+    void UpdateBombs() 
+    {
         bombsLabel.text = $"{gameStateContents.bombs:00}";
+    }
+
+    void UpdateScore() 
+    {
         scoreLabel.text = $"{gameStateContents.score:0000}";
+    }
+
+    void UpdateAlert() 
+    {
         alertLabel.text = gameStateContents.alert.ToString();
+    }
+
+    void UpdateDamage() 
+    {
         FLabel.text = gameState.GotDamage(DamageIndex.F) ? "F" : "";
         BLabel.text = gameState.GotDamage(DamageIndex.B) ? "B" : "";
         MLabel.text = gameState.GotDamage(DamageIndex.M) ? "M" : "";
         GLabel.text = gameState.GotDamage(DamageIndex.G) ? "G" : "";
+    }
 
+    void UpdateGameStatus()
+    {
         if (gameStateContents.gameStatus == GameStatus.DEAD ||
             gameStateContents.gameStatus == GameStatus.FINISHED)
         {
@@ -168,22 +181,70 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             topRowInner.style.display = DisplayStyle.Flex;
             rankOuter.style.display = DisplayStyle.None;
         }
+    }
 
-        dirty = false;
+    void Reset()
+    {
+        enemyPlaneSet = new();
+        UpdateAll();
+    }
+
+    void UpdateAll()
+    {
+        UpdateAlert();
+        UpdateAlt();
+        UpdateScore();
+        UpdateGameStatus();
+        UpdateDamage();
+        UpdateBombs();
+        UpdateDashColor();
+    }
+
+    void UpdateFuel()
+    {
+        var fuel = (int)((gameStateContents.fuel * maxFuelDisplayed) / gameState.maxFuel);
+        if (fuel != lastDisplayedFuel)
+        {
+            lastDisplayedFuel = fuel;
+            fuelLabel.text = $"{fuel:000}";
+        }
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
-        dirty = true;
+        UpdateGameStatus();
     }
 
     public void OnGameEvent(GameEvent ge)
     {
         if (ge == GameEvent.START)
         {
-            enemyPlaneSet = new();
+            Reset();
         }
-        dirty = true;
+        else if (ge == GameEvent.SPEED_CHANGED)
+        {
+            UpdateSpeed();
+        }
+        else if (ge == GameEvent.ALT_CHANGED)
+        {
+            UpdateAlt();
+        }
+        else if (ge == GameEvent.BOMBS_CHANGED)
+        {
+            UpdateBombs();
+        }
+        else if (ge == GameEvent.SCORE_CHANGED)
+        {
+            UpdateScore();
+        }
+        else if (ge == GameEvent.ALERT)
+        {
+            UpdateAlert();
+        }
+        else if (ge == GameEvent.DAMAGE_CHANGED)
+        {
+            UpdateDamage();
+        }
     }
 
     public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
@@ -199,6 +260,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             enemyPlaneSet.Remove(enemyPlane);
         }
+        UpdateDashColor();
         //Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
     }
 }
