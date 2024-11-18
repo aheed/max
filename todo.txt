@@ -340,7 +340,8 @@ Profiling:
   Colliders inactive when pending activation?*
     yes
   Activate objects later, inactivate earlier*
-  Reduce level width
+  Reduce level width (*)
+    Add parameters leftTrim and rightTrim*
   Use unlit materials and renderers*
     Does not seem to make any improvement
   Use background and river section materials without texture.
@@ -350,7 +351,8 @@ Profiling:
   Optimize flipbook? Takes ca 2 %
   Optimize vip blinker. Use a single color cycle to share for all vip targets.
 
-Why is the visible area not centered (more stuff on the right)?
+Why is the visible area not centered (more stuff on the right)?*
+  Because the camera is offset in the y direction
 Why does index.html go away when Unity editor is closed?
   Because it's in the Temp folder most likely
 

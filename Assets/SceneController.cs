@@ -98,6 +98,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
     public bool asyncLevelBuild = false;
+    public int leftTrim = 2;
+    public int rightTrim = 5;
 
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
@@ -604,7 +606,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Single cell items: Flack guns, trees, tanks
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            for (var xtmp = 0; xtmp < LevelContents.gridWidth; xtmp++)    
+            for (var xtmp = leftTrim; xtmp < (LevelContents.gridWidth - rightTrim); xtmp++)    
             {
                 GameObject selectedPrefab = null;
                 switch (levelContents.cells[xtmp, ytmp])

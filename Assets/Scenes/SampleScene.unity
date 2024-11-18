@@ -465,6 +465,8 @@ MonoBehaviour:
   parllelRoadSideWidth: 0.05
   parallelRoadWidth: 0.9
   asyncLevelBuild: 0
+  leftTrim: 10
+  rightTrim: 20
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
 --- !u!1 &2054397210
