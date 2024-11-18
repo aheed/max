@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -254,11 +254,11 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -0.55, y: 1.55, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 608621886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
 MonoBehaviour:
@@ -272,7 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9cfaa912081c56ebebf82e46ade016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refObject: {fileID: 608621886}
   yOffset: 1.4
 --- !u!114 &608621884 stripped
 MonoBehaviour:
@@ -290,88 +289,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5340390649717109972, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
   m_PrefabInstance: {fileID: 2853367615520477439}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &619394800
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 619394802}
-  - component: {fileID: 619394801}
-  m_Layer: 0
-  m_Name: Global Light 2D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &619394801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619394800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
-  m_LightType: 4
-  m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_LightVolumeIntensity: 1
-  m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 0000000099f77b85
-  m_LightCookieSprite: {fileID: 0}
-  m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
-  m_AlphaBlendOnOverlap: 0
-  m_OverlapOperation: 0
-  m_NormalMapDistance: 3
-  m_NormalMapQuality: 2
-  m_UseNormalMap: 0
-  m_ShadowIntensityEnabled: 0
-  m_ShadowIntensity: 0.75
-  m_ShadowVolumeIntensityEnabled: 0
-  m_ShadowVolumeIntensity: 0.75
-  m_LocalBounds:
-    m_Center: {x: 0, y: -0.00000011920929, z: 0}
-    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
-  m_PointLightInnerAngle: 360
-  m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
-  m_ShapeLightParametricSides: 5
-  m_ShapeLightParametricAngleOffset: 0
-  m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 0.5
-  m_ShapeLightFalloffOffset: {x: 0, y: 0}
-  m_ShapePath:
-  - {x: -0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: 0.5, z: 0}
-  - {x: -0.5, y: 0.5, z: 0}
---- !u!4 &619394802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619394800}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &621318500
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,6 +403,7 @@ MonoBehaviour:
   enemyPlanePrefab: {fileID: 2165493113498992378, guid: 21e9beeb29cf4c9959214f56a5089997, type: 3}
   shadowControlPrefab: {fileID: 9201924445058020500, guid: e228024eb4c67fdd19d72d2022609b02, type: 3}
   groundPrefab: {fileID: 6852585398171151434, guid: de48b231330cb7a41a608084c8e07cc2, type: 3}
+  visibleAreaMarkerPrefab: {fileID: 7862784925668682839, guid: 32b7a87dd0982b628ae3096fc840d0ab, type: 3}
   riverSectionPrefab: {fileID: 3673043693166868737, guid: ecf23279296cc9c4ebadc1f867beca57, type: 3}
   roadPrefab: {fileID: 5513747941671286812, guid: ae24cdd56d13f660d90c0c6dd31559e7, type: 3}
   landingStripPrefab: {fileID: 6914347553027331206, guid: 8d2c5b9c51ffa2cb0ac62431f2e22ab1, type: 3}
@@ -521,9 +439,10 @@ MonoBehaviour:
   roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
   groundMaterial: {fileID: 2100000, guid: 8cb2155c8f83a733884b98d9308266d1, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
+  visibleAreaMarkerMaterial: {fileID: 2100000, guid: 1a18bab593071e1f497073ecd677d11a, type: 2}
   levelHeight: 80
-  activationDistance: 20
-  deactivationDistance: 20
+  activationDistance: 8
+  deactivationDistance: 6
   minRestartWaitSeconds: 1
   fuelRateLow: 0.6
   fuelRateHigh: 1.2
@@ -538,7 +457,7 @@ MonoBehaviour:
   enemyPlaneOncomingSpeedMax: -0.5
   enemyPlaneIntervalSecMax: 15
   enemyPlaneIntervalSecMin: 5
-  carOffsetX: -5
+  carOffsetX: 5
   vipProbability: 0.5
   carProbability: 0.5
   enemyPlaneOncomingProbability: 0.3
@@ -546,6 +465,10 @@ MonoBehaviour:
   parllelRoadSideWidth: 0.05
   parallelRoadWidth: 0.9
   asyncLevelBuild: 0
+  leftTrim: 10
+  rightTrim: 20
+  visibleAreaMarkerWidth: 12
+  visibleAreaMarkerHeight: 8
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,15 +678,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3598460748232834513, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5340390649717109972, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 519420032}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
-  - {fileID: 619394802}
   - {fileID: 2853367615520477439}
   - {fileID: 763321430}
   - {fileID: 2110362362}

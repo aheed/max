@@ -16,12 +16,6 @@ public class Boat1 : MonoBehaviour, IPositionObservable
         gameState = FindObjectOfType<GameState>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void Sink()
     {
         var collider = gameObject.GetComponent<Collider2D>();

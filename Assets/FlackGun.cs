@@ -8,7 +8,6 @@ public class FlackGun : MonoBehaviour, IPositionObservable
     public Sprite shotSprite;
     public float avgTimeToShootSeconds = 5.0f;
     float timeToShoot = -1.0f;
-    GameState gameState;
     private SpriteRenderer spriteR;
     private bool alive = true;
 
@@ -46,7 +45,7 @@ public class FlackGun : MonoBehaviour, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            gameState.BombLanded(bomb, gameObject);
+            FindObjectOfType<GameState>().BombLanded(bomb, gameObject);
             return;
         }
 
@@ -63,18 +62,8 @@ public class FlackGun : MonoBehaviour, IPositionObservable
     // Update is called once per frame
     void Update()
     {
-        if (gameState == null)
-        {
-            gameState = FindObjectOfType<GameState>();
-        }
-
-        if (!alive)
-        {
-            return;
-        }
-
         timeToShoot -= Time.deltaTime;
-        if (timeToShoot < 0f)
+        if (timeToShoot < 0f && alive)
         {
             Shoot();
             RestartShotClock();

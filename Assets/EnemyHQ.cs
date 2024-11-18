@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyHQ : MonoBehaviour, IPositionObservable
 {
     public Sprite bombedSprite;
-    GameState gameState;
     private SpriteRenderer spriteR;
     private bool bombed = false;
 
@@ -32,15 +31,6 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable
     void Start()
     {
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (gameState == null)
-        {
-            gameState = FindObjectOfType<GameState>();
-        }
     }
 
     void OnTriggerEnter2D(Collider2D col)

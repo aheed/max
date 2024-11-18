@@ -28,12 +28,6 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
         return target != null;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnTriggerEnter2D(Collider2D col)
     {   
         //Debug.Log($"bridge collided with {col.name}");

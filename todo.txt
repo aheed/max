@@ -321,7 +321,7 @@ Explosions on land, target hit: double cycle of color shifts
 Some boat2 go up river
 
 Post processing:
-  Film grain and saturatio=0 => old film like effect. 1920s like.
+  Film grain and saturation=0 => old film like effect. 1920s like.
     How to get fibers, vertical lines, fingerprints, black or white spots, etc to make it look more like an old film?
       Lens dirt? Or just a mostly transparent sprite on top of everything.
     Round screen corners, black outside
@@ -336,9 +336,34 @@ Post processing:
   https://docs.unity3d.com/Packages/com.unity.postprocessing@3.0/manual/Manipulating-the-Stack.html
 
 Profiling:
-  The Update() functions take a lot of time, even the empty ones!
-  Colliders inactive when pending activation?
-  Activate objects later, inactivate earlier
-  Reduce level width
-  
+  The Update() functions take a lot of time, even the empty ones!*
+  Colliders inactive when pending activation?*
+    yes
+  Activate objects later, inactivate earlier*
+  Reduce level width (*)
+    Add parameters leftTrim and rightTrim*
+  Use unlit materials and renderers*
+    Does not seem to make any improvement
+  Use background and river section materials without texture.
+  Instantiate objects when needed instead of keeping inactive objects.
+  Turn off all physics? Takes ca 1% CPU
+  DashUIDocument.Update() is expensive*
+  Optimize flipbook? Takes ca 2 %
+  Optimize vip blinker. Use a single color cycle to share for all vip targets.
 
+Why is the visible area not centered (more stuff on the right)?*
+  Because the camera is offset in the y direction
+Why does index.html go away when Unity editor is closed?
+  Because it's in the Temp folder most likely
+
+
+---
+Defalt webgl template
+config.matchWebGLToCanvasSize = false;
+canvas.style.width = "960px";
+canvas.style.height = "600px"; 
+
+Looks good if you run it maximized. How to make it start maximized?
+  Only possible from user interaction. Permission problem otherwise.
+    Add an extra clickable element to guide the user?
+      https://stackoverflow.com/questions/63307533/add-way-to-go-full-screen-in-new-unity-webgl-template

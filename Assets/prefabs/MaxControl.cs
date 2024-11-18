@@ -64,6 +64,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugRepairAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
+        gameState = FindObjectOfType<GameState>();
+        gameState.RegisterObserver(this); 
         lastCollidedMove = new Vector2(0, 0);
     }
 
@@ -250,12 +252,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     // Update is called once per frame
     void Update()
-    {
-        if (gameState == null)
-        {
-            gameState = FindObjectOfType<GameState>();
-            gameState.RegisterObserver(this); 
-        }
+    {        
         GameStateContents stateContents = gameState.GetStateContents();
 
         move = MoveAction.ReadValue<Vector2>();
