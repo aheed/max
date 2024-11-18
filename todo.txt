@@ -349,3 +349,18 @@ Profiling:
   Optimize flipbook? Takes ca 2 %
   Optimize vip blinker. Use a single color cycle to share for all vip targets.
 
+Why is the visible area not centered (more stuff on the right)?
+Why does index.html go away when Unity editor is closed?
+  Because it's in the Temp folder most likely
+
+
+---
+Defalt webgl template
+config.matchWebGLToCanvasSize = false;
+canvas.style.width = "960px";
+canvas.style.height = "600px"; 
+
+Looks good if you run it maximized. How to make it start maximized?
+  Only possible from user interaction. Permission problem otherwise.
+    Add an extra clickable element to guide the user?
+      https://stackoverflow.com/questions/63307533/add-way-to-go-full-screen-in-new-unity-webgl-template
