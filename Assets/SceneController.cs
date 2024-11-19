@@ -49,6 +49,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
     public GameObject vehicle1Prefab;
+    public GameObject enemyHangarPrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
@@ -597,13 +598,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
         }
 
-        // Hangar
-        var haGameObject = Instantiate(hangarPrefab, lvlTransform);
-        var haLocalTransform = new Vector3(levelContents.hangar.x * cellWidth + levelContents.hangar.y * cellHeight * neutralSlope, levelContents.hangar.y * cellHeight, -0.2f);
-        haGameObject.transform.localPosition = haLocalTransform;
-        
-
-        // Single cell items: Flack guns, trees, tanks
+        // Small items: Flack guns, trees, tanks
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
             for (var xtmp = leftTrim; xtmp < (LevelContents.gridWidth - rightTrim); xtmp++)    
@@ -637,6 +632,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
                     case CellContent.VEHICLE1:
                         selectedPrefab = vehicle1Prefab;
+                        break;
+                    case CellContent.ENEMY_HANGAR:
+                        selectedPrefab = enemyHangarPrefab;
+                        break;
+                    case CellContent.HANGAR:
+                        selectedPrefab = hangarPrefab;
                         break;
                 }
 

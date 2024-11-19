@@ -47,7 +47,7 @@ public class BulletControl : MonoBehaviour, IPositionObservable
         }
 
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
-        if (collObjName == CollisionHelper.NoObject)
+        if (collObjName == CollisionHelper.NoObject || collObjName == CollisionHelper.UnknownObject)
         {
             return; //no actual collision, different altitudes
         }
