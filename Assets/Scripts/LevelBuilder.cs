@@ -464,7 +464,6 @@ public class LevelBuilder
                             for (var xx = hangarStartX; xx < hangarStartX + hangarWidth; xx++)
                             {
                                 var cellContents = xx == hangarX && yy == hangarY ? CellContent.ENEMY_HANGAR : CellContent.HOUSE;
-                                //var cellContents = xx == hangarX && yy == hangarY ? CellContent.ENEMY_HANGAR : CellContent.TANK; //TEMP
                                 ret.cells[xx, yy] = cellContents;
                             }
                         }
