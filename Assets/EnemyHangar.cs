@@ -19,12 +19,22 @@ public class EnemyHangar : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col)
-    {
+    {        
         if (!col.name.StartsWith("bomb"))
         {
             return;
         }
 
+        Debug.Log("enemy hangar bombed .................dddddd");
+        
         bombed.Activate();
+        
+        var collider = gameObject.GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        // Todo: report destroyed enemy hangar for scoring
     }
 }

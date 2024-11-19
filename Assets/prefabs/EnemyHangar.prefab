@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cff29b61ab558b7b97ac49bddf64032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bombed: {fileID: 1438717582633282222}
 --- !u!60 &3498991138188012217
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -277,16 +278,16 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 7e1f37ba337416c9aa8242c12155e80d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.3, y: 1.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!114 &1438717582633282222
@@ -312,4 +313,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 195c691f67ce0ba2fac6c97ee3bebadf, type: 3}
   - {fileID: 21300000, guid: 753065ab73b982719a475d3163f9581b, type: 3}
   timeToChangeSpriteSec: 0.05
-  randomSprite: 0
+  randomSprite: 1
