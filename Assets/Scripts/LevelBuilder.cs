@@ -19,7 +19,8 @@ public enum CellContent
     BOAT1,
     BOAT2,
     HANGAR,
-    VEHICLE1
+    VEHICLE1,
+    ENEMY_HANGAR
 }
 
 public enum LevelType
@@ -452,6 +453,22 @@ public class LevelBuilder
                                 ret.cells[x, y+i] = CellContent.LANDING_STRIP;
                             }
                         }
+
+                        // space for hangar
+                        var hangarX = stripStartX - hangarWidth / 2 - 1;
+                        var hangarY = y + enemyAirstripHeight / 2;
+                        var hangarStartX = hangarX - hangarWidth / 2;
+                        var hangarStartY = hangarY - hangarHeight / 2;
+                        for (var yy = hangarStartY; yy < hangarStartY + hangarHeight; yy++)
+                        {
+                            for (var xx = hangarStartX; xx < hangarStartX + hangarWidth; xx++)
+                            {
+                                var cellContents = xx == hangarX && yy == hangarY ? CellContent.ENEMY_HANGAR : CellContent.HOUSE;
+                                //var cellContents = xx == hangarX && yy == hangarY ? CellContent.ENEMY_HANGAR : CellContent.TANK; //TEMP
+                                ret.cells[xx, yy] = cellContents;
+                            }
+                        }
+                        
                         cooldown = minSpaceBetweenEnemyAirstrips;
                     }
                     if (cooldown > 0)

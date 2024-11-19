@@ -257,6 +257,7 @@ Enemy air strips
   Add parked plane sprites on top.
   Set polygon collider (4 pts) in code.*
   bombable hangar (to be used for friendly hangars too? Negative score? :))
+    Simplify code: Friendly hangar should be placed with coordinates from LevelBuilder, just like enemy hangar.
   Fixed x offset from parallel road*
   Loop to populate before houses etc.*
   Should have double end markings, not single ones as friendly landing strips.*

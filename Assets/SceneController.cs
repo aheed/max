@@ -49,6 +49,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
     public GameObject vehicle1Prefab;
+    public GameObject enemyHangarPrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
@@ -603,7 +604,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         haGameObject.transform.localPosition = haLocalTransform;
         
 
-        // Single cell items: Flack guns, trees, tanks
+        // Small items: Flack guns, trees, tanks
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
             for (var xtmp = leftTrim; xtmp < (LevelContents.gridWidth - rightTrim); xtmp++)    
@@ -637,6 +638,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
                     case CellContent.VEHICLE1:
                         selectedPrefab = vehicle1Prefab;
+                        break;
+                    case CellContent.ENEMY_HANGAR:
+                        selectedPrefab = enemyHangarPrefab;
                         break;
                 }
 
@@ -716,7 +720,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         newLevelTask = null;
         latestLevelPrereq = new LevelPrerequisite 
             {
-                levelType = LevelType.NORMAL,
+                //levelType = LevelType.NORMAL,
+                levelType = LevelType.ROAD, //TEMP!!!!!!!!!!!!!
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
