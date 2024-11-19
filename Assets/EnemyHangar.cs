@@ -12,12 +12,6 @@ public class EnemyHangar : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnTriggerEnter2D(Collider2D col)
     {        
         if (!col.name.StartsWith("bomb"))
@@ -25,8 +19,6 @@ public class EnemyHangar : MonoBehaviour
             return;
         }
 
-        Debug.Log("enemy hangar bombed .................dddddd");
-        
         bombed.Activate();
         
         var collider = gameObject.GetComponent<Collider2D>();

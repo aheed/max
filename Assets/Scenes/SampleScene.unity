@@ -355,63 +355,6 @@ MonoBehaviour:
   postExposurelifeSpanSec: 0.3
   hueShift: -100
   maxPostExposure: 2
---- !u!1001 &752618841
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3211059959162521110, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_Name
-      value: EnemyHangar
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5774148122558673988, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
 --- !u!1 &763321429
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +419,7 @@ MonoBehaviour:
   boat1Prefab: {fileID: 2878459979805281793, guid: f08e038dc0ef295a4b13e7a16e464aed, type: 3}
   boat2Prefab: {fileID: 2233345942563649688, guid: 90dcf23d027c9502db5f80c4b0f5be42, type: 3}
   vehicle1Prefab: {fileID: 4502306411438874035, guid: 9e069a6934df1ff508e1b70ff3c17022, type: 3}
-  enemyHangarPrefab: {fileID: 939305069}
+  enemyHangarPrefab: {fileID: 3211059959162521110, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}
   carPrefab: {fileID: -8453423270569367082, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}
@@ -527,11 +470,6 @@ MonoBehaviour:
   rightTrim: 20
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
---- !u!1 &939305069 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3211059959162521110, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
-  m_PrefabInstance: {fileID: 752618841}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,4 +694,3 @@ SceneRoots:
   - {fileID: 2110362362}
   - {fileID: 2054397212}
   - {fileID: 621318502}
-  - {fileID: 752618841}

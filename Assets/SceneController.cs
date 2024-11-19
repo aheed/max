@@ -598,12 +598,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
         }
 
-        // Hangar
-        var haGameObject = Instantiate(hangarPrefab, lvlTransform);
-        var haLocalTransform = new Vector3(levelContents.hangar.x * cellWidth + levelContents.hangar.y * cellHeight * neutralSlope, levelContents.hangar.y * cellHeight, -0.2f);
-        haGameObject.transform.localPosition = haLocalTransform;
-        
-
         // Small items: Flack guns, trees, tanks
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
@@ -641,6 +635,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         break;
                     case CellContent.ENEMY_HANGAR:
                         selectedPrefab = enemyHangarPrefab;
+                        break;
+                    case CellContent.HANGAR:
+                        selectedPrefab = hangarPrefab;
                         break;
                 }
 
@@ -720,8 +717,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         newLevelTask = null;
         latestLevelPrereq = new LevelPrerequisite 
             {
-                //levelType = LevelType.NORMAL,
-                levelType = LevelType.ROAD, //TEMP!!!!!!!!!!!!!
+                levelType = LevelType.NORMAL,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
