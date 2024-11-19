@@ -50,6 +50,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat2Prefab;
     public GameObject vehicle1Prefab;
     public GameObject enemyHangarPrefab;
+    public GameObject parkedPlanePrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
@@ -347,6 +348,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             PolygonCollider2D polygonCollider = lsGameObject.AddComponent<PolygonCollider2D>();
             polygonCollider.isTrigger = true;
             polygonCollider.points = new Vector2[] {llc, lrc, urc, ulc};
+
+            // parked planes
+            var nofParkedPlanes = UnityEngine.Random.Range(1, 4);
+            for (int i = 0; i < nofParkedPlanes; i++)
+            {
+                var parkedPlane = Instantiate(parkedPlanePrefab, lsGameObject.transform);
+                var parkedPlaneY = lsllcY + (i+1) * lsHeight / (nofParkedPlanes+1);
+                var parkedPlaneX = parkedPlaneY * neutralSlope + lsWidth / 2;
+                var ppLocalTransform = new Vector3(parkedPlaneX, parkedPlaneY, -0.01f);
+                parkedPlane.transform.localPosition = ppLocalTransform;
+            }
         }
 
         if (levelContents.city != null)
