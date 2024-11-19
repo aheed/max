@@ -6,13 +6,11 @@ public class Boat1 : MonoBehaviour, IPositionObservable
 {
     public GameObject sunkBoatPrefab;
     GameState gameState;
-    private SpriteRenderer spriteR;
     int health = 3;
 
     // Start is called before the first frame update
     void Start()
     {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = FindObjectOfType<GameState>();
     }
 
