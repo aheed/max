@@ -254,7 +254,7 @@ River should have a black line at its left bank.*
 
 Enemy air strips
   reuse code for drawing friendly landing strip?
-  Add parked plane sprites on top.
+  Add parked plane sprites on top.*
   Set polygon collider (4 pts) in code.*
   bombable hangar (to be used for friendly hangars too? Negative score? :))*
     Simplify code: Friendly hangar should be placed with coordinates from LevelBuilder, just like enemy hangar.*
@@ -368,3 +368,19 @@ Looks good if you run it maximized. How to make it start maximized?
   Only possible from user interaction. Permission problem otherwise.
     Add an extra clickable element to guide the user?
       https://stackoverflow.com/questions/63307533/add-way-to-go-full-screen-in-new-unity-webgl-template
+
+
+Alerts
+P - dashboard keeps track of enemy planes via gameEvent
+W - Random. Any of 5 possible directions (never down). Or no wind.
+    Only impacts plane movement when in status flying, out-of-fuel,...
+L - On during approach. Off otherwise. Only displayed in some states.
+
+Introduce new gameEvents and corresponding bool gameStateContents members
+  WIND_CHANGED
+  LANDING_CHANGED
+  Recalculate alert to be displayed if any of the relevant game events happen.
+Remove gameStateContents.alert
+  
+
+Prio, low to high: W, L, P

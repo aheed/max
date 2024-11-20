@@ -144,7 +144,12 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         Vector3 tmpLocalPosition = transform.localPosition;
         var deltaOffsetY = 0f;
         var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
-        tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime;
+        var significantWind = stateContents.wind && 
+            (stateContents.gameStatus == GameStatus.FLYING ||
+             stateContents.gameStatus == GameStatus.OUT_OF_FUEL ||
+             stateContents.gameStatus == GameStatus.KILLED_BY_FLACK);
+        tmpLocalPosition.x += apparentMove.x * GameState.horizontalSpeed * speedFactor * Time.deltaTime +
+            (significantWind ? stateContents.windDirection.x * GameState.windSpeed * Time.deltaTime : 0f);
 
         var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
         //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
@@ -167,7 +172,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }
         var tmpOffsetY = offsetY + deltaOffsetY;        
 
-        tmpLocalPosition.z -= forcedDescent * Time.deltaTime;
+        tmpLocalPosition.z += -forcedDescent * Time.deltaTime +
+            (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
+
         if (tmpLocalPosition.z < minAltitude) 
         {
             tmpLocalPosition.z = minAltitude;

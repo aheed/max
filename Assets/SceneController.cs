@@ -92,17 +92,19 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float enemyPlaneOncomingSpeedMax = -0.5f;
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
+    public float windIntervalSecMax = 10f;
+    public float windIntervalSecMin = 5f;
     public float carOffsetX = -5f;
     public float vipProbability = 0.5f;
     public float carProbability = 0.5f;
     public float enemyPlaneOncomingProbability = 0.3f;
+    public float windProbability = 0.6f;
     public float riverBankWidth = 0.1f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
     public bool asyncLevelBuild = false;
     public int leftTrim = 2;
     public int rightTrim = 5;
-
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
 
@@ -128,6 +130,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
     float enemyPlaneCooldown = 0f;
+    float windCooldown = 0f;
     GameObject riverSectionGameObject;
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
@@ -855,6 +858,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         enemyPlaneCooldown = UnityEngine.Random.Range(enemyPlaneIntervalSecMin, enemyPlaneIntervalSecMax);
     }
 
+    void SetWindCooldown()
+    {
+        windCooldown = UnityEngine.Random.Range(windIntervalSecMin, windIntervalSecMax);
+    }
+
     void SpawnEnemyPlane()
     {
         var startPos = refobject.transform.position;
@@ -990,6 +998,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             roadLowerEdgesY.RemoveAt(0);
         }
 
+        var distanceDiff = refobject.transform.position.y - lastLevelLowerEdgeY;
+        gameState.SetApproachingLanding(
+            (distanceDiff > levelHeight * (1-LevelBuilder.finalApproachQuotient)) ||
+            distanceDiff < 0);
+
         // Update game state
         if (stateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
             stateContents.gameStatus == GameStatus.COLLIDED)
@@ -1035,6 +1048,15 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 {
                     SpawnEnemyPlane();
                     SetEnemyPlaneCooldown();
+                }
+
+                windCooldown -= Time.deltaTime;
+                if (windCooldown <= 0)
+                {
+                    stateContents.windDirection = GameStateContents.windDirections[UnityEngine.Random.Range(0, GameStateContents.windDirections.Length)];
+                    gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);
+                    SetWindCooldown();
+                    Debug.Log($"New wind {stateContents.windDirection} {stateContents.wind}");
                 }
             }
 

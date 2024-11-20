@@ -15,6 +15,8 @@ public enum GameEvent
     BOMBS_CHANGED,
     SCORE_CHANGED,
     SMALL_DETONATION,
+    LANDING_CHANGED,
+    WIND_CHANGED
 }
 
 public enum DamageIndex
@@ -27,14 +29,19 @@ public enum DamageIndex
 
 public class GameStateContents
 {
+    public static Vector2[] windDirections = new Vector2[] {new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(-1f, 1f), new Vector2(-1f, 0f)};
+
     public float speed = 0f;    
     public GameStatus gameStatus = GameStatus.ACCELERATING;
     public float altitude = 0f;
     public float fuel = 0f;
     public int bombs = 0;
     public int score = 0;
-    public string alert = "";    
+    public string alert = "";
+    public bool approachingLanding = false;
+    public bool wind = false;
     public bool[] damages = new bool[] { false, false, false, false};
+    public Vector2 windDirection = new Vector2(0f, 0f);
 }
 
 public interface IGameStateObserver
@@ -55,6 +62,7 @@ public class GameState : MonoBehaviour
     public float acceleration = 0.4f;
     public static float horizontalSpeed = 3.0f;
     public static float verticalSpeed = 2.0f;
+    public static float windSpeed = 0.2f;
     public static string landingAlert = "L";
     public static string windAlert = "W";
     public static string enemyPlaneAlert = "P";
@@ -130,6 +138,24 @@ public class GameState : MonoBehaviour
         {
             gameStateContents.alert = alert;
             ReportEvent(GameEvent.ALERT);
+        }
+    }
+
+    public void SetApproachingLanding(bool approachingLanding)
+    {
+        if (approachingLanding != gameStateContents.approachingLanding)
+        {
+            gameStateContents.approachingLanding = approachingLanding;
+            ReportEvent(GameEvent.LANDING_CHANGED);
+        }
+    }
+
+    public void SetWind(bool wind)
+    {
+        if (wind != gameStateContents.wind)
+        {
+            gameStateContents.wind = wind;
+            ReportEvent(GameEvent.WIND_CHANGED);
         }
     }
 
