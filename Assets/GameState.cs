@@ -37,7 +37,6 @@ public class GameStateContents
     public float fuel = 0f;
     public int bombs = 0;
     public int score = 0;
-    public string alert = "";
     public bool approachingLanding = false;
     public bool wind = false;
     public bool[] damages = new bool[] { false, false, false, false};
@@ -132,15 +131,6 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public void SetAlert(string alert)
-    {
-        if (alert != gameStateContents.alert)
-        {
-            gameStateContents.alert = alert;
-            ReportEvent(GameEvent.ALERT);
-        }
-    }
-
     public void SetApproachingLanding(bool approachingLanding)
     {
         if (approachingLanding != gameStateContents.approachingLanding)
@@ -218,7 +208,7 @@ public class GameState : MonoBehaviour
         gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;
-        gameStateContents.alert = "";
+        gameStateContents.wind = false;
         gameStateContents.damages = new bool[] { false, false, false, false};
     }
 

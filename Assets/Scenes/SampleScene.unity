@@ -459,10 +459,13 @@ MonoBehaviour:
   enemyPlaneOncomingSpeedMax: -0.5
   enemyPlaneIntervalSecMax: 15
   enemyPlaneIntervalSecMin: 5
+  windIntervalSecMax: 10
+  windIntervalSecMin: 5
   carOffsetX: 5
   vipProbability: 0.5
   carProbability: 0.5
   enemyPlaneOncomingProbability: 0.3
+  windProbability: 0.3
   riverBankWidth: 0.05
   parllelRoadSideWidth: 0.05
   parallelRoadWidth: 0.9
