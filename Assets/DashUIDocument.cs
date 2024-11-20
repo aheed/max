@@ -151,9 +151,33 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         scoreLabel.text = $"{gameStateContents.score:0000}";
     }
 
-    void UpdateAlert() 
+    void UpdateAlert()
     {
-        alertLabel.text = gameStateContents.alert.ToString();
+        if (gameStateContents.gameStatus != GameStatus.FLYING)
+        {
+            alertLabel.text = "";
+            return;
+        }
+
+        if (enemyPlaneSet.Any())
+        {
+            alertLabel.text = "P";
+            return;
+        }
+
+        if (gameStateContents.approachingLanding)
+        {
+            alertLabel.text = "L";
+            return;
+        }
+
+        if (gameStateContents.wind)
+        {
+            alertLabel.text = "W";
+            return;
+        }
+
+        alertLabel.text = "";
     }
 
     void UpdateDamage() 
@@ -213,6 +237,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
         UpdateGameStatus();
+        UpdateAlert();
     }
 
     public void OnGameEvent(GameEvent ge)
@@ -245,6 +270,11 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             UpdateDamage();
         }
+        else if (ge == GameEvent.LANDING_CHANGED ||
+                 ge == GameEvent.WIND_CHANGED)
+        {
+            UpdateAlert();
+        }
     }
 
     public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
@@ -261,6 +291,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             enemyPlaneSet.Remove(enemyPlane);
         }
         UpdateDashColor();
+        UpdateAlert();
         //Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
     }
 }
