@@ -419,6 +419,7 @@ MonoBehaviour:
   boat1Prefab: {fileID: 2878459979805281793, guid: f08e038dc0ef295a4b13e7a16e464aed, type: 3}
   boat2Prefab: {fileID: 2233345942563649688, guid: 90dcf23d027c9502db5f80c4b0f5be42, type: 3}
   vehicle1Prefab: {fileID: 4502306411438874035, guid: 9e069a6934df1ff508e1b70ff3c17022, type: 3}
+  vehicle2Prefab: {fileID: 4502306411438874035, guid: 331a7ea5d72c74a9b8db20e2e797361d, type: 3}
   enemyHangarPrefab: {fileID: 3211059959162521110, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
   parkedPlanePrefab: {fileID: 3620008788814347501, guid: 87b718656893e5f26a8107336c606d51, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}

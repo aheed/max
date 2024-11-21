@@ -49,6 +49,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
     public GameObject vehicle1Prefab;
+    public GameObject vehicle2Prefab;
     public GameObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public bridge bridgePrefab;
@@ -648,9 +649,15 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     case CellContent.VEHICLE1:
                         selectedPrefab = vehicle1Prefab;
                         break;
+                    
+                    case CellContent.VEHICLE2:
+                        selectedPrefab = vehicle2Prefab;
+                        break;
+
                     case CellContent.ENEMY_HANGAR:
                         selectedPrefab = enemyHangarPrefab;
                         break;
+
                     case CellContent.HANGAR:
                         selectedPrefab = hangarPrefab;
                         break;

@@ -20,6 +20,7 @@ public enum CellContent
     BOAT2,
     HANGAR,
     VEHICLE1,
+    VEHICLE2,
     ENEMY_HANGAR
 }
 
@@ -127,7 +128,8 @@ public class LevelBuilder
     public static float treeProbability = 0.03f;
     public static float boat1Probability = 0.005f;
     public static float boat2Probability = 0.2f;
-    public static float vehicle1Probability = 0.1f;
+    public static float vehicle1Probability = 0.07f;
+    public static float vehicle2Probability = 0.07f;
     public static int normalHouseWidth = 5;
     public static int minHouseWidth = 2;
     public static int maxHouseWidth = 6;
@@ -401,12 +403,16 @@ public class LevelBuilder
 
                 var slopeX = (int)(slope * segmentHeight);
 
-                if (levelType == LevelType.ROAD )
+                if (levelType == LevelType.ROAD  && !approaching && !takingOff)
                 {
                     // Mid-road stationary vehicles
-                    if (TrueByProbability(vehicle1Probability) && !approaching && !takingOff)
+                    if (TrueByProbability(vehicle1Probability))
                     {
                         ret.cells[midRoadX, y] = CellContent.VEHICLE1;
+                    }
+                    else if (TrueByProbability(vehicle2Probability))
+                    {
+                        ret.cells[midRoadX, y] = CellContent.VEHICLE2;
                     }
                 }
                 
