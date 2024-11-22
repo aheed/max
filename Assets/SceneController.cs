@@ -110,6 +110,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public float visibleAreaMarkerHeight = 3f;
 
     //// Game status
+    MaxCamera maxCamera;
     int level = -1;
     float prepTimeForNextLevelQuotient = 0.90f;
     float lastLevelLowerEdgeY = 0f;
@@ -752,9 +753,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     }
 
     void Start()
-    {        
-        // visible area marker
+    {   
         var camObject = GameObject.Find("Main Camera");
+        maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
+
+        // visible area marker for debugging
         var vaGameObject = Instantiate(visibleAreaMarkerPrefab, camObject.transform);
         var localPosition = new Vector3(-visibleAreaMarkerWidth/2, -visibleAreaMarkerHeight/2, 1f);
         vaGameObject.transform.localPosition = localPosition;
@@ -1192,6 +1195,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         {
             gameState.SetSpeed(0f);
             gameState.SetStatus(GameStatus.REFUELLING);
+        }
+        else if (gameEvent == GameEvent.BIG_DETONATION && maxCamera != null)
+        {
+            maxCamera.OnDetonation();
         }
     }
 

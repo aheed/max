@@ -273,6 +273,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yOffset: 1.4
+  correctionRate: 0.2
+  shakeAmplitude: 0.13
+  shakeMoves: 10
+  shakeMoveIntervalSec: 0.1
+  shakeCooldown: 0
+  shakeMovesLeft: 0
 --- !u!114 &608621884 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5114585973398386375, guid: 7d12a5a24aed7c89996d951d7d31997d, type: 3}

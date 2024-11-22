@@ -36,6 +36,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public InputAction FireAction;
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
+    public InputAction DebugAuxAction;
     Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
@@ -62,6 +63,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         FireAction.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
+        DebugAuxAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = FindObjectOfType<GameState>();
@@ -338,6 +340,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (DebugRepairAction.WasPressedThisFrame())
         {
             gameState.SetRandomDamage(false);
+        }
+
+        if (DebugAuxAction.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.BIG_DETONATION);
         }
         
         bulletCooldown -= Time.deltaTime;
