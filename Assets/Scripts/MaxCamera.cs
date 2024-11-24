@@ -9,14 +9,13 @@ public class MaxCamera : MonoBehaviour
    public float shakeAmplitude = 0.3f;
    public int shakeMoves = 5;
    public float shakeMoveIntervalSec = 0.1f;
+   float shakeCooldown;
+   int shakeMovesLeft = 0;
    Vector3 targetLocalPosition;
-   public float shakeCooldown;
-   public int shakeMovesLeft = 0;
+   Vector3 shakeVelocity;
 
    void Start()
    {
-      //var parentPos = gameObject.transform.parent.position;
-      //transform.position = new Vector3(parentPos.x, parentPos.y + yOffset, -10f);
       targetLocalPosition = new Vector3(0f, yOffset, -10f);
       transform.localPosition = targetLocalPosition;
    }
@@ -28,10 +27,12 @@ public class MaxCamera : MonoBehaviour
 
       if (shakeMovesLeft > 0)
       {
+         transform.localPosition += shakeVelocity * Time.deltaTime;
+
          shakeCooldown -= Time.deltaTime;
          if (shakeCooldown <= 0)
          {
-            transform.localPosition += new Vector3(
+            shakeVelocity = new Vector3(
                UnityEngine.Random.Range(-shakeAmplitude, shakeAmplitude),
                UnityEngine.Random.Range(-shakeAmplitude, shakeAmplitude),
                0f);
@@ -43,7 +44,6 @@ public class MaxCamera : MonoBehaviour
 
    public void OnDetonation()
    {
-      Debug.Log("Camera detects detonation..........................");
       shakeMovesLeft = shakeMoves;
    }
 }
