@@ -112,6 +112,9 @@ MonoBehaviour:
   straightSprite: {fileID: 21300000, guid: e3249e5fee7ce25be8867cfc474d9108, type: 3}
   crashedSprite: {fileID: 21300000, guid: 2255ea0bc4ba334ceab0af5993cf83f6, type: 3}
   oncomingSprite: {fileID: 21300000, guid: 021601808e43c7e2885f0ee85bdd92db, type: 3}
+  explosionPrefab: {fileID: 8737226349025698249, guid: 456ea0c1fa932ba50b38a208a7979ea2, type: 3}
+  crashExplosions: 4
+  explosionDistanceMax: 0.3
 --- !u!61 &-1236022594490615837
 BoxCollider2D:
   m_ObjectHideFlags: 0

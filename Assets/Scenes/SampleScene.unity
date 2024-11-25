@@ -462,8 +462,8 @@ MonoBehaviour:
   enemyPlaneSpeedMin: 1.5
   enemyPlaneOncomingSpeedMin: -2
   enemyPlaneOncomingSpeedMax: -0.5
-  enemyPlaneIntervalSecMax: 15
-  enemyPlaneIntervalSecMin: 5
+  enemyPlaneIntervalSecMax: 2
+  enemyPlaneIntervalSecMin: 1
   windIntervalSecMax: 10
   windIntervalSecMin: 5
   carOffsetX: 5

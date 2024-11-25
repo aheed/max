@@ -19,9 +19,13 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
     public Sprite straightSprite;
     public Sprite crashedSprite;
     public Sprite oncomingSprite;
+    public GameObject explosionPrefab;
+    public int crashExplosions = 4;
+    public float explosionDistanceMax = 0.4f;
     float lastAltitude;
     float moveCooldownSec;
-    float crashCooldownSec;
+    float crashCooldownSec;    
+    int crashExplosionsLeft;
     float speed = 0.1f;
     private SpriteRenderer spriteR;
     int moveX = 0;
@@ -110,9 +114,28 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         if (crashed)
         {
             crashCooldownSec -= Time.deltaTime;
+            
             if (crashCooldownSec <= 0f)
             {
                 Deactivate();
+            }
+            else
+            {
+                var fractionTimeLeft = crashCooldownSec / crashDurationSec;
+                spriteR.color = new Color(fractionTimeLeft, fractionTimeLeft, fractionTimeLeft, fractionTimeLeft);
+                if (crashExplosionsLeft > fractionTimeLeft * crashExplosions)
+                {
+                    var newExplosion = Instantiate(explosionPrefab, gameObject.transform);
+                    newExplosion.transform.localPosition = new Vector3(
+                        UnityEngine.Random.Range(-explosionDistanceMax, explosionDistanceMax),
+                        UnityEngine.Random.Range(-explosionDistanceMax, explosionDistanceMax),
+                        0f);
+                    var explosionSpriteR = newExplosion.GetComponent<SpriteRenderer>();
+                    explosionSpriteR.color = new Color(1f, 1f, 0f, 0.5f);
+                    var flipbook = InterfaceHelper.GetInterface<FlipBook>(newExplosion);
+                    flipbook.Activate();
+                    --crashExplosionsLeft;
+                }
             }
             return;
         }
@@ -185,6 +208,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
         crashed = true;
         crashCooldownSec = crashDurationSec;
+        crashExplosionsLeft = crashExplosions;
         spriteR.color = Color.white;
         spriteR.sprite = crashedSprite;
         var collider = gameObject.GetComponent<Collider2D>();
