@@ -122,7 +122,8 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             else
             {
                 var fractionTimeLeft = crashCooldownSec / crashDurationSec;
-                spriteR.color = new Color(1f-fractionTimeLeft, 1-fractionTimeLeft, 1f-fractionTimeLeft, 0.5f + fractionTimeLeft/2);
+                var rgb = 1f-fractionTimeLeft;
+                spriteR.color = new Color(rgb, rgb, rgb, 0.5f + fractionTimeLeft/2);
 
                 if (crashExplosionsLeft > fractionTimeLeft * crashExplosions)
                 {
@@ -136,23 +137,6 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             }
             return;
         }
-
-        /// TEMP
-        if (speed > 0 && transform.position.y - refObject.transform.position.y > 3f)
-        {
-            Debug.Log($"Enemy plane self destruct ({transform.position.y} vs {refObject.transform.position.y})");
-            crashed = true;
-            crashCooldownSec = crashDurationSec;
-            crashExplosionsLeft = crashExplosions;
-            spriteR.color = Color.white;
-            spriteR.sprite = crashedSprite;
-            var collider = gameObject.GetComponent<Collider2D>();
-            if (collider != null)
-            {
-                collider.enabled = false;
-            }
-        }
-        ///
 
         if (speed > 0 && transform.position.y - refObject.transform.position.y > maxDistance)
         {
