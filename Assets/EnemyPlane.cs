@@ -122,7 +122,8 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             else
             {
                 var fractionTimeLeft = crashCooldownSec / crashDurationSec;
-                spriteR.color = new Color(fractionTimeLeft, fractionTimeLeft, fractionTimeLeft, fractionTimeLeft);
+                spriteR.color = new Color(1f-fractionTimeLeft, 1-fractionTimeLeft, 1f-fractionTimeLeft, 0.5f + fractionTimeLeft/2);
+
                 if (crashExplosionsLeft > fractionTimeLeft * crashExplosions)
                 {
                     var newExplosion = Instantiate(explosionPrefab, gameObject.transform);
@@ -130,15 +131,28 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
                         UnityEngine.Random.Range(-explosionDistanceMax, explosionDistanceMax),
                         UnityEngine.Random.Range(-explosionDistanceMax, explosionDistanceMax),
                         0f);
-                    var explosionSpriteR = newExplosion.GetComponent<SpriteRenderer>();
-                    explosionSpriteR.color = new Color(1f, 1f, 0f, 0.5f);
-                    var flipbook = InterfaceHelper.GetInterface<FlipBook>(newExplosion);
-                    flipbook.Activate();
                     --crashExplosionsLeft;
                 }
             }
             return;
         }
+
+        /// TEMP
+        if (speed > 0 && transform.position.y - refObject.transform.position.y > 3f)
+        {
+            Debug.Log($"Enemy plane self destruct ({transform.position.y} vs {refObject.transform.position.y})");
+            crashed = true;
+            crashCooldownSec = crashDurationSec;
+            crashExplosionsLeft = crashExplosions;
+            spriteR.color = Color.white;
+            spriteR.sprite = crashedSprite;
+            var collider = gameObject.GetComponent<Collider2D>();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+        }
+        ///
 
         if (speed > 0 && transform.position.y - refObject.transform.position.y > maxDistance)
         {
