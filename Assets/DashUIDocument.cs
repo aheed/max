@@ -241,8 +241,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
-        if (gameStatus == GameStatus.ACCELERATING ||
-            gameStatus == GameStatus.REPAIRING ||
+        if (gameStatus == GameStatus.REPAIRING ||
             gameStatus == GameStatus.LOADING_BOMBS)
         {
             audioSource.clip = bingClip;
