@@ -5,6 +5,13 @@ using System.Linq;
 
 public class DashUIDocument : MonoBehaviour, IGameStateObserver
 {
+    public int maxSpeedDisplayed = 130;
+    public int maxAltitudeDisplayed = 99;
+    public int maxFuelDisplayed = 200;
+    public AudioClip bingClip;
+    public AudioClip damageClip;
+    public AudioClip alertClip;
+    AudioSource audioSource;
     UIDocument uiDocument;
     
     Label altLabel;
@@ -22,10 +29,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
-    
-    public int maxSpeedDisplayed = 130;
-    public int maxAltitudeDisplayed = 99;
-    public int maxFuelDisplayed = 200;
+
     int lastDisplayedFuel;
     SimpleBlinker dashBlinker;
     HashSet<EnemyPlane> enemyPlaneSet;
@@ -39,6 +43,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         uiDocument = GetComponent<UIDocument>();
         dashBase = uiDocument.rootVisualElement.Q<VisualElement>("DashBase");
         topRowInner = uiDocument.rootVisualElement.Q<VisualElement>("TopRowInner");
@@ -236,6 +241,13 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
+        if (gameStatus == GameStatus.ACCELERATING ||
+            gameStatus == GameStatus.REPAIRING ||
+            gameStatus == GameStatus.LOADING_BOMBS)
+        {
+            audioSource.clip = bingClip;
+            audioSource.Play();
+        }
         UpdateGameStatus();
         UpdateAlert();
     }
@@ -262,16 +274,25 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             UpdateScore();
         }
-        else if (ge == GameEvent.ALERT)
+        else if (ge == GameEvent.DAMAGE_SUSTAINED)
         {
-            UpdateAlert();
-        }
-        else if (ge == GameEvent.DAMAGE_CHANGED)
-        {
+            audioSource.PlayOneShot(damageClip);
             UpdateDamage();
         }
-        else if (ge == GameEvent.LANDING_CHANGED ||
-                 ge == GameEvent.WIND_CHANGED)
+        else if (ge == GameEvent.DAMAGE_REPAIRED)
+        {
+            audioSource.PlayOneShot(bingClip);
+            UpdateDamage();
+        }
+        else if (ge == GameEvent.LANDING_CHANGED)
+        {
+            if (gameStateContents.approachingLanding)
+            {
+                audioSource.PlayOneShot(alertClip);
+            }
+            UpdateAlert();
+        }
+        else if (ge == GameEvent.WIND_CHANGED)
         {
             UpdateAlert();
         }
