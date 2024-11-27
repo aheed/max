@@ -384,3 +384,7 @@ Remove gameStateContents.alert
   
 
 Prio, low to high: W, L, P
+
+-----------
+bug: shadow responds to moves in state KILLED_BY_FLACK
+

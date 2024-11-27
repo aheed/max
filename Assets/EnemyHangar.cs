@@ -27,6 +27,10 @@ public class EnemyHangar : MonoBehaviour
             collider.enabled = false;
         }
 
+        var gameState = FindObjectOfType<GameState>();
+        gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+        gameState.ReportEvent(GameEvent.MEDIUM_BANG);
+
         // Todo: report destroyed enemy hangar for scoring
     }
 }

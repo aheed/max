@@ -10,14 +10,17 @@ public enum GameEvent
     RESTART_REQUESTED,
     SPEED_CHANGED,
     ALT_CHANGED,
-    DAMAGE_CHANGED,
-    ALERT,
+    DAMAGE_SUSTAINED,
+    DAMAGE_REPAIRED,
     BOMBS_CHANGED,
     SCORE_CHANGED,
     SMALL_DETONATION,
     BIG_DETONATION,
     LANDING_CHANGED,
-    WIND_CHANGED
+    WIND_CHANGED,
+    SMALL_BANG,
+    MEDIUM_BANG,
+    BIG_BANG,
 }
 
 public enum DamageIndex
@@ -55,6 +58,7 @@ public interface IGameStateObserver
 public class GameState : MonoBehaviour
 {
     public float maxSpeed = 2.0f;
+    public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
     public float minSafeAltitude = 0.3f;
     public float maxHorizPosition = 2.0f;
@@ -179,7 +183,7 @@ public class GameState : MonoBehaviour
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
 
     public void SetRandomDamage(bool damage)
-    {
+    {        
         var nofDamages = gameStateContents.damages.Length;
         var index = UnityEngine.Random.Range(0, nofDamages);
         var candidates = 0;
@@ -188,14 +192,15 @@ public class GameState : MonoBehaviour
             if (gameStateContents.damages[index] != damage)
             {
                 gameStateContents.damages[index] = damage;
-                ReportEvent(GameEvent.DAMAGE_CHANGED);
-                return;
+                break;
             }
             index = (index + 1) % nofDamages;
             candidates++;
         }
 
-        if (damage)
+        ReportEvent(damage ? GameEvent.DAMAGE_SUSTAINED : GameEvent.DAMAGE_REPAIRED);
+
+        if (damage && candidates >= nofDamages)
         {
             SetStatus(GameStatus.KILLED_BY_FLACK);
         }
@@ -205,7 +210,7 @@ public class GameState : MonoBehaviour
     {
         gameStateContents.speed = 0f;
         gameStateContents.gameStatus = GameStatus.REFUELLING;
-        gameStateContents.altitude = 0f;
+        gameStateContents.altitude = minAltitude;
         gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;

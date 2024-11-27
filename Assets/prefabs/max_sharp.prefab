@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1349370398196582425}
   - component: {fileID: -2765026285494241494}
   - component: {fileID: -1933360253579024442}
+  - component: {fileID: 5547384854979691170}
   m_Layer: 3
   m_Name: max_sharp
   m_TagString: Untagged
@@ -308,6 +309,14 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.21}
   m_EdgeRadius: 0
+--- !u!81 &5547384854979691170
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6968700587012613537}
+  m_Enabled: 1
 --- !u!1001 &4742559290695725460
 PrefabInstance:
   m_ObjectHideFlags: 0

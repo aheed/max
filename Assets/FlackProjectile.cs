@@ -27,7 +27,13 @@ public class FlackProjectile : MonoBehaviour
         timeToLiveSec -= Time.deltaTime;
         if (timeToLiveSec < 0f)
         {
-            Instantiate(flackExplosionPrefab, transform.position, Quaternion.identity);
+            // Place the explosion at same altitude as the plane
+            // for correct 3D sound distance.
+            Vector3 explosionPos = new Vector3(
+                transform.position.x,
+                transform.position.y,
+                FindObjectOfType<GameState>().GetStateContents().altitude);
+            Instantiate(flackExplosionPrefab, explosionPos, Quaternion.identity);
             Destroy(gameObject);
         }
     }

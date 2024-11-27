@@ -5,6 +5,21 @@ using System.Linq;
 
 public class DashUIDocument : MonoBehaviour, IGameStateObserver
 {
+    public int maxSpeedDisplayed = 130;
+    public int maxAltitudeDisplayed = 99;
+    public int maxFuelDisplayed = 200;
+    public float speedPitchMax = 1f;
+    public float altitudePitchMax = 1f;
+    
+    public AudioClip bingClip;
+    public AudioClip damageClip;
+    public AudioClip alertClip;
+    public AudioClip bangSmallClip;
+    public AudioClip bangMediumClip;
+    public AudioClip bangBigClip;
+    public AudioClip rulebritanniaClip;
+    AudioSource audioSource;
+    AudioSource motorAudioSource;
     UIDocument uiDocument;
     
     Label altLabel;
@@ -22,11 +37,9 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
-    
-    public int maxSpeedDisplayed = 130;
-    public int maxAltitudeDisplayed = 99;
-    public int maxFuelDisplayed = 200;
+
     int lastDisplayedFuel;
+    int lastDisplayedAltitude;
     SimpleBlinker dashBlinker;
     HashSet<EnemyPlane> enemyPlaneSet;
     public float avgAlpha = 0.01f;
@@ -34,11 +47,16 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     int displayCnt = 0;
     GameState gameState;
     GameStateContents gameStateContents;
+    float speedPitch;
+    float altitudePitch;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        var audioSources = GetComponents<AudioSource>();
+        audioSource = audioSources[0];
+        motorAudioSource = audioSources[1];
         uiDocument = GetComponent<UIDocument>();
         dashBase = uiDocument.rootVisualElement.Q<VisualElement>("DashBase");
         topRowInner = uiDocument.rootVisualElement.Q<VisualElement>("TopRowInner");
@@ -125,19 +143,40 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         }
     }
 
+    void UpdatePitch()
+    {
+        motorAudioSource.pitch = 1 + speedPitch + altitudePitch;
+        var mute = 
+            gameStateContents.gameStatus == GameStatus.FINISHED ||
+            gameStateContents.gameStatus == GameStatus.DEAD ||
+            gameStateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
+            gameStateContents.gameStatus == GameStatus.OUT_OF_FUEL;
+        motorAudioSource.mute = mute;
+    }
+
     void UpdateSpeed()
     {
-        var speed = (int)((gameStateContents.speed * maxSpeedDisplayed) / gameState.maxSpeed);
+        var relSpeed = gameStateContents.speed / gameState.maxSpeed;
+        var speed = (int)(relSpeed * maxSpeedDisplayed);
         speedLabel.text = $"{speed:000}";
         var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
         speedLabel.style.color = color;
+        speedPitch = relSpeed * speedPitchMax;
+        UpdatePitch();
         UpdateDashColor();
     }
 
     void UpdateAlt()
     {
-        var altitude = (int)((gameStateContents.altitude * maxAltitudeDisplayed) / gameState.maxAltitude);
-        altLabel.text = $"{altitude:00}";
+        var relAltitude = gameStateContents.altitude / gameState.maxAltitude;
+        var altitude = (int)(relAltitude * maxAltitudeDisplayed);
+        if (altitude != lastDisplayedAltitude)
+        {
+            altLabel.text = $"{altitude:00}";
+            altitudePitch = relAltitude * altitudePitchMax;
+            UpdatePitch();
+            lastDisplayedAltitude = altitude;
+        }
         UpdateDashColor();
     }
 
@@ -199,6 +238,10 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
                 "Blue Max class 1" :
                 "Kamikaze trainee class 4";
             rankLabel.text = $"Rank: {rank}";
+            if (gameStateContents.gameStatus == GameStatus.FINISHED)
+            {
+                audioSource.PlayOneShot(rulebritanniaClip);
+            }
         }
         else
         {
@@ -236,6 +279,12 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
 
     public void OnGameStatusChanged(GameStatus gameStatus)
     {
+        if (gameStatus == GameStatus.REPAIRING ||
+            gameStatus == GameStatus.LOADING_BOMBS)
+        {
+            audioSource.clip = bingClip;
+            audioSource.Play();
+        }
         UpdateGameStatus();
         UpdateAlert();
     }
@@ -262,18 +311,39 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         {
             UpdateScore();
         }
-        else if (ge == GameEvent.ALERT)
+        else if (ge == GameEvent.DAMAGE_SUSTAINED)
         {
-            UpdateAlert();
-        }
-        else if (ge == GameEvent.DAMAGE_CHANGED)
-        {
+            audioSource.PlayOneShot(damageClip);
             UpdateDamage();
         }
-        else if (ge == GameEvent.LANDING_CHANGED ||
-                 ge == GameEvent.WIND_CHANGED)
+        else if (ge == GameEvent.DAMAGE_REPAIRED)
+        {
+            audioSource.PlayOneShot(bingClip);
+            UpdateDamage();
+        }
+        else if (ge == GameEvent.LANDING_CHANGED)
+        {
+            if (gameStateContents.approachingLanding)
+            {
+                audioSource.PlayOneShot(alertClip);
+            }
+            UpdateAlert();
+        }
+        else if (ge == GameEvent.WIND_CHANGED)
         {
             UpdateAlert();
+        }
+        else if (ge == GameEvent.SMALL_BANG)
+        {
+            audioSource.PlayOneShot(bangSmallClip);
+        }
+        else if (ge == GameEvent.MEDIUM_BANG)
+        {
+            audioSource.PlayOneShot(bangMediumClip);
+        }
+        else if (ge == GameEvent.BIG_BANG)
+        {
+            audioSource.PlayOneShot(bangBigClip);
         }
     }
 

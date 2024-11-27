@@ -150,6 +150,11 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
             Destroy(target.gameObject);
             target = null;
         }
+
+        var bomb = col.gameObject.GetComponent<Bomb>();
+        var tmp = new GameObject("tmp"); // Pass a throwaway game object to indicate something was hit
+        tmp.transform.position = bomb.transform.position;
+        FindObjectOfType<GameState>().BombLanded(bomb, tmp);
     }
 
     public Vector2 GetPosition() => transform.position;
