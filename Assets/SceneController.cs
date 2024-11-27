@@ -1017,7 +1017,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         if (stateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
             stateContents.gameStatus == GameStatus.COLLIDED)
         {
-            if (maxPlane.GetAltitude() <= MaxControl.minAltitude)
+            if (maxPlane.GetAltitude() <= gameState.minAltitude)
             {
                 gameState.SetStatus(GameStatus.DEAD);
             }

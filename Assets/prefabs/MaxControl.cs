@@ -20,8 +20,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float damagePeriodSec = 2.0f;
     public float offsetDecreaseRate = 0.3f;
     public float bulletIntervalSeconds = 0.1f;
-    public  float bombIntervalSeconds = 0.5f;
-    public static readonly float minAltitude = 0.1f;
+    public  float bombIntervalSeconds = 0.5f;    
     public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
     public float collidedMoveInterval = 0.03f;
@@ -48,7 +47,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public Sprite rightSprite;
     public Sprite straightSprite;
     public Sprite crashedSprite;
-    private SpriteRenderer spriteR;
+    SpriteRenderer spriteR;
     float offsetY = 0;
     GameState gameState;    
     private Vector2 touchStartPosition, touchEndPosition;
@@ -177,9 +176,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         tmpLocalPosition.z += -forcedDescent * Time.deltaTime +
             (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
 
-        if (tmpLocalPosition.z < minAltitude) 
+        if (tmpLocalPosition.z < gameState.minAltitude) 
         {
-            tmpLocalPosition.z = minAltitude;
+            tmpLocalPosition.z = gameState.minAltitude;
         }
         if (tmpLocalPosition.z > gameState.maxAltitude)
         {

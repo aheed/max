@@ -55,6 +55,7 @@ public interface IGameStateObserver
 public class GameState : MonoBehaviour
 {
     public float maxSpeed = 2.0f;
+    public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
     public float minSafeAltitude = 0.3f;
     public float maxHorizPosition = 2.0f;
@@ -206,7 +207,7 @@ public class GameState : MonoBehaviour
     {
         gameStateContents.speed = 0f;
         gameStateContents.gameStatus = GameStatus.REFUELLING;
-        gameStateContents.altitude = 0f;
+        gameStateContents.altitude = minAltitude;
         gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;

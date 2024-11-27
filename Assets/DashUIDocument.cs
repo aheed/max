@@ -8,10 +8,14 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     public int maxSpeedDisplayed = 130;
     public int maxAltitudeDisplayed = 99;
     public int maxFuelDisplayed = 200;
+    public float speedPitchMax = 1f;
+    public float altitudePitchMax = 1f;
+    
     public AudioClip bingClip;
     public AudioClip damageClip;
     public AudioClip alertClip;
     AudioSource audioSource;
+    AudioSource motorAudioSource;
     UIDocument uiDocument;
     
     Label altLabel;
@@ -31,6 +35,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     VisualElement rankOuter;
 
     int lastDisplayedFuel;
+    int lastDisplayedAltitude;
     SimpleBlinker dashBlinker;
     HashSet<EnemyPlane> enemyPlaneSet;
     public float avgAlpha = 0.01f;
@@ -38,12 +43,16 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     int displayCnt = 0;
     GameState gameState;
     GameStateContents gameStateContents;
+    float speedPitch;
+    float altitudePitch;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        var audioSources = GetComponents<AudioSource>();
+        audioSource = audioSources[0];
+        motorAudioSource = audioSources[1];
         uiDocument = GetComponent<UIDocument>();
         dashBase = uiDocument.rootVisualElement.Q<VisualElement>("DashBase");
         topRowInner = uiDocument.rootVisualElement.Q<VisualElement>("TopRowInner");
@@ -130,19 +139,34 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         }
     }
 
+    void UpdatePitch()
+    {
+        motorAudioSource.pitch = 1 + speedPitch + altitudePitch;
+    }
+
     void UpdateSpeed()
     {
-        var speed = (int)((gameStateContents.speed * maxSpeedDisplayed) / gameState.maxSpeed);
+        var relSpeed = gameStateContents.speed / gameState.maxSpeed;
+        var speed = (int)(relSpeed * maxSpeedDisplayed);
         speedLabel.text = $"{speed:000}";
         var color = gameStateContents.speed >= gameState.GetSafeTakeoffSpeed() ? Color.white : Color.gray;
         speedLabel.style.color = color;
+        speedPitch = relSpeed * speedPitchMax;
+        UpdatePitch();
         UpdateDashColor();
     }
 
     void UpdateAlt()
     {
-        var altitude = (int)((gameStateContents.altitude * maxAltitudeDisplayed) / gameState.maxAltitude);
-        altLabel.text = $"{altitude:00}";
+        var relAltitude = gameStateContents.altitude / gameState.maxAltitude;
+        var altitude = (int)(relAltitude * maxAltitudeDisplayed);
+        if (altitude != lastDisplayedAltitude)
+        {
+            altLabel.text = $"{altitude:00}";
+            altitudePitch = relAltitude * altitudePitchMax;
+            UpdatePitch();
+            lastDisplayedAltitude = altitude;
+        }
         UpdateDashColor();
     }
 
