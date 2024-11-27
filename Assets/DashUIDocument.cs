@@ -142,6 +142,12 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     void UpdatePitch()
     {
         motorAudioSource.pitch = 1 + speedPitch + altitudePitch;
+        var mute = 
+            gameStateContents.gameStatus == GameStatus.FINISHED ||
+            gameStateContents.gameStatus == GameStatus.DEAD ||
+            gameStateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
+            gameStateContents.gameStatus == GameStatus.OUT_OF_FUEL;
+        motorAudioSource.mute = mute;
     }
 
     void UpdateSpeed()
