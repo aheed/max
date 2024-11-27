@@ -541,6 +541,9 @@ MonoBehaviour:
   bingClip: {fileID: 8300000, guid: 48f43751dcae5c26899ddba23638404a, type: 3}
   damageClip: {fileID: 8300000, guid: 1c3fc002074535e80aa76b7ec056c4ed, type: 3}
   alertClip: {fileID: 8300000, guid: 4f44e28e0530e8f7db67b5180c88f874, type: 3}
+  bangSmallClip: {fileID: 8300000, guid: 193f27a34514c7fb69b95696a91752bf, type: 3}
+  bangMediumClip: {fileID: 8300000, guid: c80f3f3a37f13102cb5058a52010b868, type: 3}
+  bangBigClip: {fileID: 8300000, guid: 355c5f03952715523b4c812248b7eaf7, type: 3}
   avgAlpha: 0.01
 --- !u!82 &2054397215
 AudioSource:

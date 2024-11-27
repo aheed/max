@@ -37,6 +37,7 @@ public class Boat1 : MonoBehaviour, IPositionObservable
             --health;
             if (health <= 0)
             {
+                gameState.ReportEvent(GameEvent.MEDIUM_BANG);
                 Sink();
             }
         }
@@ -48,6 +49,8 @@ public class Boat1 : MonoBehaviour, IPositionObservable
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             gameState.BombLanded(bomb, null);
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             Sink();
             return;
         }

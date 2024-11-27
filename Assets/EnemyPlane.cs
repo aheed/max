@@ -214,6 +214,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         {
             collider.enabled = false;
         }
+        gameState.ReportEvent(GameEvent.BIG_BANG);
     }
 
 }

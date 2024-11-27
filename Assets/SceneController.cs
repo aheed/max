@@ -1218,6 +1218,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             if (prefab != bombSplashPrefab)
             {
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+                gameState.ReportEvent(GameEvent.SMALL_BANG);
             }
         }
         else
@@ -1226,11 +1227,11 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             {
                 Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+                gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
             Destroy(hitObject);
         }
-        //var s = IsOverRiver(bomb.GetPosition()) ? "Splash!" : "Booom!";
-        //Debug.Log($"Bomb on the scene at {bomb.GetPosition().x}, {bomb.GetPosition().y} ******* {s} {bomb.transform.position} {c.transform.position}");
+    
         if (bomb != null)
         {
             Destroy(bomb.gameObject);

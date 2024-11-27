@@ -432,6 +432,10 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
             spriteR.sprite = crashedSprite;
+            if (gameStatus == GameStatus.DEAD)
+            {
+                gameState.ReportEvent(GameEvent.BIG_BANG);
+            }
         }
     }
 

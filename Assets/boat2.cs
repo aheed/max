@@ -47,8 +47,10 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
     {
         if (col.name.StartsWith("bomb"))
         {
-            var bomb = col.gameObject.GetComponent<Bomb>();
+            var bomb = col.gameObject.GetComponent<Bomb>();            
             gameState.BombLanded(bomb, null);
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             Sink();
             // Todo: report destroyed boat for scoring
             return;
@@ -58,6 +60,8 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
             col.name.StartsWith("boat") ||
             col.name.StartsWith("road_end"))
         {
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.SMALL_BANG);
             Sink();
             return;
         }
@@ -65,6 +69,7 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName.StartsWith("bullet"))
         {
+            gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             Sink();
             // Todo: report destroyed boat for scoring
         }

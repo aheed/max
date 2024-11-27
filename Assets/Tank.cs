@@ -24,6 +24,9 @@ public class Tank : MonoBehaviour, IPositionObservable
             {
                 collider.enabled = false;
             }
+            var gameState = FindObjectOfType<GameState>();
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.SMALL_BANG);
 
             // Todo: report destroyed tank for scoring
         }

@@ -14,6 +14,9 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     public AudioClip bingClip;
     public AudioClip damageClip;
     public AudioClip alertClip;
+    public AudioClip bangSmallClip;
+    public AudioClip bangMediumClip;
+    public AudioClip bangBigClip;
     AudioSource audioSource;
     AudioSource motorAudioSource;
     UIDocument uiDocument;
@@ -324,6 +327,18 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         else if (ge == GameEvent.WIND_CHANGED)
         {
             UpdateAlert();
+        }
+        else if (ge == GameEvent.SMALL_BANG)
+        {
+            audioSource.PlayOneShot(bangSmallClip);
+        }
+        else if (ge == GameEvent.MEDIUM_BANG)
+        {
+            audioSource.PlayOneShot(bangMediumClip);
+        }
+        else if (ge == GameEvent.BIG_BANG)
+        {
+            audioSource.PlayOneShot(bangBigClip);
         }
     }
 

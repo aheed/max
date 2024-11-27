@@ -17,7 +17,10 @@ public enum GameEvent
     SMALL_DETONATION,
     BIG_DETONATION,
     LANDING_CHANGED,
-    WIND_CHANGED
+    WIND_CHANGED,
+    SMALL_BANG,
+    MEDIUM_BANG,
+    BIG_BANG,
 }
 
 public enum DamageIndex

@@ -33,6 +33,9 @@ public class FlackGun : MonoBehaviour, IPositionObservable
                 collider.enabled = false;
             }
             alive = false;
+            var gameState = FindObjectOfType<GameState>();
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.SMALL_BANG);
 
             // Todo: report destroyed flack gun for scoring
         }
