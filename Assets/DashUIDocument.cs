@@ -17,6 +17,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     public AudioClip bangSmallClip;
     public AudioClip bangMediumClip;
     public AudioClip bangBigClip;
+    public AudioClip rulebritanniaClip;
     AudioSource audioSource;
     AudioSource motorAudioSource;
     UIDocument uiDocument;
@@ -237,6 +238,10 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
                 "Blue Max class 1" :
                 "Kamikaze trainee class 4";
             rankLabel.text = $"Rank: {rank}";
+            if (gameStateContents.gameStatus == GameStatus.FINISHED)
+            {
+                audioSource.PlayOneShot(rulebritanniaClip);
+            }
         }
         else
         {
