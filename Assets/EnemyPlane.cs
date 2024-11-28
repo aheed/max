@@ -140,13 +140,13 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
         if (speed > 0 && transform.position.y - refObject.transform.position.y > maxDistance)
         {
-            Debug.Log($"Enemy plane too far in front ({transform.position.y} vs {refObject.transform.position.y})");
+            //Debug.Log($"Enemy plane too far in front ({transform.position.y} vs {refObject.transform.position.y})");
             Deactivate();
         }
 
         if (speed < 0 && refObject.transform.position.y - transform.position.y > maxDistanceBehind)
         {
-            Debug.Log($"Enemy plane too far behind ({transform.position.y} vs {refObject.transform.position.y})");
+            //Debug.Log($"Enemy plane too far behind ({transform.position.y} vs {refObject.transform.position.y})");
             Deactivate();
         }
 

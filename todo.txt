@@ -399,6 +399,7 @@ target count:
     Problem for city level.*
   Make all possible VIP targets report target hit when hit.*
   Implement the level type decision based on target count fulfillment.
+    Should be possible to replay road level? Two limits? Randomness?
 
 ---
 More optimization: remove unnecessary Start functions, to make game object instantiation cheaper.

@@ -934,20 +934,28 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
     LevelPrerequisite GetNewLevelPrereq()
     {
-        // Todo: implement decision what level type to build next.
-        //       Should be based on player performance, like number of VIP targets hit, score etc.
-        var newLevelType = LevelType.NORMAL;
         var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;
-        if (latestLevelType == LevelType.NORMAL) 
-        {
-            newLevelType = LevelType.ROAD;
-        }
-        else if (latestLevelType == LevelType.ROAD ||
-                latestLevelType == LevelType.CITY)
+        var newLevelType = latestLevelType;
+        var reachedTargetLimit = gameState.GetTargetsHit() >= gameState.GetStateContents().targetsHitMin;
+        if (latestLevelType == LevelType.CITY)
         {
             newLevelType = LevelType.CITY;
         }
-        ////
+        else if (reachedTargetLimit)
+        {
+            if (latestLevelType == LevelType.NORMAL)
+            {
+                newLevelType = LevelType.ROAD;
+            }
+            else // if (latestLevelType == LevelType.ROAD) 
+            {
+                newLevelType = LevelType.CITY;
+            }
+        }
+        else if (latestLevelType == LevelType.ROAD)
+        {
+            newLevelType = LevelType.NORMAL;
+        }
 
         var enemyHQsBombed = latestLevelType == LevelType.CITY ?
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
@@ -1079,7 +1087,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     stateContents.windDirection = GameStateContents.windDirections[UnityEngine.Random.Range(0, GameStateContents.windDirections.Length)];
                     gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);
                     SetWindCooldown();
-                    Debug.Log($"New wind {stateContents.windDirection} {stateContents.wind}");
+                    //Debug.Log($"New wind {stateContents.windDirection} {stateContents.wind}");
                 }
             }
 
