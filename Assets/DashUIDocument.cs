@@ -34,6 +34,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     Label alertLabel;
     Label rankLabel;
     Label fpsLabel;
+    Label targetsLabel;
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
@@ -73,6 +74,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
+        targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
 
         gameState = FindObjectOfType<GameState>();
         gameStateContents = gameState.GetStateContents();
@@ -190,6 +192,11 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         scoreLabel.text = $"{gameStateContents.score:0000}";
     }
 
+    void UpdateTargets()
+    {
+        targetsLabel.text = $"{gameStateContents.targetsHit}/{888}";
+    }
+
     void UpdateAlert()
     {
         if (gameStateContents.gameStatus != GameStatus.FLYING)
@@ -265,6 +272,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         UpdateDamage();
         UpdateBombs();
         UpdateDashColor();
+        UpdateTargets();
     }
 
     void UpdateFuel()
@@ -310,6 +318,10 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         else if (ge == GameEvent.SCORE_CHANGED)
         {
             UpdateScore();
+        }
+        else if (ge == GameEvent.TARGET_HIT)
+        {
+            UpdateTargets();
         }
         else if (ge == GameEvent.DAMAGE_SUSTAINED)
         {

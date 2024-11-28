@@ -24,6 +24,8 @@
             <ui:Label tabindex="-1" text="99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Bombs" style="width: 7%;" />
             <ui:Label tabindex="-1" text="SCORE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ScoreText" />
             <ui:Label tabindex="-1" text="99999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Score" style="width: 18%;" />
+            <ui:Label tabindex="-1" text="Targets" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TargetsText" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Targets" />
         </ui:VisualElement>
         <ui:Label tabindex="-1" text="W" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alert" style="font-size: 72px; position: absolute; top: auto; left: 220px; width: 6%; bottom: 17%;" />
         <ui:Label tabindex="-1" text="fps" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FpsLabel" style="position: absolute; right: 10%;" />

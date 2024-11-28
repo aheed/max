@@ -936,6 +936,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             {
                 Debug.Log("Time to build new level (sync) ***************");
                 latestLevelPrereq = GetNewLevelPrereq();
+                gameState.SetTargetsHit(0);
                 latestLevel = new LevelBuilder().Build(latestLevelPrereq);
                 CreateLevel();
             }
@@ -945,6 +946,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 {
                     Debug.Log("Time to build new level asynchronously ***************");
                     latestLevelPrereq = GetNewLevelPrereq();
+                    gameState.SetTargetsHit(0);
                     newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }

@@ -21,6 +21,7 @@ public enum GameEvent
     SMALL_BANG,
     MEDIUM_BANG,
     BIG_BANG,
+    TARGET_HIT
 }
 
 public enum DamageIndex
@@ -45,6 +46,7 @@ public class GameStateContents
     public bool wind = false;
     public bool[] damages = new bool[] { false, false, false, false};
     public Vector2 windDirection = new Vector2(0f, 0f);
+    public int targetsHit;
 }
 
 public interface IGameStateObserver
@@ -73,6 +75,8 @@ public class GameState : MonoBehaviour
     public int maxBombs = 30;
     public float maxFuel = 100f;
     public float startFuelQuotient = 0.90f;
+    public int targetsHitMin1 = 10;
+    public int targetsHitMin2 = 10;
 
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;
@@ -206,6 +210,17 @@ public class GameState : MonoBehaviour
         }
     }
 
+    public void SetTargetsHit(int hits)
+    {
+        gameStateContents.targetsHit = hits;
+        ReportEvent(GameEvent.TARGET_HIT);
+    }
+
+    public void IncrementTargetsHit()
+    {
+        SetTargetsHit(gameStateContents.targetsHit + 1);
+    }    
+
     public void Reset()
     {
         gameStateContents.speed = 0f;
@@ -216,6 +231,7 @@ public class GameState : MonoBehaviour
         gameStateContents.score = 0;
         gameStateContents.wind = false;
         gameStateContents.damages = new bool[] { false, false, false, false};
+        gameStateContents.targetsHit = 0;
     }
 
     // Start is called before the first frame update
