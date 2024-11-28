@@ -47,6 +47,7 @@ public class GameStateContents
     public bool[] damages = new bool[] { false, false, false, false};
     public Vector2 windDirection = new Vector2(0f, 0f);
     public int targetsHit;
+    public int targetsHitMin;
 }
 
 public interface IGameStateObserver
@@ -210,15 +211,17 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public void SetTargetsHit(int hits)
+    public void SetTargetsHit(int hits, int hitsMin)
     {
         gameStateContents.targetsHit = hits;
+        gameStateContents.targetsHitMin = hitsMin;
         ReportEvent(GameEvent.TARGET_HIT);
     }
 
     public void IncrementTargetsHit()
     {
-        SetTargetsHit(gameStateContents.targetsHit + 1);
+        SetTargetsHit(gameStateContents.targetsHit + 1,
+            gameStateContents.targetsHitMin); // unchanged
     }    
 
     public void Reset()
@@ -232,6 +235,7 @@ public class GameState : MonoBehaviour
         gameStateContents.wind = false;
         gameStateContents.damages = new bool[] { false, false, false, false};
         gameStateContents.targetsHit = 0;
+        gameStateContents.targetsHitMin = 0;
     }
 
     // Start is called before the first frame update

@@ -194,7 +194,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
 
     void UpdateTargets()
     {
-        targetsLabel.text = $"{gameStateContents.targetsHit}/{888}";
+        targetsLabel.text = $"{gameStateContents.targetsHit}/{gameStateContents.targetsHitMin}";
     }
 
     void UpdateAlert()

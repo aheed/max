@@ -108,6 +108,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public int rightTrim = 5;
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
+    public LevelType startLevelType = LevelType.NORMAL;
 
     //// Game status
     MaxCamera maxCamera;
@@ -698,6 +699,23 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.AddRange(newGameObjects);
     }
 
+    int GetTargetHisMin(LevelType levelType)
+    {
+        switch (levelType)
+        {
+            case LevelType.NORMAL:
+                return gameState.targetsHitMin1;
+            case LevelType.ROAD:
+                return gameState.targetsHitMin2;
+            case LevelType.CITY:
+                //return enemyHQs.Count;
+                return 777; //todo: introduce constant. Or look at another collection.
+            default:
+                Debug.LogError($"invalid level type {levelType}");
+                return 0;
+        }
+    }
+
     void StartNewGame()
     {
         levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.gridHeight;
@@ -731,10 +749,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         activeObjects.Clear();
         roadLowerEdgesY = new();
         enemyHQs = null;
-        newLevelTask = null;
+        newLevelTask = null;        
         latestLevelPrereq = new LevelPrerequisite 
             {
-                levelType = LevelType.NORMAL,
+                levelType = startLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
@@ -743,6 +761,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         PreventRelanding();
         gameState = GetGameState();
         gameState.Reset();
+        gameState.GetStateContents().targetsHitMin = GetTargetHisMin(startLevelType);
         gameState.ReportEvent(GameEvent.START);
     }
 
@@ -936,7 +955,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             {
                 Debug.Log("Time to build new level (sync) ***************");
                 latestLevelPrereq = GetNewLevelPrereq();
-                gameState.SetTargetsHit(0);
+                gameState.SetTargetsHit(0, GetTargetHisMin(latestLevelPrereq.levelType));
                 latestLevel = new LevelBuilder().Build(latestLevelPrereq);
                 CreateLevel();
             }
@@ -946,7 +965,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 {
                     Debug.Log("Time to build new level asynchronously ***************");
                     latestLevelPrereq = GetNewLevelPrereq();
-                    gameState.SetTargetsHit(0);
+                    gameState.SetTargetsHit(0, GetTargetHisMin(latestLevelPrereq.levelType));
                     newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }
