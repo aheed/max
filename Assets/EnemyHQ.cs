@@ -44,8 +44,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable
         var gameState = FindObjectOfType<GameState>();
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
-
-        // Todo: report destroyed enemy HQ
+        gameState.IncrementTargetsHit();
     }
 
     public Vector2 GetPosition() => transform.position;

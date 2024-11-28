@@ -699,6 +699,21 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.AddRange(newGameObjects);
     }
 
+    int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
+    {
+        switch (levelPrereq.levelType)
+        {
+            case LevelType.NORMAL:
+            case LevelType.ROAD:
+                return 0;
+            case LevelType.CITY:
+                return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
+            default:
+                Debug.LogError($"invalid level type {levelPrereq.levelType}");
+                return 0;
+        }
+    }
+
     int GetTargetHitsMin(LevelPrerequisite levelPrereq)
     {
         switch (levelPrereq.levelType)
@@ -708,7 +723,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             case LevelType.ROAD:
                 return gameState.targetsHitMin2;
             case LevelType.CITY:
-                //return enemyHQs.Count;
                 return levelPrereq.enemyHQsBombed.Count();
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
@@ -955,7 +969,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             {
                 Debug.Log("Time to build new level (sync) ***************");
                 latestLevelPrereq = GetNewLevelPrereq();
-                gameState.SetTargetsHit(0, GetTargetHitsMin(latestLevelPrereq));
+                gameState.SetTargetsHit(
+                    GetTargetHitsAtStartOfLevel(latestLevelPrereq),
+                    GetTargetHitsMin(latestLevelPrereq));
                 latestLevel = new LevelBuilder().Build(latestLevelPrereq);
                 CreateLevel();
             }
@@ -965,7 +981,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 {
                     Debug.Log("Time to build new level asynchronously ***************");
                     latestLevelPrereq = GetNewLevelPrereq();
-                    gameState.SetTargetsHit(0, GetTargetHitsMin(latestLevelPrereq));
+                    gameState.SetTargetsHit(
+                        GetTargetHitsAtStartOfLevel(latestLevelPrereq),
+                        GetTargetHitsMin(latestLevelPrereq));
                     newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }

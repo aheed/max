@@ -392,3 +392,8 @@ bug: shadow responds to moves in state KILLED_BY_FLACK
 lazy evaluation to delay instantiation of game objects:
   cars don't appear*
   active objects are not destroyed*
+
+---
+target count:
+  Targets from last level hit after new level is created count.
+    Problem for city level.
