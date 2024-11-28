@@ -924,7 +924,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var maxSpeed = oncoming ? enemyPlaneOncomingSpeedMax : enemyPlaneSpeedMax * gameState.maxSpeed;
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
-        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
+            gameState.GetStateContents().latestLevelPrereq.levelType != LevelType.CITY)
         {
             enemyPlane.SetVip();
         }

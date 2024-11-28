@@ -52,7 +52,10 @@ public class Car : MonoBehaviour, IVip
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             gameState.BombLanded(bomb, gameObject);
-            return;
+            if(IsVip())
+            {
+                gameState.IncrementTargetsHit();
+            }
         }
     }
 }

@@ -51,8 +51,11 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
             gameState.BombLanded(bomb, null);
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.MEDIUM_BANG);
+            if (IsVip())
+            {
+                gameState.IncrementTargetsHit();
+            }
             Sink();
-            // Todo: report destroyed boat for scoring
             return;
         }
 
@@ -70,8 +73,11 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
         if (collObjName.StartsWith("bullet"))
         {
             gameState.ReportEvent(GameEvent.MEDIUM_BANG);
+            if (IsVip())
+            {
+                gameState.IncrementTargetsHit();
+            }
             Sink();
-            // Todo: report destroyed boat for scoring
         }
     }
 
