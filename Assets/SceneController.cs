@@ -118,7 +118,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     int currentLevelIndex = 0;
     static int nofLevels = 2;
     GameObject[] levels;
-    LevelPrerequisite latestLevelPrereq;
     LevelContents latestLevel;
     Task<LevelContents> newLevelTask;
     int framesToBuildLevelDbg;
@@ -138,7 +137,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
-    List<EnemyHQ> enemyHQs;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -210,6 +208,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     // llcx, llcy: Lower Left Corner of the level
     public List<GameObjectCollection> PopulateScene(LevelContents levelContents)
     {
+        GameStateContents stateContents = gameState.GetStateContents();
         float cellWidth = levelWidth / LevelContents.gridWidth;
         float cellHeight = levelHeight / LevelContents.gridHeight;
         float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
@@ -405,7 +404,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var cityMesh = CreateQuadMesh(cityVerts);
             cityMeshFilter.mesh = cityMesh;
 
-            enemyHQs = levelContents.city.enemyHQs.Select(hq =>
+            stateContents.enemyHQs = levelContents.city.enemyHQs.Select(hq =>
             {
                 var hqInstance = Instantiate(enemyHqPrefab, lvlTransform);
                 if (hq.bombed)
@@ -762,20 +761,21 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-        enemyHQs = null;
-        newLevelTask = null;        
-        latestLevelPrereq = new LevelPrerequisite 
+        newLevelTask = null;
+        gameState = GetGameState();
+        var stateContents = gameState.GetStateContents();
+        gameState.Reset();
+        stateContents.latestLevelPrereq = new LevelPrerequisite 
             {
                 levelType = startLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
-        latestLevel = new LevelBuilder().Build(latestLevelPrereq);
+        latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
-        gameState = GetGameState();
-        gameState.Reset();
-        gameState.GetStateContents().targetsHitMin = GetTargetHitsMin(latestLevelPrereq);
+        stateContents.enemyHQs = null;
+        stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
         gameState.ReportEvent(GameEvent.START);
     }
 
@@ -936,19 +936,20 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         // Todo: implement decision what level type to build next.
         //       Should be based on player performance, like number of VIP targets hit, score etc.
         var newLevelType = LevelType.NORMAL;
-        if (latestLevelPrereq.levelType == LevelType.NORMAL) 
+        var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;
+        if (latestLevelType == LevelType.NORMAL) 
         {
             newLevelType = LevelType.ROAD;
         }
-        else if (latestLevelPrereq.levelType == LevelType.ROAD ||
-                latestLevelPrereq.levelType == LevelType.CITY)
+        else if (latestLevelType == LevelType.ROAD ||
+                latestLevelType == LevelType.CITY)
         {
             newLevelType = LevelType.CITY;
         }
         ////
 
-        var enemyHQsBombed = latestLevelPrereq.levelType == LevelType.CITY ?
-            enemyHQs.Select(hq => hq.IsBombed()) :
+        var enemyHQsBombed = latestLevelType == LevelType.CITY ?
+            gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
             new List<bool> {false, false, false};
         return new LevelPrerequisite {
             levelType = newLevelType,
@@ -968,23 +969,23 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             if (!asyncLevelBuild)
             {
                 Debug.Log("Time to build new level (sync) ***************");
-                latestLevelPrereq = GetNewLevelPrereq();
-                gameState.SetTargetsHit(
-                    GetTargetHitsAtStartOfLevel(latestLevelPrereq),
-                    GetTargetHitsMin(latestLevelPrereq));
-                latestLevel = new LevelBuilder().Build(latestLevelPrereq);
+                stateContents.latestLevelPrereq = GetNewLevelPrereq();
+                latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
                 CreateLevel();
+                gameState.SetTargetsHit(
+                    GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
+                    GetTargetHitsMin(stateContents.latestLevelPrereq));
             }
             else 
             {
                 if (newLevelTask == null)
                 {
                     Debug.Log("Time to build new level asynchronously ***************");
-                    latestLevelPrereq = GetNewLevelPrereq();
+                    stateContents.latestLevelPrereq = GetNewLevelPrereq();
                     gameState.SetTargetsHit(
-                        GetTargetHitsAtStartOfLevel(latestLevelPrereq),
-                        GetTargetHitsMin(latestLevelPrereq));
-                    newLevelTask = new LevelBuilder().BuildAsync(latestLevelPrereq);
+                        GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
+                        GetTargetHitsMin(stateContents.latestLevelPrereq));
+                    newLevelTask = new LevelBuilder().BuildAsync(stateContents.latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }
                 else 
@@ -1101,6 +1102,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
+                var enemyHQs = gameState.GetStateContents().enemyHQs;
                 gameState.SetStatus(enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed()) ?
                     GameStatus.FINISHED : GameStatus.REFUELLING);
             }

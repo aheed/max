@@ -397,3 +397,9 @@ lazy evaluation to delay instantiation of game objects:
 target count:
   Targets from last level hit after new level is created count.
     Problem for city level.
+
+---
+More optimization: remove unnecessary Start functions, to make game object instantiation cheaper.
+
+---
+Enemy aircraft should not be VIP on city levels.

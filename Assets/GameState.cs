@@ -48,6 +48,8 @@ public class GameStateContents
     public Vector2 windDirection = new Vector2(0f, 0f);
     public int targetsHit;
     public int targetsHitMin;
+    public List<EnemyHQ> enemyHQs;
+    public LevelPrerequisite latestLevelPrereq;
 }
 
 public interface IGameStateObserver
@@ -222,7 +224,14 @@ public class GameState : MonoBehaviour
     {
         SetTargetsHit(gameStateContents.targetsHit + 1,
             gameStateContents.targetsHitMin); // unchanged
-    }    
+    }
+
+    public int GetTargetsHit()
+    {
+        return gameStateContents.latestLevelPrereq.levelType == LevelType.CITY && gameStateContents.enemyHQs != null ?
+            gameStateContents.enemyHQs.Where(h => h.IsBombed()).Count() :
+            gameStateContents.targetsHit;
+    }
 
     public void Reset()
     {
@@ -236,6 +245,7 @@ public class GameState : MonoBehaviour
         gameStateContents.damages = new bool[] { false, false, false, false};
         gameStateContents.targetsHit = 0;
         gameStateContents.targetsHitMin = 0;
+        gameStateContents.latestLevelPrereq = null;
     }
 
     // Start is called before the first frame update
