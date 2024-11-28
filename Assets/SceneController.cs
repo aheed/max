@@ -24,7 +24,7 @@ public enum GameStatus
 public class GameObjectCollection
 {
     public float yCoord;
-    public List<GameObject> gameObjects;
+    public IEnumerable<GameObject> gameObjects;
 }
 
 public class SceneController : MonoBehaviour, IGameStateObserver
@@ -583,19 +583,21 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 bridge.SetVip();
             }
 
-            // Car
-            
+            // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                Car car = Instantiate(carPrefab, lvlTransform);
-                var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-                car.transform.localPosition = carLocalTransform;
-                ret[road].gameObjects.Add(car.gameObject);
-
-                if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
-                {
-                    car.SetVip();
-                }
+                ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).SelectMany(_ => 
+                    {
+                        Car car = Instantiate(carPrefab, lvlTransform);
+                        var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
+                        car.transform.localPosition = carLocalTransform;
+                        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        {
+                            car.SetVip();
+                        }
+                        return new [] {car.gameObject};
+                    })
+                );
             }
         }
 
@@ -616,9 +618,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
 
         // Small items: Flack guns, trees, tanks
-        for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
+        for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
         {
-            for (var xtmp = leftTrim; xtmp < (LevelContents.gridWidth - rightTrim); xtmp++)    
+            var ytmp = ytmpOuter; //capture for lazy evaluation
+            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).Select(xtmp =>
             {
                 GameObject selectedPrefab = null;
                 switch (levelContents.cells[xtmp, ytmp])
@@ -669,15 +672,18 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
-                    ret[ytmp].gameObjects.Add(itemGameObject);
+                    
                     var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
                     if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                     {
                         possibleVip.SetVip();
                     }
+                    return itemGameObject;
                 }
+                return null;
+            }).Where(go => go != null);
 
-            }
+            ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
         }
 
         return ret.ToList();
@@ -689,18 +695,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var newGameObjects = PopulateScene(latestLevel)
         .Select(goc => new GameObjectCollection {yCoord = goc.yCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
         .ToList();
-        foreach (var collection in newGameObjects)
-        {
-            foreach (var gameObject in collection.gameObjects)
-            {
-                var collider = gameObject.GetComponent<Collider2D>();
-                if (collider != null)
-                {
-                    collider.enabled = false;
-                }
-                gameObject.SetActive(false);
-            }
-        }
         pendingActivation.AddRange(newGameObjects);
     }
 
@@ -971,23 +965,12 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().yCoord)
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
-
-            // Activate objects
-            var collection = pendingActivation.First();
-            foreach (var gameObject in collection.gameObjects)
-            {
-                var collider = gameObject.GetComponent<Collider2D>();
-                if (collider != null)
-                {
-                    collider.enabled = true;
-                }
-                gameObject.SetActive(true);
-
-            }
-
-            // Move collection to the activeObjects collection
+            var activeCollection = pendingActivation.First();
+            // Instantiate game objects, never mind return value
+            activeCollection.gameObjects = activeCollection.gameObjects.ToArray();
             pendingActivation.RemoveAt(0);
-            activeObjects.Add(collection);
+            activeObjects.Add(activeCollection);
+            break;
         }
 
         while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().yCoord)
