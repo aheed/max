@@ -586,7 +586,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).SelectMany(_ => 
+                ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
                     {
                         Car car = Instantiate(carPrefab, lvlTransform);
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
@@ -595,7 +595,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         {
                             car.SetVip();
                         }
-                        return new [] {car.gameObject};
+                        return car.gameObject;
                     })
                 );
             }
