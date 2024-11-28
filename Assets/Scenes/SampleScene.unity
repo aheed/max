@@ -470,6 +470,7 @@ MonoBehaviour:
   rightTrim: 20
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
+  startLevelType: 0
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,6 +778,8 @@ MonoBehaviour:
   maxBombs: 30
   maxFuel: 100
   startFuelQuotient: 0.9
+  targetsHitMin1: 10
+  targetsHitMin2: 15
 --- !u!4 &2110362362
 Transform:
   m_ObjectHideFlags: 0

@@ -145,16 +145,19 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         front.Activate();
         side.Activate();
         roof.Activate();
+
+        var gameState = FindObjectOfType<GameState>();
         if (target != null)
         {
             Destroy(target.gameObject);
             target = null;
+            gameState.IncrementTargetsHit();
         }
 
         var bomb = col.gameObject.GetComponent<Bomb>();
         var tmp = new GameObject("tmp"); // Pass a throwaway game object to indicate something was hit
         tmp.transform.position = bomb.transform.position;
-        FindObjectOfType<GameState>().BombLanded(bomb, tmp);
+        gameState.BombLanded(bomb, tmp);
     }
 
     public Vector2 GetPosition() => transform.position;

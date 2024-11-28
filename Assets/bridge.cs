@@ -9,12 +9,6 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
     public float targetOffset = 0.1f;
     Target target;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void SetVip()
     {
         target = Instantiate(targetPrefab, gameObject.transform);
@@ -30,19 +24,17 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
 
     public void OnTriggerEnter2D(Collider2D col)
     {   
-        //Debug.Log($"bridge collided with {col.name}");
         if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
         {
-            Debug.Log($"bridge bombed !!!!!!!!!!!!!!!!!!!!!!!!!!! collided with {col.name}");
             if (target != null)
             {
                 Destroy(target.gameObject);
                 target = null;
+                FindObjectOfType<GameState>().IncrementTargetsHit();
             }
 
             //todo: report road or bridge hit for scoring
         }
-        
     }
 
     public Vector2 GetPosition() => transform.position;

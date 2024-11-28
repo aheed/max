@@ -392,3 +392,17 @@ bug: shadow responds to moves in state KILLED_BY_FLACK
 lazy evaluation to delay instantiation of game objects:
   cars don't appear*
   active objects are not destroyed*
+
+---
+target count:
+  Targets from last level hit after new level is created count.*
+    Problem for city level.*
+  Make all possible VIP targets report target hit when hit.*
+  Implement the level type decision based on target count fulfillment.
+    Should be possible to replay road level? Two limits? Randomness?
+
+---
+More optimization: remove unnecessary Start functions, to make game object instantiation cheaper.
+
+---
+Enemy aircraft should not be VIP on city levels.*
