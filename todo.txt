@@ -402,7 +402,12 @@ target count:
     Should be possible to replay road level? Two limits? Randomness?
 
 ---
-More optimization: remove unnecessary Start functions, to make game object instantiation cheaper.
+More optimization:
+  remove unnecessary Start functions, to make game object instantiation cheaper.
+  Make objects static?
+    https://docs.unity3d.com/Manual/StaticObjects.html
+  Remove ground mesh. Use solid green background color instead (Camera setting).
+  
 
 ---
 Enemy aircraft should not be VIP on city levels.*
