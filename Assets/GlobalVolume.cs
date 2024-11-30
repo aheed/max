@@ -75,6 +75,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
             filmGrain.active = false;
             bloom.active = false;
             vignette.active = false;
+            colorAdjustments.saturation.overrideState = false;
         }
         else if (viewMode == ViewMode.TV_SIM)
         {
@@ -83,6 +84,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
             filmGrain.active = true;
             bloom.active = true;
             vignette.active = true;
+            colorAdjustments.saturation.overrideState = true;
         }
     }
 
