@@ -17,7 +17,7 @@
                     <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Rank" style="display: flex; align-self: center; margin-left: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-direction: column; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="BottomRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%; font-size: 34px; height: 50%;">
+            <ui:VisualElement name="BottomRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%; font-size: 34px; height: 50%; margin-bottom: 15px;">
                 <ui:Label tabindex="-1" text="SPEED" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SpeedText" style="width: 130px; -unity-text-align: upper-right; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; margin-left: 20px;" />
                 <ui:Label tabindex="-1" text="999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Speed" style="color: rgb(255, 255, 255); -unity-font-style: bold; width: 100px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
                 <ui:Label tabindex="-1" text="           " parse-escape-sequences="true" display-tooltip-when-elided="true" name="AlertPlaceholder" style="width: 50px;" />
