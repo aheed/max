@@ -21,7 +21,8 @@ public enum GameEvent
     SMALL_BANG,
     MEDIUM_BANG,
     BIG_BANG,
-    TARGET_HIT
+    TARGET_HIT,
+    VIEW_MODE_CHANGED,
 }
 
 public enum DamageIndex
@@ -30,6 +31,12 @@ public enum DamageIndex
     B,
     M,
     G
+}
+
+public enum ViewMode
+{
+    NORMAL = 0,
+    TV_SIM,
 }
 
 public class GameStateContents
@@ -69,6 +76,7 @@ public class GameState : MonoBehaviour
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
+    public ViewMode viewMode = ViewMode.NORMAL;
     public static float horizontalSpeed = 3.0f;
     public static float verticalSpeed = 2.0f;
     public static float windSpeed = 0.2f;
@@ -159,6 +167,12 @@ public class GameState : MonoBehaviour
             gameStateContents.wind = wind;
             ReportEvent(GameEvent.WIND_CHANGED);
         }
+    }
+
+    public void SetViewMode(ViewMode viewMode)
+    {
+        this.viewMode = viewMode;
+        ReportEvent(GameEvent.VIEW_MODE_CHANGED);
     }
 
     public float GetSafeTakeoffSpeed() => safeTakeoffSpeedQuotient * maxSpeed;

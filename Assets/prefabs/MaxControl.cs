@@ -343,7 +343,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         if (DebugAuxAction.WasPressedThisFrame())
         {
-            gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            //gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
         
         bulletCooldown -= Time.deltaTime;

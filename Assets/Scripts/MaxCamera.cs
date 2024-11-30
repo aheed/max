@@ -5,6 +5,9 @@ using UnityEngine;
 public class MaxCamera : MonoBehaviour
 {   
    public float yOffset = 1.0f;
+   public float tvScale = 0.9f;
+   public float tvOffsetX = -0.1f;
+   public float tvOffsetY = 0.1f;
    public float correctionRate = 0.2f;
    public float shakeAmplitude = 0.3f;
    public int shakeMoves = 5;
@@ -45,5 +48,20 @@ public class MaxCamera : MonoBehaviour
    public void OnDetonation()
    {
       shakeMovesLeft = shakeMoves;
+   }
+
+   public void OnViewModeChanged()
+   {
+      var viewMode = FindObjectOfType<GameState>().viewMode;
+      if (viewMode == ViewMode.NORMAL)
+      {
+         targetLocalPosition = new Vector3(0f, yOffset, -10f);
+         transform.localScale = new Vector3(1f, 1f, 1f);
+      }
+      else if (viewMode == ViewMode.TV_SIM)
+      {
+         targetLocalPosition = new Vector3(tvOffsetX, yOffset + tvOffsetY, -10f);
+         transform.localScale = new Vector3(tvScale, tvScale, 1f);
+      }
    }
 }

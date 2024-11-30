@@ -1233,6 +1233,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         {
             maxCamera.OnDetonation();
         }
+        else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
+        {
+            maxCamera.OnViewModeChanged();
+        }
     }
 
     public void OnBombLanded(Bomb bomb, GameObject hitObject) 
