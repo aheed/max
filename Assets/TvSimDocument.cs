@@ -7,12 +7,11 @@ public class TvSimDocument : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UpdateViewMode();
+        OnViewModeChanged();
     }
 
-    // Update is called once per frame
-    public void UpdateViewMode()
+    public void OnViewModeChanged()
     {
-        
+        gameObject.SetActive(FindObjectOfType<GameState>().viewMode == ViewMode.TV_SIM);
     }
 }

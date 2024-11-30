@@ -137,7 +137,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
-    GameObject tvSimDocumentObject;
+    TvSimDocument tvSimDocumentObject;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -783,7 +783,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     void Start()
     {   
         var camObject = GameObject.Find("Main Camera");
-        tvSimDocumentObject = FindObjectOfType<TvSimDocument>(true).gameObject;
+        tvSimDocumentObject = FindObjectOfType<TvSimDocument>(true);
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         // visible area marker for debugging
@@ -1238,7 +1238,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
         {
             maxCamera.OnViewModeChanged();
-            tvSimDocumentObject.SetActive(gameState.viewMode == ViewMode.TV_SIM);
+            tvSimDocumentObject.OnViewModeChanged();
         }
     }
 
