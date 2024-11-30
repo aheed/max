@@ -264,6 +264,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yOffset: 1.4
+  tvScale: 0.8
+  tvOffsetX: 0
+  tvOffsetY: 0.05
   correctionRate: 0.1
   shakeAmplitude: 4.13
   shakeMoves: 10
@@ -858,6 +861,7 @@ MonoBehaviour:
   maxHorizPosition: 4
   safeTakeoffSpeedQuotient: 0.8
   acceleration: 0.4
+  viewMode: 0
   maxBombs: 30
   maxFuel: 100
   startFuelQuotient: 0.9
