@@ -370,13 +370,13 @@ Looks good if you run it maximized. How to make it start maximized?
       https://stackoverflow.com/questions/63307533/add-way-to-go-full-screen-in-new-unity-webgl-template
 
 
-Alerts
+Alerts*
 P - dashboard keeps track of enemy planes via gameEvent
 W - Random. Any of 5 possible directions (never down). Or no wind.
     Only impacts plane movement when in status flying, out-of-fuel,...
 L - On during approach. Off otherwise. Only displayed in some states.
 
-Introduce new gameEvents and corresponding bool gameStateContents members
+Introduce new gameEvents and corresponding bool gameStateContents members*
   WIND_CHANGED
   LANDING_CHANGED
   Recalculate alert to be displayed if any of the relevant game events happen.
@@ -411,3 +411,23 @@ More optimization:
 
 ---
 Enemy aircraft should not be VIP on city levels.*
+
+---
+Player progress:
+Unlock level when objective (number of targets) achieved on previous level.
+Level: 99 red balloons
+Level: Zaxxon style boss fight
+  Ripoff. How do you stay airbourne with 0 air speed?
+  So? How is a space robot fighting in WW I?
+Level: solve Rubik's cube (how?)
+Fun stuff:
+  purple rain,
+  a flock of seagulls,
+  "Up Where We Belong"	Joe Cocker and Jennifer Warnes
+Move on to next level, 3D mode or whatever:
+  Zaxxon style edge-of-earths-crust, new level on other side of the void.
+  Blackout, lightning
+
+----
+More cushion, less grain, more vignette, more bloom, TV screen glare
+
