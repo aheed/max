@@ -427,7 +427,12 @@ Fun stuff:
 Move on to next level, 3D mode or whatever:
   Zaxxon style edge-of-earths-crust, new level on other side of the void.
   Blackout, lightning
+Powerups
 
 ----
 More cushion, less grain, more vignette, more bloom, TV screen glare
 
+Balloon:
+  Shoot a balloon to reveal a possible powerup?
+
+  
