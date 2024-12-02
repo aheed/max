@@ -15,12 +15,22 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
     float hueShiftTimeToLiveSec;
     float postExposureTimeToLiveSec;
     ColorAdjustments colorAdjustments;
+    LensDistortion lensDistortion;
+    ChromaticAberration chromaticAberration;
+    FilmGrain filmGrain;
+    Bloom bloom;
+    Vignette vignette;
     // Start is called before the first frame update
     void Start()
     {
         var volume = GetComponent<Volume>();
         VolumeProfile p = volume.profile;
         p.TryGet(out colorAdjustments);        
+        p.TryGet(out lensDistortion);
+        p.TryGet(out chromaticAberration);
+        p.TryGet(out filmGrain);
+        p.TryGet(out bloom);
+        p.TryGet(out vignette);
         GameState gameState = FindObjectOfType<GameState>();
         gameState.RegisterObserver(this);
     }
@@ -55,9 +65,38 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
         }
     }
 
+    void UpdateViewMode()
+    {
+        var viewMode = FindObjectOfType<GameState>().viewMode;
+        if (viewMode == ViewMode.NORMAL)
+        {
+            lensDistortion.active = false;
+            chromaticAberration.active = false;
+            filmGrain.active = false;
+            bloom.active = false;
+            vignette.active = false;
+            colorAdjustments.saturation.overrideState = false;
+        }
+        else if (viewMode == ViewMode.TV_SIM)
+        {
+            lensDistortion.active = true;
+            chromaticAberration.active = true;
+            filmGrain.active = true;
+            bloom.active = true;
+            vignette.active = true;
+            colorAdjustments.saturation.overrideState = true;
+        }
+    }
+
     public void OnGameStatusChanged(GameStatus gameStatus) {}
 
     public void OnGameEvent(GameEvent ge) {
+        if (ge == GameEvent.VIEW_MODE_CHANGED)
+        {
+            UpdateViewMode();
+            return;
+        }
+
         if (ge != GameEvent.SMALL_DETONATION)
         {
             return;

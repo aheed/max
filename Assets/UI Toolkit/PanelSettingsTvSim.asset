@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19101, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: PanelSettings
+  m_Name: PanelSettingsTvSim
   m_EditorClassIdentifier: 
   themeUss: {fileID: -4733365628477956816, guid: c9d62e1ac8d9091589e92fc73dde8dee, type: 3}
-  m_TargetTexture: {fileID: 8400000, guid: 656758b65b3b3f49086d90218f2fe0d2, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_ScaleMode: 2
   m_ReferenceSpritePixelsPerUnit: 100
   m_Scale: 1

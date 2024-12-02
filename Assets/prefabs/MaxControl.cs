@@ -267,6 +267,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         ///////////////////
         bool fireTouch = false;
+        bool debugTouch = false;
         for (int i = 0; i < Input.touchCount; i++)
         {
             Touch theTouch;
@@ -279,6 +280,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             {
                 fireTouch = true;
                 //Debug.Log($"Touch Fire at {theTouch.position}");
+                
+                if (theTouch.position.y > 0.8f * Screen.height)
+                {
+                    debugTouch = true;
+                }
             }
             else 
             {
@@ -341,9 +347,10 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             gameState.SetRandomDamage(false);
         }
 
-        if (DebugAuxAction.WasPressedThisFrame())
+        if (debugTouch || DebugAuxAction.WasPressedThisFrame())
         {
-            gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            //gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
         
         bulletCooldown -= Time.deltaTime;
