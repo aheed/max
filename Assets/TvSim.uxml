@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="TVSimFrame" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/Characters/tv_frame.png?fileID=2800000&amp;guid=e61f42ae55279ac75939017ba611cf17&amp;type=3#tv_frame&quot;); position: absolute; width: 100%; height: 100%; display: flex;" />
-    <ui:VisualElement name="Glare" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/Characters/tv4.png?fileID=2800000&amp;guid=9f7b60496a1154d49a1562e9dd5e7359&amp;type=3#tv4&quot;); position: absolute; width: 100%; height: 100%; display: flex;" />
+    <ui:VisualElement name="Glare" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/Characters/tv4.png?fileID=2800000&amp;guid=9f7b60496a1154d49a1562e9dd5e7359&amp;type=3#tv4&quot;); position: absolute; width: 100%; height: 100%; display: flex; opacity: 0.4;" />
 </ui:UXML>
