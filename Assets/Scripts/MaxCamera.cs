@@ -55,17 +55,12 @@ public class MaxCamera : MonoBehaviour
    public void OnViewModeChanged()
    {
       var viewMode = FindObjectOfType<GameState>().viewMode;
-      //Debug.Log($"Rect: {cameraComponent.rect}");
       if (viewMode == ViewMode.NORMAL)
       {
-         //targetLocalPosition = new Vector3(0f, yOffset, -10f);
-         //transform.localScale = new Vector3(1f, 1f, 1f);
          cameraComponent.rect = new Rect( ) { x = 0, y = 0, width = 1, height = 1};          
       }
       else if (viewMode == ViewMode.TV_SIM)
       {
-         //targetLocalPosition = new Vector3(tvOffsetX, yOffset + tvOffsetY, -10f);
-         //transform.localScale = new Vector3(tvScale, tvScale, 1f);
          cameraComponent.rect = new Rect() {
             x = (1f-tvScale)/2 + tvOffsetX,
             y = (1f-tvScale)/2 + tvOffsetY,
