@@ -52,6 +52,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject vehicle2Prefab;
     public GameObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
+    public GameObject balloonPrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
@@ -632,7 +633,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         break;
 
                     case CellContent.TANK:
-                        selectedPrefab = tankPrefab;
+                        selectedPrefab = balloonPrefab; // tankPrefab;
                         break;
 
                     case CellContent.TREE1:

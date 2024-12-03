@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 18
   m_Sprite: {fileID: 21300000, guid: 7b0f11267e4e34d788184e5f73604a63, type: 3}
   m_Color: {r: 0.03773582, g: 0.019401908, b: 0.019401908, a: 0.36078432}
   m_FlipX: 0
@@ -159,7 +159,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 19
   m_Sprite: {fileID: 21300000, guid: 7c74b8f3cfef5442a9411050a2baf3ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -183,6 +183,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2abc067a0e88e3cf8d5fdf4c1f31755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popSprite: {fileID: 21300000, guid: 75d60594e00a91bb999af8d1af7ee469, type: 3}
+  riseSpeed: 0.1
+  poppedLifeSpanSec: 0.6
+  startAltitudeQuotientMax: 0.3
 --- !u!60 &-8328137053325121709
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -212,7 +216,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

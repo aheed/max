@@ -8,6 +8,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
     public float riseSpeed = 1.8f;
     public float poppedLifeSpanSec = 0.6f;
     public float startAltitudeQuotientMax = 0.3f;
+    public float height = 0.3f;
     float timeToLiveSec;
     private SpriteRenderer spriteR;
     private bool popped = false;
@@ -18,7 +19,14 @@ public class Balloon : MonoBehaviour, IPositionObservable
         Vector3 localPosition = transform.localPosition;
         localPosition += new Vector3(0, deltaAltitude, deltaAltitude);
         transform.localPosition = localPosition;
-        shadow.transform.localPosition = new Vector3(0, -localPosition.y, -localPosition.y);
+
+        //Vector3 shadowLocalPosition = shadow.transform.localPosition;
+        //shadowLocalPosition += new Vector3(0, -deltaAltitude, -deltaAltitude);
+        //shadow.transform.localPosition = shadowLocalPosition;
+        //shadow.transform.localPosition = new Vector3(0, -localPosition.y, -localPosition.y);
+
+        var altitude = GetAltitude();
+        shadow.transform.localPosition = new Vector3(0, -altitude);
     }
 
     // Start is called before the first frame update
@@ -31,7 +39,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
         var gameState = FindObjectOfType<GameState>();
         var startAltitude = UnityEngine.Random.Range(
             gameState.minAltitude,
-            gameState.minAltitude * startAltitudeQuotientMax);
+            gameState.maxAltitude * startAltitudeQuotientMax);
         Rise(startAltitude);
     }
 
@@ -78,6 +86,11 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        if (!col.name.StartsWith("bullet"))
+        {
+            return;
+        }
+
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
 
         if (collObjName.StartsWith("bullet"))
@@ -104,6 +117,6 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
     public float GetHeight()
     {
-        return Altitudes.planeHeight;
+        return height;
     }
 }

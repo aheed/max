@@ -503,6 +503,7 @@ MonoBehaviour:
   vehicle2Prefab: {fileID: 4502306411438874035, guid: 331a7ea5d72c74a9b8db20e2e797361d, type: 3}
   enemyHangarPrefab: {fileID: 3211059959162521110, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
   parkedPlanePrefab: {fileID: 3620008788814347501, guid: 87b718656893e5f26a8107336c606d51, type: 3}
+  balloonPrefab: {fileID: 7169239955302212857, guid: c6b2bdc4c01f2cabe9b99b85d0beee84, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}
   carPrefab: {fileID: -8453423270569367082, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}
