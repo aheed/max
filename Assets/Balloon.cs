@@ -4,96 +4,44 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour, IPositionObservable
 {
-    public Sprite popSprite;    
-    public float poppedLifeSpanSec = 0.6f;
     public float startAltitudeQuotientMax = 0.3f;
     public float height = 0.3f;
-    float timeToLiveSec;
+    public GameObject popPrefab;
     private SpriteRenderer spriteR;
-    private bool popped = false;
     private GameObject shadow = null;
-    private Vector3 riseVelocity;
+
     private float startParentAltitude;
 
     public void SetShadow(GameObject shadow) => this.shadow = shadow;
 
     float GetParentAltitude() => gameObject.transform.parent.localPosition.y;
 
-    void Rise(float deltaAltitude) {
-        Vector3 localPosition = transform.localPosition;
-        localPosition += new Vector3(0, deltaAltitude, deltaAltitude);
-        transform.localPosition = localPosition;
-        spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);        
-        return;
-
-        //Vector3 shadowLocalPosition = shadow.transform.localPosition;
-        //shadowLocalPosition += new Vector3(0, -deltaAltitude, -deltaAltitude);
-        //shadow.transform.localPosition = shadowLocalPosition;
-        //shadow.transform.localPosition = new Vector3(0, -localPosition.y, -localPosition.y);
-
-        var altitude = GetAltitude();
-        shadow.transform.localPosition = new Vector3(0, -altitude);
-    }
+    int GetSortingOrder() => (int)(GetAltitude() * 100.0f);
 
     // Start is called before the first frame update
     void Start()
     {
         var gameState = FindObjectOfType<GameState>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();        
-
-        /*
-        riseVelocity = new Vector3(0, riseSpeed, riseSpeed);
-        */
         
         var startAltitude = UnityEngine.Random.Range(
             gameState.minAltitude,
             gameState.maxAltitude * startAltitudeQuotientMax);
         
         startParentAltitude = GetParentAltitude();
-        //Rise(startAltitude);
 
         Vector3 localPosition = transform.localPosition;
         localPosition.z = 0;
         localPosition += new Vector3(0, startAltitude, startAltitude);
         transform.localPosition = localPosition;
-        spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(popped)
-        {
-            timeToLiveSec -= Time.deltaTime;
-            if (timeToLiveSec < 0f)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            var newOpacity = timeToLiveSec / poppedLifeSpanSec;
-            var newColor = new Color(1f, 1f, 1f, newOpacity);
-            spriteR.color = newColor;
-            return;
-        }
-
-        //Rise(riseSpeed * Time.deltaTime);
+        spriteR.sortingOrder = GetSortingOrder();
     }
 
     void Pop()
     {
-        Debug.Log($"Balloon popped!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        var spriteR = gameObject.GetComponent<SpriteRenderer>();
-        spriteR.sprite = popSprite;
-        timeToLiveSec = poppedLifeSpanSec;
-        Destroy(shadow);
-        shadow = null;
-        var collider = gameObject.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
-        }
-        popped = true;
+        var pop = Instantiate(popPrefab, gameObject.transform.position, Quaternion.identity);
+        pop.GetComponent<SpriteRenderer>().sortingOrder = GetSortingOrder();
+        Destroy(gameObject);
     }
 
     void OnDestroy()
@@ -107,24 +55,24 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (!col.name.StartsWith("bullet"))
+        if (!col.name.StartsWith("bullet") &&
+            !col.name.StartsWith("max"))
         {
             return;
         }
 
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
+        //var bullet = InterfaceHelper.GetInterface<BulletControl>(col.gameObject);
 
-        var bullet = InterfaceHelper.GetInterface<BulletControl>(col.gameObject);
-        
-
-        if (collObjName.StartsWith("bullet"))
+        if (collObjName.StartsWith("bullet") ||
+            collObjName.StartsWith("max"))
         {
-            Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
+            //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
             FindObjectOfType<GameState>().IncrementTargetsHit();
         }
         else 
         {
-            Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} miss");
+            //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} miss");
             return; //no collision
         }        
         

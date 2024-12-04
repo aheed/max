@@ -102,6 +102,7 @@ MonoBehaviour:
   poppedLifeSpanSec: 0.6
   startAltitudeQuotientMax: 0.3
   height: 0.6
+  popPrefab: {fileID: 2579522328830834619, guid: 82766b2cb9a563ea390490f56ac9b663, type: 3}
 --- !u!60 &-8328137053325121709
 PolygonCollider2D:
   m_ObjectHideFlags: 0

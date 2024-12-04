@@ -430,10 +430,11 @@ Move on to next level, 3D mode or whatever:
 Powerups
 
 ----
-More cushion, less grain, more vignette, more bloom, TV screen glare
+More cushion, less grain, more vignette, more bloom, TV screen glare*
 
 Balloon:
   Shoot a balloon to reveal a possible powerup?
+  Big balloons worth multiple targets?
   Optimization:
     All balloons have a level-scope parent object. Only the parent's position needs to be updated every frame.*
       The parent could check every frame if it's first child is too far behind (or high up) and destroy it in that case.*
@@ -443,10 +444,11 @@ Balloon:
     Balloon keeps a start parent height, save on Start.*
       Altitude = current parent height - start height.*
     Balloon's sorting order is set to start altitude => approximately correct*
-    Technique to avoid Update() function for balloon: separate object (special class) that simply calls a callback on Update().
+    Technique to avoid Update() function for balloon: separate object (special class) that simply calls a callback on Update().*
       To be used for popped balloons. Kills itself and the balloon when done.
+      Or just use a separate prefab for popped balloon.*
   Balloons should also pop on collision with Max => possible to pop even when gun is jammed.
-  Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.
-    Otherwise hard to pop balloons. Collider must trigger AND altitudes must overlap.
+  Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.*
+
 
   
