@@ -53,12 +53,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public GameObject balloonPrefab;
+    public GameObject balloonShadowPrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
+    public GameObject balloonParentPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -139,6 +141,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
     TvSimDocument tvSimDocumentObject;
+    GameObject balloonParent;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -158,6 +161,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
         lastLevelLowerEdgeY = llcy;
+        balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
+        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
 
 
@@ -633,7 +638,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         break;
 
                     case CellContent.TANK:
-                        selectedPrefab = balloonPrefab; // tankPrefab;
+                        selectedPrefab = balloonShadowPrefab; // tankPrefab;
                         break;
 
                     case CellContent.TREE1:
@@ -679,6 +684,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                     {
                         possibleVip.SetVip();
+                    }
+
+                    if (selectedPrefab == balloonShadowPrefab)
+                    {
+                        var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
+                        balloonGameObject.transform.localPosition = itemGameObject.transform.localPosition;
+                        Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
+                        balloon.SetShadow(itemGameObject);
                     }
                     return itemGameObject;
                 }
@@ -1041,7 +1054,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         while (roadLowerEdgesY.Count > 0 && refobject.transform.position.y - deactivationDistance > roadLowerEdgesY.First())
         {
             roadLowerEdgesY.RemoveAt(0);
-        }
+        } 
 
         var distanceDiff = refobject.transform.position.y - lastLevelLowerEdgeY;
         gameState.SetApproachingLanding(

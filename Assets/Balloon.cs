@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour, IPositionObservable
 {
-    public Sprite popSprite;
-    public float riseSpeed = 1.8f;
+    public Sprite popSprite;    
     public float poppedLifeSpanSec = 0.6f;
     public float startAltitudeQuotientMax = 0.3f;
     public float height = 0.3f;
@@ -14,11 +13,18 @@ public class Balloon : MonoBehaviour, IPositionObservable
     private bool popped = false;
     private GameObject shadow = null;
     private Vector3 riseVelocity;
+    private float startParentAltitude;
+
+    public void SetShadow(GameObject shadow) => this.shadow = shadow;
+
+    float GetParentAltitude() => gameObject.transform.parent.localPosition.y;
 
     void Rise(float deltaAltitude) {
         Vector3 localPosition = transform.localPosition;
         localPosition += new Vector3(0, deltaAltitude, deltaAltitude);
         transform.localPosition = localPosition;
+        spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);        
+        return;
 
         //Vector3 shadowLocalPosition = shadow.transform.localPosition;
         //shadowLocalPosition += new Vector3(0, -deltaAltitude, -deltaAltitude);
@@ -32,14 +38,18 @@ public class Balloon : MonoBehaviour, IPositionObservable
     // Start is called before the first frame update
     void Start()
     {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-        // assume shadow is the only child
-        shadow = transform.GetChild(0).gameObject;
-        riseVelocity = new Vector3(0, riseSpeed, riseSpeed);
         var gameState = FindObjectOfType<GameState>();
+        spriteR = gameObject.GetComponent<SpriteRenderer>();        
+
+        /*
+        riseVelocity = new Vector3(0, riseSpeed, riseSpeed);
+        */
+        
         var startAltitude = UnityEngine.Random.Range(
             gameState.minAltitude,
             gameState.maxAltitude * startAltitudeQuotientMax);
+        
+        startParentAltitude = GetParentAltitude();
         Rise(startAltitude);
     }
 
@@ -61,11 +71,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
             return;
         }
 
-        /*Vector3 localPosition = transform.localPosition;
-        localPosition += riseVelocity * Time.deltaTime;
-        transform.localPosition = localPosition;
-        shadow.transform.localPosition = new Vector3(0, -localPosition.y, -localPosition.y);*/
-        Rise(riseSpeed * Time.deltaTime);
+        //Rise(riseSpeed * Time.deltaTime);
     }
 
     void Pop()
@@ -82,6 +88,15 @@ public class Balloon : MonoBehaviour, IPositionObservable
             collider.enabled = false;
         }
         popped = true;
+    }
+
+    void OnDestroy()
+    {
+        if (shadow != null)
+        {
+            Destroy(shadow);
+            shadow = null;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -112,7 +127,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
     public float GetAltitude()
     {
-        return transform.position.z;
+        return transform.localPosition.z + startParentAltitude - GetParentAltitude();
     }
 
     public float GetHeight()
