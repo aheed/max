@@ -689,7 +689,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                     if (selectedPrefab == balloonShadowPrefab)
                     {
                         var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
-                        balloonGameObject.transform.localPosition = itemGameObject.transform.localPosition;
+                        balloonGameObject.transform.position = itemGameObject.transform.position;
                         Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
                         balloon.SetShadow(itemGameObject);
                     }
