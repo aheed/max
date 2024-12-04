@@ -99,7 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popSprite: {fileID: 21300000, guid: 75d60594e00a91bb999af8d1af7ee469, type: 3}
-  riseSpeed: 0.1
   poppedLifeSpanSec: 0.6
   startAltitudeQuotientMax: 0.3
   height: 0.3

@@ -50,7 +50,13 @@ public class Balloon : MonoBehaviour, IPositionObservable
             gameState.maxAltitude * startAltitudeQuotientMax);
         
         startParentAltitude = GetParentAltitude();
-        Rise(startAltitude);
+        //Rise(startAltitude);
+
+        Vector3 localPosition = transform.localPosition;
+        localPosition.z = 0;
+        localPosition += new Vector3(0, startAltitude, startAltitude);
+        transform.localPosition = localPosition;
+        spriteR.sortingOrder = (int)(GetAltitude() * 100.0f);
     }
 
     // Update is called once per frame
@@ -108,14 +114,19 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
 
+        var bullet = InterfaceHelper.GetInterface<BulletControl>(col.gameObject);
+        
+
         if (collObjName.StartsWith("bullet"))
         {
+            Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
             FindObjectOfType<GameState>().IncrementTargetsHit();
         }
         else 
         {
+            Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} miss");
             return; //no collision
-        }
+        }        
         
         Pop();
     }
@@ -127,7 +138,9 @@ public class Balloon : MonoBehaviour, IPositionObservable
 
     public float GetAltitude()
     {
-        return transform.localPosition.z + startParentAltitude - GetParentAltitude();
+        return (height / 4) + // offset up to the actual balloon, ignore string
+            transform.localPosition.z + // start altitude
+            GetParentAltitude() - startParentAltitude; // altitude gained since start
     }
 
     public float GetHeight()
