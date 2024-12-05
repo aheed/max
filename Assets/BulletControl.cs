@@ -41,7 +41,8 @@ public class BulletControl : MonoBehaviour, IPositionObservable
     {
         if (col.name.StartsWith("max") || 
             col.name.StartsWith("flack_expl") ||
-            col.name.StartsWith("bomb"))
+            col.name.StartsWith("bomb") ||
+            col.name.StartsWith("balloon"))
         {
             return;
         }

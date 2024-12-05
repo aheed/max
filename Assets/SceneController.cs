@@ -52,12 +52,15 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public GameObject vehicle2Prefab;
     public GameObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
+    public GameObject balloonPrefab;
+    public GameObject balloonShadowPrefab;
     public bridge bridgePrefab;
     public Car carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
+    public GameObject balloonParentPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -138,6 +141,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
     TvSimDocument tvSimDocumentObject;
+    GameObject balloonParent;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -157,6 +161,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
         lastLevelLowerEdgeY = llcy;
+        balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
+        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
 
 
@@ -579,7 +585,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             bridge bridge = Instantiate(bridgePrefab, lvlTransform);
             var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
             bridge.transform.localPosition = bridgeLocalTransform;
-            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
             {
                 bridge.SetVip();
             }
@@ -592,7 +598,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         Car car = Instantiate(carPrefab, lvlTransform);
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
                         car.transform.localPosition = carLocalTransform;
-                        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             car.SetVip();
                         }
@@ -612,7 +618,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var houseLocalTransform = new Vector3(houseSpec.position.x * cellWidth + houseSpec.position.y * cellHeight * neutralSlope, houseSpec.position.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 
-            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
             {
                 house.SetVip();
             }
@@ -622,10 +628,10 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
         {
             var ytmp = ytmpOuter; //capture for lazy evaluation
-            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).Select(xtmp =>
+            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 GameObject selectedPrefab = null;
-                switch (levelContents.cells[xtmp, ytmp])
+                switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
                         selectedPrefab = flackGunPrefab;
@@ -668,21 +674,40 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         break;
                 }
 
+                List<GameObject> ret = new();
                 if (selectedPrefab != null)
                 {
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     
-                    var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
-                    if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                    if (levelContents.vipTargets)
                     {
-                        possibleVip.SetVip();
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
+                        if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        {
+                            possibleVip.SetVip();
+                        }
                     }
-                    return itemGameObject;
+
+                    ret.Add(itemGameObject);
                 }
-                return null;
-            }).Where(go => go != null);
+
+                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                {
+                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, lvlTransform);
+                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
+                    balloonShadowGameObject.transform.localPosition = itemLocalTransform;
+
+                    var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
+                    balloonGameObject.transform.position = balloonShadowGameObject.transform.position;
+                    Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
+                    balloon.SetShadow(balloonShadowGameObject);
+                    ret.Add(balloonShadowGameObject);
+                }
+
+                return ret;
+            });
 
             ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
         }
@@ -705,6 +730,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         {
             case LevelType.NORMAL:
             case LevelType.ROAD:
+            case LevelType.BALLOONS:
                 return 0;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
@@ -724,6 +750,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 return gameState.targetsHitMin2;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Count();
+            case LevelType.BALLOONS:
+                return 99;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -927,7 +955,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
-            gameState.GetStateContents().latestLevelPrereq.levelType != LevelType.CITY)
+            LevelBuilder.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
         }
@@ -1040,7 +1068,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         while (roadLowerEdgesY.Count > 0 && refobject.transform.position.y - deactivationDistance > roadLowerEdgesY.First())
         {
             roadLowerEdgesY.RemoveAt(0);
-        }
+        } 
 
         var distanceDiff = refobject.transform.position.y - lastLevelLowerEdgeY;
         gameState.SetApproachingLanding(
