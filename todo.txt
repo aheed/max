@@ -428,6 +428,10 @@ Move on to next level, 3D mode or whatever:
   Zaxxon style edge-of-earths-crust, new level on other side of the void.
   Blackout, lightning
 Powerups
+River Raid style helicopters patrolling back and forth across the river
+  Jets passing by from side to side.
+"On June 18, 1983, the space shuttle Challenger launched from Kennedy Space Center on the STS-7 mission crewed by the first flight American female astronaut, Mission Specialist Sally K. Ride."
+Arcade Game Mario Bros
 
 ----
 More cushion, less grain, more vignette, more bloom, TV screen glare*
@@ -447,7 +451,7 @@ Balloon:
     Technique to avoid Update() function for balloon: separate object (special class) that simply calls a callback on Update().*
       To be used for popped balloons. Kills itself and the balloon when done.
       Or just use a separate prefab for popped balloon.*
-  Balloons should also pop on collision with Max => possible to pop even when gun is jammed.
+  Balloons should also pop on collision with Max => possible to pop even when gun is jammed.*
   Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.*
 
 

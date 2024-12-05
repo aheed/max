@@ -585,7 +585,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             bridge bridge = Instantiate(bridgePrefab, lvlTransform);
             var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
             bridge.transform.localPosition = bridgeLocalTransform;
-            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
             {
                 bridge.SetVip();
             }
@@ -598,7 +598,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         Car car = Instantiate(carPrefab, lvlTransform);
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
                         car.transform.localPosition = carLocalTransform;
-                        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             car.SetVip();
                         }
@@ -618,7 +618,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             var houseLocalTransform = new Vector3(houseSpec.position.x * cellWidth + houseSpec.position.y * cellHeight * neutralSlope, houseSpec.position.y * cellHeight, -0.2f);
             house.transform.localPosition = houseLocalTransform;
 
-            if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
             {
                 house.SetVip();
             }
@@ -628,17 +628,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
         {
             var ytmp = ytmpOuter; //capture for lazy evaluation
-            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).Select(xtmp =>
+            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 GameObject selectedPrefab = null;
-                switch (levelContents.cells[xtmp, ytmp])
+                switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
                         selectedPrefab = flackGunPrefab;
                         break;
 
                     case CellContent.TANK:
-                        selectedPrefab = balloonShadowPrefab; // tankPrefab;
+                        selectedPrefab = tankPrefab;
                         break;
 
                     case CellContent.TREE1:
@@ -674,29 +674,40 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                         break;
                 }
 
+                List<GameObject> ret = new();
                 if (selectedPrefab != null)
                 {
                     var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
                     var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     
-                    var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
-                    if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                    if (levelContents.vipTargets)
                     {
-                        possibleVip.SetVip();
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
+                        if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        {
+                            possibleVip.SetVip();
+                        }
                     }
 
-                    if (selectedPrefab == balloonShadowPrefab)
-                    {
-                        var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
-                        balloonGameObject.transform.position = itemGameObject.transform.position;
-                        Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
-                        balloon.SetShadow(itemGameObject);
-                    }
-                    return itemGameObject;
+                    ret.Add(itemGameObject);
                 }
-                return null;
-            }).Where(go => go != null);
+
+                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                {
+                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, lvlTransform);
+                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
+                    balloonShadowGameObject.transform.localPosition = itemLocalTransform;
+
+                    var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
+                    balloonGameObject.transform.position = balloonShadowGameObject.transform.position;
+                    Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
+                    balloon.SetShadow(balloonShadowGameObject);
+                    ret.Add(balloonShadowGameObject);
+                }
+
+                return ret;
+            });
 
             ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
         }
@@ -719,6 +730,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         {
             case LevelType.NORMAL:
             case LevelType.ROAD:
+            case LevelType.BALLOONS:
                 return 0;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
@@ -738,6 +750,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
                 return gameState.targetsHitMin2;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Count();
+            case LevelType.BALLOONS:
+                return 99;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -941,7 +955,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
-            gameState.GetStateContents().latestLevelPrereq.levelType != LevelType.CITY)
+            LevelBuilder.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
         }

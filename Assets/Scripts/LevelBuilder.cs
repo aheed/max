@@ -21,14 +21,18 @@ public enum CellContent
     HANGAR,
     VEHICLE1,
     VEHICLE2,
-    ENEMY_HANGAR
+    ENEMY_HANGAR,
+    BALLOON = 1 << 6,
+    LAND_MASK = 0x3F,
+    AIR_MASK = 0xC0
 }
 
 public enum LevelType
 {
     NORMAL,
     ROAD,
-    CITY
+    CITY,
+    BALLOONS
 }
 
 public class RiverSegment
@@ -95,11 +99,12 @@ public class LevelContents
     public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
     public HousePosition hangar;
-    public City city;    
+    public City city;
+    public bool vipTargets;
 }
 
 public class LevelBuilder 
-{    
+{        
     public static readonly int landingStripHeight = 30;
     public static readonly int landingStripWidth = 6;
     public static readonly int minSpaceBetweenRoads = 10;
@@ -130,6 +135,8 @@ public class LevelBuilder
     public static float boat2Probability = 0.2f;
     public static float vehicle1Probability = 0.07f;
     public static float vehicle2Probability = 0.07f;
+    public static float balloonOverLandProbability = 0.008f;
+    public static float balloonOverWaterProbability = 0.05f;
     public static int normalHouseWidth = 5;
     public static int minHouseWidth = 2;
     public static int maxHouseWidth = 6;
@@ -148,6 +155,11 @@ public class LevelBuilder
     public static int bigHouseRoadDistance = 10;
     private static int maxRandom = 65535;
     private System.Random _rnd = new Random();
+
+    public static bool PossibleVipTargets(LevelType levelType)
+    {
+        return levelType != LevelType.CITY && levelType != LevelType.BALLOONS;
+    }
 
     public bool TrueByProbability(float probability)
     {
@@ -168,6 +180,8 @@ public class LevelBuilder
         var approachLength = (int)(LevelContents.gridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.gridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.gridHeight * finalApproachQuotient);
+
+        ret.vipTargets = PossibleVipTargets(levelPrerequisite.levelType);
 
         // Landing Strip
         var lsllcX = midX - (landingStripWidth / 2);
@@ -196,7 +210,7 @@ public class LevelBuilder
         var riverLeftOfAirstrip = levelPrerequisite.riverLeftOfAirstrip;
         ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip; // May be overridden below
         
-        if (levelType == LevelType.NORMAL)
+        if (levelType == LevelType.NORMAL || levelType == LevelType.BALLOONS)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -650,6 +664,16 @@ public class LevelBuilder
                 if (TrueByProbability(boat1Probability) && ret.cells[x, y] == CellContent.WATER)
                 {
                     ret.cells[x, y] = CellContent.BOAT1;
+                }
+
+                if (levelType == LevelType.BALLOONS)
+                {
+                    // Balloons
+                    var localBalloonProbability = ret.cells[x, y] == CellContent.WATER ? balloonOverWaterProbability : balloonOverLandProbability;
+                    if (TrueByProbability(localBalloonProbability))
+                    {
+                        ret.cells[x, y] |= CellContent.BALLOON;
+                    }
                 }
 
                 /*if (ret.cells[x, y] == CellContent.ROAD || ret.cells[x, y] == CellContent.WATER || ret.cells[x, y] == CellContent.LANDING_STRIP) //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
