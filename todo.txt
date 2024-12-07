@@ -432,6 +432,8 @@ River Raid style helicopters patrolling back and forth across the river
   Jets passing by from side to side.
 "On June 18, 1983, the space shuttle Challenger launched from Kennedy Space Center on the STS-7 mission crewed by the first flight American female astronaut, Mission Specialist Sally K. Ride."
 Arcade Game Mario Bros
+Marble madness, Qbert...
+
 
 ----
 More cushion, less grain, more vignette, more bloom, TV screen glare*
@@ -455,4 +457,21 @@ Balloon:
   Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.*
 
 
-  
+icons:
+  https://www.svgrepo.com/collection/kalai-oval-interface-icons/
+
+Instruction UI document on first launch. How to save? Cookie, app storage...
+
+How to go to full screen and back on a Unity UI button click?
+  Lots of problems with fullscreen, webGL
+    Phone:
+      The button click position seems to be wrong in fullscreen mode. Like it's position is related to screen, not viewport.
+        Same on desktop
+        Seems to be a known bug:
+          https://discussions.unity.com/t/webgl-ui-toolkit-buttons-position-does-not-match-the-clickable-areas-when-page-is-90-turned/934418
+      Not all the screen is visible on mobile in non-fullscreen mode, landscape orientation.
+    Desktop:
+      fullscreen toggle from UI does not take effect until a key is pressed.
+        "you should trigger cursor locking or full-screen requests on mouse/key down events, instead of mouse/key up events"
+          https://docs.unity3d.com/2019.4/Documentation/Manual/webgl-cursorfullscreen.html
+    To solve: use custom code to detect if a click was indeed at a button location?

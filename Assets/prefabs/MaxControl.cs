@@ -351,6 +351,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
+            Screen.fullScreen = !Screen.fullScreen;
         }
         
         bulletCooldown -= Time.deltaTime;
