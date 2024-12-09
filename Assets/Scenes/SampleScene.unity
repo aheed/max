@@ -499,6 +499,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crtTexture: {fileID: 2800000, guid: e91cef29c6e7ad2fda7786de883ef5cb, type: 3}
   flatscreenTexture: {fileID: 2800000, guid: ca739c8d7cb11c9fd8cc8b751d628b41, type: 3}
+  fullScreenTexture: {fileID: 2800000, guid: 66b87b7a1861a440e94ec4a1c4ebbec5, type: 3}
+  exitFullScreenTexture: {fileID: 2800000, guid: 9f846e6c6c7e064acba09465360a2e35, type: 3}
+  volumeMuteTexture: {fileID: 2800000, guid: db70d5582fb23b47d895af5ed0561a03, type: 3}
+  volumeUpTexture: {fileID: 2800000, guid: b4cecad57b0bda0be93aea78ba73c1cb, type: 3}
 --- !u!1 &763321429
 GameObject:
   m_ObjectHideFlags: 0
