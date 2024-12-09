@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="ButtonBarUI" style="flex-grow: 1; flex-direction: row-reverse; align-items: flex-start;">
+        <ui:VisualElement name="ButtonBar" style="flex-grow: 1; right: auto; width: auto; max-width: 10%; align-items: center;">
+            <ui:VisualElement name="TvButton" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0.5); background-image: url(&quot;project://database/Assets/UI%20Toolkit/crt.png?fileID=2800000&amp;guid=e91cef29c6e7ad2fda7786de883ef5cb&amp;type=3#crt&quot;); width: auto; height: auto; max-width: 64px; max-height: 64px; min-width: 64px; min-height: 64px;" />
+            <ui:VisualElement name="FullScreenButton" style="flex-grow: 1; max-width: 64px; max-height: 64px; min-width: 64px; min-height: 64px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/fullscreen.png?fileID=2800000&amp;guid=66b87b7a1861a440e94ec4a1c4ebbec5&amp;type=3#fullscreen&quot;);" />
+            <ui:VisualElement name="MuteButton" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
