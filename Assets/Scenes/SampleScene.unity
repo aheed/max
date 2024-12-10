@@ -550,7 +550,6 @@ MonoBehaviour:
   maxPlanePrefab: {fileID: 1349370398196582425, guid: ef656689f5ac54052b53051006d44669, type: 3}
   enemyPlanePrefab: {fileID: 2165493113498992378, guid: 21e9beeb29cf4c9959214f56a5089997, type: 3}
   shadowControlPrefab: {fileID: 9201924445058020500, guid: e228024eb4c67fdd19d72d2022609b02, type: 3}
-  groundPrefab: {fileID: 6852585398171151434, guid: de48b231330cb7a41a608084c8e07cc2, type: 3}
   visibleAreaMarkerPrefab: {fileID: 7862784925668682839, guid: 32b7a87dd0982b628ae3096fc840d0ab, type: 3}
   riverSectionPrefab: {fileID: 3673043693166868737, guid: ecf23279296cc9c4ebadc1f867beca57, type: 3}
   roadPrefab: {fileID: 5513747941671286812, guid: ae24cdd56d13f660d90c0c6dd31559e7, type: 3}
@@ -591,7 +590,6 @@ MonoBehaviour:
   riverMaterial: {fileID: 2100000, guid: ea8d7ce4ef66b3210b86d629dd1c00c2, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: b867665235b5f0ee7bc1a4e4c1811b6a, type: 2}
   roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
-  groundMaterial: {fileID: 2100000, guid: 8cb2155c8f83a733884b98d9308266d1, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
   visibleAreaMarkerMaterial: {fileID: 2100000, guid: 1a18bab593071e1f497073ecd677d11a, type: 2}
   levelHeight: 80
@@ -627,6 +625,54 @@ MonoBehaviour:
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
   startLevelType: 0
+--- !u!1 &1108143171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1108143173}
+  - component: {fileID: 1108143172}
+  m_Layer: 5
+  m_Name: UserGuideDocument
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1108143172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108143171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 5554c5eedd465a72a81806960341e2d8, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: a24ca40701bb52d798cf0a0fa16addad, type: 3}
+  m_SortingOrder: 0
+--- !u!4 &1108143173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108143171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1570911665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,3 +1170,4 @@ SceneRoots:
   - {fileID: 621318502}
   - {fileID: 1570911667}
   - {fileID: 762468299}
+  - {fileID: 1108143173}
