@@ -406,7 +406,7 @@ More optimization:
   remove unnecessary Start functions, to make game object instantiation cheaper.
   Make objects static?
     https://docs.unity3d.com/Manual/StaticObjects.html
-  Remove ground mesh. Use solid green background color instead (Camera setting).
+  Remove ground mesh. Use solid green background color instead (Camera setting).*
   
 
 ---

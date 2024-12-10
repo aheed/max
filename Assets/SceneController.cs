@@ -32,7 +32,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
     public ShadowControl shadowControlPrefab;
-    public GameObject groundPrefab;
     public GameObject visibleAreaMarkerPrefab;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
@@ -73,7 +72,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     public Material riverMaterial;
     public Material riverBankMaterial;
     public Material roadMaterial;
-    public Material groundMaterial;
     public Material landingStripMaterial;
     public Material visibleAreaMarkerMaterial;
     public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
@@ -222,26 +220,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var midX = LevelContents.gridWidth / 2;
 
         var lvlTransform = GetLevel().transform;
-
-        // Ground
-        var grGameObject = Instantiate(groundPrefab, lvlTransform);
-        
-        var grUpperCornerOffsetX = levelHeight * neutralSlope;
-
-        var grMeshFilter = grGameObject.AddComponent<MeshFilter>();
-        var grMeshRenderer = grGameObject.AddComponent<MeshRenderer>();
-        grMeshRenderer.material = groundMaterial;
-
-        var grVerts = new List<Vector2>
-        {
-            new Vector2(0f, 0f),
-            new Vector2(levelWidth, 0f),
-            new Vector2(grUpperCornerOffsetX, levelHeight),
-            new Vector2(levelWidth + grUpperCornerOffsetX, levelHeight)
-        };
-
-        var grMesh = CreateQuadMesh(grVerts);
-        grMeshFilter.mesh = grMesh;
 
         // Landing Strip
         {
