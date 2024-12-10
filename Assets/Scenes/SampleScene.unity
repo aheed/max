@@ -436,6 +436,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 608621886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &762468297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 762468299}
+  - component: {fileID: 762468298}
+  - component: {fileID: 762468300}
+  m_Layer: 5
+  m_Name: ButtonBarDocument
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &762468298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762468297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 5554c5eedd465a72a81806960341e2d8, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: a4efc841b625b04218d599e53942b110, type: 3}
+  m_SortingOrder: 0
+--- !u!4 &762468299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762468297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &762468300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762468297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e8936cbe48706fbcf05665fc1f975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crtTexture: {fileID: 2800000, guid: e91cef29c6e7ad2fda7786de883ef5cb, type: 3}
+  flatscreenTexture: {fileID: 2800000, guid: ca739c8d7cb11c9fd8cc8b751d628b41, type: 3}
+  fullScreenTexture: {fileID: 2800000, guid: 66b87b7a1861a440e94ec4a1c4ebbec5, type: 3}
+  exitFullScreenTexture: {fileID: 2800000, guid: 9f846e6c6c7e064acba09465360a2e35, type: 3}
+  volumeMuteTexture: {fileID: 2800000, guid: db70d5582fb23b47d895af5ed0561a03, type: 3}
+  volumeUpTexture: {fileID: 2800000, guid: b4cecad57b0bda0be93aea78ba73c1cb, type: 3}
 --- !u!1 &763321429
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,3 +1123,4 @@ SceneRoots:
   - {fileID: 2054397212}
   - {fileID: 621318502}
   - {fileID: 1570911667}
+  - {fileID: 762468299}
