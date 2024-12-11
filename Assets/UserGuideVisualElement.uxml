@@ -25,5 +25,4 @@
         <ui:VisualElement name="VerticalDivider" style="flex-grow: 1; position: absolute; align-self: center; background-image: url(&quot;project://database/Assets/UI%20Toolkit/dashedVertical.png?fileID=2800000&amp;guid=2128784404f1e26f59974cf9e54ad4f4&amp;type=3#dashedVertical&quot;); background-color: rgba(0, 0, 0, 0); width: 4%; height: 115%; margin-top: 5%; margin-right: 5%; margin-bottom: 5%; margin-left: 48%; -unity-background-scale-mode: scale-and-crop;" />
         <ui:VisualElement name="CloseButton" style="flex-grow: 1; position: absolute; top: 5px; right: 5px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/close-square.png?fileID=2800000&amp;guid=35a0d14b0f03c010bb6de201f2209f43&amp;type=3#close-square&quot;); -unity-background-scale-mode: scale-to-fit; width: 80px; height: 80px;" />
     </ui:VisualElement>
-    <ui:Button text="Got it!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GotIt" style="position: absolute; left: 45%; align-self: center; -unity-font-style: bold; font-size: 36px; bottom: 35%;" />
 </ui:UXML>

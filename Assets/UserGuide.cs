@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class UserGuide : MonoBehaviour
 {
     Button gotItButtonElem;
+    VisualElement closeElem;
     
     // Start is called before the first frame update
     void OnEnable()
@@ -13,13 +14,13 @@ public class UserGuide : MonoBehaviour
         Debug.Log("User Guide started");
         var uiDocument = GetComponent<UIDocument>();
 
-        gotItButtonElem = uiDocument.rootVisualElement.Q<Button>("GotIt");
-        gotItButtonElem.RegisterCallback<ClickEvent>(OnGotItClicked);
+        closeElem = uiDocument.rootVisualElement.Q<VisualElement>("CloseButton");
+        closeElem.RegisterCallback<ClickEvent>(OnCloseClicked);
     }
 
-    void OnGotItClicked(ClickEvent evt)
+    void OnCloseClicked(ClickEvent evt)
     {
-        Debug.Log("Got it button clicked");
+        Debug.Log("Close button clicked");
         if (evt.propagationPhase != PropagationPhase.AtTarget)
         return;
         
