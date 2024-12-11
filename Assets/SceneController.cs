@@ -815,6 +815,8 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var vaMesh = CreateQuadMesh(vaVerts);
         vaMeshFilter.mesh = vaMesh;
         vaGameObject.SetActive(false);
+        
+        Settings.Update();
 
         StartNewGame();
     }
