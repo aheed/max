@@ -14,6 +14,7 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement tvElem;
     VisualElement fullScreenElem;
     VisualElement muteElem;
+    VisualElement helpElem;
     GameState gameState;
     float audioVolume;
     bool fullScreen = false; //expected state, could change any time
@@ -33,6 +34,10 @@ public class ButtonBarDocument : MonoBehaviour
 
         muteElem = uiDocument.rootVisualElement.Q<VisualElement>("MuteButton");
         muteElem.RegisterCallback<ClickEvent>(OnMuteClicked);
+
+        helpElem = uiDocument.rootVisualElement.Q<VisualElement>("HelpButton");
+        helpElem.RegisterCallback<ClickEvent>(OnHelpClicked);
+
         UpdateAll();
     }
 
@@ -115,5 +120,14 @@ public class ButtonBarDocument : MonoBehaviour
         
         //AudioListener.pause = !AudioListener.pause;
         UpdateMuteButton();
+    }
+
+    void OnHelpClicked(ClickEvent evt)
+    {
+        Debug.Log("Help clicked");
+        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        return;
+        
+        FindObjectOfType<UserGuide>(true).gameObject.SetActive(true);
     }
 }
