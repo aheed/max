@@ -16,7 +16,6 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement muteElem;
     VisualElement helpElem;
     GameState gameState;
-    float audioVolume;
     bool fullScreen = false; //expected state, could change any time
     
 
@@ -71,7 +70,7 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdateMuteButton()
     {
-        var newTexture = AudioListener.volume == 0 ? volumeMuteTexture : volumeUpTexture;
+        var newTexture = Settings.GetMute() ? volumeMuteTexture : volumeUpTexture;
         muteElem.style.backgroundImage = new StyleBackground(newTexture);        
     }
 
@@ -107,16 +106,7 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.propagationPhase != PropagationPhase.AtTarget)
         return;
         
-        var audioListener = FindObjectOfType<AudioListener>(true); //assume there is only one
-        if (AudioListener.volume == 0)
-        {
-            AudioListener.volume = audioVolume;
-        }
-        else
-        {
-            audioVolume = AudioListener.volume;
-            AudioListener.volume = 0;
-        }
+        Settings.SetMute(!Settings.GetMute());
         
         //AudioListener.pause = !AudioListener.pause;
         UpdateMuteButton();

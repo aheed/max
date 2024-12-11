@@ -8,6 +8,10 @@ public class UserGuide : MonoBehaviour
     Button gotItButtonElem;
     VisualElement closeElem;
     
+    static UserGuide GetInstance() => FindObjectOfType<UserGuide>(true);
+    public static void SetOpenState(bool open) => 
+        GetInstance().gameObject.SetActive(open);
+    
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -24,7 +28,8 @@ public class UserGuide : MonoBehaviour
         if (evt.propagationPhase != PropagationPhase.AtTarget)
         return;
         
-        gameObject.SetActive(false);
+        SetOpenState(false);
+        Settings.SetUserGuideHasBeenDisplayed();
     }
 
 }
