@@ -11,11 +11,14 @@ public class ButtonBarDocument : MonoBehaviour
     public Texture2D exitFullScreenTexture;
     public Texture2D volumeMuteTexture;
     public Texture2D volumeUpTexture;
+    public Texture2D normalControlTexture;
+    public Texture2D pilotControlTexture;
     VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
     VisualElement dotsElem;
     VisualElement muteElem;
+    VisualElement pilotElem;
     VisualElement helpElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
@@ -41,6 +44,9 @@ public class ButtonBarDocument : MonoBehaviour
         muteElem = uiDocument.rootVisualElement.Q<VisualElement>("MuteButton");
         muteElem.RegisterCallback<ClickEvent>(OnMuteClicked);
 
+        pilotElem = uiDocument.rootVisualElement.Q<VisualElement>("PilotButton");
+        pilotElem.RegisterCallback<ClickEvent>(OnPilotClicked);
+
         helpElem = uiDocument.rootVisualElement.Q<VisualElement>("HelpButton");
         helpElem.RegisterCallback<ClickEvent>(OnHelpClicked);
 
@@ -48,7 +54,9 @@ public class ButtonBarDocument : MonoBehaviour
         dotsElem.RegisterCallback<ClickEvent>(OnDotsClicked);
 
         expandedRightSide.Add(muteElem);
+        expandedRightSide.Add(pilotElem);
         expandedRightSide.Add(helpElem);
+        
 
         UpdateAll();
     }
@@ -58,6 +66,7 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateTvSimButton();
         UpdateFullScreenButton();
         UpdateMuteButton();
+        UpdatePilotButton();
         UpdateRightSideExpanded();
     }
 
@@ -86,6 +95,12 @@ public class ButtonBarDocument : MonoBehaviour
     {
         var newTexture = Settings.GetMute() ? volumeMuteTexture : volumeUpTexture;
         muteElem.style.backgroundImage = new StyleBackground(newTexture);        
+    }
+
+    void UpdatePilotButton()
+    {
+        var newTexture = Settings.GetPilotControl() ? pilotControlTexture : normalControlTexture;
+        pilotElem.style.backgroundImage = new StyleBackground(newTexture);        
     }
 
     void Update()
@@ -124,6 +139,17 @@ public class ButtonBarDocument : MonoBehaviour
         
         //AudioListener.pause = !AudioListener.pause;
         UpdateMuteButton();
+    }
+
+    void OnPilotClicked(ClickEvent evt)
+    {
+        Debug.Log("Pilot clicked");
+        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        return;
+        
+        Settings.SetPilotControl(!Settings.GetPilotControl());
+        
+        UpdatePilotButton();
     }
 
     void OnHelpClicked(ClickEvent evt)
