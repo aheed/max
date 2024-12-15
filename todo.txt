@@ -454,5 +454,7 @@ Balloon:
   Balloons should also pop on collision with Max => possible to pop even when gun is jammed.*
   Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.*
 
+Button bar:
+  Reduce button vertical size => reduce risk of accidental clicks.
 
   

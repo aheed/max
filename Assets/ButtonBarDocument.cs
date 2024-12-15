@@ -11,12 +11,16 @@ public class ButtonBarDocument : MonoBehaviour
     public Texture2D exitFullScreenTexture;
     public Texture2D volumeMuteTexture;
     public Texture2D volumeUpTexture;
+    VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
+    VisualElement dotsElem;
     VisualElement muteElem;
     VisualElement helpElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
+    bool rightSideExpanded = false;
+    List<VisualElement> expandedRightSide = new();
     
 
     // Start is called before the first frame update
@@ -24,6 +28,9 @@ public class ButtonBarDocument : MonoBehaviour
     {
         gameState = FindObjectOfType<GameState>();
         var uiDocument = GetComponent<UIDocument>();
+
+        buttonBarUIElem = uiDocument.rootVisualElement.Q<VisualElement>("ButtonBarUI");
+        buttonBarUIElem.RegisterCallback<ClickEvent>(OnBackgroundClicked);
 
         tvElem = uiDocument.rootVisualElement.Q<VisualElement>("TvButton");
         tvElem.RegisterCallback<ClickEvent>(OnTVClicked);
@@ -37,6 +44,12 @@ public class ButtonBarDocument : MonoBehaviour
         helpElem = uiDocument.rootVisualElement.Q<VisualElement>("HelpButton");
         helpElem.RegisterCallback<ClickEvent>(OnHelpClicked);
 
+        dotsElem = uiDocument.rootVisualElement.Q<VisualElement>("DotsButton");
+        dotsElem.RegisterCallback<ClickEvent>(OnDotsClicked);
+
+        expandedRightSide.Add(muteElem);
+        expandedRightSide.Add(helpElem);
+
         UpdateAll();
     }
 
@@ -45,6 +58,7 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateTvSimButton();
         UpdateFullScreenButton();
         UpdateMuteButton();
+        UpdateRightSideExpanded();
     }
 
     void UpdateTvSimButton()
@@ -119,5 +133,37 @@ public class ButtonBarDocument : MonoBehaviour
         return;
         
         FindObjectOfType<UserGuide>(true).gameObject.SetActive(true);
+    }
+
+    void UpdateRightSideExpanded()
+    {
+        var dotsDisplayStyle = rightSideExpanded ? DisplayStyle.None : DisplayStyle.Flex;
+        var expansionDisplayStyle = rightSideExpanded ? DisplayStyle.Flex : DisplayStyle.None;
+
+        dotsElem.style.display = dotsDisplayStyle;
+        foreach (var item in expandedRightSide)
+        {
+            item.style.display = expansionDisplayStyle;
+        }
+    }
+
+    void OnDotsClicked(ClickEvent evt)
+    {
+        Debug.Log("Dots clicked");
+        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        return;
+
+        rightSideExpanded = true;
+        UpdateRightSideExpanded();
+    }
+
+    void OnBackgroundClicked(ClickEvent evt)
+    {
+        Debug.Log("Background clicked");
+        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        return;
+
+        rightSideExpanded = false;
+        UpdateRightSideExpanded();
     }
 }
