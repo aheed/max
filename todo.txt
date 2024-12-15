@@ -454,5 +454,8 @@ Balloon:
   Balloons should also pop on collision with Max => possible to pop even when gun is jammed.*
   Adjust the balloon sprite so the actual balloon, not the string, is at center of the game object => altitude/shadow distance more accurate.*
 
+A UI toolkit toggle changes text color some part of it is focused. How to change it/make it not change? No clue.
+  Workaround: kill the built-in label and place another one to the left of the toggle.
+
 
   

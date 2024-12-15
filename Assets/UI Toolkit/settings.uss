@@ -1,0 +1,25 @@
+#DialogWindow GroupBox .settings-toggle#PilotToggle {
+    color: rgb(3, 122, 236);
+}
+
+.settings-toggle:focus {
+    color: rgb(209, 56, 56);
+}
+
+#DialogWindow .settings-toggle:active {
+    color: rgb(32, 221, 214);
+}
+
+.settings-toggle:checked {
+    color: rgb(211, 238, 24);
+}
+
+#DialogWindow .unity-toggle__label:focus {
+    -unity-font-style: italic;
+    color: rgb(185, 15, 245);
+}
+
+#DialogWindow .unity-toggle :focus {
+    color: rgb(248, 128, 4);
+    background-color: rgba(217, 122, 122, 0);
+}
