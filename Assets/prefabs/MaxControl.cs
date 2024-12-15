@@ -264,6 +264,10 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         GameStateContents stateContents = gameState.GetStateContents();
 
         move = MoveAction.ReadValue<Vector2>();
+        if (!Settings.GetPilotControl())
+        {
+            move.y = move.y * -1f;
+        }
 
         ///////////////////
         bool fireTouch = false;
