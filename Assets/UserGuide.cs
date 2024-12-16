@@ -8,7 +8,7 @@ public class UserGuide : MonoBehaviour
     Button gotItButtonElem;
     VisualElement closeElem;
     
-    static UserGuide GetInstance() => FindObjectOfType<UserGuide>(true);
+    static UserGuide GetInstance() => FindAnyObjectByType<UserGuide>(FindObjectsInactive.Include);
     public static void SetOpenState(bool open) => 
         GetInstance().gameObject.SetActive(open);
     
@@ -25,7 +25,7 @@ public class UserGuide : MonoBehaviour
     void OnCloseClicked(ClickEvent evt)
     {
         Debug.Log("Close button clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != closeElem)
         return;
         
         SetOpenState(false);

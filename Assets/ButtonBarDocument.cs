@@ -29,7 +29,7 @@ public class ButtonBarDocument : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
         var uiDocument = GetComponent<UIDocument>();
 
         buttonBarUIElem = uiDocument.rootVisualElement.Q<VisualElement>("ButtonBarUI");
@@ -111,7 +111,7 @@ public class ButtonBarDocument : MonoBehaviour
     void OnTVClicked(ClickEvent evt)
     {
         Debug.Log("TV sim toggle clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != tvElem)
         return;
         
         gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
@@ -122,7 +122,7 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Fullscreen toggle clicked");
         // Only perform this action at the target, not in a parent
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != fullScreenElem)
         return;
 
         Screen.fullScreen = !Screen.fullScreen;
@@ -132,7 +132,7 @@ public class ButtonBarDocument : MonoBehaviour
     void OnMuteClicked(ClickEvent evt)
     {
         Debug.Log("Mute clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != muteElem)
         return;
         
         Settings.SetMute(!Settings.GetMute());
@@ -144,7 +144,7 @@ public class ButtonBarDocument : MonoBehaviour
     void OnPilotClicked(ClickEvent evt)
     {
         Debug.Log("Pilot clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != pilotElem)
         return;
         
         Settings.SetPilotControl(!Settings.GetPilotControl());
@@ -155,10 +155,10 @@ public class ButtonBarDocument : MonoBehaviour
     void OnHelpClicked(ClickEvent evt)
     {
         Debug.Log("Help clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != helpElem)
         return;
         
-        FindObjectOfType<UserGuide>(true).gameObject.SetActive(true);
+        FindAnyObjectByType<UserGuide>(FindObjectsInactive.Include).gameObject.SetActive(true);
     }
 
     void UpdateRightSideExpanded()
@@ -176,7 +176,7 @@ public class ButtonBarDocument : MonoBehaviour
     void OnDotsClicked(ClickEvent evt)
     {
         Debug.Log("Dots clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != dotsElem)
         return;
 
         rightSideExpanded = true;
@@ -186,7 +186,7 @@ public class ButtonBarDocument : MonoBehaviour
     void OnBackgroundClicked(ClickEvent evt)
     {
         Debug.Log("Background clicked");
-        if (evt.propagationPhase != PropagationPhase.AtTarget)
+        if (evt.target != buttonBarUIElem)
         return;
 
         rightSideExpanded = false;

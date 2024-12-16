@@ -18,7 +18,7 @@ public class Car : MonoBehaviour, IVip
     void Start()
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
         speed = speedFactor * gameState.maxSpeed;
         var spriteIndex = Random.Range(0, sprites.Length);
         spriteR.sprite = sprites[spriteIndex];

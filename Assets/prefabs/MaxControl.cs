@@ -65,7 +65,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugAuxAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
         gameState.RegisterObserver(this); 
         lastCollidedMove = new Vector2(0, 0);
     }

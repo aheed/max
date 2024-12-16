@@ -34,7 +34,7 @@ public class car_l2_1 : MonoBehaviour, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindObjectOfType<GameState>().BombLanded(bomb, gameObject);
+            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
             return;
         }
 

@@ -789,7 +789,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     void Start()
     {   
         var camObject = GameObject.Find("Main Camera");
-        tvSimDocumentObject = FindObjectOfType<TvSimDocument>(true);
+        tvSimDocumentObject = FindAnyObjectByType<TvSimDocument>(FindObjectsInactive.Include);
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         // visible area marker for debugging
@@ -894,7 +894,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         if (gameState == null)
         {
-            gameState = FindObjectOfType<GameState>();
+            gameState = FindAnyObjectByType<GameState>();
             gameState.RegisterObserver(this);
         }
         return gameState;
