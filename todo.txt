@@ -457,4 +457,4 @@ Balloon:
 Button bar:
   Reduce button vertical size => reduce risk of accidental clicks.
 
-  
+Old/low end phone from 2019 runs the game at 25 fps (webgl). Optimizations needed.
