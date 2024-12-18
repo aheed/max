@@ -19,7 +19,7 @@ public static class Settings
     public static bool GetMute() => PlayerPrefs.GetInt(mutePrefsKey) != 0;
     public static void SetMute(bool mute)
     {
-        var audioListener = GameObject.FindObjectOfType<AudioListener>(true); //assume there is only one
+        var audioListener = GameObject.FindAnyObjectByType<AudioListener>(FindObjectsInactive.Include); //assume there is only one
 
         if (mute && AudioListener.volume != 0f)
         {

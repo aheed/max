@@ -76,7 +76,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
 
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
         gameStateContents = gameState.GetStateContents();
         
         gameState.RegisterObserver(this);

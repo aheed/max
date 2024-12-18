@@ -15,7 +15,7 @@ public class prop : MonoBehaviour, IGameStateObserver
     void Start()
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        FindObjectOfType<GameState>().RegisterObserver(this);
+        FindAnyObjectByType<GameState>().RegisterObserver(this);
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class prop : MonoBehaviour, IGameStateObserver
 
     void OnDestroy()
     {
-        FindObjectOfType<GameState>().UnregisterObserver(this);
+        FindAnyObjectByType<GameState>().UnregisterObserver(this);
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

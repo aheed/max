@@ -27,7 +27,7 @@ public class EnemyHangar : MonoBehaviour
             collider.enabled = false;
         }
 
-        var gameState = FindObjectOfType<GameState>();
+        var gameState = FindAnyObjectByType<GameState>();
         gameState.ReportEvent(GameEvent.SMALL_DETONATION);
         gameState.ReportEvent(GameEvent.MEDIUM_BANG);
 

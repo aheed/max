@@ -31,7 +31,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
         p.TryGet(out filmGrain);
         p.TryGet(out bloom);
         p.TryGet(out vignette);
-        GameState gameState = FindObjectOfType<GameState>();
+        GameState gameState = FindAnyObjectByType<GameState>();
         gameState.RegisterObserver(this);
     }
 
@@ -67,7 +67,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
 
     void UpdateViewMode()
     {
-        var viewMode = FindObjectOfType<GameState>().viewMode;
+        var viewMode = FindAnyObjectByType<GameState>().viewMode;
         if (viewMode == ViewMode.NORMAL)
         {
             lensDistortion.active = false;

@@ -14,7 +14,7 @@ public class boat2 : MonoBehaviour, IPositionObservable, IVip
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindObjectOfType<GameState>();    
+        gameState = FindAnyObjectByType<GameState>();    
         velocity = new Vector3(-speed, -speed, 0);
         var spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.color = new Color(0.5f, 0.4f, 0f); // brown

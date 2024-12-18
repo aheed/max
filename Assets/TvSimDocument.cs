@@ -12,6 +12,6 @@ public class TvSimDocument : MonoBehaviour
 
     public void OnViewModeChanged()
     {
-        gameObject.SetActive(FindObjectOfType<GameState>().viewMode == ViewMode.TV_SIM);
+        gameObject.SetActive(FindAnyObjectByType<GameState>().viewMode == ViewMode.TV_SIM);
     }
 }

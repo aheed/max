@@ -11,7 +11,7 @@ public class Boat1 : MonoBehaviour, IPositionObservable
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
     }
 
     void Sink()

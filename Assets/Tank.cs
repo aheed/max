@@ -24,7 +24,7 @@ public class Tank : MonoBehaviour, IPositionObservable
             {
                 collider.enabled = false;
             }
-            var gameState = FindObjectOfType<GameState>();
+            var gameState = FindAnyObjectByType<GameState>();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
@@ -37,7 +37,7 @@ public class Tank : MonoBehaviour, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindObjectOfType<GameState>().BombLanded(bomb, gameObject);
+            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
             return;
         }
 

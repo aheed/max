@@ -21,7 +21,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
     // Start is called before the first frame update
     void Start()
     {
-        var gameState = FindObjectOfType<GameState>();
+        var gameState = FindAnyObjectByType<GameState>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();        
         
         var startAltitude = UnityEngine.Random.Range(
@@ -68,7 +68,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
             collObjName.StartsWith("max"))
         {
             //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
-            FindObjectOfType<GameState>().IncrementTargetsHit();
+            FindAnyObjectByType<GameState>().IncrementTargetsHit();
         }
         else 
         {

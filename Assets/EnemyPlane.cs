@@ -88,7 +88,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         SetMoveCooldown();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.color = new Color(1f, 1f, 0.1f); // yellow
-        gameState = FindObjectOfType<GameState>();
+        gameState = FindAnyObjectByType<GameState>();
         Register();
     }
 
