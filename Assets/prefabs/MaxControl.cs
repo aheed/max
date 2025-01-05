@@ -34,7 +34,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     bool gunDamage = false;
     public InputAction MoveAction;
     public InputAction FireAction;
-    public InputAction TouchAction;
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction;
@@ -63,7 +62,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         MoveAction.Enable();
         FireAction.Enable();
         EnhancedTouchSupport.Enable();
-        TouchAction.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
