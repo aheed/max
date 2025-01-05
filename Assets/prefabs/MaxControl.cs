@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
 public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
@@ -33,6 +34,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     bool gunDamage = false;
     public InputAction MoveAction;
     public InputAction FireAction;
+    public InputAction TouchAction;
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction;
@@ -60,6 +62,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     {
         MoveAction.Enable();
         FireAction.Enable();
+        EnhancedTouchSupport.Enable();
+        TouchAction.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
@@ -140,6 +144,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             default:
                 break;
         }
+        
 
         
         Vector3 tmpLocalPosition = transform.localPosition;
@@ -271,14 +276,17 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         ///////////////////
         bool fireTouch = false;
-        for (int i = 0; i < Input.touchCount; i++)
+        //for (int i = 0; i < Input.touchCount; i++)
+        //var touches = TouchAction.ReadValue<Vector2>();
+        //foreach (var theTouch in touches)
+        foreach (var theTouch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
         {
-            Touch theTouch;
-            theTouch = Input.GetTouch(i);
+            //Touch theTouch;
+            //theTouch = Input.GetTouch(i);
 
             //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
 
-            if (theTouch.position.x < (Screen.width / 2))
+            if (theTouch.screenPosition.x < (Screen.width / 2))
                 //&& theTouch.fingerId != moveFingerId)
             {
                 fireTouch = true;
@@ -286,12 +294,12 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             }
             else 
             {
-                if ((theTouch.phase == UnityEngine.TouchPhase.Moved ||
-                     theTouch.phase == UnityEngine.TouchPhase.Ended))// &&
+                if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
+                     theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
                         //theTouch.position.x > (Screen.width / 2) &&
                         //theTouch.fingerId == moveFingerId)
                 {
-                    touchEndPosition = theTouch.position;
+                    touchEndPosition = theTouch.screenPosition;
 
                     float x = touchEndPosition.x - touchStartPosition.x;
                     float y = touchEndPosition.y - touchStartPosition.y;
@@ -318,9 +326,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
                     Debug.Log($"Got Move {x},{y} {x2},{y2} {x3},{y3} {move.x},{move.y}");
                     //touchStartPosition = theTouch.position;
                 }
-                else if (theTouch.phase == UnityEngine.TouchPhase.Began)
+                else if (theTouch.phase == UnityEngine.InputSystem.TouchPhase.Began)
                 {
-                    touchStartPosition = theTouch.position;
+                    touchStartPosition = theTouch.screenPosition;
                 }
             }
         }
