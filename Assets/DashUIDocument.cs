@@ -359,7 +359,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
+    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
 
     public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
     {

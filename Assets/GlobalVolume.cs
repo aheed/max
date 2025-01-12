@@ -106,7 +106,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
         postExposureTimeToLiveSec = postExposurelifeSpanSec;
     }
 
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
+    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
 
     public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

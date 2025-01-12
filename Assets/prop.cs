@@ -41,6 +41,6 @@ public class prop : MonoBehaviour, IGameStateObserver
 
     public void OnGameEvent(GameEvent _) {}
 
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
+    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
     public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

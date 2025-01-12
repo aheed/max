@@ -10,7 +10,7 @@ public class UserGuide : MonoBehaviour
     
     static UserGuide GetInstance() => FindAnyObjectByType<UserGuide>(FindObjectsInactive.Include);
     public static void SetOpenState(bool open) => 
-        GetInstance().gameObject.SetActive(open);
+        GetInstance()?.gameObject.SetActive(open);
     
     // Start is called before the first frame update
     void OnEnable()

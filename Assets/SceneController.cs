@@ -23,7 +23,7 @@ public enum GameStatus
 
 public class GameObjectCollection
 {
-    public float yCoord;
+    public float zCoord;
     public IEnumerable<GameObject> gameObjects;
 }
 
@@ -525,7 +525,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
             ret[ytmp] = new GameObjectCollection {
-                yCoord = ytmp * cellHeight, // level relative coordinate
+                zCoord = ytmp * cellHeight, // level relative coordinate
                 gameObjects = new List<GameObject>()
             };
         }        
@@ -697,7 +697,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection {yCoord = goc.yCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -1021,7 +1021,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
         }
 
-        while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().yCoord)
+        while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().zCoord)
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
             var activeCollection = pendingActivation.First();
@@ -1032,7 +1032,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             break;
         }
 
-        while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().yCoord)
+        while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().zCoord)
         {
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
 
@@ -1250,17 +1250,17 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) 
+    public void OnBombLanded(GameObject bomb, GameObject hitObject) 
     {
         if (hitObject == null)
         {
-            var prefab = IsOverRiver(bomb.GetPosition()) ? bombSplashPrefab : bombCraterPrefab;
-            if (IsOverRoad(bomb.GetPosition()))
+            var prefab = IsOverRiver(bomb.transform.position) ? bombSplashPrefab : bombCraterPrefab;
+            if (IsOverRoad(bomb.transform.position))
             {
                 prefab = mushroomCloudPrefab;
                 //todo: report road or bridge hit for scoring
             }
-            Vector3 craterPosition = bomb.GetPosition();
+            Vector3 craterPosition = bomb.transform.position;
             craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
             if (prefab != bombSplashPrefab)

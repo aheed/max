@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
-public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
+public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 {
     public Transform refObject;    
     public float glideDescentRate = 0.3f;
@@ -37,18 +37,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction;
-    Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
     Vector2 lastApparentMove;
-    float lastAltitude;
     public GameObject bulletPrefab;
     public Bomb bombPrefab;
-    public Sprite leftSprite;
-    public Sprite rightSprite;
-    public Sprite straightSprite;
-    public Sprite crashedSprite;
-    SpriteRenderer spriteR;
     float offsetY = 0;
     GameState gameState;    
     private Vector2 touchStartPosition, touchEndPosition;
@@ -65,8 +58,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
-	    rigidbody2d = GetComponent<Rigidbody2D>();
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = FindAnyObjectByType<GameState>();
         gameState.RegisterObserver(this); 
         lastCollidedMove = new Vector2(0, 0);
@@ -216,16 +207,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
-            var newSprite = straightSprite;
-            if (apparentMove.x < 0)
-            {
-                newSprite = leftSprite;
-            }
-            else if (apparentMove.x > 0)
-            {
-                newSprite = rightSprite;
-            }
-            spriteR.sprite = newSprite;
             lastApparentMove = apparentMove;
         }
 
@@ -372,18 +353,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             lastMove = move;
         }
         HandleMove(move);
-
-        if (GetAltitude() != lastAltitude)
-        {
-            lastAltitude = GetAltitude();
-            spriteR.sortingOrder = (int)(lastAltitude * 100.0f);
-            //Debug.Log($"Max new altitude/sortingorder {lastAltitude}/{spriteR.sortingOrder}");
-        }
     }
 
     public Vector2 GetPosition()
     {
-        return rigidbody2d.position;
+        return transform.position;
     }
 
     public float GetAltitude()
@@ -442,7 +416,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
     {
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
-            spriteR.sprite = crashedSprite;
             if (gameStatus == GameStatus.DEAD)
             {
                 gameState.ReportEvent(GameEvent.BIG_BANG);
@@ -460,7 +433,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
             }
             tmpLocalPosition.y = tmpLocalPosition.z;
             transform.localPosition = tmpLocalPosition;
-            spriteR.sprite = straightSprite;
             offsetY = 0f;
         }
     }
