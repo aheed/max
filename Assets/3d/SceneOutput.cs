@@ -13,4 +13,6 @@ public class SceneOutput
     public float landingStripStartZ;
     public float landingStripEndZ;
     public float landingStripWidth;
+    public GameObject riverSectionGameObject;
+    public List<Vector3> riverVerts;
 }

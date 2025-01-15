@@ -88,7 +88,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     float enemyPlaneCooldown = 0f;
     float windCooldown = 0f;
     GameObject riverSectionGameObject;
-    List<Vector2> riverVerts;
+    List<Vector3> riverVerts;
     List<float> roadNearEdgesZ;
     TvSimDocument tvSimDocumentObject;
     GameObject balloonParent;
@@ -107,7 +107,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         
         level++;
         var llcz = level * levelLength;
-        var newLevel = Instantiate(new GameObject(), new Vector3(0f, 0f, llcz), Quaternion.identity);
+        var newLevel = Instantiate(new GameObject("level"), new Vector3(0f, 0f, llcz), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
         lastLevelStartZ = llcz;
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
@@ -135,6 +135,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         landingStripStartZ = sceneOutput.landingStripStartZ;
         landingStripEndZ = sceneOutput.landingStripEndZ;
         landingStripWidth = sceneOutput.landingStripWidth;
+        riverVerts = sceneOutput.riverVerts;
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
@@ -252,6 +253,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     }
 
     // Todo: remove param xOffset (?)
+    // Todo: use z coord, not y coord
     float GetRiverLeftEdgeX(float yCoord, float xOffset, float yOffset)
     {
         // find segment

@@ -281,58 +281,61 @@ public class SceneBuilder : MonoBehaviour
                 bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
                 zSortOrder += zSortOrderIncrement;
             }
-        }
+        }*/
 
 
         // River
-        riverSectionGameObject = Instantiate(riverSectionPrefab, lvlTransform);
-        var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0f, -0.2f);
-        riverSectionGameObject.transform.localPosition = rsLocalTransform;
-        var riverLeftBank = new GameObject("riverbank");
-        riverLeftBank.transform.parent = lvlTransform;
+        //ret.riverSectionGameObject = Instantiate(riverSectionPrefab, sceneInput.levelTransform);
+        ret.riverSectionGameObject = new GameObject("riversection");
+        ret.riverSectionGameObject.transform.parent = sceneInput.levelTransform;
+        var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0.2f, 0f);
+        ret.riverSectionGameObject.transform.localPosition = rsLocalTransform;
+        /*var riverLeftBank = new GameObject("riverbank");
+        riverLeftBank.transform.parent = sceneInput.levelTransform;
         var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
-        riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
+        riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;*/
 
         // River MeshRenderers
-        var rsMeshFilter = riverSectionGameObject.AddComponent<MeshFilter>();
-        var rsMeshRenderer = riverSectionGameObject.AddComponent<MeshRenderer>();
+        var rsMeshFilter = ret.riverSectionGameObject.AddComponent<MeshFilter>();
+        var rsMeshRenderer = ret.riverSectionGameObject.AddComponent<MeshRenderer>();
         rsMeshRenderer.material = riverMaterial;
-        var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
+        /*var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
         var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
-        bankMeshRenderer.material = riverBankMaterial;
+        bankMeshRenderer.material = riverBankMaterial;*/
 
         // River Meshes
-        var y = 0f;
+        var z = 0f;
         float riverLowerLeftCornerX = 0f;
         var riverWidth = LevelBuilder.riverWidth * cellWidth;        
 
-        riverVerts = levelContents.riverSegments.SelectMany(segment => 
+        ret.riverVerts = levelContents.riverSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
-            var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
+            var xOffset = segment.slope * segmentHeight;
             
-            var ret = new List<Vector2>
+            var ret = new List<Vector3>
             {
-                new Vector2(riverLowerLeftCornerX, y),
-                new Vector2(riverLowerLeftCornerX + riverWidth, y),
-                new Vector2(riverLowerLeftCornerX + xOffset, y + segmentHeight),
-                new Vector2(riverLowerLeftCornerX + riverWidth + xOffset, y + segmentHeight)
+                new Vector3(riverLowerLeftCornerX, 0f, z),
+                new Vector3(riverLowerLeftCornerX + riverWidth, 0f, z),
+                new Vector3(riverLowerLeftCornerX + xOffset, 0f, z + segmentHeight),
+                new Vector3(riverLowerLeftCornerX + riverWidth + xOffset, 0f, z + segmentHeight)
             };
-            y += segmentHeight;
+            z += segmentHeight;
             riverLowerLeftCornerX += xOffset;
             return ret;
         }).ToList();
 
-        var riverBankVerts = riverVerts.Select((vert, index) => {
+        /*var riverBankVerts = ret.riverVerts.Select((vert, index) => {
             var x = index % 2 == 0 ? vert.x : vert.x - riverWidth + riverBankWidth;
             return new Vector2(x, vert.y);
-        }).ToList();
+        }).ToList();*/
         
-        var mesh = CreateQuadMesh(riverVerts);
+        var mesh = CreateQuadMesh(ret.riverVerts.ToArray());
         rsMeshFilter.mesh = mesh;
-        var riverBankMesh = CreateQuadMesh(riverBankVerts);
-        bankMeshFilter.mesh = riverBankMesh;
+        /*var riverBankMesh = CreateQuadMesh(riverBankVerts);
+        bankMeshFilter.mesh = riverBankMesh;*/
 
+        /*
 
         // Parallel Road
         GameObject paraRoad = new GameObject("parallel road");
