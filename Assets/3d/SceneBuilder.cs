@@ -30,10 +30,13 @@ public class SceneBuilder : MonoBehaviour
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
+    public Material riverMaterial;
+    public Material riverBankMaterial;
+    public Material roadMaterial;
+    public Material landingStripMaterial;
 
-    Mesh CreateQuadMesh(IEnumerable<Vector2> coords)
+    Mesh CreateQuadMesh(Vector3[] verts)
     {
-        var verts = coords.Select(v => (Vector3)v).ToArray();
         if (verts.Length % 4 != 0)
         {
             throw new System.Exception("Length of param must a multiple of 4");
@@ -71,74 +74,68 @@ public class SceneBuilder : MonoBehaviour
         return mesh;
     }
 
-    public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
+    //public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
 
-    /*
+    
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public List<GameObjectCollection> PopulateScene(LevelContents levelContents)
+    public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
-        GameStateContents stateContents = gameState.GetStateContents();
-        float cellWidth = levelWidth / LevelContents.gridWidth;
-        float cellHeight = levelHeight / LevelContents.gridHeight;
-        float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
+        float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
+        float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
 
-        var lvlTransform = GetLevel().transform;
+        SceneOutput ret = new();
+        GameObjectCollection[] gameObjects = new GameObjectCollection[LevelContents.gridHeight];
+        for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
+        {
+            gameObjects[ztmp] = new GameObjectCollection {
+                zCoord = ztmp * cellHeight, // level relative coordinate
+                gameObjects = new List<GameObject>()
+            };
+        }
 
         // Landing Strip
         {
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
-            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
-            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
-            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
-            var endSpriteHeight = topSpriteR.bounds.size.y;
-
-            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
             
-            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
+            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0.21f, 0f);
             lsGameObject.transform.localPosition = lsLocalTransform;
-
-            lsLocalTransform.x += lsWidth / 2;
-            lsLocalTransform.y += endSpriteHeight / 2;
-            lsBottomEnd.transform.localPosition = lsLocalTransform;        
             
-            landingStripBottomY = lsGameObject.transform.position.y;
-            landingStripTopY = landingStripBottomY + lsHeight;
-            landingStripWidth = lsWidth;
-            
-            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
+            ret.landingStripStartZ = lsGameObject.transform.position.z; 
+            ret.landingStripEndZ = ret.landingStripStartZ + lsHeight;
+            ret.landingStripWidth = lsWidth;
 
-            lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
-            lsLocalTransform.y += lsHeight - endSpriteHeight;
-            lsTopEnd.transform.localPosition = lsLocalTransform;
-
-            var lsllcX = 0;
+            var lsllcX = 0f;
             var lslrcX = lsWidth;
-            var lsulcX = lsUpperCornerOffsetX;
-            var lsurcX = lslrcX + lsUpperCornerOffsetX;
-            var lsllcY = 0;
-            var lslrcY = 0;
-            var lsulcY = lsHeight;
-            var lsurcY = lsHeight;
+            var lsulcX = 0f;
+            var lsurcX = lsWidth;
+            var lsllcZ = 0f;
+            var lslrcZ = 0f;
+            var lsulcZ = lsHeight;
+            var lsurcZ = lsHeight;
+            var lsMeshY = 0f;
 
             var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
             var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
             lsMeshRenderer.material = landingStripMaterial;
 
-            var lsVerts = new List<Vector2>
+            var lsVerts = new Vector3[]
             {
-                new Vector2(lsllcX, lsllcY),
-                new Vector2(lslrcX, lslrcY),
-                new Vector2(lsulcX, lsulcY),
-                new Vector2(lsurcX, lsurcY)
+                new Vector3(lsllcX, lsMeshY, lsllcZ),
+                new Vector3(lslrcX, lsMeshY, lslrcZ),
+                new Vector3(lsulcX, lsMeshY, lsulcZ),
+                new Vector3(lsurcX, lsMeshY, lsurcZ)
             };
 
             var lsMesh = CreateQuadMesh(lsVerts);
             lsMeshFilter.mesh = lsMesh;
         }
+
+        /*
 
         // Enemy Airstrips
         foreach(var enemyAirstrip in levelContents.enemyAirstrips)
@@ -384,16 +381,7 @@ public class SceneBuilder : MonoBehaviour
         var prMesh = CreateQuadMesh(paraRoadVerts);
         var prMeshWide = CreateQuadMesh(paraRoadWideVerts);
         prMeshFilter.mesh = prMesh;
-        prMeshFilterWide.mesh = prMeshWide;
-
-        GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
-        for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
-        {
-            ret[ytmp] = new GameObjectCollection {
-                yCoord = ytmp * cellHeight, // level relative coordinate
-                gameObjects = new List<GameObject>()
-            };
-        }        
+        prMeshFilterWide.mesh = prMeshWide;        
         
         // Roads
         foreach (var road in levelContents.roads)
@@ -555,7 +543,9 @@ public class SceneBuilder : MonoBehaviour
             ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
         }
 
-        return ret.ToList();
+        */
+        ret.gameObjects = gameObjects.ToList();
+        return ret;
     }
-    */
+    
 }

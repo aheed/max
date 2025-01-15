@@ -119,10 +119,22 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     void CreateLevel()
     {
         RotateLevels();
-        var newGameObjects = sceneBuilder.PopulateScene(latestLevel)
+        var sceneInput = new SceneInput
+        {
+            levelTransform = GetLevel().transform,
+            stateContents = gameState.GetStateContents(),
+            levelWidth = levelWidth,
+            levelHeight = levelLength
+        };
+        var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
+        var newGameObjects = sceneOutput.gameObjects
         .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelStartZ, gameObjects = goc.gameObjects})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
+        gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
+        landingStripStartZ = sceneOutput.landingStripStartZ;
+        landingStripEndZ = sceneOutput.landingStripEndZ;
+        landingStripWidth = sceneOutput.landingStripWidth;
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
@@ -166,7 +178,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         //var levelLowerLeftCornerX = 0f;
         var refObjStartOffset = 0.8f;
         //var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
-        var newRefObjPos = new Vector3(0f, 0f, refObjStartOffset);
+        var newRefObjPos = new Vector3(levelWidth / 2, 0f, refObjStartOffset);
         refobject.transform.position = newRefObjPos;
 
         if (maxPlane == null)

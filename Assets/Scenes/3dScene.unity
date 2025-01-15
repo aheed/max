@@ -164,12 +164,7 @@ MonoBehaviour:
   minDistanceRiverAirstrip: 5
   maxDistanceRiverToAdjust: 2
   roadHeight: 0.4
-  riverMaterial: {fileID: 0}
-  riverBankMaterial: {fileID: 0}
-  roadMaterial: {fileID: 0}
-  landingStripMaterial: {fileID: 0}
-  visibleAreaMarkerMaterial: {fileID: 0}
-  levelHeight: 80
+  levelLength: 80
   activationDistance: 8
   deactivationDistance: 8
   minRestartWaitSeconds: 1
@@ -388,7 +383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &505702790
 Transform:
   m_ObjectHideFlags: 0
@@ -1263,7 +1258,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: -8}
+  m_LocalPosition: {x: 10, y: 18, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2517,7 +2512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   riverSectionPrefab: {fileID: 0}
   roadPrefab: {fileID: 0}
-  landingStripPrefab: {fileID: 0}
+  landingStripPrefab: {fileID: 6914347553027331206, guid: 8d2c5b9c51ffa2cb0ac62431f2e22ab1, type: 3}
   housePrefab: {fileID: 0}
   flackGunPrefab: {fileID: 0}
   tankPrefab: {fileID: 0}
@@ -2537,6 +2532,10 @@ MonoBehaviour:
   hangarPrefab: {fileID: 0}
   enemyHqPrefab: {fileID: 0}
   bigHousePrefab: {fileID: 0}
+  riverMaterial: {fileID: 0}
+  riverBankMaterial: {fileID: 0}
+  roadMaterial: {fileID: 0}
+  landingStripMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
 --- !u!4 &1636314947
 Transform:
   m_ObjectHideFlags: 0
@@ -3303,7 +3302,7 @@ PrefabInstance:
       objectReference: {fileID: 1159989481}
     - target: {fileID: 170281272061075255, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2448
+      value: 2472
       objectReference: {fileID: 0}
     - target: {fileID: 229145063041757069, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3311,7 +3310,7 @@ PrefabInstance:
       objectReference: {fileID: 1402502343}
     - target: {fileID: 229145063041757069, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 1759
+      value: 1783
       objectReference: {fileID: 0}
     - target: {fileID: 507222170476185451, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3319,7 +3318,7 @@ PrefabInstance:
       objectReference: {fileID: 769164765}
     - target: {fileID: 507222170476185451, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 1853
+      value: 1877
       objectReference: {fileID: 0}
     - target: {fileID: 1147520403995015173, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Name
@@ -3399,7 +3398,7 @@ PrefabInstance:
       objectReference: {fileID: 1086024911}
     - target: {fileID: 3096832934410118861, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2448
+      value: 2472
       objectReference: {fileID: 0}
     - target: {fileID: 3122788549430999521, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3407,7 +3406,7 @@ PrefabInstance:
       objectReference: {fileID: 1248119479}
     - target: {fileID: 3122788549430999521, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 1329
+      value: 1353
       objectReference: {fileID: 0}
     - target: {fileID: 3970258429114394977, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3443,7 +3442,7 @@ PrefabInstance:
       objectReference: {fileID: 1222553455}
     - target: {fileID: 6247621148131785429, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 1392
+      value: 1416
       objectReference: {fileID: 0}
     - target: {fileID: 7256372425223412905, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3459,7 +3458,7 @@ PrefabInstance:
       objectReference: {fileID: 1003289188}
     - target: {fileID: 7928951117511808088, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 5652
+      value: 5676
       objectReference: {fileID: 0}
     - target: {fileID: 8679697740925676377, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -3467,7 +3466,7 @@ PrefabInstance:
       objectReference: {fileID: 1069885690}
     - target: {fileID: 8679697740925676377, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 1663
+      value: 1687
       objectReference: {fileID: 0}
     - target: {fileID: 8851776619420192258, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
