@@ -103,7 +103,7 @@ public class SceneBuilder : MonoBehaviour
 
             var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
             
-            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0.21f, 0f);
+            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, 0f);
             lsGameObject.transform.localPosition = lsLocalTransform;
             
             ret.landingStripStartZ = lsGameObject.transform.position.z; 
@@ -289,7 +289,7 @@ public class SceneBuilder : MonoBehaviour
         //ret.riverSectionGameObject = Instantiate(riverSectionPrefab, sceneInput.levelTransform);
         ret.riverSectionGameObject = new GameObject("riversection");
         ret.riverSectionGameObject.transform.parent = sceneInput.levelTransform;
-        var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0.2f, 0f);
+        var rsLocalTransform = new Vector3(levelContents.riverLowerLeftCornerX * cellWidth, 0f, 0f);
         ret.riverSectionGameObject.transform.localPosition = rsLocalTransform;
         /*var riverLeftBank = new GameObject("riverbank");
         riverLeftBank.transform.parent = sceneInput.levelTransform;
@@ -510,7 +510,7 @@ public class SceneBuilder : MonoBehaviour
                         break;
                 }
 
-                var itemLocalTransform = new Vector3(xtmp * cellWidth, 0.24f, ztmp * cellHeight);
+                var itemLocalTransform = new Vector3(xtmp * cellWidth, 0f, ztmp * cellHeight);
 
                 List<GameObject> retInner = new();
                 if (selectedPrefab != null)
