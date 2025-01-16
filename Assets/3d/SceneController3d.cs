@@ -57,8 +57,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
     public bool asyncLevelBuild = false;
-    public int leftTrim = 2;
-    public int rightTrim = 5;
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
     public LevelType startLevelType = LevelType.NORMAL;
@@ -124,7 +122,9 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             levelTransform = GetLevel().transform,
             stateContents = gameState.GetStateContents(),
             levelWidth = levelWidth,
-            levelHeight = levelLength
+            levelHeight = levelLength,
+            vipProbability = vipProbability,
+            balloonParentTransform = balloonParent.transform
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects

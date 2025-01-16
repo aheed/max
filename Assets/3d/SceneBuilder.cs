@@ -34,6 +34,8 @@ public class SceneBuilder : MonoBehaviour
     public Material riverBankMaterial;
     public Material roadMaterial;
     public Material landingStripMaterial;
+    public int leftTrim = 2;
+    public int rightTrim = 5;
 
     Mesh CreateQuadMesh(Vector3[] verts)
     {
@@ -86,12 +88,11 @@ public class SceneBuilder : MonoBehaviour
         var midX = LevelContents.gridWidth / 2;
 
         SceneOutput ret = new();
-        GameObjectCollection[] gameObjects = new GameObjectCollection[LevelContents.gridHeight];
+        GameObjectCollection[] gameObjectCollections = new GameObjectCollection[LevelContents.gridHeight];
         for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
         {
-            gameObjects[ztmp] = new GameObjectCollection {
+            gameObjectCollections[ztmp] = new GameObjectCollection {
                 zCoord = ztmp * cellHeight, // level relative coordinate
-                gameObjects = new List<GameObject>()
             };
         }
 
@@ -457,15 +458,16 @@ public class SceneBuilder : MonoBehaviour
                 house.SetVip();
             }
         }
+        */
 
         // Small items: Flack guns, trees, tanks
-        for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
+        for (var ztmpOuter = 0; ztmpOuter < LevelContents.gridHeight; ztmpOuter++)
         {
-            var ytmp = ytmpOuter; //capture for lazy evaluation
-            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
+            var ztmp = ztmpOuter; //capture for lazy evaluation
+            var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 GameObject selectedPrefab = null;
-                switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
+                switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
                         selectedPrefab = flackGunPrefab;
@@ -508,46 +510,45 @@ public class SceneBuilder : MonoBehaviour
                         break;
                 }
 
-                List<GameObject> ret = new();
+                var itemLocalTransform = new Vector3(xtmp * cellWidth, 0.24f, ztmp * cellHeight);
+
+                List<GameObject> retInner = new();
                 if (selectedPrefab != null)
                 {
-                    var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
-                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
+                    var itemGameObject = Instantiate(selectedPrefab, sceneInput.levelTransform);
                     itemGameObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)
                     {
                         var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
-                        if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
                             possibleVip.SetVip();
                         }
                     }
 
-                    ret.Add(itemGameObject);
+                    retInner.Add(itemGameObject);
                 }
 
-                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, lvlTransform);
-                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
+                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, sceneInput.levelTransform);
                     balloonShadowGameObject.transform.localPosition = itemLocalTransform;
 
-                    var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
+                    var balloonGameObject = Instantiate(balloonPrefab, sceneInput.balloonParentTransform);
                     balloonGameObject.transform.position = balloonShadowGameObject.transform.position;
                     Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
                     balloon.SetShadow(balloonShadowGameObject);
-                    ret.Add(balloonShadowGameObject);
+                    retInner.Add(balloonShadowGameObject);
                 }
 
-                return ret;
+                return retInner;
             });
 
-            ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
+            gameObjectCollections[ztmp].gameObjects = gameObjectsAtZ;
         }
 
-        */
-        ret.gameObjects = gameObjects.ToList();
+        ret.gameObjects = gameObjectCollections.ToList();
         return ret;
     }
     

@@ -12,5 +12,7 @@ public class SceneInput
     public GameStateContents stateContents;
     public float levelWidth;
     public float levelHeight;
+    public float vipProbability;
+    public Transform balloonParentTransform;
     
 }

@@ -192,8 +192,6 @@ MonoBehaviour:
   parllelRoadSideWidth: 0.1
   parallelRoadWidth: 0.9
   asyncLevelBuild: 0
-  leftTrim: 2
-  rightTrim: 5
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
   startLevelType: 0
@@ -2517,7 +2515,7 @@ MonoBehaviour:
   flackGunPrefab: {fileID: 0}
   tankPrefab: {fileID: 0}
   tree1Prefab: {fileID: 0}
-  tree2Prefab: {fileID: 0}
+  tree2Prefab: {fileID: 9099390254065398501, guid: 79e39c9a719fde497b6f8aefff8ce173, type: 3}
   boat1Prefab: {fileID: 0}
   boat2Prefab: {fileID: 0}
   vehicle1Prefab: {fileID: 0}
@@ -2536,6 +2534,8 @@ MonoBehaviour:
   riverBankMaterial: {fileID: 0}
   roadMaterial: {fileID: 0}
   landingStripMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
+  leftTrim: 2
+  rightTrim: 5
 --- !u!4 &1636314947
 Transform:
   m_ObjectHideFlags: 0
