@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
+
+
 public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 {
     public Transform refObject;    
@@ -48,6 +50,29 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     private float maxMove = 1.0f;
     private float minMove = 4.0f;
     private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41
+
+    void SetAppearance(float moveX, bool alive)
+    {
+        if (!alive)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+            return;
+        }
+        
+        if (moveX > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, -30);
+        }
+        else if (moveX < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 30);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -208,6 +233,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
             stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
+            SetAppearance(apparentMove.x, true);
             lastApparentMove = apparentMove;
         }
 
@@ -417,6 +443,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     {
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
+            SetAppearance(0, false);
             if (gameStatus == GameStatus.DEAD)
             {
                 gameState.ReportEvent(GameEvent.BIG_BANG);
@@ -427,6 +454,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public void OnGameEvent(GameEvent gameEvent) {
         if (gameEvent == GameEvent.START)
         {
+            SetAppearance(0, true);
             Vector3 tmpLocalPosition = transform.localPosition;
             if (tmpLocalPosition.y < landingAltitude) 
             {
