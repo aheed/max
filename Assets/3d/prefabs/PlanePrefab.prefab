@@ -565,7 +565,47 @@ MonoBehaviour:
     m_Id: 8b476a1b-e191-4042-8f2a-7f1eea060cc1
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: 8ea2153a-04fa-4f9b-896f-f93c8b64cf37
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 61f3bc73-8d01-450e-b147-c729a1db37ca
+      m_Path: <Keyboard>/upArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 9fdef63a-caf7-487a-ba8e-7c26fdf5b6f3
+      m_Path: <Keyboard>/downArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: dfcc6003-0fda-42db-a0a0-792097bd9725
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 19defc5e-1d1e-4259-b099-4fd9fe0995a7
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
     m_Flags: 0
   FireAction:
     m_Name: Fire
@@ -574,7 +614,15 @@ MonoBehaviour:
     m_Id: bc052d5a-170a-434b-874e-37e3187cf8bb
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 3e9fdf83-a5c8-4858-bdcb-32dbf225a86e
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire
+      m_Flags: 0
     m_Flags: 0
   DebugFlackAction:
     m_Name: Debug Flack

@@ -42,7 +42,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     Vector2 lastApparentMove;
     public GameObject bulletPrefab;
     public Bomb bombPrefab;
-    float offsetY = 0;
+    float offsetZ = 0;
     GameState gameState;    
     private Vector2 touchStartPosition, touchEndPosition;
     private float maxMove = 1.0f;
@@ -137,7 +137,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         
         Vector3 tmpLocalPosition = transform.localPosition;
-        var deltaOffsetY = 0f;
+        var deltaOffsetZ = 0f;
         var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
         var significantWind = stateContents.wind && 
             (stateContents.gameStatus == GameStatus.FLYING ||
@@ -150,42 +150,42 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
         if (apparentMove.x == 0f)
         {
-            tmpLocalPosition.z += moveY;
+            tmpLocalPosition.y += moveY;
         }
         else if (moveY != 0f)
         {
-            deltaOffsetY = moveY;
+            deltaOffsetZ = moveY;
         }
         
         //if (stateContents.gameStatus == GameStatus.FLYING &&
         if (GetAltitude() > landingAltitude &&
-            deltaOffsetY == 0f &&
-            offsetY > 0)
+            deltaOffsetZ == 0f &&
+            offsetZ > 0)
         {
-            deltaOffsetY = -offsetDecreaseRate * Time.deltaTime;
-            tmpLocalPosition.x += deltaOffsetY * SceneController.riverSlopes[SceneController.neutralRiverSlopeIndex];
+            deltaOffsetZ = -offsetDecreaseRate * Time.deltaTime;
+            //tmpLocalPosition.x += deltaOffsetZ * SceneController.riverSlopes[SceneController.neutralRiverSlopeIndex];
         }
-        var tmpOffsetY = offsetY + deltaOffsetY;        
+        var tmpOffsetZ = offsetZ + deltaOffsetZ;        
 
-        tmpLocalPosition.z += -forcedDescent * Time.deltaTime +
+        tmpLocalPosition.y += -forcedDescent * Time.deltaTime +
             (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
 
-        if (tmpLocalPosition.z < gameState.minAltitude) 
+        if (tmpLocalPosition.y < gameState.minAltitude) 
         {
-            tmpLocalPosition.z = gameState.minAltitude;
+            tmpLocalPosition.y = gameState.minAltitude;
         }
-        if (tmpLocalPosition.z > gameState.maxAltitude)
+        if (tmpLocalPosition.y > gameState.maxAltitude)
         {
-            tmpLocalPosition.z = gameState.maxAltitude;
+            tmpLocalPosition.y = gameState.maxAltitude;
         }
-        if (tmpLocalPosition.z + tmpOffsetY > gameState.maxAltitude)
+        if (tmpLocalPosition.y + tmpOffsetZ > gameState.maxAltitude)
         {
-            tmpLocalPosition.z = transform.localPosition.z;
-            tmpOffsetY = offsetY;
+            tmpLocalPosition.y = transform.localPosition.y;
+            tmpOffsetZ = offsetZ;
         }
-        if (tmpOffsetY < 0f)
+        if (tmpOffsetZ < 0f)
         {
-            tmpOffsetY = 0f;
+            tmpOffsetZ = 0f;
         }
         if (tmpLocalPosition.x > gameState.maxHorizPosition)
         {
@@ -195,13 +195,14 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             tmpLocalPosition.x = -gameState.maxHorizPosition;
         }
-        tmpLocalPosition.y = tmpLocalPosition.z + offsetY;
-        if (transform.localPosition.z != tmpLocalPosition.z)
+        //tmpLocalPosition.y = tmpLocalPosition.z + offsetZ;
+        if (transform.localPosition.y != tmpLocalPosition.y)
         {
-            gameState.SetAltitude(tmpLocalPosition.z);
+            gameState.SetAltitude(tmpLocalPosition.y);
         }
-        transform.localPosition = tmpLocalPosition;
-        offsetY = tmpOffsetY;        
+        offsetZ = tmpOffsetZ;
+        tmpLocalPosition.z = offsetZ;   
+        transform.localPosition = tmpLocalPosition;        
 
         if (apparentMove.x != lastApparentMove.x &&
             stateContents.gameStatus != GameStatus.DEAD &&
@@ -362,7 +363,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     public float GetAltitude()
     {
-        return transform.localPosition.z;
+        return transform.localPosition.y;
     }
 
     public float GetHeight()
@@ -427,13 +428,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (gameEvent == GameEvent.START)
         {
             Vector3 tmpLocalPosition = transform.localPosition;
-            if (tmpLocalPosition.z < landingAltitude) 
+            if (tmpLocalPosition.y < landingAltitude) 
             {
-                tmpLocalPosition.z = landingAltitude;
+                tmpLocalPosition.y = landingAltitude;
             }
-            tmpLocalPosition.y = tmpLocalPosition.z;
             transform.localPosition = tmpLocalPosition;
-            offsetY = 0f;
+            offsetZ = 0f;
         }
     }
 
