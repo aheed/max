@@ -43,7 +43,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     Vector2 lastMove;
     Vector2 lastApparentMove;
     public GameObject bulletPrefab;
-    public Bomb bombPrefab;
+    public GameObject bombPrefab;
     float offsetZ = 0;
     GameState gameState;    
     private Vector2 touchStartPosition, touchEndPosition;

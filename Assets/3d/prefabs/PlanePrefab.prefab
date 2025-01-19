@@ -651,8 +651,8 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  bulletPrefab: {fileID: 0}
-  bombPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
+  bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
 --- !u!1 &4343290731584256819
 GameObject:
   m_ObjectHideFlags: 0
