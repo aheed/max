@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     {
         startPosition = transform.position;
         velocity = new Vector3(0, 0, speed);
+        Debug.Log($"Bullet spawned at {transform.position}");
     }
 
     // Update is called once per frame
@@ -22,8 +23,23 @@ public class Bullet : MonoBehaviour
         transform.position = position;
         if (transform.position.z > (startPosition.z + range))
         {
-            Debug.Log($"3D Bullet out of sight at {transform.position}");
+            //Debug.Log($"3D Bullet out of sight at {transform.position}");
             Destroy(gameObject);
         }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log($"3D Hit!!!!!!!!!!!!!!! Bullet at altitude {transform.position.z} collided with {col.gameObject.name}");
+        if (col.gameObject.name.StartsWith("max") || 
+            col.gameObject.name.StartsWith("flack_expl") ||
+            col.gameObject.name.StartsWith("bomb") ||
+            col.gameObject.name.StartsWith("balloon"))
+        {
+            return;
+        }
+
+        Debug.Log($"3D Hit!!!!!!!!!!!!!!! Bullet at altitude {transform.position.z} collided with {col.gameObject.name} HIT!!!");
+        Destroy(gameObject);
     }
 }
