@@ -40,7 +40,7 @@ public class SceneBuilder : MonoBehaviour
     public float riverAltitude = -0.3f;
     float airstripAltitude = 0.01f;
 
-    Mesh CreateQuadMesh(Vector3[] verts)
+    Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
     {
         if (verts.Length % 4 != 0)
         {
@@ -50,7 +50,8 @@ public class SceneBuilder : MonoBehaviour
         var triangles = new List<int>();
         var normals = new List<Vector3>();
         var uvs = new List<Vector2>();
-        for (int i = 0; i < verts.Length / 4; i++)
+        var quads = verts.Length / 4;
+        for (int i = 0; i < quads; i++)
         {
             var triIndexOffset = i * 4;
             triangles.Add(triIndexOffset + 0);
@@ -60,10 +61,11 @@ public class SceneBuilder : MonoBehaviour
             triangles.Add(triIndexOffset + 3);
             triangles.Add(triIndexOffset + 1);
 
-            normals.Add(Vector3.up);
-            normals.Add(Vector3.up);
-            normals.Add(Vector3.up);
-            normals.Add(Vector3.up);
+
+            normals.Add(quadNormals[i]);
+            normals.Add(quadNormals[i]);
+            normals.Add(quadNormals[i]);
+            normals.Add(quadNormals[i]);
 
             uvs.Add(new Vector2(0, 0));
             uvs.Add(new Vector2(1, 0));
@@ -135,7 +137,7 @@ public class SceneBuilder : MonoBehaviour
                 new Vector3(lsurcX, lsMeshY, lsurcZ)
             };
 
-            var lsMesh = CreateQuadMesh(lsVerts);
+            var lsMesh = CreateQuadMesh(lsVerts, new Vector3[] {Vector3.up});
             lsMeshFilter.mesh = lsMesh;
         }
 
@@ -301,10 +303,10 @@ public class SceneBuilder : MonoBehaviour
         groundRightOfRiver.transform.parent = sceneInput.levelTransform;
         groundRightOfRiver.transform.localPosition = new Vector3(0f, 0f, 0f);
 
-        /*var riverLeftBank = new GameObject("riverbank");
+        var riverLeftBank = new GameObject("riverbank");
         riverLeftBank.transform.parent = sceneInput.levelTransform;
-        var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
-        riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;*/
+        var riverLeftBankLocalTransform = new Vector3(0f, 0f, 0f);
+        riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
         // River MeshRenderers
         var rsMeshFilter = ret.riverSectionGameObject.AddComponent<MeshFilter>();
@@ -319,6 +321,10 @@ public class SceneBuilder : MonoBehaviour
         var grMeshRenderer = groundRightOfRiver.AddComponent<MeshRenderer>();
         grMeshRenderer.material = groundMaterial;
 
+        var lbMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
+        var lbMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
+        lbMeshRenderer.material = landingStripMaterial;
+
         /*var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
         var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
         bankMeshRenderer.material = riverBankMaterial;*/
@@ -332,6 +338,9 @@ public class SceneBuilder : MonoBehaviour
         List<Vector3> riverVerts = new();
         List<Vector3> groundLeftOfRiverVerts = new();
         List<Vector3> groundRightOfRiverVerts = new();
+        List<Vector3> riverLeftBankVerts = new();
+        List<Vector3> UpNormals = new();
+        List<Vector3> riverLeftBankNormals = new();
 
         foreach (var segment in levelContents.riverSegments)
         {
@@ -358,22 +367,27 @@ public class SceneBuilder : MonoBehaviour
             groundRightOfRiverVerts.Add(new Vector3(riverUpperRightCornerX, 0f, upperZ));
             groundRightOfRiverVerts.Add(new Vector3(sceneInput.levelWidth, 0f, upperZ));
 
+            riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, 0f, z));
+            riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, riverAltitude, z));
+            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, 0f, upperZ));
+            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, riverAltitude, upperZ));
+
+            UpNormals.Add(Vector3.up);
+            var riverLeftBankNormal = new Vector3(segmentHeight, 0f, xOffset).normalized;
+            riverLeftBankNormals.Add(riverLeftBankNormal);
+
             z += segmentHeight;
             riverLowerLeftCornerX += xOffset;
         }
 
         ret.riverVerts = riverVerts;
-
-        /*var riverBankVerts = ret.riverVerts.Select((vert, index) => {
-            var x = index % 2 == 0 ? vert.x : vert.x - riverWidth + riverBankWidth;
-            return new Vector2(x, vert.y);
-        }).ToList();*/
         
-        rsMeshFilter.mesh = CreateQuadMesh(ret.riverVerts.ToArray());
-        glMeshFilter.mesh = CreateQuadMesh(groundLeftOfRiverVerts.ToArray());
-        grMeshFilter.mesh = CreateQuadMesh(groundRightOfRiverVerts.ToArray());
-        /*var riverBankMesh = CreateQuadMesh(riverBankVerts);
-        bankMeshFilter.mesh = riverBankMesh;*/
+        var upNormalsArray = UpNormals.ToArray();
+        rsMeshFilter.mesh = CreateQuadMesh(ret.riverVerts.ToArray(), upNormalsArray);
+        glMeshFilter.mesh = CreateQuadMesh(groundLeftOfRiverVerts.ToArray(), upNormalsArray);
+        grMeshFilter.mesh = CreateQuadMesh(groundRightOfRiverVerts.ToArray(), upNormalsArray);
+        lbMeshFilter.mesh = CreateQuadMesh(riverLeftBankVerts.ToArray(), riverLeftBankNormals.ToArray());
+
 
         /*
 
