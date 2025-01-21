@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 public class EnemyPlane3d : MonoBehaviour, IVip
@@ -39,7 +40,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     {
         if (controller == null)
         {
-            controller = model.GetComponent<PlaneController>(); //Todo: check if this is correct
+            controller = InterfaceHelper.GetInterface<PlaneController>(transform.GetChild(1).gameObject);
             controller.planeModel = GetModel();
         }
         return controller;
@@ -51,6 +52,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         if (speed < 0)
         {
             GetController().oncoming = true;
+            GetController().SetAppearance(0, !crashed);
         }
     }
 
@@ -153,9 +155,9 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             SetMoveCooldown();
         }
 
-        var progX = (speed + moveX * GameState.horizontalSpeed) * Time.deltaTime;
-        var progY = speed * Time.deltaTime;
-        Vector3 progress = new (progX, progY, 0.0f);
+        var progX = moveX * GameState.horizontalSpeed * Time.deltaTime;
+        var progZ = speed * Time.deltaTime;
+        Vector3 progress = new (progX, 0f, progZ);
         transform.position += progress;
 
         if (moveX != lastMoveX)
@@ -169,11 +171,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name.StartsWith("bullet"))
+        if (col.gameObject.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
             // Todo: report the victory
         }
-        else if (col.gameObject.name.StartsWith("player"))
+        else if (col.gameObject.name.StartsWith("player", true, CultureInfo.InvariantCulture))
         {
             // mid air collision
         }

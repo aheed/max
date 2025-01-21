@@ -479,7 +479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxPlanePrefab: {fileID: 7412553814368927781, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
-  enemyPlanePrefab: {fileID: 0}
+  enemyPlanePrefab: {fileID: 1651244251128591268, guid: 55f196b9dbc3da056ad52ff7903b8fe6, type: 3}
   visibleAreaMarkerPrefab: {fileID: 0}
   balloonParentPrefab: {fileID: 4120745604916191142, guid: bec86724a7ea0fcbf8585549cc51968b, type: 3}
   bombSplashPrefab: {fileID: 0}

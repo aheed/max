@@ -11,7 +11,7 @@ using UnityEngine;
 public class SceneController3d : MonoBehaviour, IGameStateObserver
 {
     public PlayerPlane maxPlanePrefab;
-    public EnemyPlane enemyPlanePrefab;
+    public EnemyPlane3d enemyPlanePrefab;
     public GameObject visibleAreaMarkerPrefab;
     public GameObject balloonParentPrefab;
     public GameObject bombSplashPrefab;
@@ -324,26 +324,26 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     }
 
     void SpawnEnemyPlane()
-    {
-        Debug.Log("Time to spawn enemy plane");
-        return; //TEMP
+    {        
         var startPos = refobject.transform.position;
-        //startPos = transform.position;
+
         bool oncoming = UnityEngine.Random.Range(0f, 1.0f) < enemyPlaneOncomingProbability;
         if (oncoming)
         {
-            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition, gameState.maxHorizPosition) + 2.0f * gameState.maxAltitude;
-            startPos.y += 2.0f * gameState.maxAltitude;
+            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition, gameState.maxHorizPosition);
+            startPos.z += activationDistance;
         }
         else
         {
             startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition - 2 * gameState.maxAltitude, gameState.maxHorizPosition - 2 * gameState.maxAltitude);
-            startPos.y += -gameState.maxAltitude;
+            startPos.z += -deactivationDistance;
         }
 
+        startPos.y = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
+
+        Debug.Log("Time to spawn enemy plane. oncoming: " + oncoming);
         
-        startPos.z = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
-        EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
+        EnemyPlane3d enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
         var minSpeed = oncoming ? enemyPlaneOncomingSpeedMin : enemyPlaneSpeedMin * gameState.maxSpeed;
         var maxSpeed = oncoming ? enemyPlaneOncomingSpeedMax : enemyPlaneSpeedMax * gameState.maxSpeed;

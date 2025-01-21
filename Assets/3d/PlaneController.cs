@@ -7,38 +7,23 @@ public class PlaneController : MonoBehaviour
 
     public void SetAppearance(float moveX, bool alive)
     {
+        //Debug.Log($"SetAppearance moveX={moveX} alive={alive} oncoming={oncoming}");
+        var yRotation = oncoming ? 180 : 0;
         if (!alive)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 90);
+            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 90);
         }
         else if (moveX > 0)
         {
-            transform.rotation = Quaternion.Euler(0, 0, -30);
+            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, -30);
         }
         else if (moveX < 0)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 30);
+            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 30);
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 0);
         }
-
-        if (oncoming)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
