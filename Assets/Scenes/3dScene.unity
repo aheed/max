@@ -14185,7 +14185,7 @@ MonoBehaviour:
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
   groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
   riverBankMaterial: {fileID: 0}
-  roadMaterial: {fileID: 0}
+  roadMaterial: {fileID: 2100000, guid: 87992205aaa6103d8b192cd702fd68a2, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
   leftTrim: 2
   rightTrim: 5

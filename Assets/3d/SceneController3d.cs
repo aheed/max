@@ -124,7 +124,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             levelWidth = levelWidth,
             levelHeight = levelLength,
             vipProbability = vipProbability,
-            balloonParentTransform = balloonParent.transform
+            balloonParentTransform = balloonParent.transform,
+            roadHeight = roadHeight
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
@@ -136,6 +137,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         landingStripEndZ = sceneOutput.landingStripEndZ;
         landingStripWidth = sceneOutput.landingStripWidth;
         riverVerts = sceneOutput.riverVerts;
+        roadNearEdgesZ = sceneOutput.roadNearEdgesZ;
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)

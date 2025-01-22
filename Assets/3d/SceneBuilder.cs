@@ -38,6 +38,7 @@ public class SceneBuilder : MonoBehaviour
     public int leftTrim = 2;
     public int rightTrim = 5;
     public float riverAltitude = -0.3f;
+    public float roadAltitude = 0.01f;
     float airstripAltitude = 0.01f;
 
     Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
@@ -438,18 +439,20 @@ public class SceneBuilder : MonoBehaviour
         var prMesh = CreateQuadMesh(paraRoadVerts);
         var prMeshWide = CreateQuadMesh(paraRoadWideVerts);
         prMeshFilter.mesh = prMesh;
-        prMeshFilterWide.mesh = prMeshWide;        
+        prMeshFilterWide.mesh = prMeshWide;
+        */
         
         // Roads
+        ret.roadNearEdgesZ = new();
         foreach (var road in levelContents.roads)
         {
-            var roadGameObject = Instantiate(roadPrefab, lvlTransform);
-            var lowerEdgeY = road * cellHeight;
+            //var roadGameObject = Instantiate(roadPrefab, lvlTransform);
+            var roadGameObject = new GameObject("road");
+            roadGameObject.transform.parent = sceneInput.levelTransform;
+            var lowerEdgeZ = road * cellHeight;
+            roadGameObject.transform.localPosition = new Vector3(0f, roadAltitude, lowerEdgeZ);
             
-            var roadLeftEdgeX = road * cellHeight * neutralSlope;
-            var roadLocalTransform = new Vector3(roadLeftEdgeX, lowerEdgeY, -0.21f);
-            roadGameObject.transform.localPosition = roadLocalTransform;            
-            roadLowerEdgesY.Add(roadGameObject.transform.position.y);
+            ret.roadNearEdgesZ.Add(roadGameObject.transform.position.z);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
 
@@ -457,21 +460,22 @@ public class SceneBuilder : MonoBehaviour
             var meshRenderer = roadGameObject.AddComponent<MeshRenderer>();
             meshRenderer.material = roadMaterial;
 
-            var roadVerts = new List<Vector2>
+            var roadVerts = new Vector3[]
             {
-                new Vector2(0, 0),
-                new Vector2(roadWidth, 0),
-                new Vector2(0, roadHeight),
-                new Vector2(roadWidth, roadHeight)
+                new Vector3(0, 0, 0),
+                new Vector3(roadWidth, 0, 0),
+                new Vector3(0, 0, sceneInput.roadHeight),
+                new Vector3(roadWidth, 0, sceneInput.roadHeight)
             };
 
-            var roadMesh = CreateQuadMesh(roadVerts);
+            var roadMesh = CreateQuadMesh(roadVerts, new Vector3[] {Vector3.up});
             meshFilter.mesh = roadMesh;
 
+            /*
             // Bridge
-            var bridgeX = GetRiverLeftEdgeX(lowerEdgeY, riverSectionGameObject.transform.localPosition.x, 0f) + riverWidth / 2;
+            var bridgeX = GetRiverLeftEdgeX(lowerEdgeZ, riverSectionGameObject.transform.localPosition.x, 0f) + riverWidth / 2;
             bridge bridge = Instantiate(bridgePrefab, lvlTransform);
-            var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeY + (roadHeight / 2), -0.23f);
+            var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeZ + (roadHeight / 2), -0.23f);
             bridge.transform.localPosition = bridgeLocalTransform;
             if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
             {
@@ -484,7 +488,7 @@ public class SceneBuilder : MonoBehaviour
                 ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
                     {
                         Car car = Instantiate(carPrefab, lvlTransform);
-                        var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
+                        var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeZ + (roadHeight / 2), -0.24f);
                         car.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
@@ -493,9 +497,10 @@ public class SceneBuilder : MonoBehaviour
                         return car.gameObject;
                     })
                 );
-            }
+            }*/
         }
 
+        /*
         // Houses
         foreach (var houseSpec in levelContents.houses)
         {
