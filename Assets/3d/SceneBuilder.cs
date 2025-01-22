@@ -11,7 +11,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
-    public ExpHouse housePrefab;
+    public GameObject housePrefab;
     public GameObject flackGunPrefab;
     public GameObject tankPrefab;
     public GameObject tree1Prefab;
@@ -500,23 +500,25 @@ public class SceneBuilder : MonoBehaviour
             }*/
         }
 
-        /*
+        
         // Houses
         foreach (var houseSpec in levelContents.houses)
         {
-            ExpHouse house = Instantiate(housePrefab, lvlTransform);
-            house.SetSize(houseSpec.width, houseSpec.height, houseSpec.depth);
-            var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
-            house.SetColor(houseColors[colorIndex]);
-            var houseLocalTransform = new Vector3(houseSpec.position.x * cellWidth + houseSpec.position.y * cellHeight * neutralSlope, houseSpec.position.y * cellHeight, -0.2f);
-            house.transform.localPosition = houseLocalTransform;
+            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
+            var house3d = InterfaceHelper.GetInterface<House3d>(Instantiate(housePrefab, sceneInput.levelTransform));
 
-            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            /*house.SetSize(houseSpec.width, houseSpec.height, houseSpec.depth);
+            var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
+            house.SetColor(houseColors[colorIndex]);*/
+            var houseLocalPosition = new Vector3(houseSpec.position.x * cellWidth, 0f, houseSpec.position.y * cellHeight);
+            houseGameObject.transform.localPosition = houseLocalPosition;
+
+            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
             {
-                house.SetVip();
+                house3d.SetVip();
             }
         }
-        */
+        
 
         // Small items: Flack guns, trees, tanks
         for (var ztmpOuter = 0; ztmpOuter < LevelContents.gridHeight; ztmpOuter++)
