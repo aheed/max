@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
     {
         startPosition = transform.position;
         velocity = new Vector3(0, 0, speed);
-        Debug.Log($"Bullet spawned at {transform.position}");
+        //Debug.Log($"Bullet spawned at {transform.position}");
     }
 
     // Update is called once per frame

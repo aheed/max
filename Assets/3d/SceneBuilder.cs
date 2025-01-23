@@ -381,6 +381,16 @@ public class SceneBuilder : MonoBehaviour
             riverLowerLeftCornerX += xOffset;
         }
 
+        if (riverVerts.Count == 0)
+        {
+            // Add a ground mesh even if there is no river
+            groundRightOfRiverVerts.Add(new Vector3(0f, 0f, 0f));
+            groundRightOfRiverVerts.Add(new Vector3(sceneInput.levelWidth, 0f, 0f));
+            groundRightOfRiverVerts.Add(new Vector3(0f, 0f, sceneInput.levelHeight));
+            groundRightOfRiverVerts.Add(new Vector3(sceneInput.levelWidth, 0f, sceneInput.levelHeight));
+            UpNormals.Add(Vector3.up);
+        }
+
         ret.riverVerts = riverVerts;
         
         var upNormalsArray = UpNormals.ToArray();
@@ -504,17 +514,17 @@ public class SceneBuilder : MonoBehaviour
         // Houses
         foreach (var houseSpec in levelContents.houses)
         {
-            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
-            //var house = InterfaceHelper.GetInterface<House3d>(houseGameObject);
+            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);            
             var house = InterfaceHelper.GetInterface<House4>(houseGameObject);
 
-            house.SetSize(new Vector3(houseSpec.width, houseSpec.height, houseSpec.depth));
             /*
             var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
             house.SetColor(houseColors[colorIndex]);*/
-            var houseOffsetY = 0.5f; //TEMP
+            var houseOffsetY = 0.0f; //TEMP
             var houseLocalPosition = new Vector3(houseSpec.position.x * cellWidth, houseOffsetY, houseSpec.position.y * cellHeight);
-            houseGameObject.transform.localPosition = houseLocalPosition;           
+            houseGameObject.transform.localPosition = houseLocalPosition;
+
+            house.SetSize(new Vector3(houseSpec.width, houseSpec.height, houseSpec.depth));
 
             if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
             {
