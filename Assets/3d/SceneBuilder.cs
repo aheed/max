@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class SceneBuilder : MonoBehaviour
 {
+    public float carProbability = 0.5f;
+    public float carOffsetX = -5f;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
@@ -25,7 +27,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public bridge bridgePrefab;
-    public Car carPrefab;
+    public GameObject carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
@@ -39,6 +41,7 @@ public class SceneBuilder : MonoBehaviour
     public int rightTrim = 5;
     public float riverAltitude = -0.3f;
     public float roadAltitude = 0.01f;
+    public float carAltitude = 0.05f;
     float airstripAltitude = 0.01f;
 
     Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
@@ -99,8 +102,9 @@ public class SceneBuilder : MonoBehaviour
         {
             gameObjectCollections[ztmp] = new GameObjectCollection {
                 zCoord = ztmp * cellHeight, // level relative coordinate
+                gameObjects = new List<GameObject>()
             };
-        }
+        }        
 
         // Landing Strip
         {
@@ -491,23 +495,24 @@ public class SceneBuilder : MonoBehaviour
             {
                 bridge.SetVip();
             }
+            */
 
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
+                gameObjectCollections[road].gameObjects = gameObjectCollections[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
                     {
-                        Car car = Instantiate(carPrefab, lvlTransform);
-                        var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeZ + (roadHeight / 2), -0.24f);
+                        GameObject car = Instantiate(carPrefab, sceneInput.levelTransform);
+                        var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
                         car.transform.localPosition = carLocalTransform;
-                        if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+                        /*if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
                             car.SetVip();
-                        }
+                        }*/
                         return car.gameObject;
                     })
                 );
-            }*/
+            }
         }
 
         
@@ -618,7 +623,7 @@ public class SceneBuilder : MonoBehaviour
                 return retInner;
             });
 
-            gameObjectCollections[ztmp].gameObjects = gameObjectsAtZ;
+            gameObjectCollections[ztmp].gameObjects = gameObjectCollections[ztmp].gameObjects.Concat(gameObjectsAtZ);
         }
 
         ret.gameObjects = gameObjectCollections.ToList();

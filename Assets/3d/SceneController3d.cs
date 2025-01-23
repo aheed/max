@@ -47,10 +47,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
     public float windIntervalSecMax = 10f;
-    public float windIntervalSecMin = 5f;
-    public float carOffsetX = -5f;
-    public float vipProbability = 0.5f;
-    public float carProbability = 0.5f;
+    public float windIntervalSecMin = 5f;    
+    public float vipProbability = 0.5f;    
     public float enemyPlaneOncomingProbability = 0.3f;
     public float windProbability = 0.6f;
     public float riverBankWidth = 0.1f;
