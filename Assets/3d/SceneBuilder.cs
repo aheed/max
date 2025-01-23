@@ -545,6 +545,7 @@ public class SceneBuilder : MonoBehaviour
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 GameObject selectedPrefab = null;
+                var altitude = 0f;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
@@ -565,10 +566,12 @@ public class SceneBuilder : MonoBehaviour
 
                     case CellContent.BOAT1:
                         selectedPrefab = boat1Prefab;
+                        altitude = riverAltitude;
                         break;
 
                     case CellContent.BOAT2:
                         selectedPrefab = boat2Prefab;
+                        altitude = riverAltitude;
                         break;
 
                     case CellContent.VEHICLE1:
@@ -588,7 +591,7 @@ public class SceneBuilder : MonoBehaviour
                         break;
                 }
 
-                var itemLocalTransform = new Vector3(xtmp * cellWidth, 0f, ztmp * cellHeight);
+                var itemLocalTransform = new Vector3(xtmp * cellWidth, altitude, ztmp * cellHeight);
 
                 List<GameObject> retInner = new();
                 if (selectedPrefab != null)
