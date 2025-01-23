@@ -505,17 +505,20 @@ public class SceneBuilder : MonoBehaviour
         foreach (var houseSpec in levelContents.houses)
         {
             var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
-            var house3d = InterfaceHelper.GetInterface<House3d>(Instantiate(housePrefab, sceneInput.levelTransform));
+            //var house = InterfaceHelper.GetInterface<House3d>(houseGameObject);
+            var house = InterfaceHelper.GetInterface<House4>(houseGameObject);
 
-            /*house.SetSize(houseSpec.width, houseSpec.height, houseSpec.depth);
+            house.SetSize(new Vector3(houseSpec.width, houseSpec.height, houseSpec.depth));
+            /*
             var colorIndex = UnityEngine.Random.Range(0, houseColors.Length);
             house.SetColor(houseColors[colorIndex]);*/
-            var houseLocalPosition = new Vector3(houseSpec.position.x * cellWidth, 0f, houseSpec.position.y * cellHeight);
-            houseGameObject.transform.localPosition = houseLocalPosition;
+            var houseOffsetY = 0.5f; //TEMP
+            var houseLocalPosition = new Vector3(houseSpec.position.x * cellWidth, houseOffsetY, houseSpec.position.y * cellHeight);
+            houseGameObject.transform.localPosition = houseLocalPosition;           
 
             if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
             {
-                house3d.SetVip();
+                house.SetVip();
             }
         }
         

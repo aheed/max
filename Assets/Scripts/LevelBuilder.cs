@@ -143,7 +143,7 @@ public class LevelBuilder
     public static int normalHouseHeight = 2;
     public static int minHouseHeight = 1;
     public static int maxHouseHeight = 4;
-    public static int normalHouseDepth = 2;
+    public static int normalHouseDepth = 5;
     public static int minHouseDepth = 2;
     public static int maxHouseDepth = 5;
 
