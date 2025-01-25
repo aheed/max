@@ -314,6 +314,11 @@ public class SceneBuilder : MonoBehaviour
         var riverLeftBankLocalTransform = new Vector3(0f, 0f, 0f);
         riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
+        var riverRightBank = new GameObject("riverbank");
+        riverRightBank.transform.parent = sceneInput.levelTransform;
+        var riverRightBankLocalTransform = new Vector3(0f, 0f, 0f);
+        riverRightBank.transform.localPosition = riverLeftBankLocalTransform;
+
         // River MeshRenderers
         var rsMeshFilter = ret.riverSectionGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = ret.riverSectionGameObject.AddComponent<MeshRenderer>();
@@ -331,6 +336,10 @@ public class SceneBuilder : MonoBehaviour
         var lbMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
         lbMeshRenderer.material = landingStripMaterial;
 
+        var rbMeshFilter = riverRightBank.AddComponent<MeshFilter>();
+        var rbMeshRenderer = riverRightBank.AddComponent<MeshRenderer>();
+        rbMeshRenderer.material = landingStripMaterial;
+
         /*var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
         var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
         bankMeshRenderer.material = riverBankMaterial;*/
@@ -345,8 +354,10 @@ public class SceneBuilder : MonoBehaviour
         List<Vector3> groundLeftOfRiverVerts = new();
         List<Vector3> groundRightOfRiverVerts = new();
         List<Vector3> riverLeftBankVerts = new();
+        List<Vector3> riverRightBankVerts = new();
         List<Vector3> UpNormals = new();
         List<Vector3> riverLeftBankNormals = new();
+        List<Vector3> riverRightBankNormals = new();
 
         foreach (var segment in levelContents.riverSegments)
         {
@@ -375,12 +386,19 @@ public class SceneBuilder : MonoBehaviour
 
             riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, 0f, z));
             riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, gameState.riverAltitude, z));
-            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, 0f, upperZ));
+            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, 0f, upperZ));            
             riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, gameState.riverAltitude, upperZ));
+
+            riverRightBankVerts.Add(new Vector3(riverUpperRightCornerX, 0f, upperZ));            
+            riverRightBankVerts.Add(new Vector3(riverUpperRightCornerX, gameState.riverAltitude, upperZ));
+            riverRightBankVerts.Add(new Vector3(riverLowerRightCornerX, 0f, z));
+            riverRightBankVerts.Add(new Vector3(riverLowerRightCornerX, gameState.riverAltitude, z));
 
             UpNormals.Add(Vector3.up);
             var riverLeftBankNormal = new Vector3(segmentHeight, 0f, xOffset).normalized;
             riverLeftBankNormals.Add(riverLeftBankNormal);
+            var riverRightBankNormal = -riverLeftBankNormal;
+            riverRightBankNormals.Add(riverRightBankNormal);
 
             z += segmentHeight;
             riverLowerLeftCornerX += xOffset;
@@ -403,12 +421,14 @@ public class SceneBuilder : MonoBehaviour
         glMeshFilter.mesh = CreateQuadMesh(groundLeftOfRiverVerts.ToArray(), upNormalsArray);
         grMeshFilter.mesh = CreateQuadMesh(groundRightOfRiverVerts.ToArray(), upNormalsArray);
         lbMeshFilter.mesh = CreateQuadMesh(riverLeftBankVerts.ToArray(), riverLeftBankNormals.ToArray());
+        rbMeshFilter.mesh = CreateQuadMesh(riverRightBankVerts.ToArray(), riverRightBankNormals.ToArray());
 
         // Add mesh colliders
         ret.riverSectionGameObject.AddComponent<MeshCollider>();
         groundLeftOfRiver.AddComponent<MeshCollider>();
         groundRightOfRiver.AddComponent<MeshCollider>();
         riverLeftBank.AddComponent<MeshCollider>();
+        riverRightBank.AddComponent<MeshCollider>();
 
         /*
 

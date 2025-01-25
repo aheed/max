@@ -203,14 +203,15 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }*/
         //if (tmpLocalPosition.y < gameState.minAltitude) 
         //{
-        if (isOnRiver)
+        if (isOnRiver && tmpLocalPosition.y < gameState.riverAltitude + gameState.minAltitude)
         {
             tmpLocalPosition.y = gameState.riverAltitude + gameState.minAltitude;
         }
-        else if(isOnGround)
+        else if(isOnGround && tmpLocalPosition.y < gameState.minAltitude)
         {
             tmpLocalPosition.y = gameState.minAltitude;
         }
+
         //}
         
         if (tmpLocalPosition.y > gameState.maxAltitude)
