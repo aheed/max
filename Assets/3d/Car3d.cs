@@ -11,7 +11,7 @@ public class Car3d : MonoBehaviour, IVip
     {
         gameState = FindAnyObjectByType<GameState>();
         speed = speedFactor * gameState.maxSpeed;
-        Debug.Log($"Car3d speed is {speed}");
+        //Debug.Log($"Car3d speed is {speed}");
     }    
 
     // Update is called once per frame

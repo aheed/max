@@ -188,6 +188,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             maxPlane.refObject = refobject.transform;
         }
         maxPlane.transform.localPosition = Vector3.zero;
+        maxPlane.Reset();
 
         if (levels != null)
         {

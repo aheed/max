@@ -138,13 +138,13 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
         if (speed > 0 && transform.position.z - refObject.transform.position.z > maxDistance)
         {
-            Debug.Log($"Enemy plane too far in front ({transform.position.z} vs {refObject.transform.position.z})");
+            //Debug.Log($"Enemy plane too far in front ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
         }
 
         if (speed < 0 && refObject.transform.position.z - transform.position.z > maxDistanceBehind)
         {
-            Debug.Log($"Enemy plane too far behind ({transform.position.z} vs {refObject.transform.position.z})");
+            //Debug.Log($"Enemy plane too far behind ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
         }
 

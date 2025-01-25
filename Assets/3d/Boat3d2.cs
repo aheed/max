@@ -39,7 +39,7 @@ public class Boat3d2 : MonoBehaviour, IVip
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log($"3D Boat 2 Hit!!!!!! Collided with {col.gameObject.name}");
+        //Debug.Log($"3D Boat 2 Hit!!!!!! Collided with {col.gameObject.name}");
         alive = false;
     }
 }

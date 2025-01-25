@@ -26,53 +26,46 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public  float bombIntervalSeconds = 0.5f;    
     public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
-    public float collidedMoveInterval = 0.03f;
+    public float collidedMoveInterval = 0.03f;    
+    public InputAction MoveAction;
+    public InputAction FireAction;
+    public InputAction DebugFlackAction;
+    public InputAction DebugRepairAction;
+    public InputAction DebugAuxAction;    
+    public GameObject bulletPrefab;
+    public GameObject bombPrefab;    
+    private Vector2 touchStartPosition, touchEndPosition;
+    private float maxMove = 1.0f;
+    private float minMove = 4.0f;
+    private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41
+    PlaneController controller;
+
+    // state
+    GameState gameState;    
+    Vector2 move;
+    Vector2 lastMove;
+    Vector2 lastApparentMove;
     float bulletCooldown = 0.0f;
     float bombCooldown = 0.0f;
     float damageCooldown = 0f;
     float collidedCooldown = 0f;
     Vector2 lastCollidedMove;
+    float offsetZ = 0;
     bool bombDamage = false;
     bool gunDamage = false;
-    public InputAction MoveAction;
-    public InputAction FireAction;
-    public InputAction DebugFlackAction;
-    public InputAction DebugRepairAction;
-    public InputAction DebugAuxAction;
-    Vector2 move;
-    Vector2 lastMove;
-    Vector2 lastApparentMove;
-    public GameObject bulletPrefab;
-    public GameObject bombPrefab;
-    float offsetZ = 0;
-    GameState gameState;    
-    private Vector2 touchStartPosition, touchEndPosition;
-    private float maxMove = 1.0f;
-    private float minMove = 4.0f;
-    private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41
+    bool isOnGround = false;
+    bool isOnRiver = false;
 
-    void SetAppearance(float moveX, bool alive)
+    PlaneController GetController()
     {
-        if (!alive)
+        if (controller == null)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-            return;
+            controller = InterfaceHelper.GetInterface<PlaneController>(transform.GetChild(1).gameObject);
         }
-        
-        if (moveX > 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, -30);
-        }
-        else if (moveX < 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 30);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-        
+        return controller;
     }
+
+    void SetAppearance(float moveX, bool alive) => GetController().SetAppearance(moveX, alive);    
 
     // Start is called before the first frame update
     void Start()
@@ -85,7 +78,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugAuxAction.Enable();
         gameState = FindAnyObjectByType<GameState>();
         gameState.RegisterObserver(this); 
-        lastCollidedMove = new Vector2(0, 0);
+        Reset();
     }
 
     void FireBullet(GameStatus gameStatus)
@@ -402,7 +395,29 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         return move.x;
     }
 
+    public bool IsAtMinAltitude()
+    {
+        return isOnGround || isOnRiver;
+    }
+
     public bool IsAlive() => gameState != null && gameState.GetStateContents().gameStatus != GameStatus.DEAD;
+
+    public void Reset()
+    { 
+        move = Vector2.zero;
+        lastMove = Vector2.zero;
+        lastApparentMove = Vector2.zero;
+        bulletCooldown = 0.0f;
+        bombCooldown = 0.0f;
+        damageCooldown = 0f;
+        collidedCooldown = 0f;
+        lastCollidedMove = Vector2.zero;
+        offsetZ = 0;
+        bombDamage = false;
+        gunDamage = false;
+        isOnGround = false;
+        isOnRiver = false;
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -468,4 +483,14 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
 
     public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
+
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
+    }
+
+    void OnCollisionExit(Collision col)
+    {
+        Debug.Log($"Plane collision Exit !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
+    }
 }
