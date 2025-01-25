@@ -39,7 +39,6 @@ public class SceneBuilder : MonoBehaviour
     public Material landingStripMaterial;
     public int leftTrim = 2;
     public int rightTrim = 5;
-    public float riverAltitude = -0.3f;
     public float roadAltitude = 0.01f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.01f;
@@ -92,6 +91,8 @@ public class SceneBuilder : MonoBehaviour
     // llcx, llcy: Lower Left Corner of the level
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
+        GameState gameState = FindAnyObjectByType<GameState>();
+
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
         float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
@@ -298,7 +299,7 @@ public class SceneBuilder : MonoBehaviour
         // River
         ret.riverSectionGameObject = new GameObject("riversection");
         ret.riverSectionGameObject.transform.parent = sceneInput.levelTransform;
-        ret.riverSectionGameObject.transform.localPosition = new Vector3(0f, riverAltitude, 0f);
+        ret.riverSectionGameObject.transform.localPosition = new Vector3(0f, gameState.riverAltitude, 0f);
 
         var groundLeftOfRiver = new GameObject("ground left");
         groundLeftOfRiver.transform.parent = sceneInput.levelTransform;
@@ -373,9 +374,9 @@ public class SceneBuilder : MonoBehaviour
             groundRightOfRiverVerts.Add(new Vector3(sceneInput.levelWidth, 0f, upperZ));
 
             riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, 0f, z));
-            riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, riverAltitude, z));
+            riverLeftBankVerts.Add(new Vector3(riverLowerLeftCornerX, gameState.riverAltitude, z));
             riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, 0f, upperZ));
-            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, riverAltitude, upperZ));
+            riverLeftBankVerts.Add(new Vector3(riverUpperLeftCornerX, gameState.riverAltitude, upperZ));
 
             UpNormals.Add(Vector3.up);
             var riverLeftBankNormal = new Vector3(segmentHeight, 0f, xOffset).normalized;
@@ -403,6 +404,11 @@ public class SceneBuilder : MonoBehaviour
         grMeshFilter.mesh = CreateQuadMesh(groundRightOfRiverVerts.ToArray(), upNormalsArray);
         lbMeshFilter.mesh = CreateQuadMesh(riverLeftBankVerts.ToArray(), riverLeftBankNormals.ToArray());
 
+        // Add mesh colliders
+        ret.riverSectionGameObject.AddComponent<MeshCollider>();
+        groundLeftOfRiver.AddComponent<MeshCollider>();
+        groundRightOfRiver.AddComponent<MeshCollider>();
+        riverLeftBank.AddComponent<MeshCollider>();
 
         /*
 
@@ -566,12 +572,12 @@ public class SceneBuilder : MonoBehaviour
 
                     case CellContent.BOAT1:
                         selectedPrefab = boat1Prefab;
-                        altitude = riverAltitude;
+                        altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.BOAT2:
                         selectedPrefab = boat2Prefab;
-                        altitude = riverAltitude;
+                        altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.VEHICLE1:

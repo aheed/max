@@ -73,6 +73,7 @@ public class GameState : MonoBehaviour
     public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
     public float minSafeAltitude = 0.3f;
+    public float riverAltitude = -0.3f;
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;

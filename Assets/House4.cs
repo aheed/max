@@ -39,7 +39,7 @@ public class House4 : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log($"House Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
+        //Debug.Log($"House Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
 
         /*
         if (col.gameObject.name.StartsWith("max") || 

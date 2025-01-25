@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -65,6 +66,15 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         return controller;
     }
 
+    GameState GetGameState() 
+    {
+        if (gameState == null)
+        {
+            gameState = FindAnyObjectByType<GameState>();
+        }
+        return gameState;
+    }
+
     void SetAppearance(float moveX, bool alive) => GetController().SetAppearance(moveX, alive);    
 
     // Start is called before the first frame update
@@ -76,8 +86,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
-        gameState = FindAnyObjectByType<GameState>();
-        gameState.RegisterObserver(this); 
+        GetGameState().RegisterObserver(this); 
         Reset();
     }
 
@@ -188,10 +197,22 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         tmpLocalPosition.y += -forcedDescent * Time.deltaTime +
             (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
 
-        if (tmpLocalPosition.y < gameState.minAltitude) 
+        /*if (tmpLocalPosition.y < gameState.minAltitude) 
+        {
+            tmpLocalPosition.y = gameState.minAltitude;
+        }*/
+        //if (tmpLocalPosition.y < gameState.minAltitude) 
+        //{
+        if (isOnRiver)
+        {
+            tmpLocalPosition.y = gameState.riverAltitude + gameState.minAltitude;
+        }
+        else if(isOnGround)
         {
             tmpLocalPosition.y = gameState.minAltitude;
         }
+        //}
+        
         if (tmpLocalPosition.y > gameState.maxAltitude)
         {
             tmpLocalPosition.y = gameState.maxAltitude;
@@ -230,7 +251,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
             lastApparentMove = apparentMove;
         }
 
-        if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
+        //if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
+        if (apparentMove.x != 0f && IsAtMinAltitude())
         {
             gameState.SetStatus(GameStatus.DEAD);
         }
@@ -417,6 +439,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         gunDamage = false;
         isOnGround = false;
         isOnRiver = false;
+        var tmpPos = transform.localPosition;
+        tmpPos.y = GetGameState().minAltitude;
+        transform.localPosition = tmpPos;
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -486,11 +511,28 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
+        Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
+
+        if (col.gameObject.name.StartsWith("ground"))
+        {
+            isOnGround = true;
+        }
+        else if (col.gameObject.name.StartsWith("river"))
+        {
+            isOnRiver = true;
+        }
     }
 
     void OnCollisionExit(Collision col)
     {
         Debug.Log($"Plane collision Exit !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
+        if (col.gameObject.name.StartsWith("ground"))
+        {
+            isOnGround = false;
+        }
+        else if (col.gameObject.name.StartsWith("riversection"))
+        {
+            isOnRiver = false;
+        }
     }
 }
