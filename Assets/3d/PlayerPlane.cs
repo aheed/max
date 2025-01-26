@@ -255,6 +255,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         //if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
         if (apparentMove.x != 0f && IsAtMinAltitude())
         {
+            Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
             gameState.SetStatus(GameStatus.DEAD);
         }
     }
@@ -518,7 +519,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         {
             isOnGround = true;
         }
-        else if (col.gameObject.name.StartsWith("river"))
+        else if (col.gameObject.name.StartsWith("riversection"))
         {
             isOnRiver = true;
         }

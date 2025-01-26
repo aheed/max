@@ -491,7 +491,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
                 if (maxPlane.GetAltitude() <= MaxControl.landingAltitude)
                 {
                     //Debug.Log($"Low {maxPlane.GetPosition()}");
-                    if (IsOverLandingStrip(maxPlane.GetPosition()))
+                    if (IsOverLandingStrip(maxPlane.transform.position))
                     {
                         Debug.Log(">>>>>>>>> Landing <<<<<<<<<");
                         PreventRelanding();
