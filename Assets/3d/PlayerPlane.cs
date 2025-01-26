@@ -513,7 +513,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
+        //Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
 
         if (col.gameObject.name.StartsWith("ground"))
         {
@@ -527,7 +527,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
     void OnCollisionExit(Collision col)
     {
-        Debug.Log($"Plane collision Exit !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
+        //Debug.Log($"Plane collision Exit !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
         if (col.gameObject.name.StartsWith("ground"))
         {
             isOnGround = false;
