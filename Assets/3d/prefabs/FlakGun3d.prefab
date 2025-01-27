@@ -67,6 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9589295acb666adfbacbf8bb955ba21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flackProjectilePrefab: {fileID: 3183986066281174813, guid: 0baf565c56e630fbc99106bf753f27a3, type: 3}
+  avgTimeToShootSeconds: 5
+  projectileSpeedMax: 5
+  projectileSpeedMin: 1
 --- !u!1001 &7296589595257203455
 PrefabInstance:
   m_ObjectHideFlags: 0
