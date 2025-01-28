@@ -59,6 +59,7 @@ public class GameStateContents
     public LevelPrerequisite latestLevelPrereq;
 }
 
+
 public interface IGameStateObserver
 {
     void OnGameStatusChanged(GameStatus gameStatus);
@@ -89,11 +90,20 @@ public class GameState : MonoBehaviour
     public float startFuelQuotient = 0.90f;
     public int targetsHitMin1 = 10;
     public int targetsHitMin2 = 10;
-
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;
-
     List<IGameStateObserver> observers = new List<IGameStateObserver>();
+    static GameState singletonInstance;
+    public Vector3 playerPosition;
+
+    public static GameState GetInstance()
+    {
+        if (singletonInstance == null)
+        {
+            singletonInstance = FindAnyObjectByType<GameState>();
+        }
+        return singletonInstance;
+    }
 
     public void RegisterObserver(IGameStateObserver observer)
     {

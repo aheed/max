@@ -622,6 +622,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         Vector3 levelVelocity = new(0, 0, stateContents.speed);
         Vector3 delta = levelVelocity * Time.deltaTime;
         refobject.transform.position += delta;
+        gameState.playerPosition = maxPlane.gameObject.transform.position;
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Flakgun3d : MonoBehaviour
 {
@@ -76,5 +77,8 @@ public class Flakgun3d : MonoBehaviour
             Shoot();
             RestartShotClock();
         }
+
+        //TEMP
+        transform.GetChild(0).GetChild(0).LookAt(GameState.GetInstance().playerPosition);
     }
 }

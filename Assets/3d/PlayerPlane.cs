@@ -518,10 +518,18 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         if (col.gameObject.name.StartsWith("ground"))
         {
             isOnGround = true;
+            return;
         }
-        else if (col.gameObject.name.StartsWith("riversection"))
+
+        if (col.gameObject.name.StartsWith("riversection"))
         {
             isOnRiver = true;
+            return;
+        }
+
+        if (col.gameObject.name.StartsWith("FlackEx"))
+        {
+            Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
         }
     }
 
