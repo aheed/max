@@ -86,6 +86,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     GameObject riverSectionGameObject;
     List<Vector3> riverVerts;
     List<float> roadNearEdgesZ;
+    List<SceneRiverSegment> riverSegments;
     TvSimDocument tvSimDocumentObject;
     GameObject balloonParent;
     ////
@@ -118,7 +119,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         var sceneInput = new SceneInput
         {
             levelTransform = GetLevel().transform,
-            stateContents = gameState.GetStateContents(),
             levelWidth = levelWidth,
             levelHeight = levelLength,
             vipProbability = vipProbability,
@@ -135,7 +135,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         landingStripEndZ = sceneOutput.landingStripEndZ;
         landingStripWidth = sceneOutput.landingStripWidth;
         riverVerts = sceneOutput.riverVerts;
-        roadNearEdgesZ = sceneOutput.roadNearEdgesZ;
+        roadNearEdgesZ.AddRange(sceneOutput.roadNearEdgesZ);
+        riverSegments.AddRange(sceneOutput.riverSegments);
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
@@ -205,6 +206,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadNearEdgesZ = new();
+        riverSegments = new();
         newLevelTask = null;
         gameState = GetGameState();
         var stateContents = gameState.GetStateContents();
@@ -283,8 +285,22 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         return riverVerts[segmentIndex*4].x + xOffset + xdiff;
     }
 
-
     bool IsOverRiver(Vector3 position)
+    {
+        var segment = riverSegments.FirstOrDefault(s =>  position.z < s.maxZ);
+        if (segment == null || segment.minZ >= position.z)
+        {
+            return false;
+        }
+        
+        // interpolate river edges x
+        var zdiff = position.z - segment.minZ;
+        var xdiff = zdiff * (segment.ulcX - segment.llcX) / (segment.maxZ - segment.minZ);
+
+        return position.x > segment.llcX + xdiff && position.x < segment.lrcX + xdiff;
+    }
+
+    bool IsOverRiverOld(Vector3 position)
     {
         var xOffset = riverSectionGameObject.transform.position.x;
         var yOffset = riverSectionGameObject.transform.position.z;
@@ -463,6 +479,11 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         while (roadNearEdgesZ.Count > 0 && refobject.transform.position.z - deactivationDistance > roadNearEdgesZ.First())
         {
             roadNearEdgesZ.RemoveAt(0);
+        }
+
+        while (riverSegments.Count > 0 && refobject.transform.position.z - deactivationDistance > riverSegments.First().maxZ)
+        {
+            riverSegments.RemoveAt(0);
         } 
 
         var distanceDiff = refobject.transform.position.z - lastLevelStartZ;
@@ -677,7 +698,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
                 //todo: report road or bridge hit for scoring
             }
             Vector3 craterPosition = bomb.transform.position;
-            craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
             if (prefab != bombSplashPrefab)
             {

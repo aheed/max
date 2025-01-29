@@ -29,7 +29,9 @@ public class Bomb3d : MonoBehaviour
     void Impact()
     {
         // Todo: handle bomb impact
-        Destroy(gameObject);
+        Debug.Log($"********* 3D Bomb Impact!!!!!!!!!!!!!!! at {transform.position}");
+        GameState.GetInstance().BombLanded(gameObject, null);
+        //Destroy(gameObject);
     }
 
 

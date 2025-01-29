@@ -9,7 +9,6 @@ using UnityEngine;
 public class SceneInput
 {
     public Transform levelTransform;
-    public GameStateContents stateContents;
     public float levelWidth;
     public float levelHeight;
     public float vipProbability;

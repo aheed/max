@@ -16,4 +16,5 @@ public class SceneOutput
     public GameObject riverSectionGameObject;
     public List<Vector3> riverVerts;
     public List<float> roadNearEdgesZ;
+    public List<SceneRiverSegment> riverSegments;
 }

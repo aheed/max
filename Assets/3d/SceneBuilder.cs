@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class SceneBuilder : MonoBehaviour
@@ -87,8 +88,7 @@ public class SceneBuilder : MonoBehaviour
     //public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
 
     
-    // Create game objects
-    // llcx, llcy: Lower Left Corner of the level
+    // Create game objects    
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
         GameState gameState = FindAnyObjectByType<GameState>();
@@ -340,13 +340,8 @@ public class SceneBuilder : MonoBehaviour
         var rbMeshRenderer = riverRightBank.AddComponent<MeshRenderer>();
         rbMeshRenderer.material = landingStripMaterial;
 
-        /*var bankMeshFilter = riverLeftBank.AddComponent<MeshFilter>();
-        var bankMeshRenderer = riverLeftBank.AddComponent<MeshRenderer>();
-        bankMeshRenderer.material = riverBankMaterial;*/
-
         // River Meshes
-        var z = 0f;
-        //float riverLowerLeftCornerX = 0f;
+        var z = 0f;        
         float riverLowerLeftCornerX = levelContents.riverLowerLeftCornerX * cellWidth;
         var riverWidth = LevelBuilder.riverWidth * cellWidth;
 
@@ -358,6 +353,10 @@ public class SceneBuilder : MonoBehaviour
         List<Vector3> UpNormals = new();
         List<Vector3> riverLeftBankNormals = new();
         List<Vector3> riverRightBankNormals = new();
+        List<SceneRiverSegment> riverSegments = new();
+
+        var riverZOffset = ret.riverSectionGameObject.transform.position.z;
+        var riverXOffset = ret.riverSectionGameObject.transform.position.x;
 
         foreach (var segment in levelContents.riverSegments)
         {
@@ -373,6 +372,15 @@ public class SceneBuilder : MonoBehaviour
             riverVerts.Add(new Vector3(riverLowerRightCornerX, 0f, z));
             riverVerts.Add(new Vector3(riverUpperLeftCornerX, 0f, upperZ));
             riverVerts.Add(new Vector3(riverUpperRightCornerX, 0f, upperZ));
+            riverSegments.Add(new SceneRiverSegment
+            {
+                minZ = z + riverZOffset,
+                maxZ = upperZ + riverZOffset,
+                llcX = riverLowerLeftCornerX + riverXOffset,
+                lrcX = riverLowerRightCornerX + riverXOffset,
+                ulcX = riverUpperLeftCornerX + riverXOffset,
+                urcX = riverUpperRightCornerX + riverXOffset
+            });
 
             groundLeftOfRiverVerts.Add(new Vector3(0f, 0f, z));
             groundLeftOfRiverVerts.Add(new Vector3(riverLowerLeftCornerX, 0f, z));
@@ -415,6 +423,7 @@ public class SceneBuilder : MonoBehaviour
         }
 
         ret.riverVerts = riverVerts;
+        ret.riverSegments = riverSegments;
         
         var upNormalsArray = UpNormals.ToArray();
         rsMeshFilter.mesh = CreateQuadMesh(ret.riverVerts.ToArray(), upNormalsArray);

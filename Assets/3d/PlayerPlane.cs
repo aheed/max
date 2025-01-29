@@ -529,7 +529,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
 
         if (col.gameObject.name.StartsWith("FlakEx"))
         {
-            Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+            //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
         }
     }
 

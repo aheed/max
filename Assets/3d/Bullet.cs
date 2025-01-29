@@ -39,7 +39,7 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        Debug.Log($"3D Hit!!!!!!!!!!!!!!! Bullet at altitude {transform.position.z} collided with {col.gameObject.name} HIT!!!");
+        //Debug.Log($"3D Hit!!!!!!!!!!!!!!! Bullet at altitude {transform.position.z} collided with {col.gameObject.name} HIT!!!");
         Destroy(gameObject);
     }
 }
