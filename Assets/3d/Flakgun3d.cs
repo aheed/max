@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -11,20 +12,57 @@ public class Flakgun3d : MonoBehaviour
     private SpriteRenderer spriteR;
     private bool alive = true;
 
+
     void RestartShotClock()
     {
-        timeToShoot = Random.Range(0f, 2 * avgTimeToShootSeconds);
+        timeToShoot = UnityEngine.Random.Range(0f, 2 * avgTimeToShootSeconds);
     }
 
     void Shoot()
     {
         var gameObject = Instantiate(flackProjectilePrefab, transform.position, Quaternion.identity);
         var flakProjectile = InterfaceHelper.GetInterface<FlakProjectile3d>(gameObject);
-        var projectileVelocity = new Vector3(
+        /*var projectileVelocity = new Vector3(
             Random.Range(-projectileSpeedMax, projectileSpeedMax),
             Random.Range(projectileSpeedMin, projectileSpeedMax),
-            Random.Range(-projectileSpeedMax, projectileSpeedMax));
-        flakProjectile.Initialize(transform.position, projectileVelocity);
+            Random.Range(-projectileSpeedMax, projectileSpeedMax));*/
+
+        /*var a = GameState.GetInstance().playerPosition;        
+        //var v1 = GameState.GetInstance().GetStateContents().speed;
+        var v1 = GameState.GetInstance().maxSpeed;
+        var v2 = projectileSpeedMax;        
+        var c = transform.position;
+
+        var q = v2 / v1;
+        var d = (q * a - c) / (q - 1);
+
+        var trajectory = d - c;
+        var t = trajectory.magnitude / v2;
+        var projectileVelocity = trajectory / t;
+
+        flakProjectile.Initialize(c, projectileVelocity, t);*/
+
+        var a = GameState.GetInstance().playerPosition;        
+        var v1 = GameState.GetInstance().maxSpeed;
+        var v2 = projectileSpeedMax;
+        var c = transform.position;
+        var q = v2 / v1;
+        var zImpact = (q * a.z - c.z) / (q - 1);
+        var zDistance = zImpact - c.z;
+        var t = Math.Abs(zDistance) / v2;
+        var t2 = Math.Abs(zImpact - a.z) / v1;
+        var zSpeed = zDistance / t;
+        var projectileVelocity = new Vector3(0, 0, zSpeed);
+        //flakProjectile.Initialize(c, projectileVelocity, t, zImpact);
+
+        ///
+        var zImpact2 = a.z + v1 * t2;
+        var zImpact3 = c.z + v2 * t;
+        //Debug.Log($"zImpact: {zImpact}, zImpact2: {zImpact2}, zImpact3: {zImpact3} v:{projectileVelocity}");
+        flakProjectile.Initialize(
+            transform.position,
+            GameState.GetInstance().playerPosition,
+            new Vector3(0, 0, GameState.GetInstance().maxSpeed));
     }
 
     /*void HandleCollision(Collider2D col)
@@ -79,6 +117,7 @@ public class Flakgun3d : MonoBehaviour
         }
 
         //TEMP
-        transform.GetChild(0).GetChild(0).LookAt(GameState.GetInstance().playerPosition);
+        var a = GameState.GetInstance().playerPosition;        
+        transform.GetChild(0).GetChild(0).LookAt(a);
     }
 }
