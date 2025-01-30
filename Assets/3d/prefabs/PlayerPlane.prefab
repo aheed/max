@@ -59,7 +59,7 @@ MonoBehaviour:
   offsetDecreaseRate: 0.3
   bulletIntervalSeconds: 0.1
   bombIntervalSeconds: 0.5
-  minSafeTurnAltitude: 0.2
+  minSafeTurnAltitude: 0.1
   collidedMoveInterval: 0.03
   MoveAction:
     m_Name: Move

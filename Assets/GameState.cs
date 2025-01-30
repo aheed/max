@@ -46,6 +46,7 @@ public class GameStateContents
     public float speed = 0f;    
     public GameStatus gameStatus = GameStatus.ACCELERATING;
     public float altitude = 0f;
+    public float floorAltitude = 0f;
     public float fuel = 0f;
     public int bombs = 0;
     public int score = 0;
@@ -73,7 +74,7 @@ public class GameState : MonoBehaviour
     public float maxSpeed = 2.0f;
     public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
-    public float minSafeAltitude = 0.3f;
+    public float minSafeAltitude = 0.2f;
     public float riverAltitude = -0.3f;
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
@@ -271,6 +272,7 @@ public class GameState : MonoBehaviour
         gameStateContents.speed = 0f;
         gameStateContents.gameStatus = GameStatus.REFUELLING;
         gameStateContents.altitude = minAltitude;
+        gameStateContents.floorAltitude = minAltitude;
         gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;

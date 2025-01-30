@@ -492,10 +492,14 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             distanceDiff < 0);
 
         // Update game state
+
+        stateContents.floorAltitude = gameState.minAltitude +
+             (IsOverRiver(maxPlane.transform.position) ? gameState.riverAltitude : 0f);
+
         if (stateContents.gameStatus == GameStatus.KILLED_BY_FLACK ||
             stateContents.gameStatus == GameStatus.COLLIDED)
         {
-            if (maxPlane.GetAltitude() <= gameState.minAltitude)
+            if (maxPlane.GetAltitude() <= stateContents.floorAltitude)
             {
                 gameState.SetStatus(GameStatus.DEAD);
             }

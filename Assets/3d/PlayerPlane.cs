@@ -54,8 +54,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     float offsetZ = 0;
     bool bombDamage = false;
     bool gunDamage = false;
-    bool isOnGround = false;
-    bool isOnRiver = false;
+    bool isOnGround = false; // Todo: remove or use?
+    bool isOnRiver = false; // Todo: remove or use?
 
     PlaneController GetController()
     {
@@ -197,22 +197,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         tmpLocalPosition.y += -forcedDescent * Time.deltaTime +
             (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
 
-        /*if (tmpLocalPosition.y < gameState.minAltitude) 
+        if (tmpLocalPosition.y < stateContents.floorAltitude)
         {
-            tmpLocalPosition.y = gameState.minAltitude;
-        }*/
-        //if (tmpLocalPosition.y < gameState.minAltitude) 
-        //{
-        if (isOnRiver && tmpLocalPosition.y < gameState.riverAltitude + gameState.minAltitude)
-        {
-            tmpLocalPosition.y = gameState.riverAltitude + gameState.minAltitude;
+            tmpLocalPosition.y = stateContents.floorAltitude;
         }
-        else if(isOnGround && tmpLocalPosition.y < gameState.minAltitude)
-        {
-            tmpLocalPosition.y = gameState.minAltitude;
-        }
-
-        //}
         
         if (tmpLocalPosition.y > gameState.maxAltitude)
         {
@@ -252,10 +240,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
             lastApparentMove = apparentMove;
         }
 
-        //if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
-        if (apparentMove.x != 0f && IsAtMinAltitude())
+        if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
+        //if (apparentMove.x != 0f && IsAtMinAltitude())
         {
-            Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
+            //Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
             gameState.SetStatus(GameStatus.DEAD);
         }
     }
@@ -417,11 +405,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
     public float GetMoveX()
     {
         return move.x;
-    }
-
-    public bool IsAtMinAltitude()
-    {
-        return isOnGround || isOnRiver;
     }
 
     public bool IsAlive() => gameState != null && gameState.GetStateContents().gameStatus != GameStatus.DEAD;
