@@ -150,14 +150,15 @@ public class SceneBuilder : MonoBehaviour
             var meshSize =  lsMeshFilter.mesh.bounds.size;
             var localScale = lsGameObject.transform.localScale;
             localScale.x = lsWidth / (meshSize.x * lsQuadTransform.localScale.x);
-            localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            //localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            localScale.z = lsHeight / (meshSize.z * lsQuadTransform.localScale.z);
             lsGameObject.transform.localScale = localScale;
 
             // position
             var lsLocalPosition = new Vector3(
-                ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth,
+                ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth + lsWidth / 2,
                 airstripAltitude,
-                enemyAirstrip * cellHeight);
+                enemyAirstrip * cellHeight + lsHeight / 2);
             lsGameObject.transform.localPosition = lsLocalPosition;         
 
             /*
