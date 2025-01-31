@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 0ce459b57674ad3498f1c4e46c09af85
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7605421287027767580
+    second: enemylandingstrip_0
+  - first:
+      213: -2826698129025333642
+    second: enemylandingstrip_1
+  - first:
+      213: -1220255554911425097
+    second: enemylandingstrip_2
+  - first:
+      213: 7437634375142590075
+    second: enemylandingstrip_3
+  - first:
+      213: 6744212265775250319
+    second: enemylandingstrip_4
+  - first:
+      213: 766966843782463331
+    second: enemylandingstrip_5
+  - first:
+      213: 3746602530056922437
+    second: enemylandingstrip_6
+  - first:
+      213: 4937983314254119537
+    second: enemylandingstrip_7
+  - first:
+      213: 2273200704481315977
+    second: enemylandingstrip_8
+  - first:
+      213: 2766340083192655597
+    second: enemylandingstrip_9
+  - first:
+      213: 7788603050554969023
+    second: enemylandingstrip_10
+  - first:
+      213: 1276620602902445354
+    second: enemylandingstrip_11
+  - first:
+      213: -1677476945480578861
+    second: enemylandingstrip_12
+  - first:
+      213: -9143193870916525876
+    second: enemylandingstrip_13
+  - first:
+      213: 1316455012989901995
+    second: enemylandingstrip_14
+  - first:
+      213: -6053861978419441095
+    second: enemylandingstrip_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: enemylandingstrip_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 365
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e6048b72ad147690800000000000000
+      internalID: -7605421287027767580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_1
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 365
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6760f24370d85c8d0800000000000000
+      internalID: -2826698129025333642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_2
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 365
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bdae4ab908c01fe0800000000000000
+      internalID: -1220255554911425097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_3
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 365
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b76cb93de09c73760800000000000000
+      internalID: 7437634375142590075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_4
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 330
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8bbd57c251489d50800000000000000
+      internalID: 6744212265775250319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_5
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 330
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36ff726e740d4aa00800000000000000
+      internalID: 766966843782463331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_6
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 330
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5456f96962b9ef330800000000000000
+      internalID: 3746602530056922437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_7
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 330
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1724ce869ad378440800000000000000
+      internalID: 4937983314254119537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_8
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 39
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98cc6cd2ff70c8f10800000000000000
+      internalID: 2273200704481315977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_9
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 39
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dee6f9226a3046620800000000000000
+      internalID: 2766340083192655597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_10
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 39
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbb4adc653da61c60800000000000000
+      internalID: 7788603050554969023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_11
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 39
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2df1fcaca777b110800000000000000
+      internalID: 1276620602902445354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_12
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 4
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d809b11b9768b8e0800000000000000
+      internalID: -1677476945480578861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_13
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 4
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc0ed7bfd99dc1180800000000000000
+      internalID: -9143193870916525876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_14
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 4
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bac9b040cdcf44210800000000000000
+      internalID: 1316455012989901995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemylandingstrip_15
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 4
+        width: 6
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 932d019fa9c5cfba0800000000000000
+      internalID: -6053861978419441095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      enemylandingstrip_0: -7605421287027767580
+      enemylandingstrip_1: -2826698129025333642
+      enemylandingstrip_10: 7788603050554969023
+      enemylandingstrip_11: 1276620602902445354
+      enemylandingstrip_12: -1677476945480578861
+      enemylandingstrip_13: -9143193870916525876
+      enemylandingstrip_14: 1316455012989901995
+      enemylandingstrip_15: -6053861978419441095
+      enemylandingstrip_2: -1220255554911425097
+      enemylandingstrip_3: 7437634375142590075
+      enemylandingstrip_4: 6744212265775250319
+      enemylandingstrip_5: 766966843782463331
+      enemylandingstrip_6: 3746602530056922437
+      enemylandingstrip_7: 4937983314254119537
+      enemylandingstrip_8: 2273200704481315977
+      enemylandingstrip_9: 2766340083192655597
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
