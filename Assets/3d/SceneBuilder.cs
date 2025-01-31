@@ -113,38 +113,23 @@ public class SceneBuilder : MonoBehaviour
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
             var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
+
+            var lsQuadTransform = lsGameObject.transform.GetChild(0);
+            //var lsMeshFilter = lsGameObject.GetComponentInChildren<MeshFilter>();
+            var lsMeshFilter = lsQuadTransform.gameObject.GetComponent<MeshFilter>();
+            var meshSize =  lsMeshFilter.mesh.bounds.size;
+            var localScale = lsGameObject.transform.localScale;
+            localScale.x = lsWidth / (meshSize.x * lsQuadTransform.localScale.x);
+            localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            lsGameObject.transform.localScale = localScale;
             
-            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), airstripAltitude, 0f);
+            var zOffset = lsHeight / 2;
+            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth, airstripAltitude, zOffset);
             lsGameObject.transform.localPosition = lsLocalTransform;
-            
-            ret.landingStripStartZ = lsGameObject.transform.position.z; 
+
+            ret.landingStripStartZ = lsGameObject.transform.position.z - zOffset;
             ret.landingStripEndZ = ret.landingStripStartZ + lsHeight;
             ret.landingStripWidth = lsWidth;
-
-            var lsllcX = 0f;
-            var lslrcX = lsWidth;
-            var lsulcX = 0f;
-            var lsurcX = lsWidth;
-            var lsllcZ = 0f;
-            var lslrcZ = 0f;
-            var lsulcZ = lsHeight;
-            var lsurcZ = lsHeight;
-            var lsMeshY = 0f;
-
-            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
-            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
-            lsMeshRenderer.material = landingStripMaterial;
-
-            var lsVerts = new Vector3[]
-            {
-                new Vector3(lsllcX, lsMeshY, lsllcZ),
-                new Vector3(lslrcX, lsMeshY, lslrcZ),
-                new Vector3(lsulcX, lsMeshY, lsulcZ),
-                new Vector3(lsurcX, lsMeshY, lsurcZ)
-            };
-
-            var lsMesh = CreateQuadMesh(lsVerts, new Vector3[] {Vector3.up});
-            lsMeshFilter.mesh = lsMesh;
         }
 
         /*
