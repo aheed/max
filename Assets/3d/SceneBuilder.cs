@@ -14,6 +14,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
+    public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
     public GameObject flackGunPrefab;
     public GameObject tankPrefab;
@@ -114,6 +115,7 @@ public class SceneBuilder : MonoBehaviour
 
             var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
 
+            // scale
             var lsQuadTransform = lsGameObject.transform.GetChild(0);
             //var lsMeshFilter = lsGameObject.GetComponentInChildren<MeshFilter>();
             var lsMeshFilter = lsQuadTransform.gameObject.GetComponent<MeshFilter>();
@@ -123,16 +125,15 @@ public class SceneBuilder : MonoBehaviour
             localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
             lsGameObject.transform.localScale = localScale;
             
+            // position
             var zOffset = lsHeight / 2;
-            var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth, airstripAltitude, zOffset);
-            lsGameObject.transform.localPosition = lsLocalTransform;
+            var lsLocalPosition = new Vector3((LevelContents.gridWidth / 2) * cellWidth, airstripAltitude, zOffset);
+            lsGameObject.transform.localPosition = lsLocalPosition;
 
             ret.landingStripStartZ = lsGameObject.transform.position.z - zOffset;
             ret.landingStripEndZ = ret.landingStripStartZ + lsHeight;
             ret.landingStripWidth = lsWidth;
         }
-
-        /*
 
         // Enemy Airstrips
         foreach(var enemyAirstrip in levelContents.enemyAirstrips)
@@ -140,64 +141,26 @@ public class SceneBuilder : MonoBehaviour
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.enemyAirstripHeight * cellHeight;
 
-            var lsTopEnd = Instantiate(airstripEndPrefab, lvlTransform);
-            var lsTopEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
-            var lsBottomEnd = Instantiate(airstripEndPrefab, lvlTransform);
-            var lsBottomEnd2 = Instantiate(airstripEndPrefab, lvlTransform);
-            var topSpriteR = lsTopEnd.gameObject.GetComponent<SpriteRenderer>();
-            var endSpriteHeight = topSpriteR.bounds.size.y;
+            var lsGameObject = Instantiate(enemyLandingStripPrefab, sceneInput.levelTransform);
 
-            var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            // scale
+            var lsQuadTransform = lsGameObject.transform.GetChild(0);
+            //var lsMeshFilter = lsGameObject.GetComponentInChildren<MeshFilter>();
+            var lsMeshFilter = lsQuadTransform.gameObject.GetComponent<MeshFilter>();
+            var meshSize =  lsMeshFilter.mesh.bounds.size;
+            var localScale = lsGameObject.transform.localScale;
+            localScale.x = lsWidth / (meshSize.x * lsQuadTransform.localScale.x);
+            localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            lsGameObject.transform.localScale = localScale;
 
-            var stripOffsetY = enemyAirstrip * cellHeight;            
-            var stripOffsetX = stripOffsetY * neutralSlope;
-            var lsLocalTransform = new Vector3(stripOffsetX + ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth, stripOffsetY, -0.21f);
-            lsGameObject.transform.localPosition = lsLocalTransform;
+            // position
+            var lsLocalPosition = new Vector3(
+                ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth,
+                airstripAltitude,
+                enemyAirstrip * cellHeight);
+            lsGameObject.transform.localPosition = lsLocalPosition;         
 
-            lsLocalTransform.x += lsWidth / 2;
-            lsLocalTransform.y += endSpriteHeight / 2;
-            lsBottomEnd.transform.localPosition = lsLocalTransform;
-
-            lsLocalTransform.x += 2 * endSpriteHeight * neutralSlope;
-            lsLocalTransform.y += 2 * endSpriteHeight;
-            lsBottomEnd2.transform.localPosition = lsLocalTransform;
-            
-            var lsUpperCornerOffsetX = lsHeight * neutralSlope;
-
-            lsLocalTransform.x += lsUpperCornerOffsetX - 3 * endSpriteHeight * neutralSlope;
-            lsLocalTransform.y += lsHeight - 3 * endSpriteHeight;
-            lsTopEnd.transform.localPosition = lsLocalTransform;
-
-            lsLocalTransform.x -= 2 * endSpriteHeight * neutralSlope;
-            lsLocalTransform.y -= 2 * endSpriteHeight;
-            lsTopEnd2.transform.localPosition = lsLocalTransform;
-
-            var lsllcX = 0;
-            var lslrcX = lsWidth;
-            var lsulcX = lsUpperCornerOffsetX;
-            var lsurcX = lslrcX + lsUpperCornerOffsetX;
-            var lsllcY = 0;
-            var lslrcY = 0;
-            var lsulcY = lsHeight;
-            var lsurcY = lsHeight;
-
-            var lsMeshFilter = lsGameObject.AddComponent<MeshFilter>();
-            var lsMeshRenderer = lsGameObject.AddComponent<MeshRenderer>();
-            lsMeshRenderer.material = landingStripMaterial;
-
-            var llc = new Vector2(lsllcX, lsllcY);
-            var lrc = new Vector2(lslrcX, lslrcY);
-            var ulc = new Vector2(lsulcX, lsulcY);
-            var urc = new Vector2(lsurcX, lsurcY);
-            var lsVerts = new List<Vector2> {llc, lrc, ulc, urc};
-
-            var lsMesh = CreateQuadMesh(lsVerts);
-            lsMeshFilter.mesh = lsMesh;
-
-            PolygonCollider2D polygonCollider = lsGameObject.AddComponent<PolygonCollider2D>();
-            polygonCollider.isTrigger = true;
-            polygonCollider.points = new Vector2[] {llc, lrc, urc, ulc};
-
+            /*
             // parked planes
             var nofParkedPlanes = UnityEngine.Random.Range(1, 4);
             for (int i = 0; i < nofParkedPlanes; i++)
@@ -207,9 +170,10 @@ public class SceneBuilder : MonoBehaviour
                 var parkedPlaneX = parkedPlaneY * neutralSlope + lsWidth / 2;
                 var ppLocalTransform = new Vector3(parkedPlaneX, parkedPlaneY, -0.01f);
                 parkedPlane.transform.localPosition = ppLocalTransform;
-            }
+            }*/
         }
 
+        /*
         if (levelContents.city != null)
         {
             var cityWidth = LevelContents.gridWidth * cellWidth;
