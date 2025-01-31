@@ -682,8 +682,6 @@ MonoBehaviour:
   enemyPlaneOncomingProbability: 0.3
   windProbability: 0
   riverBankWidth: 0.1
-  parllelRoadSideWidth: 0.1
-  parallelRoadWidth: 0.9
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
@@ -16703,13 +16701,15 @@ MonoBehaviour:
   bigHousePrefab: {fileID: 0}
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
   groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
-  riverBankMaterial: {fileID: 0}
+  riverBankMaterial: {fileID: 2100000, guid: 54c26c8f9c6246c019b8b7f00e8f3a84, type: 2}
   roadMaterial: {fileID: 2100000, guid: 87992205aaa6103d8b192cd702fd68a2, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
   leftTrim: 2
   rightTrim: 5
   roadAltitude: 0.01
   carAltitude: 0
+  parllelRoadSideWidth: 0.1
+  parallelRoadWidth: 0.6
 --- !u!4 &1636314947
 Transform:
   m_ObjectHideFlags: 0

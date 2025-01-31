@@ -52,8 +52,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public float enemyPlaneOncomingProbability = 0.3f;
     public float windProbability = 0.6f;
     public float riverBankWidth = 0.1f;
-    public float parllelRoadSideWidth = 0.1f;
-    public float parallelRoadWidth = 0.9f;
     public bool asyncLevelBuild = false;
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;

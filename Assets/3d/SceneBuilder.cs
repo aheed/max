@@ -44,12 +44,19 @@ public class SceneBuilder : MonoBehaviour
     public float roadAltitude = 0.01f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.01f;
+    public float parllelRoadSideWidth = 0.1f;
+    public float parallelRoadWidth = 0.9f;
 
     Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
     {
         if (verts.Length % 4 != 0)
         {
             throw new System.Exception("Length of param must a multiple of 4");
+        }
+
+        if (verts.Length != quadNormals.Length * 4 && verts.Length != 0)
+        {
+            throw new System.Exception("Length of quadNormals must be 1/4 of verts");
         }
         
         var triangles = new List<int>();
@@ -388,16 +395,16 @@ public class SceneBuilder : MonoBehaviour
         riverLeftBank.AddComponent<MeshCollider>();
         riverRightBank.AddComponent<MeshCollider>();
 
-        /*
+        
 
         // Parallel Road
         GameObject paraRoad = new GameObject("parallel road");
         GameObject paraRoadWide = new GameObject("parallel road wide");
-        paraRoad.transform.parent = lvlTransform;
-        paraRoadWide.transform.parent = lvlTransform;
-        var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, 0f, -0.2f);
+        paraRoad.transform.parent = sceneInput.levelTransform;
+        paraRoadWide.transform.parent = sceneInput.levelTransform;
+        var prLocalTransform = new Vector3(levelContents.roadLowerLeftCornerX * cellWidth, airstripAltitude, 0f);
         paraRoadWide.transform.localPosition = prLocalTransform;
-        prLocalTransform.z -= 0.01f;
+        prLocalTransform.y += airstripAltitude;
         paraRoad.transform.localPosition = prLocalTransform;
 
         // MeshRenderer
@@ -409,36 +416,40 @@ public class SceneBuilder : MonoBehaviour
         prMeshRendererWide.material = riverBankMaterial;
 
         // Mesh
-        y = 0f;
+        z = 0f;
         float prLowerLeftCornerX = 0f;
+
+        List<Vector3> paraRoadSegmentNormals = new();
 
         var paraRoadVerts = levelContents.roadSegments.SelectMany(segment => 
         {
             var segmentHeight = segment.height * cellHeight;
-            var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
+            var xOffset = segment.slope * segment.height * cellHeight;
             
-            var ret = new List<Vector2>
+            var ret = new List<Vector3>
             {
-                new Vector2(prLowerLeftCornerX, y),
-                new Vector2(prLowerLeftCornerX + parallelRoadWidth, y),
-                new Vector2(prLowerLeftCornerX + xOffset, y + segmentHeight),
-                new Vector2(prLowerLeftCornerX + parallelRoadWidth + xOffset, y + segmentHeight)
+                new Vector3(prLowerLeftCornerX, 0f, z),
+                new Vector3(prLowerLeftCornerX + parallelRoadWidth, 0f, z),
+                new Vector3(prLowerLeftCornerX + xOffset, 0f, z + segmentHeight),
+                new Vector3(prLowerLeftCornerX + parallelRoadWidth + xOffset, 0f, z + segmentHeight)
             };
-            y += segmentHeight;
+            paraRoadSegmentNormals.Add(Vector3.up);
+            z += segmentHeight;
             prLowerLeftCornerX += xOffset;
             return ret;
-        }).ToList();
+        }).ToArray();
 
         var paraRoadWideVerts = paraRoadVerts.Select((vert, index) => {
             var x = index % 2 == 0 ? vert.x - parllelRoadSideWidth : vert.x + parllelRoadSideWidth;
-            return new Vector2(x, vert.y);
-        }).ToList();
+            return new Vector3(x, vert.y, vert.z);
+        }).ToArray();
 
-        var prMesh = CreateQuadMesh(paraRoadVerts);
-        var prMeshWide = CreateQuadMesh(paraRoadWideVerts);
+        var paraRoadSegmentNormalsArray = paraRoadSegmentNormals.ToArray();
+        var prMesh = CreateQuadMesh(paraRoadVerts, paraRoadSegmentNormalsArray);
+        var prMeshWide = CreateQuadMesh(paraRoadWideVerts, paraRoadSegmentNormalsArray);
         prMeshFilter.mesh = prMesh;
         prMeshFilterWide.mesh = prMeshWide;
-        */
+        
         
         // Roads
         ret.roadNearEdgesZ = new();
