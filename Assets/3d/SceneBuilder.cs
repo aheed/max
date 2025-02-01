@@ -43,7 +43,7 @@ public class SceneBuilder : MonoBehaviour
     public int rightTrim = 5;
     public float roadAltitude = 0.01f;
     public float carAltitude = 0.05f;
-    float airstripAltitude = 0.01f;
+    float airstripAltitude = 0.001f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
 
