@@ -18,6 +18,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
     public GameObject refobject;
+    public Material targetMaterial;
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
@@ -56,6 +57,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
     public LevelType startLevelType = LevelType.NORMAL;
+    TargetMaterialBlinker targetBlinker;
 
     //// Game status
     MaxCamera maxCamera;
@@ -230,6 +232,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         Settings.Update();
+        targetBlinker = new TargetMaterialBlinker(targetMaterial);
 
         StartNewGame();
     }
@@ -640,6 +643,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
                 gameState.SetStatus(GameStatus.OUT_OF_FUEL);
             }
         }
+
+        targetBlinker.Update(Time.deltaTime);
 
         // Update refobject position
         Vector3 levelVelocity = new(0, 0, stateContents.speed);
