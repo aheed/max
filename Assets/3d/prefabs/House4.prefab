@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81e0655574c634138d3bdd29bb59c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPrefab: {fileID: 8686703124214881876, guid: ba85c2e8bfed35540823de7b67181dc4, type: 3}
   sizeFactor: 0.15
 --- !u!54 &2483602030061262665
 Rigidbody:

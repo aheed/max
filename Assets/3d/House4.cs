@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
-public class House4 : MonoBehaviour
+public class House4 : MonoBehaviour, IVip
 {
+    public GameObject targetPrefab;
     public float sizeFactor = 0.3f;
+    Vector3 size;
+
+    GameObject target = null;
 
     public void SetSize(Vector3 newSize)
     {
@@ -30,28 +34,39 @@ public class House4 : MonoBehaviour
         var position = transform.position;
         position.y += newSize.y * sizeFactor / 2;
         transform.position = position;
+
+        size = newSize;
     }
 
     public void SetVip()
     {
-        //Todo: Add VIP logic
+        var targetPosition = transform.position;
+        targetPosition.y += (size.y / 2) * sizeFactor;
+        target = Instantiate(targetPrefab, targetPosition, Quaternion.Euler(20f, 0f, 0f), transform);
+    }
+
+    public bool IsVip()
+    {
+        return target != null;
     }
 
     void OnCollisionEnter(Collision col)
-    {
+    {        
         //Debug.Log($"House Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
-
-        /*
-        if (col.gameObject.name.StartsWith("max") || 
-            col.gameObject.name.StartsWith("flack_expl") ||
-            col.gameObject.name.StartsWith("bomb") ||
-            col.gameObject.name.StartsWith("balloon"))
+        
+        if (!col.gameObject.name.StartsWith("Bomb"))
         {
             return;
         }
 
-        Destroy(gameObject);
-        */
+        if (IsVip())
+        {
+            GameState.GetInstance().IncrementTargetsHit();
+        }
+
+        GameState.GetInstance().BombLanded(col.gameObject, gameObject);
+
+        // Todo: spawn explosion/destroyed house
     }
 
 }
