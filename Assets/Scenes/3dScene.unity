@@ -653,6 +653,7 @@ MonoBehaviour:
   refobject: {fileID: 131094158}
   planeTargetMaterial: {fileID: 2100000, guid: 0d4220fd78d2484e9a473549a21be21d, type: 2}
   carTargetMaterial: {fileID: 2100000, guid: 2556b1c4abaddb886bdbd620b4ad07cd, type: 2}
+  boatTargetMaterial: {fileID: 2100000, guid: 9fb1dfdb828ca34aba8dc438d07a524c, type: 2}
   width: 1
   height: 1
   riverSectionHeight: 20

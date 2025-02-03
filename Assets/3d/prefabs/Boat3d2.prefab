@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8435dd5632ab920f087d0114ba36bea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetMaterial: {fileID: 2100000, guid: 9fb1dfdb828ca34aba8dc438d07a524c, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 0fc8f422979c8ab76ac1f96b38380ef8, type: 2}
   speed: 0.8
 --- !u!65 &847386119960409100
 BoxCollider:
@@ -148,6 +150,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scout_Boat
       objectReference: {fileID: 0}
+    - target: {fileID: 5997162889880428916, guid: 3d9d4bacfc8405d499551cf7af3a3c41, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0fc8f422979c8ab76ac1f96b38380ef8, type: 2}
     m_RemovedComponents:
     - {fileID: 8156423218013365297, guid: 3d9d4bacfc8405d499551cf7af3a3c41, type: 3}
     m_RemovedGameObjects: []

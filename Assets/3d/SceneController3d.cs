@@ -20,6 +20,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public GameObject refobject;
     public Material planeTargetMaterial;
     public Material carTargetMaterial;
+    public Material boatTargetMaterial;
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
@@ -60,6 +61,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public LevelType startLevelType = LevelType.NORMAL;
     TargetMaterialBlinker planeTargetBlinker;
     TargetMaterialBlinker carTargetBlinker;
+    TargetMaterialBlinker boatTargetBlinker;
 
     //// Game status
     MaxCamera maxCamera;
@@ -236,6 +238,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         Settings.Update();
         planeTargetBlinker = new TargetMaterialBlinker(planeTargetMaterial);
         carTargetBlinker = new TargetMaterialBlinker(carTargetMaterial);
+        boatTargetBlinker = new TargetMaterialBlinker(boatTargetMaterial);
 
         StartNewGame();
     }
@@ -649,6 +652,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
 
         planeTargetBlinker.Update(Time.deltaTime);
         carTargetBlinker.Update(Time.deltaTime);
+        boatTargetBlinker.Update(Time.deltaTime);
 
         // Update refobject position
         Vector3 levelVelocity = new(0, 0, stateContents.speed);
