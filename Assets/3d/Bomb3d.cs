@@ -51,7 +51,7 @@ public class Bomb3d : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log($"********* 3D Bomb Hit!!!!!!!!!!!!!!! with {col.gameObject.name}");
+        //Debug.Log($"********* 3D Bomb Hit!!!!!!!!!!!!!!! with {col.gameObject.name}");
 
         if(col.gameObject.name.StartsWith("ground"))
         {

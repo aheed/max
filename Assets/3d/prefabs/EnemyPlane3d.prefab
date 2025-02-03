@@ -47,6 +47,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec7e8a0e556115de883651736d532eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetMaterial: {fileID: 2100000, guid: 0d4220fd78d2484e9a473549a21be21d, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 985001d2460976e77880f5d4a6553a54, type: 2}
+  refObject: {fileID: 0}
+  maxDistance: 8
+  maxDistanceBehind: 1
+  moveIntervalSecMin: 0.1
+  moveIntervalSecMax: 3
+  crashDurationSec: 0.4
+  oncomingPropOffsetX: -0.1
+  oncomingPropOffsetY: -0.1
+  explosionPrefab: {fileID: 0}
+  crashExplosions: 4
+  explosionDistanceMax: 0.4
 --- !u!65 &8593988036783610070
 BoxCollider:
   m_ObjectHideFlags: 0

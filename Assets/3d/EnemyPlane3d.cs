@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class EnemyPlane3d : MonoBehaviour, IVip
 {
+    public Material targetMaterial;
+    public Material normalMaterial;
     public Transform refObject;    
     public float maxDistance = 8f;
     public float maxDistanceBehind = 1f;
@@ -22,10 +24,9 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     int moveX = 0;
     int lastMoveX = 0;
     bool crashed =  false;
-    VipBlinker vipBlinker;
-    GameState gameState;
     GameObject model;
     PlaneController controller;
+    bool isVip = false;
 
     GameObject GetModel()
     {
@@ -34,6 +35,15 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             model = transform.GetChild(0).gameObject;
         }
         return model;
+    }
+
+    MeshRenderer[] GetBlinkableRenderers()
+    {
+        // Assume a certain structure of the model
+            return new MeshRenderer[] {
+            GetModel().transform.Find("body/WingUpper").GetComponent<MeshRenderer>(),
+            GetModel().transform.Find("body/WingLower").GetComponent<MeshRenderer>(),
+        };
     }
 
     PlaneController GetController()
@@ -56,16 +66,23 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         }
     }
 
+    void SetBlinkableMaterial(Material material)
+    {
+        foreach (var renderer in GetBlinkableRenderers())
+        {
+            renderer.material = material;
+        }
+    }
+
     public void SetVip()
     {
-        // Todo: implement this
-
-        //vipBlinker = new(gameObject.GetComponent<SpriteRenderer>());
+        SetBlinkableMaterial(targetMaterial);
+        isVip = true;
     }
 
     public bool IsVip()
     {
-        return vipBlinker != null;
+        return isVip;
     }
 
     void SetMoveCooldown()
@@ -78,9 +95,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     {
         SetMoveCooldown();
 
-        // Todo: set color to yellow
+        if(!isVip)
+        {
+            SetBlinkableMaterial(normalMaterial);
+        }
 
-        gameState = FindAnyObjectByType<GameState>();
         Register();
     }
 
@@ -88,14 +107,14 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     {
         // Todo: implement this
 
-        //gameState.EnemyPlaneStatusChanged(this, true);
+        //GameState.GetInstance().EnemyPlaneStatusChanged(this, true);
     }
 
     void Deregister()
     {
         // Todo: implement this
 
-        //gameState.EnemyPlaneStatusChanged(this, false);
+        //GameState.GetInstance().EnemyPlaneStatusChanged(this, false);
     }
 
     void Deactivate()
@@ -165,8 +184,6 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             lastMoveX = moveX;
             GetController().SetAppearance(moveX, !crashed);
         }
-
-        vipBlinker?.Update(Time.deltaTime);
     }
 
     void OnCollisionEnter(Collision col)
@@ -187,7 +204,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
         if(IsVip())
         {
-            gameState.IncrementTargetsHit();
+            GameState.GetInstance().IncrementTargetsHit();
         }
         crashed = true;
         crashCooldownSec = crashDurationSec;
@@ -200,6 +217,6 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         {
             collider.enabled = false;
         }*/
-        gameState.ReportEvent(GameEvent.BIG_BANG);
+        GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
     }    
 }
