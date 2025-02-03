@@ -23,7 +23,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject parkedPlanePrefab;
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
-    public bridge bridgePrefab;
+    public GameObject bridgePrefab;
     public GameObject carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
@@ -90,6 +90,21 @@ public class SceneBuilder : MonoBehaviour
 
     //public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
 
+    float GetRiverLeftEdgeX(float z, List<SceneRiverSegment> riverSegments)
+    {
+        var segment = riverSegments.FirstOrDefault(s =>  z < s.maxZ);
+        if (segment == null || segment.minZ >= z)
+        {
+            Debug.LogError($"No river segment found for z={z}");
+            return 0;
+        }
+        
+        // interpolate river edges x
+        var zdiff = z - segment.minZ;
+        var xdiff = zdiff * (segment.ulcX - segment.llcX) / (segment.maxZ - segment.minZ);
+
+        return segment.llcX + xdiff;
+    }
     
     // Create game objects    
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
@@ -475,17 +490,33 @@ public class SceneBuilder : MonoBehaviour
             var roadMesh = CreateQuadMesh(roadVerts, new Vector3[] {Vector3.up});
             meshFilter.mesh = roadMesh;
 
-            /*
+            
             // Bridge
-            var bridgeX = GetRiverLeftEdgeX(lowerEdgeZ, riverSectionGameObject.transform.localPosition.x, 0f) + riverWidth / 2;
-            bridge bridge = Instantiate(bridgePrefab, lvlTransform);
-            var bridgeLocalTransform = new Vector3(bridgeX, lowerEdgeZ + (roadHeight / 2), -0.23f);
-            bridge.transform.localPosition = bridgeLocalTransform;
-            if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
+            var bridgeZ = roadGameObject.transform.position.z + (sceneInput.roadHeight / 2);
+            var bridgeX = GetRiverLeftEdgeX(bridgeZ, ret.riverSegments) + riverWidth / 2;
+            var bridgePosition = new Vector3(bridgeX, roadAltitude, bridgeZ);
+
+            var bridgeGameObject = Instantiate(bridgePrefab, bridgePosition, Quaternion.identity, sceneInput.levelTransform);            
+
+            // scale
+            var roadSectionQuadTransform = bridgeGameObject.transform.GetChild(0);
+            //var lsMeshFilter = lsGameObject.GetComponentInChildren<MeshFilter>();
+            var roadSectionMeshFilter = roadSectionQuadTransform.gameObject.GetComponent<MeshFilter>();
+            var meshSize = roadSectionMeshFilter.mesh.bounds.size;
+            var localScale = bridgeGameObject.transform.localScale;
+            localScale.x = sceneInput.roadHeight / (meshSize.y * roadSectionQuadTransform.localScale.x); // mesh y is bridge width (along river) because of the mesh orientation
+            localScale.y = localScale.x;
+            localScale.z = localScale.x;
+            bridgeGameObject.transform.localScale = localScale;
+
+            if (levelContents.vipTargets)
             {
-                bridge.SetVip();
-            }
-            */
+                var vip = InterfaceHelper.GetInterface<IVip>(bridgeGameObject);
+                if (vip != null && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
+                {
+                    vip.SetVip();
+                }
+            }            
 
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
