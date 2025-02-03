@@ -33,7 +33,6 @@ public class Bridge3d : MonoBehaviour, IVip
     {        
         Debug.Log($"*** Bridge Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
         
-        /*
         if (!col.gameObject.name.StartsWith("Bomb"))
         {
             return;
@@ -42,10 +41,10 @@ public class Bridge3d : MonoBehaviour, IVip
         if (IsVip())
         {
             GameState.GetInstance().IncrementTargetsHit();
+            Destroy(target);
+            target = null;
         }
 
-        GameState.GetInstance().BombLanded(col.gameObject, gameObject);
-        */
-
+        GameState.GetInstance().BombLanded(col.gameObject, null);
     }
 }
