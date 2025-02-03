@@ -59,9 +59,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
     public LevelType startLevelType = LevelType.NORMAL;
-    TargetMaterialBlinker planeTargetBlinker;
-    TargetMaterialBlinker carTargetBlinker;
-    TargetMaterialBlinker boatTargetBlinker;
+    TargetMaterialBlinker targetBlinker;    
 
     //// Game status
     MaxCamera maxCamera;
@@ -236,9 +234,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         Settings.Update();
-        planeTargetBlinker = new TargetMaterialBlinker(planeTargetMaterial);
-        carTargetBlinker = new TargetMaterialBlinker(carTargetMaterial);
-        boatTargetBlinker = new TargetMaterialBlinker(boatTargetMaterial);
+        targetBlinker = new TargetMaterialBlinker(new [] {planeTargetMaterial, carTargetMaterial, boatTargetMaterial});        
 
         StartNewGame();
     }
@@ -650,9 +646,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             }
         }
 
-        planeTargetBlinker.Update(Time.deltaTime);
-        carTargetBlinker.Update(Time.deltaTime);
-        boatTargetBlinker.Update(Time.deltaTime);
+        targetBlinker.Update(Time.deltaTime);
 
         // Update refobject position
         Vector3 levelVelocity = new(0, 0, stateContents.speed);
