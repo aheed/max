@@ -651,7 +651,8 @@ MonoBehaviour:
   bombCraterPrefab: {fileID: 7847806008530047970, guid: 320af7e31a2f912b384141d4678e62da, type: 3}
   mushroomCloudPrefab: {fileID: 7847806008530047970, guid: 320af7e31a2f912b384141d4678e62da, type: 3}
   refobject: {fileID: 131094158}
-  targetMaterial: {fileID: 2100000, guid: 0d4220fd78d2484e9a473549a21be21d, type: 2}
+  planeTargetMaterial: {fileID: 2100000, guid: 0d4220fd78d2484e9a473549a21be21d, type: 2}
+  carTargetMaterial: {fileID: 2100000, guid: 2556b1c4abaddb886bdbd620b4ad07cd, type: 2}
   width: 1
   height: 1
   riverSectionHeight: 20
@@ -686,7 +687,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 1
+  startLevelType: 0
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:

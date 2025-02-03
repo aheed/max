@@ -495,10 +495,10 @@ public class SceneBuilder : MonoBehaviour
                         GameObject car = Instantiate(carPrefab, sceneInput.levelTransform);
                         var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
                         car.transform.localPosition = carLocalTransform;
-                        /*if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
+                        if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
-                            car.SetVip();
-                        }*/
+                            InterfaceHelper.GetInterface<IVip>(car)?.SetVip();
+                        }
                         return car.gameObject;
                     })
                 );
