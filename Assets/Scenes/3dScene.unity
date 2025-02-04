@@ -19896,7 +19896,7 @@ PrefabInstance:
       objectReference: {fileID: 463767808}
     - target: {fileID: 4148779482043092323, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_VersionIndex
-      value: 61
+      value: 97
       objectReference: {fileID: 0}
     - target: {fileID: 4148779482043092323, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_Tangents.Array.data[2351].x
@@ -19928,7 +19928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4198554623491889273, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13
+      value: -1.1
       objectReference: {fileID: 0}
     - target: {fileID: 4198554623491889273, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19936,7 +19936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4198554623491889273, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4198554623491889273, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19972,7 +19972,7 @@ PrefabInstance:
       objectReference: {fileID: 164925258}
     - target: {fileID: 5617100143119119780, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_VersionIndex
-      value: 61
+      value: 97
       objectReference: {fileID: 0}
     - target: {fileID: 5617100143119119780, guid: da7e004fc568daeac983bd9529b75d87, type: 3}
       propertyPath: m_Tangents.Array.data[2351].x
@@ -30965,7 +30965,7 @@ PrefabInstance:
       objectReference: {fileID: 510625553}
     - target: {fileID: 4148779482043092323, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
       propertyPath: m_VersionIndex
-      value: 187
+      value: 196
       objectReference: {fileID: 0}
     - target: {fileID: 4148779482043092323, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
       propertyPath: m_Tangents.Array.data[2347].x
