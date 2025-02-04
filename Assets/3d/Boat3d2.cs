@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Boat3d2 : MonoBehaviour, IVip
 {
+    public GameObject sunkBoatPrefab;
     public Material targetMaterial;
     public Material normalMaterial;
     public float speed = 0.8f;
@@ -63,6 +64,7 @@ public class Boat3d2 : MonoBehaviour, IVip
             }
 
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
+            Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
         }
 
         alive = false;
