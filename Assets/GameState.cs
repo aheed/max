@@ -96,6 +96,30 @@ public class GameState : MonoBehaviour
     List<IGameStateObserver> observers = new List<IGameStateObserver>();
     static GameState singletonInstance;
     public Vector3 playerPosition;
+    private readonly Dictionary<GameEvent, List<Action>> subscribers = new();
+    
+    public void Subscribe(GameEvent gameEvent, Action callback)
+    {
+        if (!subscribers.ContainsKey(gameEvent))
+        {
+            subscribers[gameEvent] = new List<Action>();
+        }
+
+        subscribers[gameEvent].Add(callback);
+    }
+
+    public void Publish(GameEvent gameEvent)
+    {
+        if (!subscribers.ContainsKey(gameEvent))
+        {
+            return;
+        }
+
+        foreach (var callback in subscribers[gameEvent])
+        {
+            callback();
+        }
+    }
 
     public static GameState GetInstance()
     {
@@ -191,10 +215,14 @@ public class GameState : MonoBehaviour
 
     public void ReportEvent(GameEvent gameEvent)
     {
+        //todo: remove
         foreach (var observer in observers)
         {
             observer.OnGameEvent(gameEvent);
         }
+
+        // keep this
+        Publish(gameEvent);
     }
 
     public void BombLanded(Bomb bomb, GameObject hitObject = null)

@@ -8,10 +8,11 @@ public class TvSimDocument : MonoBehaviour
     void Start()
     {
         OnViewModeChanged();
+        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
     }
 
     public void OnViewModeChanged()
     {
-        gameObject.SetActive(FindAnyObjectByType<GameState>().viewMode == ViewMode.TV_SIM);
+        gameObject.SetActive(GameState.GetInstance().viewMode == ViewMode.TV_SIM);
     }
 }

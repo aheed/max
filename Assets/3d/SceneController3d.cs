@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
-
 public class SceneController3d : MonoBehaviour, IGameStateObserver
 {
     public PlayerPlane maxPlanePrefab;
@@ -89,9 +87,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     List<Vector3> riverVerts;
     List<float> roadNearEdgesZ;
     List<SceneRiverSegment> riverSegments;
-    TvSimDocument tvSimDocumentObject;
     GameObject balloonParent;
-    ////
+    ///    
     
     GameObject GetLevel() => levels[currentLevelIndex];
 
@@ -112,8 +109,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
         InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
-
-    
 
     void CreateLevel()
     {
@@ -230,7 +225,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     void Start()
     {   
         var camObject = GameObject.Find("Main Camera");
-        tvSimDocumentObject = FindAnyObjectByType<TvSimDocument>(FindObjectsInactive.Include);
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         Settings.Update();
@@ -692,7 +686,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
         {
             maxCamera.OnViewModeChanged();
-            tvSimDocumentObject.OnViewModeChanged();
         }
     }
 
