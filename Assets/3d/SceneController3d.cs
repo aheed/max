@@ -60,7 +60,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     TargetMaterialBlinker targetBlinker;    
 
     //// Game status
-    MaxCamera maxCamera;
     int level = -1;
     float prepTimeForNextLevelQuotient = 0.90f;
     float lastLevelStartZ = 0f;
@@ -224,12 +223,8 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
 
     void Start()
     {   
-        var camObject = GameObject.Find("Main Camera");
-        maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
-
         Settings.Update();
-        targetBlinker = new TargetMaterialBlinker(new [] {planeTargetMaterial, carTargetMaterial, boatTargetMaterial});        
-
+        targetBlinker = new TargetMaterialBlinker(new [] {planeTargetMaterial, carTargetMaterial, boatTargetMaterial});
         StartNewGame();
     }
 
@@ -678,14 +673,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         {
             gameState.SetSpeed(0f);
             gameState.SetStatus(GameStatus.REFUELLING);
-        }
-        else if (gameEvent == GameEvent.BIG_DETONATION && maxCamera != null)
-        {
-            maxCamera.OnDetonation();
-        }
-        else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
-        {
-            maxCamera.OnViewModeChanged();
         }
     }
 

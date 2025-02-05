@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraEventHandler : MonoBehaviour, IGameStateObserver
+public class CameraEventHandler : MonoBehaviour
 {   
     public float tvScale = 0.9f;
     public float tvOffsetX = -0.1f;
@@ -24,7 +24,8 @@ public class CameraEventHandler : MonoBehaviour, IGameStateObserver
         cameraTransform = transform.parent;
         cameraComponent = cameraTransform.gameObject.GetComponent<Camera>();
         OnViewModeChanged();
-        GameState.GetInstance().RegisterObserver(this);
+        GameState.GetInstance().Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
+        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
     }
 
     void Update()
@@ -49,7 +50,7 @@ public class CameraEventHandler : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnDetonation()
+    public void OnBigDetonation()
     {
         shakeMovesLeft = shakeMoves;
     }
@@ -69,23 +70,5 @@ public class CameraEventHandler : MonoBehaviour, IGameStateObserver
             width = tvScale,
             height = tvScale};
         }
-    }   
-
-    public void OnGameEvent(GameEvent gameEvent)
-    {
-        if (gameEvent == GameEvent.BIG_DETONATION)
-        {
-            OnDetonation();
-        }
-        else if (gameEvent == GameEvent.VIEW_MODE_CHANGED)
-        {
-            OnViewModeChanged();
-        }
     }
-
-    public void OnGameStatusChanged(GameStatus gameStatus) {}
-
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }
