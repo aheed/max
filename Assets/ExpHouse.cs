@@ -14,28 +14,31 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
     public GameObject lr_mask;
     public GameObject tr_side_mask;
     public Target targetPrefab;
-    float targetOffset = 0.25f;
+    float targetOffsetX;
+    float targetOffsetY;
     Target target;
     
     public float q = 0.16f; // size quantum
 
     public void SetSize(int width, int height, int depth)
     {
-        float xOffset = - (width + depth) * q / 2;
-        float yOffset = - (height + depth) * q / 2;
+        float halfDepth = depth * q / 2;
+
+        float xOffset = - width * q / 2;
+        float yOffset = - halfDepth / 2;
 
         float frontw = width * q;
         float fronth = height * q;
         float frontX = xOffset + width * q / 2;
         float frontY = yOffset + height * q / 2;
-
-        float roofw = (width + depth) * q;
-        float roofh = depth * q;
+        
+        float roofw = width * q + halfDepth;
+        float roofh = halfDepth;
         float roofx = xOffset + roofw / 2;
         float roofy = yOffset + fronth + roofh / 2;
 
-        float sidew = depth * q;
-        float sideh = (height + depth) * q;
+        float sidew = halfDepth;
+        float sideh = height * q + halfDepth;
         float sidex = xOffset + frontw + sidew / 2;
         float sidey = yOffset + sideh / 2;
 
@@ -100,14 +103,16 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
 
         collider.points = colliderPoints;
 
-        targetOffset = yOffset + fronth + roofh / 2;
+        targetOffsetX = xOffset + frontw / 2;
+        targetOffsetY = yOffset + fronth + q;
     }
 
     public void SetVip()
     {
         target = Instantiate(targetPrefab, gameObject.transform);
         var localPos = target.transform.localPosition;
-        localPos.y += targetOffset;
+        localPos.x += targetOffsetX;
+        localPos.y += targetOffsetY;
         target.transform.localPosition = localPos;
     }
 
