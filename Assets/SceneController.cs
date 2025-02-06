@@ -781,7 +781,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
-        stateContents.enemyHQs = null;
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
         gameState.ReportEvent(GameEvent.START);
     }

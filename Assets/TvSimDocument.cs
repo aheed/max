@@ -8,7 +8,7 @@ public class TvSimDocument : MonoBehaviour
     void Start()
     {
         OnViewModeChanged();
-        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, _ => OnViewModeChanged());
+        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
     }
 
     public void OnViewModeChanged()

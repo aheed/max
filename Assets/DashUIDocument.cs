@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 
-public class DashUIDocument : MonoBehaviour, IGameStateObserver
+public class DashUIDocument : MonoBehaviour
 {
     public int maxSpeedDisplayed = 130;
     public int maxAltitudeDisplayed = 99;
@@ -42,7 +42,6 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
     int lastDisplayedFuel;
     int lastDisplayedAltitude;
     SimpleBlinker dashBlinker;
-    HashSet<EnemyPlane> enemyPlaneSet;
     public float avgAlpha = 0.01f;
     float fpsAvg;
     int displayCnt = 0;
@@ -79,7 +78,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         gameState = FindAnyObjectByType<GameState>();
         gameStateContents = gameState.GetStateContents();
         
-        gameState.RegisterObserver(this);
+        SetupCallbacks();
 
         Reset();
     }
@@ -119,11 +118,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             }
         }
 
-        if (enemyPlaneSet.Any(e => CollisionHelper.IsOverlappingAltitude(
-                gameStateContents.altitude,
-                Altitudes.planeHeight,
-                e.GetAltitude(),
-                e.GetHeight()) && e.IsAlive()))
+        if (gameState.AnyEnemyPlaneAtCollisionAltitude())
         {
             bgColor = Color.blue;
         }
@@ -205,7 +200,7 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
             return;
         }
 
-        if (enemyPlaneSet.Any())
+        if (gameState.AnyEnemyPlanes())
         {
             alertLabel.text = "P";
             return;
@@ -259,7 +254,6 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
 
     void Reset()
     {
-        enemyPlaneSet = new();
         UpdateAll();
     }
 
@@ -297,81 +291,39 @@ public class DashUIDocument : MonoBehaviour, IGameStateObserver
         UpdateAlert();
     }
 
-    public void OnGameEvent(GameEvent ge)
+    private void SetupCallbacks()
     {
-        if (ge == GameEvent.START)
-        {
-            Reset();
-        }
-        else if (ge == GameEvent.SPEED_CHANGED)
-        {
-            UpdateSpeed();
-        }
-        else if (ge == GameEvent.ALT_CHANGED)
-        {
-            UpdateAlt();
-        }
-        else if (ge == GameEvent.BOMBS_CHANGED)
-        {
-            UpdateBombs();
-        }
-        else if (ge == GameEvent.SCORE_CHANGED)
-        {
-            UpdateScore();
-        }
-        else if (ge == GameEvent.TARGET_HIT)
-        {
-            UpdateTargets();
-        }
-        else if (ge == GameEvent.DAMAGE_SUSTAINED)
-        {
+        gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, () => OnGameStatusChanged(gameStateContents.gameStatus));
+        gameState.Subscribe(GameEvent.START, Reset);
+        gameState.Subscribe(GameEvent.SPEED_CHANGED, UpdateSpeed);
+        gameState.Subscribe(GameEvent.ALT_CHANGED, UpdateAlt);
+        gameState.Subscribe(GameEvent.BOMBS_CHANGED, UpdateBombs);
+        gameState.Subscribe(GameEvent.SCORE_CHANGED, UpdateScore);
+        gameState.Subscribe(GameEvent.TARGET_HIT, UpdateTargets);
+        gameState.Subscribe(GameEvent.DAMAGE_SUSTAINED, () => {
             audioSource.PlayOneShot(damageClip);
             UpdateDamage();
-        }
-        else if (ge == GameEvent.DAMAGE_REPAIRED)
-        {
+        });
+        gameState.Subscribe(GameEvent.DAMAGE_REPAIRED, () => {
             audioSource.PlayOneShot(bingClip);
             UpdateDamage();
-        }
-        else if (ge == GameEvent.LANDING_CHANGED)
-        {
+        });
+        gameState.Subscribe(GameEvent.LANDING_CHANGED, () => {
             if (gameStateContents.approachingLanding)
             {
                 audioSource.PlayOneShot(alertClip);
             }
             UpdateAlert();
-        }
-        else if (ge == GameEvent.WIND_CHANGED)
-        {
-            UpdateAlert();
-        }
-        else if (ge == GameEvent.SMALL_BANG)
-        {
-            audioSource.PlayOneShot(bangSmallClip);
-        }
-        else if (ge == GameEvent.MEDIUM_BANG)
-        {
-            audioSource.PlayOneShot(bangMediumClip);
-        }
-        else if (ge == GameEvent.BIG_BANG)
-        {
-            audioSource.PlayOneShot(bangBigClip);
-        }
-    }
+        });
+        gameState.Subscribe(GameEvent.WIND_CHANGED, UpdateAlert);
+        gameState.Subscribe(GameEvent.SMALL_BANG, () => audioSource.PlayOneShot(bangSmallClip));
+        gameState.Subscribe(GameEvent.MEDIUM_BANG, () => audioSource.PlayOneShot(bangMediumClip));
+        gameState.Subscribe(GameEvent.BIG_BANG, () => audioSource.PlayOneShot(bangBigClip));
+        gameState.Subscribe(GameEvent.ENEMY_PLANE_STATUS_CHANGED, OnEnemyPlaneStatusChanged);
+    }    
 
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
+    public void OnEnemyPlaneStatusChanged()
     {
-        
-        if (active)
-        {
-            enemyPlaneSet.Add(enemyPlane);
-        }
-        else
-        {
-            enemyPlaneSet.Remove(enemyPlane);
-        }
         UpdateDashColor();
         UpdateAlert();
         //Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");

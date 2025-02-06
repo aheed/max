@@ -25,6 +25,7 @@ public enum GameEvent
     VIEW_MODE_CHANGED,
     BOMB_LANDED,
     GAME_STATUS_CHANGED,
+    ENEMY_PLANE_STATUS_CHANGED,
 }
 
 public enum DamageIndex
@@ -66,6 +67,7 @@ public class GameStateContents
     public int targetsHitMin;
     public List<EnemyHQ> enemyHQs;
     public LevelPrerequisite latestLevelPrereq;
+    public HashSet<EnemyPlane> enemyPlaneSet;
 }
 
 
@@ -107,15 +109,15 @@ public class GameState : MonoBehaviour
     List<IGameStateObserver> observers = new List<IGameStateObserver>();
     static GameState singletonInstance;
     public Vector3 playerPosition;
-    private EventPubSub<GameEvent> pubSub = new();
+    private EventPubSubNoArg pubSub = new();
     private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
     
-    public void Subscribe(GameEvent gameEvent, Action<GameEvent> callback)
+    public void Subscribe(GameEvent gameEvent, Action callback)
     {
         pubSub.Subscribe(gameEvent, callback);
     }
 
-    public void Unsubscribe(GameEvent gameEvent, Action<GameEvent> callback)
+    public void Unsubscribe(GameEvent gameEvent, Action callback)
     {
         pubSub.Unsubscribe(gameEvent, callback);
     }
@@ -158,7 +160,7 @@ public class GameState : MonoBehaviour
             observer.OnGameStatusChanged(gameStatus);
         }
 
-        pubSub.Publish(GameEvent.GAME_STATUS_CHANGED, GameEvent.GAME_STATUS_CHANGED);
+        pubSub.Publish(GameEvent.GAME_STATUS_CHANGED);
     }
 
     public void SetSpeed(float speed)
@@ -228,7 +230,7 @@ public class GameState : MonoBehaviour
         }
 
         // keep this
-        pubSub.Publish(gameEvent, gameEvent);
+        pubSub.Publish(gameEvent);
     }
 
     public void BombLanded(Bomb bomb, GameObject hitObject = null)
@@ -252,10 +254,15 @@ public class GameState : MonoBehaviour
 
     public void EnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
     {
-        foreach (var observer in observers)
+        if (active)
         {
-            observer.OnEnemyPlaneStatusChanged(enemyPlane, active);
+            gameStateContents.enemyPlaneSet.Add(enemyPlane);
         }
+        else
+        {
+            gameStateContents.enemyPlaneSet.Remove(enemyPlane);
+        }
+        pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
     }
 
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
@@ -318,6 +325,23 @@ public class GameState : MonoBehaviour
         gameStateContents.targetsHit = 0;
         gameStateContents.targetsHitMin = 0;
         gameStateContents.latestLevelPrereq = null;
+        gameStateContents.enemyHQs = null;
+        gameStateContents.enemyPlaneSet = new();        
+    }
+
+    public bool AnyEnemyPlaneAtCollisionAltitude()
+    {
+        return gameStateContents.enemyPlaneSet.Any(e => CollisionHelper.IsOverlappingAltitude(
+                gameStateContents.altitude,
+                Altitudes.planeHeight,
+                e.GetAltitude(),
+                e.GetHeight()) && 
+            e.IsAlive());
+    }
+
+    public bool AnyEnemyPlanes()
+    {
+        return gameStateContents.enemyPlaneSet.Any();
     }
 
     // Start is called before the first frame update

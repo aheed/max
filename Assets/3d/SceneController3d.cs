@@ -216,7 +216,6 @@ public class SceneController3d : MonoBehaviour
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
-        stateContents.enemyHQs = null;
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
         gameState.ReportEvent(GameEvent.START);
     }
@@ -226,8 +225,8 @@ public class SceneController3d : MonoBehaviour
         Settings.Update();
 
         
-        GameState.GetInstance().Subscribe(GameEvent.START, OnGameEventCallback);
-        GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnGameEventCallback);
+        GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
+        GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
 
@@ -648,7 +647,7 @@ public class SceneController3d : MonoBehaviour
         gameState.playerPosition = maxPlane.gameObject.transform.position;
     }
 
-    public void OnGameStatusChangedCallback(GameEvent _) =>
+    private void OnGameStatusChangedCallback() =>
         OnGameStatusChangedInternal(GameState.GetInstance().GetStateContents().gameStatus);
     
     private void OnGameStatusChangedInternal(GameStatus gameStatus)
@@ -661,25 +660,22 @@ public class SceneController3d : MonoBehaviour
             restartCoolDownSeconds = minRestartWaitSeconds;
         }
     }
-    private void OnGameEventCallback(GameEvent gameEvent)
+    private void OnStartCallback()
     {
-        if (gameEvent == GameEvent.RESTART_REQUESTED)
-        {
-            if (restartCoolDownSeconds > 0f)
-            {
-                //Debug.Log("Too early to restart");
-                return;
-            }
+        gameState.SetSpeed(0f);
+        gameState.SetStatus(GameStatus.REFUELLING);
+    }
 
-            Debug.Log("Starting a new game");
-
-            StartNewGame();            
-        }
-        else if (gameEvent == GameEvent.START)
+    private void OnRestartRequestCallback()
+    {
+        if (restartCoolDownSeconds > 0f)
         {
-            gameState.SetSpeed(0f);
-            gameState.SetStatus(GameStatus.REFUELLING);
+            Debug.Log("Too early to restart");
+            return;
         }
+
+        Debug.Log("Starting a new game");
+        StartNewGame();
     }
 
     private void OnBombLandedCallback(BombLandedEventArgs args) =>
