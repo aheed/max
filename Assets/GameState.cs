@@ -71,6 +71,9 @@ public interface IGameStateObserver
 
 public class GameState : MonoBehaviour
 {
+    public static Material carBlinkMaterial;
+    public static Material boatBlinkMaterial;
+    public static Material genericBlinkMaterial;
     public float maxSpeed = 2.0f;
     public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;

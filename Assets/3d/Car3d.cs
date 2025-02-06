@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Car3d : MonoBehaviour, IVip
 {
-    public Material targetMaterial;
     public Material normalMaterial;
     public float speedFactor = 1.0f;    
     GameState gameState;
@@ -48,7 +47,7 @@ public class Car3d : MonoBehaviour, IVip
 
     public void SetVip()
     {
-        SetBlinkableMaterial(targetMaterial);
+        SetBlinkableMaterial(GameState.carBlinkMaterial);
         isVip = true;
     }
 

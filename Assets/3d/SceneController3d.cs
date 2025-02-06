@@ -224,7 +224,15 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     void Start()
     {   
         Settings.Update();
-        targetBlinker = new TargetMaterialBlinker(new [] {planeTargetMaterial, carTargetMaterial, boatTargetMaterial});
+
+        // Make copies of materials to avoid changing the .mat files
+        GameState.carBlinkMaterial = new Material(carTargetMaterial);
+        GameState.boatBlinkMaterial = new Material(boatTargetMaterial);
+        GameState.genericBlinkMaterial = new Material(planeTargetMaterial);
+        targetBlinker = new TargetMaterialBlinker(new [] {
+            GameState.genericBlinkMaterial,
+            GameState.carBlinkMaterial,
+            GameState.boatBlinkMaterial});
         StartNewGame();
     }
 

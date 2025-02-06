@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyPlane3d : MonoBehaviour, IVip
 {
-    public Material targetMaterial;
     public Material normalMaterial;
     public Transform refObject;    
     public float maxDistance = 8f;
@@ -76,7 +75,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
     public void SetVip()
     {
-        SetBlinkableMaterial(targetMaterial);
+        SetBlinkableMaterial(GameState.genericBlinkMaterial);
         isVip = true;
     }
 

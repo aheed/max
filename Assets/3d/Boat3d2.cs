@@ -3,7 +3,6 @@ using UnityEngine;
 public class Boat3d2 : MonoBehaviour, IVip
 {
     public GameObject sunkBoatPrefab;
-    public Material targetMaterial;
     public Material normalMaterial;
     public float speed = 0.8f;
     //GameState gameState;
@@ -23,7 +22,7 @@ public class Boat3d2 : MonoBehaviour, IVip
 
     public void SetVip()
     {
-        SetBlinkableMaterial(targetMaterial);
+        SetBlinkableMaterial(GameState.boatBlinkMaterial);
         isVip = true;
     }
 
