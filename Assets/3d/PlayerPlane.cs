@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 
 
-public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
+public class PlayerPlane : MonoBehaviour, IPlaneObservable
 {
     public Transform refObject;    
     public float glideDescentRate = 0.3f;
@@ -66,15 +66,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         return controller;
     }
 
-    GameState GetGameState() 
-    {
-        if (gameState == null)
-        {
-            gameState = FindAnyObjectByType<GameState>();
-        }
-        return gameState;
-    }
-
     void SetAppearance(float moveX, bool alive) => GetController().SetAppearance(moveX, alive);    
 
     // Start is called before the first frame update
@@ -86,7 +77,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
-        GetGameState().RegisterObserver(this); 
+        gameState = GameState.GetInstance();
+        gameState.Subscribe(GameEvent.START, OnStart);
+        gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
         Reset();
     }
 
@@ -425,7 +418,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         isOnGround = false;
         isOnRiver = false;
         var tmpPos = transform.localPosition;
-        tmpPos.y = GetGameState().minAltitude;
+        tmpPos.y = GameState.GetInstance().minAltitude;
         transform.localPosition = tmpPos;
     }
 
@@ -464,8 +457,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         gameState.IncrementBombs(-1);
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    public void OnGameStatusChanged()
     {
+        var gameStatus = GameState.GetInstance().GetStateContents().gameStatus;
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
             SetAppearance(0, false);
@@ -476,23 +470,16 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }
     }
 
-    public void OnGameEvent(GameEvent gameEvent) {
-        if (gameEvent == GameEvent.START)
+    public void OnStart() {
+        SetAppearance(0, true);
+        Vector3 tmpLocalPosition = transform.localPosition;
+        if (tmpLocalPosition.y < landingAltitude) 
         {
-            SetAppearance(0, true);
-            Vector3 tmpLocalPosition = transform.localPosition;
-            if (tmpLocalPosition.y < landingAltitude) 
-            {
-                tmpLocalPosition.y = landingAltitude;
-            }
-            transform.localPosition = tmpLocalPosition;
-            offsetZ = 0f;
+            tmpLocalPosition.y = landingAltitude;
         }
+        transform.localPosition = tmpLocalPosition;
+        offsetZ = 0f;
     }
-
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 
     void OnCollisionEnter(Collision col)
     {
