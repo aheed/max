@@ -24,8 +24,8 @@ public class CameraEventHandler : MonoBehaviour
         cameraTransform = transform.parent;
         cameraComponent = cameraTransform.gameObject.GetComponent<Camera>();
         OnViewModeChanged();
-        GameState.GetInstance().Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
-        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
+        GameState.GetInstance().Subscribe(GameEvent.BIG_DETONATION, _ => OnBigDetonation());
+        GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, _ => OnViewModeChanged());
     }
 
     void Update()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SceneController3d : MonoBehaviour, IGameStateObserver
+public class SceneController3d : MonoBehaviour
 {
     public PlayerPlane maxPlanePrefab;
     public EnemyPlane3d enemyPlanePrefab;
@@ -204,7 +204,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         roadNearEdgesZ = new();
         riverSegments = new();
         newLevelTask = null;
-        gameState = GetGameState();
+        gameState = GameState.GetInstance();
         var stateContents = gameState.GetStateContents();
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 
@@ -224,6 +224,12 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     void Start()
     {   
         Settings.Update();
+
+        
+        GameState.GetInstance().Subscribe(GameEvent.START, OnGameEventCallback);
+        GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnGameEventCallback);
+        GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
+        GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
 
         // Make copies of materials to avoid changing the .mat files
         GameState.carBlinkMaterial = new Material(carTargetMaterial);
@@ -320,16 +326,6 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         landingStripEndZ = landingStripStartZ;
     }
 
-    GameState GetGameState() 
-    {
-        if (gameState == null)
-        {
-            gameState = FindAnyObjectByType<GameState>();
-            gameState.RegisterObserver(this);
-        }
-        return gameState;
-    }
-
     void SetEnemyPlaneCooldown()
     {
         enemyPlaneCooldown = UnityEngine.Random.Range(enemyPlaneIntervalSecMin, enemyPlaneIntervalSecMax);
@@ -411,7 +407,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
     // Update is called once per frame
     void Update()
     {
-        gameState = GetGameState();
+        gameState = GameState.GetInstance();
         GameStateContents stateContents = gameState.GetStateContents();
 
         if (refobject.transform.position.z > (lastLevelStartZ + levelLength * prepTimeForNextLevelQuotient))
@@ -652,7 +648,10 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         gameState.playerPosition = maxPlane.gameObject.transform.position;
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    public void OnGameStatusChangedCallback(GameEvent _) =>
+        OnGameStatusChangedInternal(GameState.GetInstance().GetStateContents().gameStatus);
+    
+    private void OnGameStatusChangedInternal(GameStatus gameStatus)
     {
         Debug.Log($"New State: {gameStatus}");
         if(gameStatus == GameStatus.DEAD ||
@@ -662,8 +661,7 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             restartCoolDownSeconds = minRestartWaitSeconds;
         }
     }
-
-    public void OnGameEvent(GameEvent gameEvent)
+    private void OnGameEventCallback(GameEvent gameEvent)
     {
         if (gameEvent == GameEvent.RESTART_REQUESTED)
         {
@@ -684,7 +682,9 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) 
+    private void OnBombLandedCallback(BombLandedEventArgs args) =>
+        OnBombLandedCallbackInternal(args.bomb, args.hitObject);
+    private void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject) 
     {
         if (hitObject == null)
         {
@@ -718,6 +718,4 @@ public class SceneController3d : MonoBehaviour, IGameStateObserver
             Destroy(bomb.gameObject);
         }
     }
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

@@ -23,6 +23,8 @@ public enum GameEvent
     BIG_BANG,
     TARGET_HIT,
     VIEW_MODE_CHANGED,
+    BOMB_LANDED,
+    GAME_STATUS_CHANGED,
 }
 
 public enum DamageIndex
@@ -37,6 +39,12 @@ public enum ViewMode
 {
     NORMAL = 0,
     TV_SIM,
+}
+
+public class BombLandedEventArgs
+{
+    public GameObject bomb;
+    public GameObject hitObject;
 }
 
 public class GameStateContents
@@ -99,29 +107,22 @@ public class GameState : MonoBehaviour
     List<IGameStateObserver> observers = new List<IGameStateObserver>();
     static GameState singletonInstance;
     public Vector3 playerPosition;
-    private readonly Dictionary<GameEvent, List<Action>> subscribers = new();
+    private EventPubSub<GameEvent> pubSub = new();
+    private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
     
-    public void Subscribe(GameEvent gameEvent, Action callback)
+    public void Subscribe(GameEvent gameEvent, Action<GameEvent> callback)
     {
-        if (!subscribers.ContainsKey(gameEvent))
-        {
-            subscribers[gameEvent] = new List<Action>();
-        }
-
-        subscribers[gameEvent].Add(callback);
+        pubSub.Subscribe(gameEvent, callback);
     }
 
-    public void Publish(GameEvent gameEvent)
+    public void Unsubscribe(GameEvent gameEvent, Action<GameEvent> callback)
     {
-        if (!subscribers.ContainsKey(gameEvent))
-        {
-            return;
-        }
+        pubSub.Unsubscribe(gameEvent, callback);
+    }
 
-        foreach (var callback in subscribers[gameEvent])
-        {
-            callback();
-        }
+    public void SubscribeToBombLandedEvent(Action<BombLandedEventArgs> callback)
+    {
+        bombLandedPubSub.Subscribe(GameEvent.BOMB_LANDED, callback);
     }
 
     public static GameState GetInstance()
@@ -156,6 +157,8 @@ public class GameState : MonoBehaviour
         {
             observer.OnGameStatusChanged(gameStatus);
         }
+
+        pubSub.Publish(GameEvent.GAME_STATUS_CHANGED, GameEvent.GAME_STATUS_CHANGED);
     }
 
     public void SetSpeed(float speed)
@@ -225,15 +228,16 @@ public class GameState : MonoBehaviour
         }
 
         // keep this
-        Publish(gameEvent);
+        pubSub.Publish(gameEvent, gameEvent);
     }
 
     public void BombLanded(Bomb bomb, GameObject hitObject = null)
     {
-        foreach (var observer in observers)
+        /*foreach (var observer in observers)
         {
             observer.OnBombLanded(bomb.gameObject, hitObject);
-        }
+        }*/
+        BombLanded(bomb.gameObject, hitObject);
     }
 
     public void BombLanded(GameObject bomb, GameObject hitObject = null)
@@ -242,6 +246,8 @@ public class GameState : MonoBehaviour
         {
             observer.OnBombLanded(bomb, hitObject);
         }
+
+        bombLandedPubSub.Publish(GameEvent.BOMB_LANDED, new BombLandedEventArgs { bomb = bomb, hitObject = hitObject });
     }
 
     public void EnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
