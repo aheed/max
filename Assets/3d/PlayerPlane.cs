@@ -54,8 +54,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     float offsetZ = 0;
     bool bombDamage = false;
     bool gunDamage = false;
-    bool isOnGround = false; // Todo: remove or use?
-    bool isOnRiver = false; // Todo: remove or use?
 
     PlaneController GetController()
     {
@@ -415,8 +413,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         offsetZ = 0;
         bombDamage = false;
         gunDamage = false;
-        isOnGround = false;
-        isOnRiver = false;
         var tmpPos = transform.localPosition;
         tmpPos.y = GameState.GetInstance().minAltitude;
         transform.localPosition = tmpPos;
@@ -485,34 +481,15 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         //Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
 
-        if (col.gameObject.name.StartsWith("ground"))
+        if (col.gameObject.name.StartsWith("ground") ||
+            col.gameObject.name.StartsWith("riversection"))
         {
-            isOnGround = true;
-            return;
-        }
-
-        if (col.gameObject.name.StartsWith("riversection"))
-        {
-            isOnRiver = true;
             return;
         }
 
         if (col.gameObject.name.StartsWith("FlakEx"))
         {
             //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
-        }
-    }
-
-    void OnCollisionExit(Collision col)
-    {
-        //Debug.Log($"Plane collision Exit !!!!!!!!!!!!!!!  with {col.gameObject.name}");        
-        if (col.gameObject.name.StartsWith("ground"))
-        {
-            isOnGround = false;
-        }
-        else if (col.gameObject.name.StartsWith("riversection"))
-        {
-            isOnRiver = false;
         }
     }
 }
