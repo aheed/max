@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class GlobalVolume : MonoBehaviour, IGameStateObserver
+public class GlobalVolume : MonoBehaviour
 {
     public float hueShiftlifeSpanSec = 0.05f;
     public float postExposurelifeSpanSec = 0.2f;
@@ -32,7 +32,8 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
         p.TryGet(out bloom);
         p.TryGet(out vignette);
         GameState gameState = FindAnyObjectByType<GameState>();
-        gameState.RegisterObserver(this);
+        gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, UpdateViewMode);
+        gameState.Subscribe(GameEvent.SMALL_DETONATION, OnSmallDetonation);
     }
 
     // Update is called once per frame
@@ -67,7 +68,7 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
 
     void UpdateViewMode()
     {
-        var viewMode = FindAnyObjectByType<GameState>().viewMode;
+        var viewMode = GameState.GetInstance().viewMode;
         if (viewMode == ViewMode.NORMAL)
         {
             lensDistortion.active = false;
@@ -88,25 +89,8 @@ public class GlobalVolume : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus) {}
-
-    public void OnGameEvent(GameEvent ge) {
-        if (ge == GameEvent.VIEW_MODE_CHANGED)
-        {
-            UpdateViewMode();
-            return;
-        }
-
-        if (ge != GameEvent.SMALL_DETONATION)
-        {
-            return;
-        }
-        
+    void OnSmallDetonation() {
         hueShiftTimeToLiveSec = hueShiftlifeSpanSec;
         postExposureTimeToLiveSec = postExposurelifeSpanSec;
     }
-
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

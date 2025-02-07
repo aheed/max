@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
-public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
+public class MaxControl : MonoBehaviour, IPlaneObservable
 {
     public Transform refObject;    
     public float glideDescentRate = 0.3f;
@@ -67,8 +67,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         DebugAuxAction.Enable();
 	    rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        gameState = FindAnyObjectByType<GameState>();
-        gameState.RegisterObserver(this); 
+        gameState = GameState.GetInstance();
+        gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+        gameState.Subscribe(GameEvent.START, OnGameStart);
         lastCollidedMove = new Vector2(0, 0);
     }
 
@@ -438,8 +439,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         gameState.IncrementBombs(-1);
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    void OnGameStatusChanged()
     {
+        var gameStatus = gameState.GetStateContents().gameStatus;
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
             spriteR.sprite = crashedSprite;
@@ -450,22 +452,15 @@ public class MaxControl : MonoBehaviour, IPlaneObservable, IGameStateObserver
         }
     }
 
-    public void OnGameEvent(GameEvent gameEvent) {
-        if (gameEvent == GameEvent.START)
+    void OnGameStart() {
+        Vector3 tmpLocalPosition = transform.localPosition;
+        if (tmpLocalPosition.z < landingAltitude) 
         {
-            Vector3 tmpLocalPosition = transform.localPosition;
-            if (tmpLocalPosition.z < landingAltitude) 
-            {
-                tmpLocalPosition.z = landingAltitude;
-            }
-            tmpLocalPosition.y = tmpLocalPosition.z;
-            transform.localPosition = tmpLocalPosition;
-            spriteR.sprite = straightSprite;
-            offsetY = 0f;
+            tmpLocalPosition.z = landingAltitude;
         }
+        tmpLocalPosition.y = tmpLocalPosition.z;
+        transform.localPosition = tmpLocalPosition;
+        spriteR.sprite = straightSprite;
+        offsetY = 0f;
     }
-
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) {}
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

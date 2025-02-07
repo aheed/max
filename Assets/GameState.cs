@@ -70,15 +70,6 @@ public class GameStateContents
     public HashSet<EnemyPlane> enemyPlaneSet;
 }
 
-
-public interface IGameStateObserver
-{
-    void OnGameStatusChanged(GameStatus gameStatus);
-    void OnGameEvent(GameEvent gameEvent);
-    void OnBombLanded(GameObject bomb, GameObject hitObject);
-    void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active);
-}
-
 public class GameState : MonoBehaviour
 {
     public static Material carBlinkMaterial;
@@ -106,7 +97,6 @@ public class GameState : MonoBehaviour
     public int targetsHitMin2 = 10;
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;
-    List<IGameStateObserver> observers = new List<IGameStateObserver>();
     static GameState singletonInstance;
     public Vector3 playerPosition;
     private EventPubSubNoArg pubSub = new();
@@ -136,16 +126,6 @@ public class GameState : MonoBehaviour
         return singletonInstance;
     }
 
-    public void RegisterObserver(IGameStateObserver observer)
-    {
-        observers.Add(observer);
-    }
-
-    public void UnregisterObserver(IGameStateObserver observer)
-    {
-        observers.Remove(observer);
-    }
-
     public void SetStatus(GameStatus gameStatus)
     {
         if (gameStatus == gameStateContents.gameStatus)
@@ -154,11 +134,6 @@ public class GameState : MonoBehaviour
         }
 
         gameStateContents.gameStatus = gameStatus;
-
-        foreach (var observer in observers)
-        {
-            observer.OnGameStatusChanged(gameStatus);
-        }
 
         pubSub.Publish(GameEvent.GAME_STATUS_CHANGED);
     }
@@ -223,32 +198,16 @@ public class GameState : MonoBehaviour
 
     public void ReportEvent(GameEvent gameEvent)
     {
-        //todo: remove
-        foreach (var observer in observers)
-        {
-            observer.OnGameEvent(gameEvent);
-        }
-
-        // keep this
         pubSub.Publish(gameEvent);
     }
 
     public void BombLanded(Bomb bomb, GameObject hitObject = null)
     {
-        /*foreach (var observer in observers)
-        {
-            observer.OnBombLanded(bomb.gameObject, hitObject);
-        }*/
-        BombLanded(bomb.gameObject, hitObject);
+        BombLanded(bomb == null ? null : bomb.gameObject, hitObject);
     }
 
     public void BombLanded(GameObject bomb, GameObject hitObject = null)
     {
-        foreach (var observer in observers)
-        {
-            observer.OnBombLanded(bomb, hitObject);
-        }
-
         bombLandedPubSub.Publish(GameEvent.BOMB_LANDED, new BombLandedEventArgs { bomb = bomb, hitObject = hitObject });
     }
 

@@ -27,7 +27,7 @@ public class GameObjectCollection
     public IEnumerable<GameObject> gameObjects;
 }
 
-public class SceneController : MonoBehaviour, IGameStateObserver
+public class SceneController : MonoBehaviour
 {
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
@@ -893,8 +893,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         if (gameState == null)
         {
-            gameState = FindAnyObjectByType<GameState>();
-            gameState.RegisterObserver(this);
+            gameState = GameState.GetInstance();
+            gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+            gameState.Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequested);
+            gameState.Subscribe(GameEvent.START, OnGameStart);
+            gameState.Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
+            gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
+            gameState.SubscribeToBombLandedEvent(OnBombLandedCallback);
         }
         return gameState;
     }
@@ -1208,8 +1213,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         refobject.transform.position += delta;
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    void OnGameStatusChanged()
     {
+        var gameStatus = gameState.GetStateContents().gameStatus;
         Debug.Log($"New State: {gameStatus}");
         if(gameStatus == GameStatus.DEAD ||
            gameStatus == GameStatus.FINISHED)
@@ -1219,37 +1225,46 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnGameEvent(GameEvent gameEvent)
+    void OnRestartRequested()
     {
-        if (gameEvent == GameEvent.RESTART_REQUESTED)
+        if (restartCoolDownSeconds > 0f)
         {
-            if (restartCoolDownSeconds > 0f)
-            {
-                //Debug.Log("Too early to restart");
-                return;
-            }
-
-            Debug.Log("Starting a new game");
-
-            StartNewGame();            
+            //Debug.Log("Too early to restart");
+            return;
         }
-        else if (gameEvent == GameEvent.START)
-        {
-            gameState.SetSpeed(0f);
-            gameState.SetStatus(GameStatus.REFUELLING);
-        }
-        else if (gameEvent == GameEvent.BIG_DETONATION && maxCamera != null)
+
+        Debug.Log("Starting a new game");
+
+        StartNewGame();
+    }
+
+    void OnGameStart()
+    {
+        gameState.SetSpeed(0f);
+        gameState.SetStatus(GameStatus.REFUELLING);
+    }
+
+    void OnBigDetonation()
+    {
+        if (maxCamera != null)
         {
             maxCamera.OnDetonation();
         }
-        else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
+    }
+
+    void OnViewModeChanged()
+    {
+        if (maxCamera != null)
         {
             maxCamera.OnViewModeChanged();
             tvSimDocumentObject.OnViewModeChanged();
         }
     }
 
-    public void OnBombLanded(GameObject bomb, GameObject hitObject) 
+    void OnBombLandedCallback(BombLandedEventArgs args) =>
+        OnBombLandedCallbackInternal(args.bomb, args.hitObject);
+
+    void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject) 
     {
         if (hitObject == null)
         {
@@ -1284,6 +1299,4 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             Destroy(bomb.gameObject);
         }
     }
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }
