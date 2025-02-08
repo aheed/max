@@ -67,7 +67,8 @@ public class GameStateContents
     public int targetsHitMin;
     public List<EnemyHQ> enemyHQs;
     public LevelPrerequisite latestLevelPrereq;
-    public HashSet<EnemyPlane> enemyPlaneSet;
+    public Dictionary<GameObject, float> enemyPlaneAltitudes;
+    public float maxAltitudeDiffForPlaneCollision;
 }
 
 public class GameState : MonoBehaviour
@@ -101,6 +102,12 @@ public class GameState : MonoBehaviour
     public Vector3 playerPosition;
     private EventPubSubNoArg pubSub = new();
     private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
+
+    public void SetPlaneHeights(float playerPlaneHeight, float enemyPlaneHeight)
+    {
+        gameStateContents.maxAltitudeDiffForPlaneCollision =
+            (playerPlaneHeight + enemyPlaneHeight) / 2;
+    }
     
     public void Subscribe(GameEvent gameEvent, Action callback)
     {
@@ -211,15 +218,15 @@ public class GameState : MonoBehaviour
         bombLandedPubSub.Publish(GameEvent.BOMB_LANDED, new BombLandedEventArgs { bomb = bomb, hitObject = hitObject });
     }
 
-    public void EnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
+    public void EnemyPlaneStatusChanged(GameObject enemyPlane, float altitude, bool active)
     {
         if (active)
         {
-            gameStateContents.enemyPlaneSet.Add(enemyPlane);
+            gameStateContents.enemyPlaneAltitudes[enemyPlane] = altitude;
         }
         else
         {
-            gameStateContents.enemyPlaneSet.Remove(enemyPlane);
+            gameStateContents.enemyPlaneAltitudes.Remove(enemyPlane);
         }
         pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
     }
@@ -285,22 +292,18 @@ public class GameState : MonoBehaviour
         gameStateContents.targetsHitMin = 0;
         gameStateContents.latestLevelPrereq = null;
         gameStateContents.enemyHQs = null;
-        gameStateContents.enemyPlaneSet = new();        
+        gameStateContents.enemyPlaneAltitudes = new();        
     }
 
     public bool AnyEnemyPlaneAtCollisionAltitude()
     {
-        return gameStateContents.enemyPlaneSet.Any(e => CollisionHelper.IsOverlappingAltitude(
-                gameStateContents.altitude,
-                Altitudes.planeHeight,
-                e.GetAltitude(),
-                e.GetHeight()) && 
-            e.IsAlive());
+        return gameStateContents.enemyPlaneAltitudes.Values.Any(alt => 
+            Math.Abs(alt - gameStateContents.altitude) < gameStateContents.maxAltitudeDiffForPlaneCollision);
     }
 
     public bool AnyEnemyPlanes()
     {
-        return gameStateContents.enemyPlaneSet.Any();
+        return gameStateContents.enemyPlaneAltitudes.Any();
     }
 
     // Start is called before the first frame update

@@ -390,6 +390,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
     public float GetHeight()
     {
+        // todo: use box collider height
         return Altitudes.planeHeight;
     }
 

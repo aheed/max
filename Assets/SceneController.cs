@@ -744,12 +744,14 @@ public class SceneController : MonoBehaviour
         var refObjStartOffset = 0.8f;
         var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
         refobject.transform.position = newRefObjPos;
+        gameState = GetGameState();
 
         if (maxPlane == null)
         {
             maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
             maxPlane.refObject = refobject.transform;            
             AddPlaneShadow(maxPlane.transform);
+            gameState.SetPlaneHeights(maxPlane.GetHeight(), Altitudes.enemyPlaneHeight);
         }
         maxPlane.transform.localPosition = Vector3.zero;
 
@@ -768,8 +770,7 @@ public class SceneController : MonoBehaviour
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-        newLevelTask = null;
-        gameState = GetGameState();
+        newLevelTask = null;        
         var stateContents = gameState.GetStateContents();
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 

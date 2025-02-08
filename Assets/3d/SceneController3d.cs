@@ -183,6 +183,7 @@ public class SceneController3d : MonoBehaviour
         {
             maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
             maxPlane.refObject = refobject.transform;
+            gameState.SetPlaneHeights(maxPlane.GetHeight(), maxPlane.GetHeight());
         }
         maxPlane.transform.localPosition = Vector3.zero;
         maxPlane.Reset();

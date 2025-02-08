@@ -326,6 +326,5 @@ public class DashUIDocument : MonoBehaviour
     {
         UpdateDashColor();
         UpdateAlert();
-        //Debug.Log($"enemy airplane status: {active} {enemyPlaneSet.Count}");
     }
 }

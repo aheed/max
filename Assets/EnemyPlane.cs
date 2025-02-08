@@ -60,7 +60,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
     public float GetHeight()
     {
-        return 0.3f;
+        return Altitudes.enemyPlaneHeight;
     }
 
     public float GetMoveX() => moveX;
@@ -94,12 +94,12 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
     void Register()
     {
-        gameState.EnemyPlaneStatusChanged(this, true);
+        gameState.EnemyPlaneStatusChanged(gameObject, GetAltitude(), true);
     }
 
     void Deregister()
     {
-        gameState.EnemyPlaneStatusChanged(this, false);
+        gameState.EnemyPlaneStatusChanged(gameObject, GetAltitude(), false);
     }
 
     void Deactivate()
@@ -209,6 +209,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             gameState.IncrementTargetsHit();
         }
         crashed = true;
+        Deregister();
         crashCooldownSec = crashDurationSec;
         crashExplosionsLeft = crashExplosions;
         spriteR.color = Color.white;
