@@ -18,7 +18,7 @@ public class Bomb3d : MonoBehaviour
 
     float GetImpactAltitude()
     {
-        return GetGameState().riverAltitude;
+        return transform.position.y > 0 ? 0f : GetGameState().riverAltitude;
     }
 
     void Start()
@@ -43,8 +43,9 @@ public class Bomb3d : MonoBehaviour
         tmpPos.y += deltaVertical;
         transform.localPosition = tmpPos;
 
-        if (tmpPos.y <= impactAltitude)
+        if (tmpPos.y < impactAltitude)
         {
+            impactAltitude = GetImpactAltitude();
             Impact();
         }
     }

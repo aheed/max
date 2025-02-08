@@ -399,13 +399,8 @@ public class SceneBuilder : MonoBehaviour
         rbMeshFilter.mesh = CreateQuadMesh(riverRightBankVerts.ToArray(), riverRightBankNormals.ToArray());
 
         // Add mesh colliders
-        ret.riverSectionGameObject.AddComponent<MeshCollider>();
-        groundLeftOfRiver.AddComponent<MeshCollider>();
-        groundRightOfRiver.AddComponent<MeshCollider>();
         riverLeftBank.AddComponent<MeshCollider>();
         riverRightBank.AddComponent<MeshCollider>();
-
-        
 
         // Parallel Road
         GameObject paraRoad = new GameObject("parallel road");

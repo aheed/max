@@ -306,21 +306,6 @@ public class SceneController3d : MonoBehaviour
         return position.x > segment.llcX + xdiff && position.x < segment.lrcX + xdiff;
     }
 
-    bool IsOverRiverOld(Vector3 position)
-    {
-        var xOffset = riverSectionGameObject.transform.position.x;
-        var yOffset = riverSectionGameObject.transform.position.z;
-
-        var leftEdgeX = GetRiverLeftEdgeX(position.z, xOffset, yOffset);
-        var rightEdgeX = leftEdgeX + LevelBuilder.riverWidth * (levelWidth / LevelContents.gridWidth);
-
-        // compare to position x
-        var overRiverSegment =
-            position.x > leftEdgeX &&
-            position.x < rightEdgeX;
-        return overRiverSegment;
-    }
-
     void PreventRelanding()
     {
         landingStripEndZ = landingStripStartZ;
@@ -685,7 +670,18 @@ public class SceneController3d : MonoBehaviour
     {
         if (hitObject == null)
         {
-            var prefab = IsOverRiver(bomb.transform.position) ? bombSplashPrefab : bombCraterPrefab;
+            var prefab = bombCraterPrefab;
+
+            if (IsOverRiver(bomb.transform.position))
+            {
+                if (bomb.transform.position.y > gameState.riverAltitude)
+                {
+                    // bomb has not landed yet
+                    return;
+                }
+                prefab = bombSplashPrefab;
+            }
+            
             if (IsOverRoad(bomb.transform.position))
             {
                 prefab = mushroomCloudPrefab;

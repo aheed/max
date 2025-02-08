@@ -45,6 +45,6 @@ public class Bridge3d : MonoBehaviour, IVip
             target = null;
         }
 
-        GameState.GetInstance().BombLanded(col.gameObject, null);
+        GameState.GetInstance().BombLanded(col.gameObject, new GameObject());
     }
 }
