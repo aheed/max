@@ -94,12 +94,12 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
     void Register()
     {
-        gameState.EnemyPlaneStatusChanged(gameObject, GetAltitude(), true);
+        gameState.AddEnemyPlane(gameObject, GetAltitude());
     }
 
     void Deregister()
     {
-        gameState.EnemyPlaneStatusChanged(gameObject, GetAltitude(), false);
+        gameState.RemoveEnemyPlane(gameObject);
     }
 
     void Deactivate()

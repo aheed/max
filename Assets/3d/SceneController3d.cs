@@ -178,6 +178,7 @@ public class SceneController3d : MonoBehaviour
         //var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
         var newRefObjPos = new Vector3(levelWidth / 2, 0f, refObjStartOffset);
         refobject.transform.position = newRefObjPos;
+        gameState = GameState.GetInstance();
 
         if (maxPlane == null)
         {
@@ -205,7 +206,6 @@ public class SceneController3d : MonoBehaviour
         roadNearEdgesZ = new();
         riverSegments = new();
         newLevelTask = null;
-        gameState = GameState.GetInstance();
         var stateContents = gameState.GetStateContents();
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 

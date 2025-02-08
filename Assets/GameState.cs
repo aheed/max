@@ -218,16 +218,15 @@ public class GameState : MonoBehaviour
         bombLandedPubSub.Publish(GameEvent.BOMB_LANDED, new BombLandedEventArgs { bomb = bomb, hitObject = hitObject });
     }
 
-    public void EnemyPlaneStatusChanged(GameObject enemyPlane, float altitude, bool active)
+    public void AddEnemyPlane(GameObject enemyPlane, float altitude)
     {
-        if (active)
-        {
-            gameStateContents.enemyPlaneAltitudes[enemyPlane] = altitude;
-        }
-        else
-        {
-            gameStateContents.enemyPlaneAltitudes.Remove(enemyPlane);
-        }
+        gameStateContents.enemyPlaneAltitudes[enemyPlane] = altitude;
+        pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
+    }
+
+    public void RemoveEnemyPlane(GameObject enemyPlane)
+    {
+        gameStateContents.enemyPlaneAltitudes.Remove(enemyPlane);
         pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
     }
 

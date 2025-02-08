@@ -391,7 +391,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public float GetHeight()
     {
         // todo: use box collider height
-        return Altitudes.planeHeight;
+        var collider = GetComponent<BoxCollider>();
+        return collider.size.y;
     }
 
     public float GetMoveX()

@@ -104,16 +104,12 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
     void Register()
     {
-        // Todo: implement this
-
-        //GameState.GetInstance().EnemyPlaneStatusChanged(this, true);
+        GameState.GetInstance().AddEnemyPlane(gameObject, transform.localPosition.y);
     }
 
     void Deregister()
     {
-        // Todo: implement this
-
-        //GameState.GetInstance().EnemyPlaneStatusChanged(this, false);
+        GameState.GetInstance().RemoveEnemyPlane(gameObject);
     }
 
     void Deactivate()
@@ -206,6 +202,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             GameState.GetInstance().IncrementTargetsHit();
         }
         crashed = true;
+        Deregister();
         crashCooldownSec = crashDurationSec;
         crashExplosionsLeft = crashExplosions;
 
