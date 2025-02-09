@@ -23,6 +23,9 @@ public enum GameEvent
     BIG_BANG,
     TARGET_HIT,
     VIEW_MODE_CHANGED,
+    BOMB_LANDED,
+    GAME_STATUS_CHANGED,
+    ENEMY_PLANE_STATUS_CHANGED,
 }
 
 public enum DamageIndex
@@ -39,6 +42,12 @@ public enum ViewMode
     TV_SIM,
 }
 
+public class BombLandedEventArgs
+{
+    public GameObject bomb;
+    public GameObject hitObject;
+}
+
 public class GameStateContents
 {
     public static Vector2[] windDirections = new Vector2[] {new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(-1f, 1f), new Vector2(-1f, 0f)};
@@ -46,6 +55,7 @@ public class GameStateContents
     public float speed = 0f;    
     public GameStatus gameStatus = GameStatus.ACCELERATING;
     public float altitude = 0f;
+    public float floorAltitude = 0f;
     public float fuel = 0f;
     public int bombs = 0;
     public int score = 0;
@@ -57,22 +67,20 @@ public class GameStateContents
     public int targetsHitMin;
     public List<EnemyHQ> enemyHQs;
     public LevelPrerequisite latestLevelPrereq;
-}
-
-public interface IGameStateObserver
-{
-    void OnGameStatusChanged(GameStatus gameStatus);
-    void OnGameEvent(GameEvent gameEvent);
-    void OnBombLanded(Bomb bomb, GameObject hitObject);
-    void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active);
+    public Dictionary<GameObject, float> enemyPlaneAltitudes;
+    public float maxAltitudeDiffForPlaneCollision;
 }
 
 public class GameState : MonoBehaviour
 {
+    public static Material carBlinkMaterial;
+    public static Material boatBlinkMaterial;
+    public static Material genericBlinkMaterial;
     public float maxSpeed = 2.0f;
     public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
-    public float minSafeAltitude = 0.3f;
+    public float minSafeAltitude = 0.2f;
+    public float riverAltitude = -0.3f;
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
@@ -88,20 +96,41 @@ public class GameState : MonoBehaviour
     public float startFuelQuotient = 0.90f;
     public int targetsHitMin1 = 10;
     public int targetsHitMin2 = 10;
-
     GameStateContents gameStateContents = new GameStateContents();
     public GameStateContents GetStateContents() => gameStateContents;
+    static GameState singletonInstance;
+    public Vector3 playerPosition;
+    private EventPubSubNoArg pubSub = new();
+    private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
 
-    List<IGameStateObserver> observers = new List<IGameStateObserver>();
-
-    public void RegisterObserver(IGameStateObserver observer)
+    public void SetPlaneHeights(float playerPlaneHeight, float enemyPlaneHeight)
     {
-        observers.Add(observer);
+        gameStateContents.maxAltitudeDiffForPlaneCollision =
+            (playerPlaneHeight + enemyPlaneHeight) / 2;
+    }
+    
+    public void Subscribe(GameEvent gameEvent, Action callback)
+    {
+        pubSub.Subscribe(gameEvent, callback);
     }
 
-    public void UnregisterObserver(IGameStateObserver observer)
+    public void Unsubscribe(GameEvent gameEvent, Action callback)
     {
-        observers.Remove(observer);
+        pubSub.Unsubscribe(gameEvent, callback);
+    }
+
+    public void SubscribeToBombLandedEvent(Action<BombLandedEventArgs> callback)
+    {
+        bombLandedPubSub.Subscribe(GameEvent.BOMB_LANDED, callback);
+    }
+
+    public static GameState GetInstance()
+    {
+        if (singletonInstance == null)
+        {
+            singletonInstance = FindAnyObjectByType<GameState>();
+        }
+        return singletonInstance;
     }
 
     public void SetStatus(GameStatus gameStatus)
@@ -113,10 +142,7 @@ public class GameState : MonoBehaviour
 
         gameStateContents.gameStatus = gameStatus;
 
-        foreach (var observer in observers)
-        {
-            observer.OnGameStatusChanged(gameStatus);
-        }
+        pubSub.Publish(GameEvent.GAME_STATUS_CHANGED);
     }
 
     public void SetSpeed(float speed)
@@ -179,26 +205,29 @@ public class GameState : MonoBehaviour
 
     public void ReportEvent(GameEvent gameEvent)
     {
-        foreach (var observer in observers)
-        {
-            observer.OnGameEvent(gameEvent);
-        }
+        pubSub.Publish(gameEvent);
     }
 
     public void BombLanded(Bomb bomb, GameObject hitObject = null)
     {
-        foreach (var observer in observers)
-        {
-            observer.OnBombLanded(bomb, hitObject);
-        }
+        BombLanded(bomb == null ? null : bomb.gameObject, hitObject);
     }
 
-    public void EnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active)
+    public void BombLanded(GameObject bomb, GameObject hitObject = null)
     {
-        foreach (var observer in observers)
-        {
-            observer.OnEnemyPlaneStatusChanged(enemyPlane, active);
-        }
+        bombLandedPubSub.Publish(GameEvent.BOMB_LANDED, new BombLandedEventArgs { bomb = bomb, hitObject = hitObject });
+    }
+
+    public void AddEnemyPlane(GameObject enemyPlane, float altitude)
+    {
+        gameStateContents.enemyPlaneAltitudes[enemyPlane] = altitude;
+        pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
+    }
+
+    public void RemoveEnemyPlane(GameObject enemyPlane)
+    {
+        gameStateContents.enemyPlaneAltitudes.Remove(enemyPlane);
+        pubSub.Publish(GameEvent.ENEMY_PLANE_STATUS_CHANGED);
     }
 
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
@@ -252,6 +281,7 @@ public class GameState : MonoBehaviour
         gameStateContents.speed = 0f;
         gameStateContents.gameStatus = GameStatus.REFUELLING;
         gameStateContents.altitude = minAltitude;
+        gameStateContents.floorAltitude = minAltitude;
         gameStateContents.fuel = maxFuel * startFuelQuotient;
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;
@@ -260,6 +290,19 @@ public class GameState : MonoBehaviour
         gameStateContents.targetsHit = 0;
         gameStateContents.targetsHitMin = 0;
         gameStateContents.latestLevelPrereq = null;
+        gameStateContents.enemyHQs = null;
+        gameStateContents.enemyPlaneAltitudes = new();        
+    }
+
+    public bool AnyEnemyPlaneAtCollisionAltitude()
+    {
+        return gameStateContents.enemyPlaneAltitudes.Values.Any(alt => 
+            Math.Abs(alt - gameStateContents.altitude) < gameStateContents.maxAltitudeDiffForPlaneCollision);
+    }
+
+    public bool AnyEnemyPlanes()
+    {
+        return gameStateContents.enemyPlaneAltitudes.Any();
     }
 
     // Start is called before the first frame update

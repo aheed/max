@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class prop : MonoBehaviour, IGameStateObserver
+public class prop : MonoBehaviour
 {
     public Sprite leftSprite;
     public Sprite rightSprite;
@@ -15,7 +15,8 @@ public class prop : MonoBehaviour, IGameStateObserver
     void Start()
     {
         spriteR = gameObject.GetComponent<SpriteRenderer>();
-        FindAnyObjectByType<GameState>().RegisterObserver(this);
+        gameState = GameState.GetInstance();
+        gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
     }
 
     // Update is called once per frame
@@ -31,16 +32,12 @@ public class prop : MonoBehaviour, IGameStateObserver
 
     void OnDestroy()
     {
-        FindAnyObjectByType<GameState>().UnregisterObserver(this);
+        gameState.Unsubscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    void OnGameStatusChanged()
     {
+        var gameStatus = gameState.GetStateContents().gameStatus;
         gameObject.SetActive(!(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK));
     }
-
-    public void OnGameEvent(GameEvent _) {}
-
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) {}
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }

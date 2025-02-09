@@ -127,7 +127,7 @@ Disable/destroy out-of-range flack guns*
 Keep all objects out of range deactivated. Reactivate when getting in range.*
   Big square collider, viewport size?
     It should be possible for a disabled game object to collide, as long as its collider is not disabled.
-  Better than a collider: keep one collection of game objects per row
+  Better than a collider: keep one collection of game objects per row*
     => Easy to detect when a new row is in range or out of range. Objects and their colliders can be turned off when out of range.
        Objects going out of range can be immediately destroyed.
      This is also a good way to trigger cars driving on the roads just as the plane passes.
@@ -150,7 +150,7 @@ Remove OUT_OF_FUEL state?
 bug: no shadows shown for enemy planes in DEAD state*
 Enemy aircraft*
 Collided state*
-Format Dashboard
+Format Dashboard*
 Set/blink dashboard background color based on state*
 Tree/house collisions*
 Bomb effect*
@@ -187,7 +187,7 @@ Bug: sometimes collision with invisible enemy planes. Inactive ones from previou
 Make all ground/water objects uniform height, a configurable safe height.*
 Change airplane colliders from box to polygon
 Correct spelling flack->flak
-Head-on enemy planes
+Head-on enemy planes*
 
 ----------
 Do we need this?
@@ -227,7 +227,7 @@ Why is it not possible to hit boat2 with bombs??*
 
 Todo:
 (Cars arrive too late. Change level width or car timing.)
-Boats should collide with other boats? And bridges? Would be fun.
+Boats should collide with other boats? And bridges? Would be fun.*
 Sunk animation for boat1.*
 Vip animations for enemy planes, cars*
 Targets (vip bridges and houses)*
@@ -457,4 +457,9 @@ Balloon:
 Button bar:
   Reduce button vertical size => reduce risk of accidental clicks.
 
-Old/low end phone from 2019 runs the game at 25 fps (webgl). Optimizations needed.
+Optimizations needed
+  Old/low end phone from 2019 runs the game at 25 fps (webgl). 
+    Looks like sprite masks reduce performance. See profiler and online discussions.
+      ExpHouse is a villain?
+  FindAnyObjectByType seems expensive. Add a static method to find GameState instance?
+  UI updates take a lot of time

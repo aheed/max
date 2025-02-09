@@ -23,11 +23,11 @@ public enum GameStatus
 
 public class GameObjectCollection
 {
-    public float yCoord;
+    public float zCoord;
     public IEnumerable<GameObject> gameObjects;
 }
 
-public class SceneController : MonoBehaviour, IGameStateObserver
+public class SceneController : MonoBehaviour
 {
     public MaxControl maxPlanePrefab;
     public EnemyPlane enemyPlanePrefab;
@@ -525,7 +525,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
             ret[ytmp] = new GameObjectCollection {
-                yCoord = ytmp * cellHeight, // level relative coordinate
+                zCoord = ytmp * cellHeight, // level relative coordinate
                 gameObjects = new List<GameObject>()
             };
         }        
@@ -697,7 +697,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection {yCoord = goc.yCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -744,12 +744,14 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         var refObjStartOffset = 0.8f;
         var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
         refobject.transform.position = newRefObjPos;
+        gameState = GetGameState();
 
         if (maxPlane == null)
         {
             maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
             maxPlane.refObject = refobject.transform;            
             AddPlaneShadow(maxPlane.transform);
+            gameState.SetPlaneHeights(maxPlane.GetHeight(), Altitudes.enemyPlaneHeight);
         }
         maxPlane.transform.localPosition = Vector3.zero;
 
@@ -768,8 +770,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-        newLevelTask = null;
-        gameState = GetGameState();
+        newLevelTask = null;        
         var stateContents = gameState.GetStateContents();
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 
@@ -781,7 +782,6 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         CreateLevel();
         PreventRelanding();
-        stateContents.enemyHQs = null;
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
         gameState.ReportEvent(GameEvent.START);
     }
@@ -894,8 +894,13 @@ public class SceneController : MonoBehaviour, IGameStateObserver
     {
         if (gameState == null)
         {
-            gameState = FindAnyObjectByType<GameState>();
-            gameState.RegisterObserver(this);
+            gameState = GameState.GetInstance();
+            gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+            gameState.Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequested);
+            gameState.Subscribe(GameEvent.START, OnGameStart);
+            gameState.Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
+            gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
+            gameState.SubscribeToBombLandedEvent(OnBombLandedCallback);
         }
         return gameState;
     }
@@ -1021,7 +1026,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             }
         }
 
-        while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().yCoord)
+        while (pendingActivation.Count > 0 && refobject.transform.position.y + activationDistance > pendingActivation.First().zCoord)
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
             var activeCollection = pendingActivation.First();
@@ -1032,7 +1037,7 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             break;
         }
 
-        while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().yCoord)
+        while (activeObjects.Count > 0 && refobject.transform.position.y - deactivationDistance > activeObjects.First().zCoord)
         {
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
 
@@ -1209,8 +1214,9 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         refobject.transform.position += delta;
     }
 
-    public void OnGameStatusChanged(GameStatus gameStatus)
+    void OnGameStatusChanged()
     {
+        var gameStatus = gameState.GetStateContents().gameStatus;
         Debug.Log($"New State: {gameStatus}");
         if(gameStatus == GameStatus.DEAD ||
            gameStatus == GameStatus.FINISHED)
@@ -1220,47 +1226,56 @@ public class SceneController : MonoBehaviour, IGameStateObserver
         }
     }
 
-    public void OnGameEvent(GameEvent gameEvent)
+    void OnRestartRequested()
     {
-        if (gameEvent == GameEvent.RESTART_REQUESTED)
+        if (restartCoolDownSeconds > 0f)
         {
-            if (restartCoolDownSeconds > 0f)
-            {
-                //Debug.Log("Too early to restart");
-                return;
-            }
-
-            Debug.Log("Starting a new game");
-
-            StartNewGame();            
+            //Debug.Log("Too early to restart");
+            return;
         }
-        else if (gameEvent == GameEvent.START)
-        {
-            gameState.SetSpeed(0f);
-            gameState.SetStatus(GameStatus.REFUELLING);
-        }
-        else if (gameEvent == GameEvent.BIG_DETONATION && maxCamera != null)
+
+        Debug.Log("Starting a new game");
+
+        StartNewGame();
+    }
+
+    void OnGameStart()
+    {
+        gameState.SetSpeed(0f);
+        gameState.SetStatus(GameStatus.REFUELLING);
+    }
+
+    void OnBigDetonation()
+    {
+        if (maxCamera != null)
         {
             maxCamera.OnDetonation();
         }
-        else if (gameEvent == GameEvent.VIEW_MODE_CHANGED && maxCamera != null)
+    }
+
+    void OnViewModeChanged()
+    {
+        if (maxCamera != null)
         {
             maxCamera.OnViewModeChanged();
             tvSimDocumentObject.OnViewModeChanged();
         }
     }
 
-    public void OnBombLanded(Bomb bomb, GameObject hitObject) 
+    void OnBombLandedCallback(BombLandedEventArgs args) =>
+        OnBombLandedCallbackInternal(args.bomb, args.hitObject);
+
+    void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject) 
     {
         if (hitObject == null)
         {
-            var prefab = IsOverRiver(bomb.GetPosition()) ? bombSplashPrefab : bombCraterPrefab;
-            if (IsOverRoad(bomb.GetPosition()))
+            var prefab = IsOverRiver(bomb.transform.position) ? bombSplashPrefab : bombCraterPrefab;
+            if (IsOverRoad(bomb.transform.position))
             {
                 prefab = mushroomCloudPrefab;
                 //todo: report road or bridge hit for scoring
             }
-            Vector3 craterPosition = bomb.GetPosition();
+            Vector3 craterPosition = bomb.transform.position;
             craterPosition.z = -0.25f;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
             if (prefab != bombSplashPrefab)
@@ -1285,6 +1300,4 @@ public class SceneController : MonoBehaviour, IGameStateObserver
             Destroy(bomb.gameObject);
         }
     }
-
-    public void OnEnemyPlaneStatusChanged(EnemyPlane enemyPlane, bool active) {}
 }
