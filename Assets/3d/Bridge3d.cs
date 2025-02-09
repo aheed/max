@@ -12,12 +12,6 @@ public class Bridge3d : MonoBehaviour, IVip
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetVip()
     {
         var targetPosition = transform.position;
