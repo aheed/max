@@ -47,7 +47,7 @@ public class Boat3d2 : MonoBehaviour, IVip
         transform.position = position;        
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         //Debug.Log($"3D Boat 2 Hit!!!!!! Collided with {col.gameObject.name}");
         if (col.gameObject.name.StartsWith("riversection"))

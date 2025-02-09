@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec7e8a0e556115de883651736d532eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMaterial: {fileID: 2100000, guid: 0d4220fd78d2484e9a473549a21be21d, type: 2}
   normalMaterial: {fileID: 2100000, guid: 985001d2460976e77880f5d4a6553a54, type: 2}
   refObject: {fileID: 0}
   maxDistance: 8
@@ -75,7 +74,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

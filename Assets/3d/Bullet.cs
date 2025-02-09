@@ -28,11 +28,12 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         //Debug.Log($"3D Hit!!!!!!!!!!!!!!! Bullet at altitude {transform.position.z} collided with {col.gameObject.name}");
         if (col.gameObject.name.StartsWith("Player") || 
             col.gameObject.name.StartsWith("flack_expl") ||
+            col.gameObject.name.StartsWith("FlakEx") ||
             col.gameObject.name.StartsWith("bomb") ||
             col.gameObject.name.StartsWith("balloon"))
         {

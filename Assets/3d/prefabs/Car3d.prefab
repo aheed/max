@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4505502160677425541}
   - component: {fileID: 3150033924233586620}
+  - component: {fileID: 2212218869653801368}
   m_Layer: 0
   m_Name: Car3d
   m_TagString: Untagged
@@ -45,9 +46,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 974ee9b13626f7b519f2a894c0e06c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMaterial: {fileID: 2100000, guid: 2556b1c4abaddb886bdbd620b4ad07cd, type: 2}
   normalMaterial: {fileID: 2100000, guid: b6cbbd2b638fa00a9aa07080ba8b2f94, type: 2}
   speedFactor: 1
+--- !u!65 &2212218869653801368
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8832076570241514882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.4739406, y: 0.15333056, z: 0.19584501}
+  m_Center: {x: 0.00062835217, y: 0.057380468, z: 0.000033706427}
 --- !u!1001 &9172262464729270642
 PrefabInstance:
   m_ObjectHideFlags: 0

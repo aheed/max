@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 810600442372572048}
   - component: {fileID: 8069511415256590297}
   - component: {fileID: 4375250994198261597}
-  - component: {fileID: 3055042672204390757}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -609,28 +608,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6788837685510052351}
   m_Mesh: {fileID: 0}
---- !u!64 &3055042672204390757
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6788837685510052351}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7082249828359199696
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +621,6 @@ GameObject:
   - component: {fileID: 3004022803297039373}
   - component: {fileID: 4045839073995855920}
   - component: {fileID: 2127729690055161920}
-  - component: {fileID: 6076360196967770437}
   m_Layer: 0
   m_Name: Trunk
   m_TagString: Untagged
@@ -1743,28 +1719,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7082249828359199696}
   m_Mesh: {fileID: 0}
---- !u!64 &6076360196967770437
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7082249828359199696}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &9099390254065398501
 GameObject:
   m_ObjectHideFlags: 0
@@ -1775,7 +1729,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8123997673837936428}
   - component: {fileID: 537393514606488417}
-  - component: {fileID: -6710476159987863720}
   m_Layer: 0
   m_Name: Tree2
   m_TagString: Untagged
@@ -1814,36 +1767,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.15, y: 0.3, z: 0.15}
   m_Center: {x: 0, y: 0.15, z: 0}
---- !u!54 &-6710476159987863720
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9099390254065398501}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1

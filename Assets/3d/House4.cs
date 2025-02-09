@@ -50,7 +50,7 @@ public class House4 : MonoBehaviour, IVip
         return target != null;
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {        
         //Debug.Log($"House Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
         

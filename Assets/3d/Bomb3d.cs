@@ -29,7 +29,7 @@ public class Bomb3d : MonoBehaviour
     void Impact()
     {
         // Todo: handle bomb impact
-        Debug.Log($"********* 3D Bomb Impact!!!!!!!!!!!!!!! at {transform.position}");
+        //Debug.Log($"********* 3D Bomb Impact!!!!!!!!!!!!!!! at {transform.position}");
         GameState.GetInstance().BombLanded(gameObject, null);
         //Destroy(gameObject);
     }
@@ -50,7 +50,7 @@ public class Bomb3d : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         //Debug.Log($"********* 3D Bomb Hit!!!!!!!!!!!!!!! with {col.gameObject.name}");
 

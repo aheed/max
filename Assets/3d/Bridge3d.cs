@@ -29,9 +29,9 @@ public class Bridge3d : MonoBehaviour, IVip
         return target != null;
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {        
-        Debug.Log($"*** Bridge Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
+        //Debug.Log($"***** Bridge Trigger Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
         
         if (!col.gameObject.name.StartsWith("Bomb"))
         {

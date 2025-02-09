@@ -479,7 +479,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         offsetZ = 0f;
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         //Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
 

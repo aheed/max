@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3273479791151766247}
   - component: {fileID: 9213723338694841791}
   - component: {fileID: 2731675072142211129}
-  - component: {fileID: 6834398167002219173}
   m_Layer: 0
   m_Name: Tail
   m_TagString: Untagged
@@ -983,28 +982,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599212631839748506}
   m_Mesh: {fileID: 0}
---- !u!64 &6834398167002219173
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 599212631839748506}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &636072421208181532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,7 +995,6 @@ GameObject:
   - component: {fileID: 5164120113268243447}
   - component: {fileID: 7251028220114482808}
   - component: {fileID: 3956056830739331986}
-  - component: {fileID: 6424009290473612611}
   m_Layer: 0
   m_Name: WingUpper
   m_TagString: Untagged
@@ -1483,28 +1459,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 636072421208181532}
   m_Mesh: {fileID: 0}
---- !u!64 &6424009290473612611
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636072421208181532}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1028622499537684450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,7 +1504,6 @@ GameObject:
   - component: {fileID: 3518962146941716514}
   - component: {fileID: 2965224297263783410}
   - component: {fileID: 3126413564534283524}
-  - component: {fileID: 1297612779758643213}
   m_Layer: 0
   m_Name: WingLower
   m_TagString: Untagged
@@ -2015,28 +1968,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3711389786721045044}
   m_Mesh: {fileID: 0}
---- !u!64 &1297612779758643213
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3711389786721045044}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &3834978983797634921
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,7 +1981,6 @@ GameObject:
   - component: {fileID: 7710098839045364060}
   - component: {fileID: 1706481804870980573}
   - component: {fileID: 1683152364303601702}
-  - component: {fileID: 4305925880298363416}
   m_Layer: 0
   m_Name: ElevatorRight
   m_TagString: Untagged
@@ -2441,28 +2371,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3834978983797634921}
   m_Mesh: {fileID: 0}
---- !u!64 &4305925880298363416
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3834978983797634921}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &4167130331888601969
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,7 +2384,6 @@ GameObject:
   - component: {fileID: 1774820511308778162}
   - component: {fileID: 8435941443291116995}
   - component: {fileID: 144262039968872935}
-  - component: {fileID: 8718410509469750299}
   m_Layer: 0
   m_Name: Fuselage
   m_TagString: Untagged
@@ -4046,28 +3953,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4167130331888601969}
   m_Mesh: {fileID: 0}
---- !u!64 &8718410509469750299
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4167130331888601969}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &5814696699403774516
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,7 +4005,6 @@ GameObject:
   - component: {fileID: 2167663141538957813}
   - component: {fileID: 6734598928079121048}
   - component: {fileID: 1906004602805793548}
-  - component: {fileID: 1708086959527871822}
   m_Layer: 0
   m_Name: Stabilizer
   m_TagString: Untagged
@@ -4511,28 +4395,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6220694597053571204}
   m_Mesh: {fileID: 0}
---- !u!64 &1708086959527871822
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6220694597053571204}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &8357929506114032732
 GameObject:
   m_ObjectHideFlags: 0
@@ -4546,7 +4408,6 @@ GameObject:
   - component: {fileID: 5312468679069801332}
   - component: {fileID: 6268653254021158818}
   - component: {fileID: 9136264026177249455}
-  - component: {fileID: 7922801967717139058}
   m_Layer: 0
   m_Name: Prop
   m_TagString: Untagged
@@ -5848,28 +5709,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8357929506114032732}
   m_Mesh: {fileID: 0}
---- !u!64 &7922801967717139058
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8357929506114032732}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &8456516798618654292
 GameObject:
   m_ObjectHideFlags: 0
@@ -5883,7 +5722,6 @@ GameObject:
   - component: {fileID: 1256167628070356483}
   - component: {fileID: 7329721564285068043}
   - component: {fileID: 8817157280477941250}
-  - component: {fileID: 7569027143639700228}
   m_Layer: 0
   m_Name: ElevatorLeft
   m_TagString: Untagged
@@ -6273,26 +6111,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8456516798618654292}
-  m_Mesh: {fileID: 0}
---- !u!64 &7569027143639700228
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8456516798618654292}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
