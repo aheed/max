@@ -128,7 +128,7 @@ public class SceneBuilder : MonoBehaviour
 
         // Object pools. Could be injected from outside or created earlier.
         var riverSectionManagerFactory = new ObjectManagerFactory(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var flakGunManagerFactory = new ObjectManagerFactory(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var flakGunManagerFactory = new ObjectManagerFactory(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack, true);
         var tankManagerFactory = new ObjectManagerFactory(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var tree1ManagerFactory = new ObjectManagerFactory(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var tree2ManagerFactory = new ObjectManagerFactory(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
@@ -138,7 +138,7 @@ public class SceneBuilder : MonoBehaviour
         var vehicle2ManagerFactory = new ObjectManagerFactory(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
         var hangarManagerFactory = new ObjectManagerFactory(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var ballonShadowManagerFactory = new ObjectManagerFactory(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var ballonShadowManagerFactory = new ObjectManagerFactory(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var carManagerFactory = new ObjectManagerFactory(carPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
 
         // Landing Strip

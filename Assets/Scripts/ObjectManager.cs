@@ -76,6 +76,8 @@ public class ObjectManagerFactory
 
     private Transform parent;
 
+    private bool deactivateOnRelease;
+
     // Collection checks will throw errors if we try to release an item that is already in the pool.
     public bool collectionChecks = true;
     public int maxPoolSize = 200;
@@ -101,11 +103,12 @@ public class ObjectManagerFactory
         }
     }
 
-    public ObjectManagerFactory(GameObject prefab, Transform parent, PoolType poolType)
+    public ObjectManagerFactory(GameObject prefab, Transform parent, PoolType poolType, bool deactivateOnRelease = false)
     {
         this.prefab = prefab;
         this.parent = parent;
         this.poolType = poolType;
+        this.deactivateOnRelease = deactivateOnRelease;
     }
 
     GameObject CreatePooledItem()
@@ -116,13 +119,17 @@ public class ObjectManagerFactory
     // Called when an item is returned to the pool using Release
     void OnReturnedToPool(GameObject gameObj)
     {
-        gameObj.SetActive(false);
+        if (deactivateOnRelease) {
+            gameObj.SetActive(false);
+        }
     }
 
     // Called when an item is taken from the pool using Get
     void OnTakeFromPool(GameObject gameObj)
     {
-        gameObj.SetActive(true);
+        if (deactivateOnRelease) {
+            gameObj.SetActive(true);
+        }
     }
 
     // If the pool capacity is reached then any items returned will be destroyed.
