@@ -138,7 +138,7 @@ public class SceneBuilder : MonoBehaviour
         var tree2ManagerFactory = new ObjectManagerFactory();
         tree2ManagerFactory.Initialize(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var boat1ManagerFactory = new ObjectManagerFactory();
-        boat1ManagerFactory.Initialize(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        boat1ManagerFactory.Initialize(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var boat2ManagerFactory = new ObjectManagerFactory();
         boat2ManagerFactory.Initialize(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
         var vehicle1ManagerFactory = new ObjectManagerFactory();
