@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -449,9 +450,10 @@ public class SceneController3d : MonoBehaviour
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
 
             var collection = activeObjects.First();
-            foreach (var gameObject in collection.gameObjects)
+            
+            foreach (var managedObject in collection.gameObjects)
             {
-                Destroy(gameObject);
+                managedObject.Release();
             }
 
             activeObjects.RemoveAt(0);

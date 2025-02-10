@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public enum GameStatus
 {
@@ -19,12 +20,6 @@ public enum GameStatus
     REPAIRING,
     DEAD,
     FINISHED  // Rule Britannia!
-}
-
-public class GameObjectCollection
-{
-    public float zCoord;
-    public IEnumerable<GameObject> gameObjects;
 }
 
 public class SceneController : MonoBehaviour
@@ -127,8 +122,8 @@ public class SceneController : MonoBehaviour
     float landingStripTopY;
     float landingStripWidth;
     GameState gameState;
-    List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
-    List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
+    List<GameObjectCollectionOld> pendingActivation = new();
+    List<GameObjectCollectionOld> activeObjects = new();
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
@@ -211,7 +206,7 @@ public class SceneController : MonoBehaviour
 
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public List<GameObjectCollection> PopulateScene(LevelContents levelContents)
+    public List<GameObjectCollectionOld> PopulateScene(LevelContents levelContents)
     {
         GameStateContents stateContents = gameState.GetStateContents();
         float cellWidth = levelWidth / LevelContents.gridWidth;
@@ -521,10 +516,10 @@ public class SceneController : MonoBehaviour
         prMeshFilter.mesh = prMesh;
         prMeshFilterWide.mesh = prMeshWide;
 
-        GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
+        GameObjectCollectionOld[] ret = new GameObjectCollectionOld[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            ret[ytmp] = new GameObjectCollection {
+            ret[ytmp] = new GameObjectCollectionOld {
                 zCoord = ytmp * cellHeight, // level relative coordinate
                 gameObjects = new List<GameObject>()
             };
@@ -697,7 +692,7 @@ public class SceneController : MonoBehaviour
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollectionOld {zCoord = goc.zCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
