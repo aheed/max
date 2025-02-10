@@ -127,32 +127,19 @@ public class SceneBuilder : MonoBehaviour
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        var riverSectionManagerFactory = new ObjectManagerFactory();
-        riverSectionManagerFactory.Initialize(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var flakGunManagerFactory = new ObjectManagerFactory();
-        flakGunManagerFactory.Initialize(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var tankManagerFactory = new ObjectManagerFactory();
-        tankManagerFactory.Initialize(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var tree1ManagerFactory = new ObjectManagerFactory();
-        tree1ManagerFactory.Initialize(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var tree2ManagerFactory = new ObjectManagerFactory();
-        tree2ManagerFactory.Initialize(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var boat1ManagerFactory = new ObjectManagerFactory();
-        boat1ManagerFactory.Initialize(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var boat2ManagerFactory = new ObjectManagerFactory();
-        boat2ManagerFactory.Initialize(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var vehicle1ManagerFactory = new ObjectManagerFactory();
-        vehicle1ManagerFactory.Initialize(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var vehicle2ManagerFactory = new ObjectManagerFactory();
-        vehicle2ManagerFactory.Initialize(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var enemyHangarManagerFactory = new ObjectManagerFactory();
-        enemyHangarManagerFactory.Initialize(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var hangarManagerFactory = new ObjectManagerFactory();
-        hangarManagerFactory.Initialize(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var ballonShadowManagerFactory = new ObjectManagerFactory();
-        ballonShadowManagerFactory.Initialize(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var carManagerFactory = new ObjectManagerFactory();
-        carManagerFactory.Initialize(carPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var riverSectionManagerFactory = new ObjectManagerFactory(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var flakGunManagerFactory = new ObjectManagerFactory(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var tankManagerFactory = new ObjectManagerFactory(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var tree1ManagerFactory = new ObjectManagerFactory(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var tree2ManagerFactory = new ObjectManagerFactory(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var boat1ManagerFactory = new ObjectManagerFactory(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        var boat2ManagerFactory = new ObjectManagerFactory(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var vehicle1ManagerFactory = new ObjectManagerFactory(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var vehicle2ManagerFactory = new ObjectManagerFactory(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var enemyHangarManagerFactory = new ObjectManagerFactory(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var hangarManagerFactory = new ObjectManagerFactory(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var ballonShadowManagerFactory = new ObjectManagerFactory(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var carManagerFactory = new ObjectManagerFactory(carPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
 
         // Landing Strip
         {

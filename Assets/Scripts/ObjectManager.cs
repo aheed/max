@@ -62,18 +62,6 @@ public class SimpleObjectManager : IObjectPool<GameObject>
     }
 }
 
-// ObjectManagerFactory
-// Creates Pools of GameObjects (objects implementing IObjectPool<GameObject>)
-// option: kind of manager, unpooled/object pool
-// option: max pool size
-// prefab
-// No need to write a new ManagedObject class. Use PooledObject<T> instead.
-//   Actually we seem to need it afterall. PooledObject does not implement IDisposable (?) or anything equivalent.
-//  
-/// </summary>
-// ObjectManagerFactory could be a generic class, but I see no need for managing anything other than GameObjects.
-// One ObjectManagerFactory per prefab => one object manager per prefab.
-
 public class ObjectManagerFactory
 {
     public enum PoolType
@@ -113,7 +101,7 @@ public class ObjectManagerFactory
         }
     }
 
-    public void Initialize(GameObject prefab, Transform parent, PoolType poolType)
+    public ObjectManagerFactory(GameObject prefab, Transform parent, PoolType poolType)
     {
         this.prefab = prefab;
         this.parent = parent;
@@ -139,7 +127,6 @@ public class ObjectManagerFactory
     // We can control what the destroy behavior does, here we destroy the GameObject.
     void OnDestroyPoolObject(GameObject gameObj)
     {
-        //Destroy(gameObj);
         GameObject.Destroy(gameObj);
     }
 }
