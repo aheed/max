@@ -114,13 +114,15 @@ public class ObjectManagerFactory
     }
 
     // Called when an item is returned to the pool using Release
-    void OnReturnedToPool(GameObject system)
+    void OnReturnedToPool(GameObject gameObj)
     {
+        gameObj.SetActive(false);
     }
 
     // Called when an item is taken from the pool using Get
-    void OnTakeFromPool(GameObject system)
+    void OnTakeFromPool(GameObject gameObj)
     {
+        gameObj.SetActive(true);
     }
 
     // If the pool capacity is reached then any items returned will be destroyed.
