@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boat1 : MonoBehaviour, IPositionObservable
+public class Boat1 : ManagedObject3, IPositionObservable
 {
     public GameObject sunkBoatPrefab;
     GameState gameState;

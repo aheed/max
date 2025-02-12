@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class boat2 : MonoBehaviour, IPositionObservable, IVip
+public class boat2 : ManagedObject3, IPositionObservable, IVip
 {
     public GameObject sunkBoatPrefab;
     public float speed = 0.8f;

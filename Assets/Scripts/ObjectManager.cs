@@ -71,12 +71,13 @@ public class ManagedObject3 : MonoBehaviour
         set => releaser = value;
     }
 
-    // Overridable methods
-    public virtual void Deactivate() {}
-    public virtual void Reactivate() {}
-    public virtual void Release() {
+    public void Release() {
         releaser.Release();
     }
+
+    // Overridable methods
+    public virtual void Deactivate() {}
+    public virtual void Reactivate() {}    
 }
 
 public class PooledObjectReleaser : IManagedObjectReleaser
@@ -110,6 +111,22 @@ public class DestroyObjectReleaser : IManagedObjectReleaser
     public void Release()
     {
         GameObject.Destroy(managedObj);
+        managedObj = null;
+    }
+}
+
+public class DeactivateObjectReleaser : IManagedObjectReleaser
+{
+    ManagedObject3 managedObj;
+
+    public DeactivateObjectReleaser(ManagedObject3 gameObj)
+    {
+        this.managedObj = gameObj;
+    }
+
+    public void Release()
+    {
+        managedObj.Deactivate();
         managedObj = null;
     }
 }
@@ -160,6 +177,39 @@ public class SimpleObjectManager : IObjectPool<GameObject>
     }
 
     public void Release(GameObject item)
+    {
+        GameObject.Destroy(item);
+    }
+}
+
+public class SimpleObjectManager3 : IObjectPool<ManagedObject3>
+{
+    private ManagedObject3 prefab;
+
+    private Transform parent;
+
+    public SimpleObjectManager3(ManagedObject3 prefab, Transform parent)
+    {
+        this.prefab = prefab;
+        this.parent = parent;
+    }
+
+    public int CountInactive {get { return 0; }}
+
+    public void Clear() {}
+
+    public ManagedObject3 Get()
+    {
+        return GameObject.Instantiate(prefab, parent);
+    }
+
+    public PooledObject<ManagedObject3> Get(out ManagedObject3 v)
+    {
+        v = Get();
+        return new PooledObject<ManagedObject3>(v, this);
+    }
+
+    public void Release(ManagedObject3 item)
     {
         GameObject.Destroy(item);
     }
@@ -353,15 +403,14 @@ public class ObjectManagerFactory3
         {
             if (m_Pool == null)
             {
-                /*
                 if (poolType == PoolType.None)
                 {
-                    m_Pool = new SimpleObjectManager(prefab, parent);
+                    m_Pool = new SimpleObjectManager3(prefab, parent);
                 }
                 else
-                {*/
+                {
                     m_Pool = new ObjectPool<ManagedObject3>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
-                //}
+                }
             }
             return m_Pool;
         }

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlackGun : MonoBehaviour, IPositionObservable
+public class FlackGun : ManagedObject3, IPositionObservable
 {
     public GameObject flackProjectilePrefab;
+    public Sprite normalSprite;
     public Sprite shotSprite;
     public float avgTimeToShootSeconds = 5.0f;
     float timeToShoot = -1.0f;
@@ -26,14 +27,8 @@ public class FlackGun : MonoBehaviour, IPositionObservable
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName.StartsWith("bullet"))
         {
-            spriteR.sprite = shotSprite;
-            var collider = gameObject.GetComponent<Collider2D>();
-            if (collider != null)
-            {
-                collider.enabled = false;
-            }
-            alive = false;
-            var gameState = FindAnyObjectByType<GameState>();
+            Deactivate();
+            var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
@@ -76,4 +71,36 @@ public class FlackGun : MonoBehaviour, IPositionObservable
     public Vector2 GetPosition() => transform.position;
     public float GetAltitude() => Altitudes.strafeMaxAltitude / 2;
     public float GetHeight() => Altitudes.strafeMaxAltitude;
+
+    // Overrides
+
+    public override void Deactivate()
+    {
+        if (!alive)
+        {
+            return;
+        }
+        alive = false;
+
+        spriteR.sprite = shotSprite;
+        if (gameObject.TryGetComponent<Collider2D>(out var collider))
+        {
+            collider.enabled = false;
+        }
+    }
+
+    public override void Reactivate()
+    {
+        if (alive)
+        {
+            return;
+        }
+        alive = true;
+
+        spriteR.sprite = normalSprite;
+        if (gameObject.TryGetComponent<Collider2D>(out var collider))
+        {
+            collider.enabled = true;
+        }
+    }
 }

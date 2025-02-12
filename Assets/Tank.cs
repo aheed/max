@@ -62,7 +62,7 @@ public class Tank : ManagedObject3, IPositionObservable
         spriteR.sprite = normalSprite;
         if (gameObject.TryGetComponent<Collider2D>(out var collider))
         {
-            collider.enabled = false;
+            collider.enabled = true;
         }
     }
 }

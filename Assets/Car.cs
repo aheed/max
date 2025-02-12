@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class Car : MonoBehaviour, IVip
+public class Car : ManagedObject3, IVip
 {
     public float speedFactor = 1.0f;
     public Sprite[] sprites;
@@ -57,5 +57,11 @@ public class Car : MonoBehaviour, IVip
                 gameState.IncrementTargetsHit();
             }
         }
+    }
+
+    // Override
+    public override void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
