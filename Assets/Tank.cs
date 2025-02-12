@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tank : MonoBehaviour, IPositionObservable
+public class Tank : ManagedObject3, IPositionObservable
 {
+    public Sprite normalSprite;
     public Sprite shotSprite;
     private SpriteRenderer spriteR;
+    private bool shot = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +20,9 @@ public class Tank : MonoBehaviour, IPositionObservable
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName.StartsWith("bullet"))
         {
+            shot = true;
             spriteR.sprite = shotSprite;
-            var collider = gameObject.GetComponent<Collider2D>();
-            if (collider != null)
+            if (gameObject.TryGetComponent<Collider2D>(out var collider))
             {
                 collider.enabled = false;
             }
@@ -47,4 +49,20 @@ public class Tank : MonoBehaviour, IPositionObservable
     public Vector2 GetPosition() => transform.position;
     public float GetAltitude() => Altitudes.strafeMaxAltitude / 2;
     public float GetHeight() => Altitudes.strafeMaxAltitude;
+
+    // Override
+    public override void Reactivate()
+    {
+        if (!shot)
+        {
+            return;
+        }
+        shot = false;
+
+        spriteR.sprite = normalSprite;
+        if (gameObject.TryGetComponent<Collider2D>(out var collider))
+        {
+            collider.enabled = false;
+        }
+    }
 }

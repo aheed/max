@@ -4,12 +4,11 @@ using UnityEngine;
 public class GameObjectCollection
 {
     public float zCoord;
-    public IEnumerable<IManagedObject> gameObjects;
+    public IEnumerable<IManagedObject> managedObjects;
 }
 
-// Todo: remove
-public class GameObjectCollectionOld
+public class GameObjectCollection3
 {
     public float zCoord;
-    public IEnumerable<GameObject> gameObjects;
+    public IEnumerable<IManagedObjectReleaser> managedObjects;
 }

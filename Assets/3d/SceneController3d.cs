@@ -124,7 +124,7 @@ public class SceneController3d : MonoBehaviour
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
-        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelStartZ, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelStartZ, managedObjects = goc.managedObjects})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
@@ -439,7 +439,7 @@ public class SceneController3d : MonoBehaviour
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.z} {pendingActivation.First().zCoord}");
             var activeCollection = pendingActivation.First();
             // Instantiate game objects, never mind return value
-            activeCollection.gameObjects = activeCollection.gameObjects.ToArray();
+            activeCollection.managedObjects = activeCollection.managedObjects.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -451,7 +451,7 @@ public class SceneController3d : MonoBehaviour
 
             var collection = activeObjects.First();
             
-            foreach (var managedObject in collection.gameObjects)
+            foreach (var managedObject in collection.managedObjects)
             {
                 managedObject.Release();
             }

@@ -122,7 +122,7 @@ public class SceneBuilder : MonoBehaviour
         {
             gameObjectCollections[ztmp] = new GameObjectCollection {
                 zCoord = ztmp * cellHeight, // level relative coordinate
-                gameObjects = new List<IManagedObject>()
+                managedObjects = new List<IManagedObject>()
             };
         }
 
@@ -532,7 +532,7 @@ public class SceneBuilder : MonoBehaviour
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                gameObjectCollections[road].gameObjects = gameObjectCollections[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
+                gameObjectCollections[road].managedObjects = gameObjectCollections[road].managedObjects.Concat((new GameObject[] {null}).Select(_ => 
                     {
                         var managedCar = new ManagedObject(carManagerFactory.Pool);
 
@@ -660,7 +660,7 @@ public class SceneBuilder : MonoBehaviour
                 return retInner;
             });
 
-            gameObjectCollections[ztmp].gameObjects = gameObjectCollections[ztmp].gameObjects.Concat(gameObjectsAtZ);
+            gameObjectCollections[ztmp].managedObjects = gameObjectCollections[ztmp].managedObjects.Concat(gameObjectsAtZ);
         }
 
         ret.gameObjects = gameObjectCollections.ToList();

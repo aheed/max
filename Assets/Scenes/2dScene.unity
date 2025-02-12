@@ -3423,7 +3423,7 @@ MonoBehaviour:
   landingStripPrefab: {fileID: 6914347553027331206, guid: 8d2c5b9c51ffa2cb0ac62431f2e22ab1, type: 3}
   housePrefab: {fileID: 3493713553119499354, guid: 6e34e51143b446ab78d8f44e8cfcb25d, type: 3}
   flackGunPrefab: {fileID: 6335712394028609315, guid: 8e54a54ab07adff4588f3c0bf096b091, type: 3}
-  tankPrefab: {fileID: 5775457082546256396, guid: a053b216515f468bdbd3490c9be8d377, type: 3}
+  tankPrefab: {fileID: -1240086557271661470, guid: a053b216515f468bdbd3490c9be8d377, type: 3}
   tree1Prefab: {fileID: 6927612615246131860, guid: 5f9a76b741a63f5108c7cd11b113577e, type: 3}
   tree2Prefab: {fileID: 5270899202881402391, guid: 0d96269627e824ccaa1fa3b2a1ce3139, type: 3}
   levelPrefab: {fileID: 5100127474471888836, guid: 389b9a52308d225e7a9a7180215c694f, type: 3}
@@ -3439,7 +3439,7 @@ MonoBehaviour:
   balloonPrefab: {fileID: 7169239955302212857, guid: c6b2bdc4c01f2cabe9b99b85d0beee84, type: 3}
   balloonShadowPrefab: {fileID: 232035690759565038, guid: 2f8ffab27d41ff96ba0727b962e42d4a, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}
-  carPrefab: {fileID: -8453423270569367082, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
+  carPrefab: {fileID: 2074072185544907474, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}
   hangarPrefab: {fileID: 3689998556768229833, guid: a7eb3e3f240af9eb99f8e4877e18965c, type: 3}
   enemyHqPrefab: {fileID: -3659939712663335449, guid: 7b51d7590579fd5e498650daeae818f6, type: 3}
