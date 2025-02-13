@@ -644,7 +644,7 @@ public class SceneBuilder : MonoBehaviour
                     retInner.Add(managedObject);
                 }
 
-                if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                /*if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
                     //var balloonShadowGameObject = Instantiate(balloonShadowPrefab, sceneInput.levelTransform);
                     var managedBalloonShadow = new ManagedObject(ballonShadowManagerFactory.Pool);
@@ -655,7 +655,7 @@ public class SceneBuilder : MonoBehaviour
                     Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
                     balloon.SetShadow(managedBalloonShadow.GameObject);
                     retInner.Add(managedBalloonShadow);
-                }
+                }*/
 
                 return retInner;
             });

@@ -107,7 +107,6 @@ public class SceneController3d : MonoBehaviour
         levels[currentLevelIndex] = newLevel;
         lastLevelStartZ = llcz;
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
-        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
 
     void CreateLevel()

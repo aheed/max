@@ -3436,15 +3436,15 @@ MonoBehaviour:
   vehicle2Prefab: {fileID: 6607165402514032523, guid: 331a7ea5d72c74a9b8db20e2e797361d, type: 3}
   enemyHangarPrefab: {fileID: -6166690957084238467, guid: f0a413ce2a2d91388b059fcddcdf3295, type: 3}
   parkedPlanePrefab: {fileID: 3620008788814347501, guid: 87b718656893e5f26a8107336c606d51, type: 3}
-  balloonPrefab: {fileID: 7169239955302212857, guid: c6b2bdc4c01f2cabe9b99b85d0beee84, type: 3}
-  balloonShadowPrefab: {fileID: 232035690759565038, guid: 2f8ffab27d41ff96ba0727b962e42d4a, type: 3}
+  balloonPrefab: {fileID: 2758623960026034339, guid: c6b2bdc4c01f2cabe9b99b85d0beee84, type: 3}
+  balloonShadowPrefab: {fileID: 5998742238145551755, guid: 2f8ffab27d41ff96ba0727b962e42d4a, type: 3}
   bridgePrefab: {fileID: 2438308562584782450, guid: a3f135951deccef9588fb757b1063606, type: 3}
   carPrefab: {fileID: -8453423270569367082, guid: e981adf2cebd134ae80a2bf113e460ff, type: 3}
   airstripEndPrefab: {fileID: 2216521997948183034, guid: 6dd446c4494e9b8d7b6c91dfb9168443, type: 3}
   hangarPrefab: {fileID: 3689998556768229833, guid: a7eb3e3f240af9eb99f8e4877e18965c, type: 3}
   enemyHqPrefab: {fileID: -3659939712663335449, guid: 7b51d7590579fd5e498650daeae818f6, type: 3}
   bigHousePrefab: {fileID: 94898319226785741, guid: 3762711ea378f301ba4fde2f4530af1a, type: 3}
-  balloonParentPrefab: {fileID: 4120745604916191142, guid: bec86724a7ea0fcbf8585549cc51968b, type: 3}
+  balloonParentPrefab: {fileID: 5963165186464578549, guid: bec86724a7ea0fcbf8585549cc51968b, type: 3}
   refobject: {fileID: 608621884}
   width: 1
   height: 1
@@ -3491,7 +3491,7 @@ MonoBehaviour:
   rightTrim: 20
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
-  startLevelType: 0
+  startLevelType: 3
 --- !u!1 &819863074
 GameObject:
   m_ObjectHideFlags: 0

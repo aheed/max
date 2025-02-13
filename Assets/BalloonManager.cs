@@ -1,14 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BalloonManager : MonoBehaviour
 {
     public float riseSpeed = 0.1f;
     public float deactivationDistance = 8f;
-    Transform refTransform;
-
-    public void SetRefTransform(Transform refTransform) => this.refTransform = refTransform;
 
     void Rise(float deltaAltitude) {
         Vector3 localPosition = transform.localPosition;
@@ -26,15 +21,5 @@ public class BalloonManager : MonoBehaviour
     void Update()
     {
         Rise(riseSpeed * Time.deltaTime);
-
-        // Destroy max one balloon
-        if (transform.childCount > 0)
-        {
-            var balloon = transform.GetChild(0).gameObject;
-            if (refTransform.position.y - deactivationDistance > balloon.transform.position.y)
-            {
-                Destroy(balloon);
-            }
-        }  
     }
 }

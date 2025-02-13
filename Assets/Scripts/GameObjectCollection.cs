@@ -11,5 +11,5 @@ public class GameObjectCollection
 public class GameObjectCollection3
 {
     public float zCoord;
-    public IEnumerable<Action> managedObjects;
+    public IEnumerable<Action> releaseActions;
 }

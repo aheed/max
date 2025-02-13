@@ -46,15 +46,15 @@ public class SceneController : MonoBehaviour
     public ManagedObject3 vehicle2Prefab;
     public ManagedObject3 enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
-    public GameObject balloonPrefab;
-    public GameObject balloonShadowPrefab;
+    public Balloon balloonPrefab;
+    public ManagedObject3 balloonShadowPrefab;
     public bridge bridgePrefab;
     public ManagedObject3 carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
-    public GameObject balloonParentPrefab;
+    public BalloonManager balloonParentPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -134,7 +134,7 @@ public class SceneController : MonoBehaviour
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
     TvSimDocument tvSimDocumentObject;
-    GameObject balloonParent;
+    BalloonManager balloonParent;
     ////
     
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -155,7 +155,6 @@ public class SceneController : MonoBehaviour
         levels[currentLevelIndex] = newLevel;
         lastLevelLowerEdgeY = llcy;
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
-        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
 
 
@@ -521,7 +520,7 @@ public class SceneController : MonoBehaviour
         {
             ret[ytmp] = new GameObjectCollection3 {
                 zCoord = ytmp * cellHeight, // level relative coordinate
-                managedObjects = new List<Action>()
+                releaseActions = new List<Action>()
             };
         }
 
@@ -536,7 +535,8 @@ public class SceneController : MonoBehaviour
         var vehicle2ManagerFactory = new ObjectManagerFactory3(vehicle2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory3(enemyHangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         //var hangarManagerFactory = new ObjectManagerFactory3(hangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
-        //var ballonShadowManagerFactory = new ObjectManagerFactory3(balloonShadowPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
+        var ballonManagerFactory = new ObjectManagerFactory3(balloonPrefab, balloonParent.transform, ObjectManagerFactory3.PoolType.Stack, false);
+        var ballonShadowManagerFactory = new ObjectManagerFactory3(balloonShadowPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack, false);
         var carManagerFactory = new ObjectManagerFactory3(carPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         
         // Roads
@@ -580,7 +580,7 @@ public class SceneController : MonoBehaviour
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].managedObjects = ret[road].managedObjects.Concat((new int[] {0}).Select(_ => 
+                ret[road].releaseActions = ret[road].releaseActions.Concat((new int[] {0}).Select(_ => 
                     {
                         //Car car = Instantiate(carPrefab, lvlTransform);
                         //var managedCar = new ManagedObject(carManagerFactory.Pool);
@@ -618,7 +618,7 @@ public class SceneController : MonoBehaviour
         for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
         {
             var ytmp = ytmpOuter; //capture for lazy evaluation
-            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
+            var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 ObjectManagerFactory3 selectedFactory3 = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
@@ -684,23 +684,29 @@ public class SceneController : MonoBehaviour
                     ret.Add(() => selectedFactory3.Pool.Release(managedObject));
                 }
 
-                /*if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    //var balloonShadowGameObject = Instantiate(balloonShadowPrefab, lvlTransform);
-                    var managedBalloonShadow = new ManagedObject(ballonShadowManagerFactory.Pool);                    
-                    managedBalloonShadow.GameObject.transform.localPosition = itemLocalTransform;
+                    var managedBalloonShadow = ballonShadowManagerFactory.Pool.Get();
+                    managedBalloonShadow.releaseAction = () => {
+                        ballonShadowManagerFactory.Pool.Release(managedBalloonShadow);
+                    };
+                    managedBalloonShadow.transform.localPosition = itemLocalTransform;
 
-                    var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
-                    balloonGameObject.transform.position = managedBalloonShadow.GameObject.transform.position;
-                    Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
-                    balloon.SetShadow(managedBalloonShadow.GameObject);
-                    ret.Add(managedBalloonShadow);
-                }*/
+                    var balloon = ballonManagerFactory.Pool.Get() as Balloon;
+                    balloon.transform.position = managedBalloonShadow.transform.position;
+                    balloon.Reactivate();
+                    balloon.SetShadow(managedBalloonShadow);
+                    balloon.releaseAction = balloon.Deactivate;
+                    ret.Add(() => {
+                        balloon.Deactivate();
+                        ballonManagerFactory.Pool.Release(balloon);
+                    });
+                }
 
                 return ret;
             });
 
-            ret[ytmp].managedObjects = ret[ytmp].managedObjects.Concat(gameObjectsAtY);
+            ret[ytmp].releaseActions = ret[ytmp].releaseActions.Concat(releaseActionsAtY);
         }
 
         return ret.ToList();
@@ -710,7 +716,7 @@ public class SceneController : MonoBehaviour
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection3 {zCoord = goc.zCoord + lastLevelLowerEdgeY, managedObjects = goc.managedObjects})
+        .Select(goc => new GameObjectCollection3 {zCoord = goc.zCoord + lastLevelLowerEdgeY, releaseActions = goc.releaseActions})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -1044,7 +1050,7 @@ public class SceneController : MonoBehaviour
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
             var activeCollection = pendingActivation.First();
             // Instantiate game objects, never mind return value
-            activeCollection.managedObjects = activeCollection.managedObjects.ToArray();
+            activeCollection.releaseActions = activeCollection.releaseActions.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -1055,9 +1061,9 @@ public class SceneController : MonoBehaviour
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
 
             var collection = activeObjects.First();
-            foreach (var managedObject in collection.managedObjects)
+            foreach (var releaseAction in collection.releaseActions)
             {
-                managedObject();
+                releaseAction();
             }
 
             activeObjects.RemoveAt(0);
