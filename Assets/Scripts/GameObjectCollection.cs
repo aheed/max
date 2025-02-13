@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,5 +11,5 @@ public class GameObjectCollection
 public class GameObjectCollection3
 {
     public float zCoord;
-    public IEnumerable<IManagedObjectReleaser> managedObjects;
+    public IEnumerable<Action> managedObjects;
 }

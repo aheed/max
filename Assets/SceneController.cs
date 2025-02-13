@@ -521,7 +521,7 @@ public class SceneController : MonoBehaviour
         {
             ret[ytmp] = new GameObjectCollection3 {
                 zCoord = ytmp * cellHeight, // level relative coordinate
-                managedObjects = new List<IManagedObjectReleaser>()
+                managedObjects = new List<Action>()
             };
         }
 
@@ -580,19 +580,19 @@ public class SceneController : MonoBehaviour
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].managedObjects = ret[road].managedObjects.Concat((new GameObject[] {null}).Select(_ => 
+                ret[road].managedObjects = ret[road].managedObjects.Concat((new int[] {0}).Select(_ => 
                     {
                         //Car car = Instantiate(carPrefab, lvlTransform);
                         //var managedCar = new ManagedObject(carManagerFactory.Pool);
                         var managedCar = carManagerFactory.Pool.Get();
-                        managedCar.Releaser = new DeactivateObjectReleaser(managedCar);
+                        managedCar.releaseAction = managedCar.Deactivate;
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
                         managedCar.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             InterfaceHelper.GetInterface<IVip>(managedCar.gameObject).SetVip();
                         }
-                        return new PooledObjectReleaser(carManagerFactory.Pool, managedCar);
+                        return new Action(() => carManagerFactory.Pool.Release(managedCar));
                     })
                 );
             }
@@ -620,7 +620,6 @@ public class SceneController : MonoBehaviour
             var ytmp = ytmpOuter; //capture for lazy evaluation
             var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                ObjectManagerFactory selectedFactory = null;
                 ObjectManagerFactory3 selectedFactory3 = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
@@ -665,13 +664,12 @@ public class SceneController : MonoBehaviour
                         break;
                 }
 
-                List<IManagedObjectReleaser> ret = new();
+                List<Action> ret = new();
                 var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
                 if (selectedFactory3 != null)
                 {
-                    //var managedObject = new ManagedObject(selectedFactory.Pool);                    
                     var managedObject = selectedFactory3.Pool.Get();
-                    managedObject.Releaser = new DeactivateObjectReleaser(managedObject);
+                    managedObject.releaseAction = managedObject.Deactivate;
                     managedObject.gameObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)
@@ -683,7 +681,7 @@ public class SceneController : MonoBehaviour
                         }
                     }
 
-                    ret.Add(new PooledObjectReleaser(selectedFactory3.Pool, managedObject));
+                    ret.Add(() => selectedFactory3.Pool.Release(managedObject));
                 }
 
                 /*if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
@@ -1059,7 +1057,7 @@ public class SceneController : MonoBehaviour
             var collection = activeObjects.First();
             foreach (var managedObject in collection.managedObjects)
             {
-                managedObject.Release();
+                managedObject();
             }
 
             activeObjects.RemoveAt(0);
@@ -1320,7 +1318,7 @@ public class SceneController : MonoBehaviour
     
         if (bomb != null)
         {
-            Destroy(bomb.gameObject);
+            Destroy(bomb);
         }
     }
 }

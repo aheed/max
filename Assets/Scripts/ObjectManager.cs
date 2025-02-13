@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -7,14 +8,6 @@ public interface IManagedObject
 
     //GameObject GameObject { get; }
 }
-
-/*public interface IManagedObject3
-{
-    IManagedObjectReleaser Releaser { get; set; } 
-    void Deactivate();
-
-    void Reactivate();
-}*/
 
 public interface IManagedObjectReleaser
 {
@@ -64,89 +57,19 @@ public class ManagedObject2 : MonoBehaviour, IManagedObject
 
 public class ManagedObject3 : MonoBehaviour
 {
-    public IManagedObjectReleaser releaser;
-
-    public IManagedObjectReleaser Releaser {
-        get => releaser;
-        set => releaser = value;
-    }
+    public Action releaseAction;
 
     public void Release() {
-        releaser.Release();
+        releaseAction();
     }
+
+    public void DestroyGameObject() {
+        GameObject.Destroy(gameObject);
+    }   
 
     // Overridable methods
     public virtual void Deactivate() {}
     public virtual void Reactivate() {}    
-}
-
-public class PooledObjectReleaser : IManagedObjectReleaser
-{
-    IObjectPool<ManagedObject3> pool;
-    ManagedObject3 managedObj;
-
-    public PooledObjectReleaser(IObjectPool<ManagedObject3> pool, ManagedObject3 gameObj)
-    {
-        this.pool = pool;
-        this.managedObj = gameObj;
-    }
-
-    public void Release()
-    {
-        pool.Release(managedObj);
-        pool = null;
-        managedObj = null;
-    }
-}
-
-public class DestroyObjectReleaser : IManagedObjectReleaser
-{
-    ManagedObject3 managedObj;
-
-    public DestroyObjectReleaser(ManagedObject3 gameObj)
-    {
-        this.managedObj = gameObj;
-    }
-
-    public void Release()
-    {
-        GameObject.Destroy(managedObj);
-        managedObj = null;
-    }
-}
-
-public class DeactivateObjectReleaser : IManagedObjectReleaser
-{
-    ManagedObject3 managedObj;
-
-    public DeactivateObjectReleaser(ManagedObject3 gameObj)
-    {
-        this.managedObj = gameObj;
-    }
-
-    public void Release()
-    {
-        managedObj.Deactivate();
-        managedObj = null;
-    }
-}
-
-public class NoopObjectReleaser : IManagedObjectReleaser
-{
-    private static NoopObjectReleaser instance;
-
-    public static NoopObjectReleaser Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new NoopObjectReleaser();
-            }
-            return instance;
-        }
-    }
-    public void Release() {}
 }
 
 public class SimpleObjectManager : IObjectPool<GameObject>
@@ -293,87 +216,6 @@ public class ObjectManagerFactory
     }
 }
 
-public class ObjectManagerFactory2
-{
-    public enum PoolType
-    {
-        None,
-        Stack
-    }
-
-    private PoolType poolType;
-
-    private ManagedObject2 prefab;
-
-    private Transform parent;
-
-    private bool deactivateOnRelease;
-
-    // Collection checks will throw errors if we try to release an item that is already in the pool.
-    public bool collectionChecks = true;
-    public int maxPoolSize = 200;
-
-    IObjectPool<ManagedObject2> m_Pool;
-
-    public IObjectPool<ManagedObject2> Pool
-    {
-        get
-        {
-            if (m_Pool == null)
-            {
-                /*
-                if (poolType == PoolType.None)
-                {
-                    m_Pool = new SimpleObjectManager(prefab, parent);
-                }
-                else
-                {*/
-                    m_Pool = new ObjectPool<ManagedObject2>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
-                //}
-            }
-            return m_Pool;
-        }
-    }
-
-    public ObjectManagerFactory2(ManagedObject2 prefab, Transform parent, PoolType poolType, bool deactivateOnRelease = false)
-    {
-        this.prefab = prefab;
-        this.parent = parent;
-        this.poolType = poolType;
-        this.deactivateOnRelease = deactivateOnRelease;
-    }
-
-    ManagedObject2 CreatePooledItem()
-    {
-        var ret = GameObject.Instantiate(prefab, parent);
-        ret.Pool = m_Pool;
-        return ret;
-    }
-
-    // Called when an item is returned to the pool using Release
-    void OnReturnedToPool(ManagedObject2 obj)
-    {
-        if (deactivateOnRelease) {
-            obj.gameObject.SetActive(false);
-        }
-    }
-
-    // Called when an item is taken from the pool using Get
-    void OnTakeFromPool(ManagedObject2 obj)
-    {
-        if (deactivateOnRelease) {
-            obj.gameObject.SetActive(true);
-        }
-        obj.Pool = m_Pool;
-    }
-
-    // If the pool capacity is reached then any items returned will be destroyed.
-    // We can control what the destroy behavior does, here we destroy the GameObject.
-    void OnDestroyPoolObject(ManagedObject2 obj)
-    {
-        GameObject.Destroy(obj.gameObject);
-    }
-}
 
 public class ObjectManagerFactory3
 {
@@ -383,13 +225,13 @@ public class ObjectManagerFactory3
         Stack
     }
 
-    private PoolType poolType;
+    private readonly PoolType poolType;
 
-    private ManagedObject3 prefab;
+    private readonly ManagedObject3 prefab;
 
-    private Transform parent;
+    private readonly Transform parent;
 
-    private bool deactivateOnRelease;
+    private readonly bool deactivateOnRelease;
 
     // Collection checks will throw errors if we try to release an item that is already in the pool.
     public bool collectionChecks = true;
