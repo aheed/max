@@ -40,8 +40,8 @@ public class SceneController : MonoBehaviour
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
-    public ManagedObject3 boat1Prefab;
-    public ManagedObject3 boat2Prefab;
+    public ManagedObject4 boat1Prefab;
+    public ManagedObject4 boat2Prefab;
     public ManagedObject3 vehicle1Prefab;
     public ManagedObject3 vehicle2Prefab;
     public ManagedObject3 enemyHangarPrefab;
@@ -530,8 +530,8 @@ public class SceneController : MonoBehaviour
         var tankManagerFactory = new ObjectManagerFactory3(tankPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
         var tree1ManagerFactory = new ObjectManagerFactory3(tree1Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
         var tree2ManagerFactory = new ObjectManagerFactory3(tree2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
-        var boat1ManagerFactory = new ObjectManagerFactory3(boat1Prefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
-        var boat2ManagerFactory = new ObjectManagerFactory3(boat2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
+        var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
+        var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         var vehicle1ManagerFactory = new ObjectManagerFactory3(vehicle1Prefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         var vehicle2ManagerFactory = new ObjectManagerFactory3(vehicle2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory3(enemyHangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
@@ -644,11 +644,11 @@ public class SceneController : MonoBehaviour
                         break;
 
                     case CellContent.BOAT1:
-                        selectedFactory3 = boat1ManagerFactory;
+                        selectedFactory4 = boat1ManagerFactory;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedFactory3 = boat2ManagerFactory;
+                        selectedFactory4 = boat2ManagerFactory;
                         break;
 
                     case CellContent.VEHICLE1:

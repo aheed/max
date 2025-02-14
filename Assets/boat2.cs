@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class boat2 : ManagedObject3, IPositionObservable, IVip
+public class boat2 : ManagedObject4, IPositionObservable, IVip
 {
     public GameObject sunkBoatPrefab;
     public float speed = 0.8f;
@@ -14,10 +14,24 @@ public class boat2 : ManagedObject3, IPositionObservable, IVip
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindAnyObjectByType<GameState>();    
+        gameState = GameState.GetInstance();    
         velocity = new Vector3(-speed, -speed, 0);
+        
+    }
+
+    public override void Deactivate()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        gameObject.SetActive(false);
+        vipBlinker = null;
+    }
+
+    public override void Reactivate()
+    {
         var spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.color = new Color(0.5f, 0.4f, 0f); // brown
+        gameObject.SetActive(true);
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 
     public void SetVip()
@@ -32,15 +46,9 @@ public class boat2 : ManagedObject3, IPositionObservable, IVip
 
     void Sink()
     {
-        var collider = gameObject.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
-        }
-
         var parent = gameObject.transform.parent;
         Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
-        gameObject.SetActive(false);
+        Release();
     }
 
     void OnTriggerEnter2D(Collider2D col)
