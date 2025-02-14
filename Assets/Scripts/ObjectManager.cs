@@ -72,6 +72,47 @@ public class ManagedObject3 : MonoBehaviour
     public virtual void Reactivate() {}    
 }
 
+public class ManagedObject4 : MonoBehaviour
+{
+    public ManagedObjectReference selfReference;
+
+    public void Release() {
+        selfReference.Release();
+    }
+
+    public void DestroyGameObject() {
+        GameObject.Destroy(gameObject);
+    }   
+
+    // Overridable methods
+    public virtual void Deactivate() {}
+    public virtual void Reactivate() {}    
+}
+
+public class ManagedObjectReference
+{
+    public ManagedObject4 managedObject;
+    private IObjectPool<ManagedObject4> pool;
+    
+    public ManagedObjectReference(ManagedObject4 managedObject, IObjectPool<ManagedObject4> pool)
+    {
+        this.managedObject = managedObject;
+        this.pool = pool;
+    }
+
+    public void Release()
+    {
+        if (managedObject == null)
+        {
+            // The object has already been released.
+            return;
+        }
+
+        pool.Release(managedObject);
+        managedObject = null;
+    }
+}
+
 public class SimpleObjectManager : IObjectPool<GameObject>
 {
     private GameObject prefab;
@@ -291,6 +332,86 @@ public class ObjectManagerFactory3
     // If the pool capacity is reached then any items returned will be destroyed.
     // We can control what the destroy behavior does, here we destroy the GameObject.
     void OnDestroyPoolObject(ManagedObject3 obj)
+    {
+        GameObject.Destroy(obj.gameObject);
+    }
+}
+
+public class ObjectManagerFactory4
+{
+    public enum PoolType
+    {
+        None,
+        Stack
+    }
+
+    private readonly PoolType poolType;
+
+    private readonly ManagedObject4 prefab;
+
+    private readonly Transform parent;
+
+    private readonly bool deactivateOnRelease;
+
+    // Collection checks will throw errors if we try to release an item that is already in the pool.
+    public bool collectionChecks = true;
+    public int maxPoolSize = 200;
+
+    private readonly IObjectPool<ManagedObject4> m_Pool;
+
+    private IObjectPool<ManagedObject4> CreatePool()
+    {
+        /*if (poolType == PoolType.None)
+        {
+            return new SimpleObjectManager3(prefab, parent);
+        }
+        else
+        {*/
+            return new ObjectPool<ManagedObject4>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+        //}
+    }
+
+    public ObjectManagerFactory4(ManagedObject4 prefab, Transform parent, PoolType poolType, bool deactivateOnRelease = true)
+    {
+        this.prefab = prefab;
+        this.parent = parent;
+        this.poolType = poolType;
+        this.deactivateOnRelease = deactivateOnRelease;
+        m_Pool = CreatePool();
+    }
+
+    public ManagedObjectReference Get()
+    {
+        var managedObjectRef = new ManagedObjectReference(m_Pool.Get(), m_Pool);
+        managedObjectRef.managedObject.selfReference = managedObjectRef;
+        return managedObjectRef;
+    }
+
+    ManagedObject4 CreatePooledItem()
+    {
+        var ret = GameObject.Instantiate(prefab, parent);
+        return ret;
+    }
+
+    // Called when an item is returned to the pool using Release
+    void OnReturnedToPool(ManagedObject4 obj)
+    {
+        if (deactivateOnRelease) {
+            obj.Deactivate();
+        }
+    }
+
+    // Called when an item is taken from the pool using Get
+    void OnTakeFromPool(ManagedObject4 obj)
+    {
+        if (deactivateOnRelease) {
+            obj.Reactivate();
+        }
+    }
+
+    // If the pool capacity is reached then any items returned will be destroyed.
+    // We can control what the destroy behavior does, here we destroy the GameObject.
+    void OnDestroyPoolObject(ManagedObject4 obj)
     {
         GameObject.Destroy(obj.gameObject);
     }

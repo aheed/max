@@ -13,3 +13,9 @@ public class GameObjectCollection3
     public float zCoord;
     public IEnumerable<Action> releaseActions;
 }
+
+public class GameObjectCollection4
+{
+    public float zCoord;
+    public IEnumerable<ManagedObjectReference> objectRefs;
+}

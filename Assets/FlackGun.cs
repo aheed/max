@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlackGun : ManagedObject3, IPositionObservable
+public class FlackGun : ManagedObject4, IPositionObservable
 {
     public GameObject flackProjectilePrefab;
     public Sprite normalSprite;
@@ -27,12 +27,18 @@ public class FlackGun : ManagedObject3, IPositionObservable
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName.StartsWith("bullet"))
         {
-            Deactivate();
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
             // Todo: report destroyed flack gun for scoring
+
+            spriteR.sprite = shotSprite;
+            if (gameObject.TryGetComponent<Collider2D>(out var collider))
+            {
+                collider.enabled = false;
+            }
+            alive = false;
         }
 
         //no collision
@@ -48,13 +54,6 @@ public class FlackGun : ManagedObject3, IPositionObservable
         }
 
         HandleCollision(col);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-        RestartShotClock();        
     }
 
     // Update is called once per frame
@@ -76,31 +75,21 @@ public class FlackGun : ManagedObject3, IPositionObservable
 
     public override void Deactivate()
     {
-        if (!alive)
-        {
-            return;
-        }
         alive = false;
-
-        spriteR.sprite = shotSprite;
-        if (gameObject.TryGetComponent<Collider2D>(out var collider))
-        {
-            collider.enabled = false;
-        }
     }
 
     public override void Reactivate()
     {
-        if (alive)
-        {
-            return;
-        }
         alive = true;
+
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
 
         spriteR.sprite = normalSprite;
         if (gameObject.TryGetComponent<Collider2D>(out var collider))
         {
             collider.enabled = true;
         }
+
+        RestartShotClock();
     }
 }

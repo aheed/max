@@ -32,7 +32,7 @@ public class SceneController : MonoBehaviour
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
     public ExpHouse housePrefab;
-    public ManagedObject3 flackGunPrefab;
+    public ManagedObject4 flackGunPrefab;
     public ManagedObject3 tankPrefab;
     public ManagedObject3 tree1Prefab;
     public ManagedObject3 tree2Prefab;
@@ -122,8 +122,8 @@ public class SceneController : MonoBehaviour
     float landingStripTopY;
     float landingStripWidth;
     GameState gameState;
-    List<GameObjectCollection3> pendingActivation = new();
-    List<GameObjectCollection3> activeObjects = new();
+    List<GameObjectCollection4> pendingActivation = new();
+    List<GameObjectCollection4> activeObjects = new();
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
@@ -205,7 +205,7 @@ public class SceneController : MonoBehaviour
 
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public List<GameObjectCollection3> PopulateScene(LevelContents levelContents)
+    public List<GameObjectCollection4> PopulateScene(LevelContents levelContents)
     {
         GameStateContents stateContents = gameState.GetStateContents();
         float cellWidth = levelWidth / LevelContents.gridWidth;
@@ -515,17 +515,18 @@ public class SceneController : MonoBehaviour
         prMeshFilter.mesh = prMesh;
         prMeshFilterWide.mesh = prMeshWide;
 
-        GameObjectCollection3[] ret = new GameObjectCollection3[LevelContents.gridHeight];
+        GameObjectCollection4[] ret = new GameObjectCollection4[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            ret[ytmp] = new GameObjectCollection3 {
+            ret[ytmp] = new GameObjectCollection4 {
                 zCoord = ytmp * cellHeight, // level relative coordinate
-                releaseActions = new List<Action>()
+                objectRefs = new List<ManagedObjectReference>()
             };
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        var flakGunManagerFactory = new ObjectManagerFactory3(flackGunPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
+        //var flakGunManagerFactory = new ObjectManagerFactory3(flackGunPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
+        var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var tankManagerFactory = new ObjectManagerFactory3(tankPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
         var tree1ManagerFactory = new ObjectManagerFactory3(tree1Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
         var tree2ManagerFactory = new ObjectManagerFactory3(tree2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
@@ -577,6 +578,7 @@ public class SceneController : MonoBehaviour
                 bridge.SetVip();
             }
             
+            /*
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
@@ -595,7 +597,7 @@ public class SceneController : MonoBehaviour
                         return new Action(() => carManagerFactory.Pool.Release(managedCar));
                     })
                 );
-            }
+            }*/
         }
 
         // Houses
@@ -621,10 +623,12 @@ public class SceneController : MonoBehaviour
             var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 ObjectManagerFactory3 selectedFactory3 = null;
+                ObjectManagerFactory4 selectedFactory4 = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        selectedFactory3 = flakGunManagerFactory;
+                        //selectedFactory3 = flakGunManagerFactory;
+                        selectedFactory4 = flakGunManagerFactory;
                         break;
 
                     case CellContent.TANK:
@@ -664,27 +668,26 @@ public class SceneController : MonoBehaviour
                         break;
                 }
 
-                List<Action> ret = new();
+                List<ManagedObjectReference> ret = new();
                 var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
-                if (selectedFactory3 != null)
+                if (selectedFactory4 != null)
                 {
-                    var managedObject = selectedFactory3.Pool.Get();
-                    managedObject.releaseAction = managedObject.Deactivate;
-                    managedObject.gameObject.transform.localPosition = itemLocalTransform;
+                    var objRef = selectedFactory4.Get();
+                    objRef.managedObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)
                     {
-                        var possibleVip = InterfaceHelper.GetInterface<IVip>(managedObject.gameObject);
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(objRef.managedObject.gameObject);
                         if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             possibleVip.SetVip();
                         }
                     }
 
-                    ret.Add(() => selectedFactory3.Pool.Release(managedObject));
+                    ret.Add(objRef);
                 }
 
-                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                /*if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
                     var managedBalloonShadow = ballonShadowManagerFactory.Pool.Get();
                     managedBalloonShadow.releaseAction = () => {
@@ -701,12 +704,12 @@ public class SceneController : MonoBehaviour
                         balloon.Deactivate();
                         ballonManagerFactory.Pool.Release(balloon);
                     });
-                }
+                }*/
 
                 return ret;
             });
 
-            ret[ytmp].releaseActions = ret[ytmp].releaseActions.Concat(releaseActionsAtY);
+            ret[ytmp].objectRefs = ret[ytmp].objectRefs.Concat(releaseActionsAtY);
         }
 
         return ret.ToList();
@@ -716,7 +719,7 @@ public class SceneController : MonoBehaviour
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection3 {zCoord = goc.zCoord + lastLevelLowerEdgeY, releaseActions = goc.releaseActions})
+        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelLowerEdgeY, objectRefs = goc.objectRefs})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -1049,8 +1052,8 @@ public class SceneController : MonoBehaviour
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
             var activeCollection = pendingActivation.First();
-            // Instantiate game objects, never mind return value
-            activeCollection.releaseActions = activeCollection.releaseActions.ToArray();
+            // Instantiate game objects
+            activeCollection.objectRefs = activeCollection.objectRefs.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -1061,9 +1064,9 @@ public class SceneController : MonoBehaviour
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
 
             var collection = activeObjects.First();
-            foreach (var releaseAction in collection.releaseActions)
+            foreach (var objRef in collection.objectRefs)
             {
-                releaseAction();
+                objRef.Release();
             }
 
             activeObjects.RemoveAt(0);
