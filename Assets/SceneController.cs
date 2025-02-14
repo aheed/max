@@ -1314,7 +1314,7 @@ public class SceneController : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            var managedObject = InterfaceHelper.GetInterface<ManagedObject3>(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject4>(hitObject);
             if (managedObject != null)
             {
                 managedObject.Release();
