@@ -31,7 +31,7 @@ public class GlobalVolume : MonoBehaviour
         p.TryGet(out filmGrain);
         p.TryGet(out bloom);
         p.TryGet(out vignette);
-        GameState gameState = FindAnyObjectByType<GameState>();
+        GameState gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, UpdateViewMode);
         gameState.Subscribe(GameEvent.SMALL_DETONATION, OnSmallDetonation);
     }

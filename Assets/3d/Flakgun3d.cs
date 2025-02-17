@@ -40,7 +40,7 @@ public class Flakgun3d : ManagedObject
                 collider.enabled = false;
             }
             alive = false;
-            var gameState = FindAnyObjectByType<GameState>();
+            var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
@@ -55,7 +55,7 @@ public class Flakgun3d : ManagedObject
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
+            GameState.GetInstance().BombLanded(bomb, gameObject);
             return;
         }
 

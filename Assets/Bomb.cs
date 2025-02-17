@@ -31,7 +31,7 @@ public class Bomb : MonoBehaviour, IPositionObservable
 
         if (tmpPos.z <= 0)
         {
-            FindAnyObjectByType<GameState>().BombLanded(this);
+            GameState.GetInstance().BombLanded(this);
         }
     }
 

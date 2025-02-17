@@ -108,7 +108,7 @@ public class SceneBuilder : MonoBehaviour
     // Create game objects    
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
-        GameState gameState = FindAnyObjectByType<GameState>();
+        GameState gameState = GameState.GetInstance();
 
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
         float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;

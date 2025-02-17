@@ -49,7 +49,7 @@ public class FlackGun : ManagedObject, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
+            GameState.GetInstance().BombLanded(bomb, gameObject);
             return;
         }
 
