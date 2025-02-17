@@ -47,7 +47,7 @@ public class SceneController : MonoBehaviour
     public ManagedObject4 enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public Balloon balloonPrefab;
-    public ManagedObject3 balloonShadowPrefab;
+    public ManagedObject4 balloonShadowPrefab;
     public bridge bridgePrefab;
     public ManagedObject3 carPrefab;
     public GameObject airstripEndPrefab;
@@ -536,8 +536,8 @@ public class SceneController : MonoBehaviour
         var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         //var hangarManagerFactory = new ObjectManagerFactory3(hangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
-        var ballonManagerFactory = new ObjectManagerFactory3(balloonPrefab, balloonParent.transform, ObjectManagerFactory3.PoolType.Stack, false);
-        var ballonShadowManagerFactory = new ObjectManagerFactory3(balloonShadowPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack, false);
+        var ballonManagerFactory = new ObjectManagerFactory4(balloonPrefab, balloonParent.transform, ObjectManagerFactory4.PoolType.Stack);
+        var ballonShadowManagerFactory = new ObjectManagerFactory4(balloonShadowPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var carManagerFactory = new ObjectManagerFactory3(carPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         
         // Roads
@@ -687,24 +687,18 @@ public class SceneController : MonoBehaviour
                     ret.Add(objRef);
                 }
 
-                /*if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var managedBalloonShadow = ballonShadowManagerFactory.Pool.Get();
-                    managedBalloonShadow.releaseAction = () => {
-                        ballonShadowManagerFactory.Pool.Release(managedBalloonShadow);
-                    };
-                    managedBalloonShadow.transform.localPosition = itemLocalTransform;
+                    var managedBalloonShadow = ballonShadowManagerFactory.Get();
+                    managedBalloonShadow.managedObject.transform.localPosition = itemLocalTransform;
 
-                    var balloon = ballonManagerFactory.Pool.Get() as Balloon;
-                    balloon.transform.position = managedBalloonShadow.transform.position;
-                    balloon.Reactivate();
-                    balloon.SetShadow(managedBalloonShadow);
-                    balloon.releaseAction = balloon.Deactivate;
-                    ret.Add(() => {
-                        balloon.Deactivate();
-                        ballonManagerFactory.Pool.Release(balloon);
-                    });
-                }*/
+                    var balloonRef = ballonManagerFactory.Get();
+                    var balloon = balloonRef.managedObject as Balloon;
+                    balloon.transform.position = managedBalloonShadow.managedObject.transform.position;
+                    balloon.InitAltitude();
+                    balloon.SetShadow(managedBalloonShadow.managedObject);
+                    ret.Add(balloonRef);
+                }
 
                 return ret;
             });

@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : ManagedObject3, IPositionObservable
+public class Balloon : ManagedObject4, IPositionObservable
 {
     public float startAltitudeQuotientMax = 0.3f;
     public float height = 0.3f;
     public GameObject popPrefab;
     private SpriteRenderer spriteR;
-    private ManagedObject3 shadow = null;
+    private ManagedObject4 shadow = null;
 
     private float startParentAltitude;
 
-    public void SetShadow(ManagedObject3 shadow) => this.shadow = shadow;
+    public void SetShadow(ManagedObject4 shadow) => this.shadow = shadow;
 
     float GetParentAltitude() => gameObject.transform.parent.localPosition.y;
 
@@ -34,7 +34,7 @@ public class Balloon : ManagedObject3, IPositionObservable
         localPosition.y += GameState.GetInstance().maxAltitude * 10;
         transform.localPosition = localPosition;
 
-        Deactivate();
+        Release();
     }
 
     public override void Deactivate()
@@ -46,7 +46,7 @@ public class Balloon : ManagedObject3, IPositionObservable
         }
     }
 
-    public override void Reactivate()
+    public void InitAltitude()
     {
         spriteR = GetComponent<SpriteRenderer>();
         var gameState = GameState.GetInstance();        
@@ -78,7 +78,7 @@ public class Balloon : ManagedObject3, IPositionObservable
             collObjName.StartsWith("max"))
         {
             //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
-            FindAnyObjectByType<GameState>().IncrementTargetsHit();
+            GameState.GetInstance().IncrementTargetsHit();
         }
         else 
         {

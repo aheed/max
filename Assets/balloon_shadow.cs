@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class balloon_shadow : ManagedObject3
+public class balloon_shadow : ManagedObject4
 {
 
 }
