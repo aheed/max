@@ -137,6 +137,50 @@ public class SceneController : MonoBehaviour
     BalloonManager balloonParent;
     ////
     
+    private ObjectManager flakGunManager;
+    private ObjectManager tankManager;
+    private ObjectManager tree1Manager;
+    private ObjectManager tree2Manager;
+    private ObjectManager boat1Manager;
+    private ObjectManager boat2Manager;
+    private ObjectManager vehicle1Manager;
+    private ObjectManager vehicle2Manager;
+    private ObjectManager enemyHangarManager;
+    private ObjectManager hangarManager;
+    private ObjectManager carManager;
+    private ObjectManager balloonManager;
+    private ObjectManager balloonShadowManager;
+    private GameObject managedObjectsParent;
+
+    public void InitSceneBuilder()
+    {
+        if (managedObjectsParent != null)
+        {
+            Destroy(managedObjectsParent);
+        }
+        
+        if (balloonParent != null)
+        {
+            Destroy(balloonParent);
+        }
+
+        managedObjectsParent = new GameObject("managedObjects");
+        balloonParent = Instantiate(balloonParentPrefab);
+        flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack, false);
+        tree2Manager = new ObjectManager(tree2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack, false);
+        boat1Manager = new ObjectManager(boat1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat2Manager = new ObjectManager(boat2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle1Manager = new ObjectManager(vehicle1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
+        hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
+        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        balloonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
+        balloonShadowManager = new ObjectManager(balloonShadowPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+    }
+    
     GameObject GetLevel() => levels[currentLevelIndex];
 
     void RotateLevels()
@@ -153,8 +197,7 @@ public class SceneController : MonoBehaviour
         var llcy = level * levelHeight;
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
-        lastLevelLowerEdgeY = llcy;
-        balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
+        lastLevelLowerEdgeY = llcy;        
     }
 
 
@@ -214,6 +257,8 @@ public class SceneController : MonoBehaviour
         var midX = LevelContents.gridWidth / 2;
 
         var lvlTransform = GetLevel().transform;
+
+        var parentPositionOffset = lvlTransform.position - managedObjectsParent.transform.position;
 
         // Landing Strip
         {
@@ -522,22 +567,7 @@ public class SceneController : MonoBehaviour
                 zCoord = ytmp * cellHeight, // level relative coordinate
                 objectRefs = new List<ManagedObjectReference>()
             };
-        }
-
-        // Object pools. Could be injected from outside or created earlier.
-        var flakGunManager = new ObjectManager(flackGunPrefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var tankManager = new ObjectManager(tankPrefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var tree1Manager = new ObjectManager(tree1Prefab, lvlTransform, ObjectManager.PoolType.Stack, false);
-        var tree2Manager = new ObjectManager(tree2Prefab, lvlTransform, ObjectManager.PoolType.Stack, false);
-        var boat1Manager = new ObjectManager(boat1Prefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var boat2Manager = new ObjectManager(boat2Prefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var vehicle1Manager = new ObjectManager(vehicle1Prefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var vehicle2Manager = new ObjectManager(vehicle2Prefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var enemyHangarManager = new ObjectManager(enemyHangarPrefab, lvlTransform, ObjectManager.PoolType.None, false);
-        var hangarManager = new ObjectManager(hangarPrefab, lvlTransform, ObjectManager.PoolType.None, false);
-        var ballonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
-        var ballonShadowManager = new ObjectManager(balloonShadowPrefab, lvlTransform, ObjectManager.PoolType.Stack);
-        var carManager = new ObjectManager(carPrefab, lvlTransform, ObjectManager.PoolType.None);
+        }        
         
         // Roads
         foreach (var road in levelContents.roads)
@@ -666,7 +696,7 @@ public class SceneController : MonoBehaviour
                 if (selectedManager != null)
                 {
                     var objRef = selectedManager.Get();
-                    objRef.managedObject.transform.localPosition = itemLocalTransform;
+                    objRef.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
                     
                     if (levelContents.vipTargets)
                     {
@@ -682,10 +712,10 @@ public class SceneController : MonoBehaviour
 
                 if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var managedBalloonShadow = ballonShadowManager.Get();
-                    managedBalloonShadow.managedObject.transform.localPosition = itemLocalTransform;
+                    var managedBalloonShadow = balloonShadowManager.Get();
+                    managedBalloonShadow.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
 
-                    var balloonRef = ballonManager.Get();
+                    var balloonRef = balloonManager.Get();
                     var balloon = balloonRef.managedObject as Balloon;
                     balloon.transform.position = managedBalloonShadow.managedObject.transform.position;
                     balloon.InitAltitude();
@@ -789,6 +819,7 @@ public class SceneController : MonoBehaviour
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
+        InitSceneBuilder();
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);

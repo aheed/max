@@ -43,9 +43,9 @@ public class SceneBuilder : MonoBehaviour
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
 
-    private ObjectManager tree1Manager;
     private ObjectManager flakGunManager;
     private ObjectManager tankManager;
+    private ObjectManager tree1Manager;
     private ObjectManager tree2Manager;
     private ObjectManager boat1Manager;
     private ObjectManager boat2Manager;
@@ -58,11 +58,15 @@ public class SceneBuilder : MonoBehaviour
 
     public void Init()
     {
+        if (managedObjectsParent != null)
+        {
+            Destroy(managedObjectsParent);
+        }
+        
         managedObjectsParent = new GameObject("managedObjects");
-        //parent.transform.parent = transform;
-        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         tree2Manager = new ObjectManager(tree2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         boat1Manager = new ObjectManager(boat1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         boat2Manager = new ObjectManager(boat2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
