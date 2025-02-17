@@ -16,18 +16,18 @@ public class SceneBuilder : MonoBehaviour
     public ManagedObject4 tankPrefab;
     public ManagedObject4 tree1Prefab;
     public ManagedObject4 tree2Prefab;    
-    public GameObject boat1Prefab;
-    public GameObject boat2Prefab;
-    public GameObject vehicle1Prefab;
-    public GameObject vehicle2Prefab;
-    public GameObject enemyHangarPrefab;
+    public ManagedObject4 boat1Prefab;
+    public ManagedObject4 boat2Prefab;
+    public ManagedObject4 vehicle1Prefab;
+    public ManagedObject4 vehicle2Prefab;
+    public ManagedObject4 enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
     public GameObject carPrefab;
     public GameObject airstripEndPrefab;
-    public GameObject hangarPrefab;
+    public ManagedObject4 hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public Material riverMaterial;
@@ -132,12 +132,12 @@ public class SceneBuilder : MonoBehaviour
         var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
         var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
         var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var boat1ManagerFactory = new ObjectManagerFactory(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var boat2ManagerFactory = new ObjectManagerFactory(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var vehicle1ManagerFactory = new ObjectManagerFactory(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var vehicle2ManagerFactory = new ObjectManagerFactory(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var enemyHangarManagerFactory = new ObjectManagerFactory(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var hangarManagerFactory = new ObjectManagerFactory(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
+        var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
+        var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
+        var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
+        var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
+        var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
         var ballonShadowManagerFactory = new ObjectManagerFactory(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var carManagerFactory = new ObjectManagerFactory(carPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
 
@@ -599,29 +599,29 @@ public class SceneBuilder : MonoBehaviour
                         break;
 
                     case CellContent.BOAT1:
-                        selectedFactory = boat1ManagerFactory;
+                        selectedFactory4 = boat1ManagerFactory;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedFactory = boat2ManagerFactory;
+                        selectedFactory4 = boat2ManagerFactory;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.VEHICLE1:
-                        selectedFactory = vehicle1ManagerFactory;
+                        selectedFactory4 = vehicle1ManagerFactory;
                         break;
                     
                     case CellContent.VEHICLE2:
-                        selectedFactory = vehicle2ManagerFactory;
+                        selectedFactory4 = vehicle2ManagerFactory;
                         break;
 
                     case CellContent.ENEMY_HANGAR:
-                        selectedFactory = enemyHangarManagerFactory;
+                        selectedFactory4 = enemyHangarManagerFactory;
                         break;
 
                     case CellContent.HANGAR:
-                        selectedFactory = hangarManagerFactory;
+                        selectedFactory4 = hangarManagerFactory;
                         break;
                 }
 

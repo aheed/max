@@ -18511,18 +18511,18 @@ MonoBehaviour:
   tankPrefab: {fileID: 7022767254515631412, guid: 3e486abe8b1198954b748bb0d8d38cf2, type: 3}
   tree1Prefab: {fileID: 3235712187026166006, guid: 6471dd48fc1cb62bd836013eb97b7e50, type: 3}
   tree2Prefab: {fileID: -1197182151743080214, guid: 79e39c9a719fde497b6f8aefff8ce173, type: 3}
-  boat1Prefab: {fileID: 150685130249457549, guid: 9da047cb61fe5563bb66b88f6a183ccc, type: 3}
-  boat2Prefab: {fileID: 4154808993142407754, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
-  vehicle1Prefab: {fileID: 7973131330759998085, guid: 2ecbcd88c7941b8ddab33a032e37bf68, type: 3}
-  vehicle2Prefab: {fileID: 7942107924430789812, guid: ff0aa3d302628f73f9c0862f613dc3c1, type: 3}
-  enemyHangarPrefab: {fileID: 3585459685346382312, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
+  boat1Prefab: {fileID: 778184378895855345, guid: 9da047cb61fe5563bb66b88f6a183ccc, type: 3}
+  boat2Prefab: {fileID: 9187710619312119170, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
+  vehicle1Prefab: {fileID: -7668174176783186871, guid: 2ecbcd88c7941b8ddab33a032e37bf68, type: 3}
+  vehicle2Prefab: {fileID: 8588223239852420487, guid: ff0aa3d302628f73f9c0862f613dc3c1, type: 3}
+  enemyHangarPrefab: {fileID: 6794356900591465683, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
   parkedPlanePrefab: {fileID: 0}
   balloonPrefab: {fileID: 0}
   balloonShadowPrefab: {fileID: 0}
   bridgePrefab: {fileID: 7238803995979680964, guid: c2ed317b22ddede37b06d13ed2847864, type: 3}
   carPrefab: {fileID: 8832076570241514882, guid: e681f57b8d6033f9ab5f52a28d922a28, type: 3}
   airstripEndPrefab: {fileID: 0}
-  hangarPrefab: {fileID: 3585459685346382312, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
+  hangarPrefab: {fileID: 6794356900591465683, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
   enemyHqPrefab: {fileID: 0}
   bigHousePrefab: {fileID: 0}
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
@@ -31468,7 +31468,7 @@ PrefabInstance:
       objectReference: {fileID: 510625553}
     - target: {fileID: 4148779482043092323, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
       propertyPath: m_VersionIndex
-      value: 214
+      value: 217
       objectReference: {fileID: 0}
     - target: {fileID: 4148779482043092323, guid: 6ad0a7bc3c412a28bac28df7c6431842, type: 3}
       propertyPath: m_Tangents.Array.data[2347].x
@@ -32304,7 +32304,7 @@ PrefabInstance:
       objectReference: {fileID: 1736221641}
     - target: {fileID: 6718339745882272846, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_VersionIndex
-      value: 6573
+      value: 6579
       objectReference: {fileID: 0}
     - target: {fileID: 6718339745882272846, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -32428,7 +32428,7 @@ PrefabInstance:
       objectReference: {fileID: 1886035419}
     - target: {fileID: 8562082310324131367, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_VersionIndex
-      value: 4421
+      value: 4427
       objectReference: {fileID: 0}
     - target: {fileID: 8562082310324131367, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_Tangents.Array.data[0].w

@@ -702,7 +702,15 @@ public class SceneController3d : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            Destroy(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject4>(hitObject);
+            if (managedObject != null)
+            {
+                managedObject.Release();
+            }
+            else
+            {
+                Destroy(hitObject);
+            }
         }
     
         if (bomb != null)

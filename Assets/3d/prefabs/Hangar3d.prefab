@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5812411163047111266}
+  - component: {fileID: 6794356900591465683}
   m_Layer: 0
   m_Name: Hangar3d
   m_TagString: Untagged
@@ -33,6 +34,18 @@ Transform:
   - {fileID: 961634392785063812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6794356900591465683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585459685346382312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b6085731ca7d73e8b42cd5cfda02fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5417692704185752602
 GameObject:
   m_ObjectHideFlags: 0

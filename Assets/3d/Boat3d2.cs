@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Boat3d2 : MonoBehaviour, IVip
+public class Boat3d2 : ManagedObject4, IVip
 {
     public GameObject sunkBoatPrefab;
     public Material normalMaterial;
@@ -67,5 +67,17 @@ public class Boat3d2 : MonoBehaviour, IVip
         }
 
         alive = false;
+    }
+
+    public override void Deactivate()
+    {
+        alive = false;
+        gameObject.SetActive(false);
+    }
+
+    public override void Reactivate()
+    {
+        alive = true;
+        gameObject.SetActive(true);
     }
 }
