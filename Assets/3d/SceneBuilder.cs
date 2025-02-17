@@ -25,7 +25,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
-    public GameObject carPrefab;
+    public ManagedObject4 carPrefab;
     public GameObject airstripEndPrefab;
     public ManagedObject4 hangarPrefab;
     public EnemyHQ enemyHqPrefab;
@@ -89,8 +89,6 @@ public class SceneBuilder : MonoBehaviour
         return mesh;
     }
 
-    //public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
-
     float GetRiverLeftEdgeX(float z, List<SceneRiverSegment> riverSegments)
     {
         var segment = riverSegments.FirstOrDefault(s =>  z < s.maxZ);
@@ -127,7 +125,6 @@ public class SceneBuilder : MonoBehaviour
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        //var riverSectionManagerFactory = new ObjectManagerFactory(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
         var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
         var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
         var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
@@ -138,8 +135,7 @@ public class SceneBuilder : MonoBehaviour
         var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
         var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
-        var ballonShadowManagerFactory = new ObjectManagerFactory(balloonShadowPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var carManagerFactory = new ObjectManagerFactory(carPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var carManagerFactory = new ObjectManagerFactory4(carPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
 
         // Landing Strip
         {
@@ -529,23 +525,22 @@ public class SceneBuilder : MonoBehaviour
                 }
             }            
 
-            /*// Car            
+            // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
                 gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] {null}).Select(_ => 
                     {
-                        var managedCar = new ManagedObject(carManagerFactory.Pool);
-
+                        var carRef = carManagerFactory.Get();
                         var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
-                        managedCar.GameObject.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
-                            InterfaceHelper.GetInterface<IVip>(managedCar.GameObject)?.SetVip();
+                            InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject)?.SetVip();
                         }
-                        return managedCar;
+                        return carRef;
                     })
                 );
-            }*/
+            }
         }
 
         
@@ -577,7 +572,6 @@ public class SceneBuilder : MonoBehaviour
             var ztmp = ztmpOuter; //capture for lazy evaluation
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                ObjectManagerFactory selectedFactory = null;
                 ObjectManagerFactory4 selectedFactory4 = null;
                 var altitude = 0f;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)

@@ -18520,7 +18520,7 @@ MonoBehaviour:
   balloonPrefab: {fileID: 0}
   balloonShadowPrefab: {fileID: 0}
   bridgePrefab: {fileID: 7238803995979680964, guid: c2ed317b22ddede37b06d13ed2847864, type: 3}
-  carPrefab: {fileID: 8832076570241514882, guid: e681f57b8d6033f9ab5f52a28d922a28, type: 3}
+  carPrefab: {fileID: 3150033924233586620, guid: e681f57b8d6033f9ab5f52a28d922a28, type: 3}
   airstripEndPrefab: {fileID: 0}
   hangarPrefab: {fileID: 6794356900591465683, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
   enemyHqPrefab: {fileID: 0}

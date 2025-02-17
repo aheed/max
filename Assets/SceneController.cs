@@ -582,18 +582,13 @@ public class SceneController : MonoBehaviour
             {
                 ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] {0}).Select(_ => 
                     {
-                        //Car car = Instantiate(carPrefab, lvlTransform);
-                        //var managedCar = new ManagedObject(carManagerFactory.Pool);
                         var carRef = carManagerFactory.Get();
-
-                        //managedCar.releaseAction = managedCar.Deactivate;
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
                         carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject).SetVip();
                         }
-                        //return new Action(() => carManagerFactory.Pool.Release(managedCar));
                         return carRef;
                     })
                 );
