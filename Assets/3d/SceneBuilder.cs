@@ -12,22 +12,22 @@ public class SceneBuilder : MonoBehaviour
     public GameObject landingStripPrefab;
     public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
-    public ManagedObject4 flackGunPrefab;
-    public ManagedObject4 tankPrefab;
-    public ManagedObject4 tree1Prefab;
-    public ManagedObject4 tree2Prefab;    
-    public ManagedObject4 boat1Prefab;
-    public ManagedObject4 boat2Prefab;
-    public ManagedObject4 vehicle1Prefab;
-    public ManagedObject4 vehicle2Prefab;
-    public ManagedObject4 enemyHangarPrefab;
+    public ManagedObject flackGunPrefab;
+    public ManagedObject tankPrefab;
+    public ManagedObject tree1Prefab;
+    public ManagedObject tree2Prefab;    
+    public ManagedObject boat1Prefab;
+    public ManagedObject boat2Prefab;
+    public ManagedObject vehicle1Prefab;
+    public ManagedObject vehicle2Prefab;
+    public ManagedObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
-    public ManagedObject4 carPrefab;
+    public ManagedObject carPrefab;
     public GameObject airstripEndPrefab;
-    public ManagedObject4 hangarPrefab;
+    public ManagedObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public Material riverMaterial;
@@ -125,17 +125,17 @@ public class SceneBuilder : MonoBehaviour
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
-        var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
-        var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
-        var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
-        var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
-        var carManagerFactory = new ObjectManagerFactory4(carPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.None);
+        var flakGunManager = new ObjectManager(flackGunPrefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var tankManager = new ObjectManager(tankPrefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var tree1Manager = new ObjectManager(tree1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var tree2Manager = new ObjectManager(tree2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var boat1Manager = new ObjectManager(boat1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var boat2Manager = new ObjectManager(boat2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
+        var vehicle1Manager = new ObjectManager(vehicle1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
+        var vehicle2Manager = new ObjectManager(vehicle2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
+        var enemyHangarManager = new ObjectManager(enemyHangarPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
+        var hangarManager = new ObjectManager(hangarPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
+        var carManager = new ObjectManager(carPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
 
         // Landing Strip
         {
@@ -530,7 +530,7 @@ public class SceneBuilder : MonoBehaviour
             {
                 gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] {null}).Select(_ => 
                     {
-                        var carRef = carManagerFactory.Get();
+                        var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
                         carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
@@ -572,59 +572,59 @@ public class SceneBuilder : MonoBehaviour
             var ztmp = ztmpOuter; //capture for lazy evaluation
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                ObjectManagerFactory4 selectedFactory4 = null;
+                ObjectManager selectedManager = null;
                 var altitude = 0f;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        selectedFactory4 = flakGunManagerFactory;
+                        selectedManager = flakGunManager;
                         break;
 
                     case CellContent.TANK:
-                        selectedFactory4 = tankManagerFactory;
+                        selectedManager = tankManager;
                         break;
 
                     case CellContent.TREE1:
-                        selectedFactory4 = tree1ManagerFactory;
+                        selectedManager = tree1Manager;
                         break;
 
                     case CellContent.TREE2:
-                        selectedFactory4 = tree2ManagerFactory;
+                        selectedManager = tree2Manager;
                         break;
 
                     case CellContent.BOAT1:
-                        selectedFactory4 = boat1ManagerFactory;
+                        selectedManager = boat1Manager;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedFactory4 = boat2ManagerFactory;
+                        selectedManager = boat2Manager;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.VEHICLE1:
-                        selectedFactory4 = vehicle1ManagerFactory;
+                        selectedManager = vehicle1Manager;
                         break;
                     
                     case CellContent.VEHICLE2:
-                        selectedFactory4 = vehicle2ManagerFactory;
+                        selectedManager = vehicle2Manager;
                         break;
 
                     case CellContent.ENEMY_HANGAR:
-                        selectedFactory4 = enemyHangarManagerFactory;
+                        selectedManager = enemyHangarManager;
                         break;
 
                     case CellContent.HANGAR:
-                        selectedFactory4 = hangarManagerFactory;
+                        selectedManager = hangarManager;
                         break;
                 }
 
                 var itemLocalTransform = new Vector3(xtmp * cellWidth, altitude, ztmp * cellHeight);
 
                 List<ManagedObjectReference> retInner = new();
-                if (selectedFactory4 != null)
+                if (selectedManager != null)
                 {
-                    var objectRef = selectedFactory4.Get();
+                    var objectRef = selectedManager.Get();
                     objectRef.managedObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)

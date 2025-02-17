@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlackGun : ManagedObject4, IPositionObservable
+public class FlackGun : ManagedObject, IPositionObservable
 {
     public GameObject flackProjectilePrefab;
     public Sprite normalSprite;

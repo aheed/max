@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Boat3d2 : ManagedObject4, IVip
+public class Boat3d2 : ManagedObject, IVip
 {
     public GameObject sunkBoatPrefab;
     public Material normalMaterial;

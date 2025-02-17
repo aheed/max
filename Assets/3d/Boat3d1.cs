@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Boat3d1 : ManagedObject4
+public class Boat3d1 : ManagedObject
 {
     void OnTriggerEnter(Collider col)
     {

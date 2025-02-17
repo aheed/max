@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Vehicle3d : ManagedObject4
+public class Vehicle3d : ManagedObject
 {
     
 }

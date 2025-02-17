@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class Car : ManagedObject4, IVip
+public class Car : ManagedObject, IVip
 {
     public float speedFactor = 1.0f;
     public Sprite[] sprites;

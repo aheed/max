@@ -448,9 +448,9 @@ public class SceneController3d : MonoBehaviour
             //Debug.Log($"Time to release game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
 
             var collection = activeObjects.First();
-            foreach (var managedObject in collection.objectRefs)
+            foreach (var objRef in collection.objectRefs)
             {
-                managedObject.Release();
+                objRef.Release();
             }
 
             activeObjects.RemoveAt(0);
@@ -702,7 +702,7 @@ public class SceneController3d : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            var managedObject = InterfaceHelper.GetInterface<ManagedObject4>(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject>(hitObject);
             if (managedObject != null)
             {
                 managedObject.Release();

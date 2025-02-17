@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Car3d : ManagedObject4, IVip
+public class Car3d : ManagedObject, IVip
 {
     public Material normalMaterial;
     public float speedFactor = 1.0f;    

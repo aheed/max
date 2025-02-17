@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHangar : ManagedObject4
+public class EnemyHangar : ManagedObject
 {
     public FlipBook bombed;
 

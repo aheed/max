@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Hangar3d : ManagedObject4
+public class Hangar3d : ManagedObject
 {
 
 }

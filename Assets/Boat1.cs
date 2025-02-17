@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boat1 : ManagedObject4, IPositionObservable
+public class Boat1 : ManagedObject, IPositionObservable
 {
     static readonly int maxHealth = 3;
     public GameObject sunkBoatPrefab;

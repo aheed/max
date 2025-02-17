@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tank : ManagedObject4, IPositionObservable
+public class Tank : ManagedObject, IPositionObservable
 {
     public Sprite normalSprite;
     public Sprite shotSprite;

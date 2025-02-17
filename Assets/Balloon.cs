@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : ManagedObject4, IPositionObservable
+public class Balloon : ManagedObject, IPositionObservable
 {
     public float startAltitudeQuotientMax = 0.3f;
     public float height = 0.3f;
     public GameObject popPrefab;
     private SpriteRenderer spriteR;
-    private ManagedObject4 shadow = null;
+    private ManagedObject shadow = null;
 
     private float startParentAltitude;
 
-    public void SetShadow(ManagedObject4 shadow) => this.shadow = shadow;
+    public void SetShadow(ManagedObject shadow) => this.shadow = shadow;
 
     float GetParentAltitude() => gameObject.transform.parent.localPosition.y;
 

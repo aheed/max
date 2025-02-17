@@ -32,26 +32,26 @@ public class SceneController : MonoBehaviour
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
     public ExpHouse housePrefab;
-    public ManagedObject4 flackGunPrefab;
-    public ManagedObject4 tankPrefab;
-    public ManagedObject4 tree1Prefab;
-    public ManagedObject4 tree2Prefab;
+    public ManagedObject flackGunPrefab;
+    public ManagedObject tankPrefab;
+    public ManagedObject tree1Prefab;
+    public ManagedObject tree2Prefab;
     public GameObject levelPrefab;
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
-    public ManagedObject4 boat1Prefab;
-    public ManagedObject4 boat2Prefab;
-    public ManagedObject4 vehicle1Prefab;
-    public ManagedObject4 vehicle2Prefab;
-    public ManagedObject4 enemyHangarPrefab;
+    public ManagedObject boat1Prefab;
+    public ManagedObject boat2Prefab;
+    public ManagedObject vehicle1Prefab;
+    public ManagedObject vehicle2Prefab;
+    public ManagedObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public Balloon balloonPrefab;
-    public ManagedObject4 balloonShadowPrefab;
+    public ManagedObject balloonShadowPrefab;
     public bridge bridgePrefab;
-    public ManagedObject4 carPrefab;
+    public ManagedObject carPrefab;
     public GameObject airstripEndPrefab;
-    public ManagedObject4 hangarPrefab;
+    public ManagedObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public BalloonManager balloonParentPrefab;
@@ -525,19 +525,19 @@ public class SceneController : MonoBehaviour
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack, false);
-        var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack, false);
-        var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None, false);
-        var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None, false);
-        var ballonManagerFactory = new ObjectManagerFactory4(balloonPrefab, balloonParent.transform, ObjectManagerFactory4.PoolType.Stack);
-        var ballonShadowManagerFactory = new ObjectManagerFactory4(balloonShadowPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var carManagerFactory = new ObjectManagerFactory4(carPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
+        var flakGunManager = new ObjectManager(flackGunPrefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var tankManager = new ObjectManager(tankPrefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var tree1Manager = new ObjectManager(tree1Prefab, lvlTransform, ObjectManager.PoolType.Stack, false);
+        var tree2Manager = new ObjectManager(tree2Prefab, lvlTransform, ObjectManager.PoolType.Stack, false);
+        var boat1Manager = new ObjectManager(boat1Prefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var boat2Manager = new ObjectManager(boat2Prefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var vehicle1Manager = new ObjectManager(vehicle1Prefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var vehicle2Manager = new ObjectManager(vehicle2Prefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var enemyHangarManager = new ObjectManager(enemyHangarPrefab, lvlTransform, ObjectManager.PoolType.None, false);
+        var hangarManager = new ObjectManager(hangarPrefab, lvlTransform, ObjectManager.PoolType.None, false);
+        var ballonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
+        var ballonShadowManager = new ObjectManager(balloonShadowPrefab, lvlTransform, ObjectManager.PoolType.Stack);
+        var carManager = new ObjectManager(carPrefab, lvlTransform, ObjectManager.PoolType.None);
         
         // Roads
         foreach (var road in levelContents.roads)
@@ -582,7 +582,7 @@ public class SceneController : MonoBehaviour
             {
                 ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] {0}).Select(_ => 
                     {
-                        var carRef = carManagerFactory.Get();
+                        var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
                         carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
@@ -617,56 +617,55 @@ public class SceneController : MonoBehaviour
             var ytmp = ytmpOuter; //capture for lazy evaluation
             var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                ObjectManagerFactory4 selectedFactory4 = null;
+                ObjectManager selectedManager = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        //selectedFactory3 = flakGunManagerFactory;
-                        selectedFactory4 = flakGunManagerFactory;
+                        selectedManager = flakGunManager;
                         break;
 
                     case CellContent.TANK:
-                        selectedFactory4 = tankManagerFactory;
+                        selectedManager = tankManager;
                         break;
 
                     case CellContent.TREE1:
-                        selectedFactory4 = tree1ManagerFactory;
+                        selectedManager = tree1Manager;
                         break;
 
                     case CellContent.TREE2:
-                        selectedFactory4 = tree2ManagerFactory;
+                        selectedManager = tree2Manager;
                         break;
 
                     case CellContent.BOAT1:
-                        selectedFactory4 = boat1ManagerFactory;
+                        selectedManager = boat1Manager;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedFactory4 = boat2ManagerFactory;
+                        selectedManager = boat2Manager;
                         break;
 
                     case CellContent.VEHICLE1:
-                        selectedFactory4 = vehicle1ManagerFactory;
+                        selectedManager = vehicle1Manager;
                         break;
                     
                     case CellContent.VEHICLE2:
-                        selectedFactory4 = vehicle2ManagerFactory;
+                        selectedManager = vehicle2Manager;
                         break;
 
                     case CellContent.ENEMY_HANGAR:
-                        selectedFactory4 = enemyHangarManagerFactory;
+                        selectedManager = enemyHangarManager;
                         break;
 
                     case CellContent.HANGAR:
-                        selectedFactory4 = hangarManagerFactory;
+                        selectedManager = hangarManager;
                         break;
                 }
 
                 List<ManagedObjectReference> ret = new();
                 var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
-                if (selectedFactory4 != null)
+                if (selectedManager != null)
                 {
-                    var objRef = selectedFactory4.Get();
+                    var objRef = selectedManager.Get();
                     objRef.managedObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)
@@ -683,10 +682,10 @@ public class SceneController : MonoBehaviour
 
                 if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var managedBalloonShadow = ballonShadowManagerFactory.Get();
+                    var managedBalloonShadow = ballonShadowManager.Get();
                     managedBalloonShadow.managedObject.transform.localPosition = itemLocalTransform;
 
-                    var balloonRef = ballonManagerFactory.Get();
+                    var balloonRef = ballonManager.Get();
                     var balloon = balloonRef.managedObject as Balloon;
                     balloon.transform.position = managedBalloonShadow.managedObject.transform.position;
                     balloon.InitAltitude();
@@ -1302,7 +1301,7 @@ public class SceneController : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            var managedObject = InterfaceHelper.GetInterface<ManagedObject4>(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject>(hitObject);
             if (managedObject != null)
             {
                 managedObject.Release();

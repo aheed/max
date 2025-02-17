@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Tank3d : ManagedObject4
+public class Tank3d : ManagedObject
 {
     
 }

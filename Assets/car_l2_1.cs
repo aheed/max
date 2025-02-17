@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class car_l2_1 : ManagedObject4, IPositionObservable
+public class car_l2_1 : ManagedObject, IPositionObservable
 {
     public Sprite shotSprite;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Tree3d : ManagedObject4
+public class Tree3d : ManagedObject
 {
     
 }

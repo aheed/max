@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class Flakgun3d : ManagedObject4
+public class Flakgun3d : ManagedObject
 {
     public GameObject flackProjectilePrefab;
     public float avgTimeToShootSeconds = 5.0f;
