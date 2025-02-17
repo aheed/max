@@ -49,7 +49,7 @@ public class SceneController : MonoBehaviour
     public Balloon balloonPrefab;
     public ManagedObject4 balloonShadowPrefab;
     public bridge bridgePrefab;
-    public ManagedObject3 carPrefab;
+    public ManagedObject4 carPrefab;
     public GameObject airstripEndPrefab;
     public GameObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
@@ -538,7 +538,7 @@ public class SceneController : MonoBehaviour
         //var hangarManagerFactory = new ObjectManagerFactory3(hangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
         var ballonManagerFactory = new ObjectManagerFactory4(balloonPrefab, balloonParent.transform, ObjectManagerFactory4.PoolType.Stack);
         var ballonShadowManagerFactory = new ObjectManagerFactory4(balloonShadowPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var carManagerFactory = new ObjectManagerFactory3(carPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
+        var carManagerFactory = new ObjectManagerFactory4(carPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         
         // Roads
         foreach (var road in levelContents.roads)
@@ -578,26 +578,27 @@ public class SceneController : MonoBehaviour
                 bridge.SetVip();
             }
             
-            /*
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].releaseActions = ret[road].releaseActions.Concat((new int[] {0}).Select(_ => 
+                ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] {0}).Select(_ => 
                     {
                         //Car car = Instantiate(carPrefab, lvlTransform);
                         //var managedCar = new ManagedObject(carManagerFactory.Pool);
-                        var managedCar = carManagerFactory.Pool.Get();
-                        managedCar.releaseAction = managedCar.Deactivate;
+                        var carRef = carManagerFactory.Get();
+
+                        //managedCar.releaseAction = managedCar.Deactivate;
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-                        managedCar.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
-                            InterfaceHelper.GetInterface<IVip>(managedCar.gameObject).SetVip();
+                            InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject).SetVip();
                         }
-                        return new Action(() => carManagerFactory.Pool.Release(managedCar));
+                        //return new Action(() => carManagerFactory.Pool.Release(managedCar));
+                        return carRef;
                     })
                 );
-            }*/
+            }
         }
 
         // Houses
