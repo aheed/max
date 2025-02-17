@@ -34,8 +34,8 @@ public class SceneController : MonoBehaviour
     public ExpHouse housePrefab;
     public ManagedObject4 flackGunPrefab;
     public ManagedObject4 tankPrefab;
-    public ManagedObject3 tree1Prefab;
-    public ManagedObject3 tree2Prefab;
+    public ManagedObject4 tree1Prefab;
+    public ManagedObject4 tree2Prefab;
     public GameObject levelPrefab;
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
@@ -51,7 +51,7 @@ public class SceneController : MonoBehaviour
     public bridge bridgePrefab;
     public ManagedObject4 carPrefab;
     public GameObject airstripEndPrefab;
-    public GameObject hangarPrefab;
+    public ManagedObject4 hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public BalloonManager balloonParentPrefab;
@@ -525,17 +525,16 @@ public class SceneController : MonoBehaviour
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        //var flakGunManagerFactory = new ObjectManagerFactory3(flackGunPrefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
         var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var tree1ManagerFactory = new ObjectManagerFactory3(tree1Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
-        var tree2ManagerFactory = new ObjectManagerFactory3(tree2Prefab, lvlTransform, ObjectManagerFactory3.PoolType.Stack);
+        var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack, false);
+        var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack, false);
         var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
         var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
-        //var hangarManagerFactory = new ObjectManagerFactory3(hangarPrefab, lvlTransform, ObjectManagerFactory3.PoolType.None);
+        var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None, false);
         var ballonManagerFactory = new ObjectManagerFactory4(balloonPrefab, balloonParent.transform, ObjectManagerFactory4.PoolType.Stack);
         var ballonShadowManagerFactory = new ObjectManagerFactory4(balloonShadowPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var carManagerFactory = new ObjectManagerFactory4(carPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
@@ -637,11 +636,11 @@ public class SceneController : MonoBehaviour
                         break;
 
                     case CellContent.TREE1:
-                        selectedFactory3 = tree1ManagerFactory;
+                        selectedFactory4 = tree1ManagerFactory;
                         break;
 
                     case CellContent.TREE2:
-                        selectedFactory3 = tree2ManagerFactory;
+                        selectedFactory4 = tree2ManagerFactory;
                         break;
 
                     case CellContent.BOAT1:
@@ -665,7 +664,7 @@ public class SceneController : MonoBehaviour
                         break;
 
                     case CellContent.HANGAR:
-                        //selectedFactory = hangarManagerFactory;
+                        selectedFactory4 = hangarManagerFactory;
                         break;
                 }
 
