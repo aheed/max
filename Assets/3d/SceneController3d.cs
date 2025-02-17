@@ -215,6 +215,7 @@ public class SceneController3d : MonoBehaviour
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
+        sceneBuilder.Init();
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);

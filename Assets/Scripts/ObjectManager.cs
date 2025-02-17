@@ -87,7 +87,7 @@ public class ObjectManager
 
     private readonly ManagedObject prefab;
 
-    private readonly Transform parent;
+    public readonly Transform parent;
 
     private readonly bool deactivateOnRelease;
 

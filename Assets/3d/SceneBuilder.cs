@@ -43,6 +43,37 @@ public class SceneBuilder : MonoBehaviour
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
 
+    private ObjectManager tree1Manager;
+    private ObjectManager flakGunManager;
+    private ObjectManager tankManager;
+    private ObjectManager tree2Manager;
+    private ObjectManager boat1Manager;
+    private ObjectManager boat2Manager;
+    private ObjectManager vehicle1Manager;
+    private ObjectManager vehicle2Manager;
+    private ObjectManager enemyHangarManager;
+    private ObjectManager hangarManager;
+    private ObjectManager carManager;
+    private GameObject managedObjectsParent;
+
+    public void Init()
+    {
+        managedObjectsParent = new GameObject("managedObjects");
+        //parent.transform.parent = transform;
+        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree2Manager = new ObjectManager(tree2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat1Manager = new ObjectManager(boat1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat2Manager = new ObjectManager(boat2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle1Manager = new ObjectManager(vehicle1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+    }
+
+
     Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
     {
         if (verts.Length % 4 != 0)
@@ -122,20 +153,9 @@ public class SceneBuilder : MonoBehaviour
                 zCoord = ztmp * cellHeight, // level relative coordinate
                 objectRefs = new List<ManagedObjectReference>()
             };
-        }
+        }        
 
-        // Object pools. Could be injected from outside or created earlier.
-        var flakGunManager = new ObjectManager(flackGunPrefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var tankManager = new ObjectManager(tankPrefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var tree1Manager = new ObjectManager(tree1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var tree2Manager = new ObjectManager(tree2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var boat1Manager = new ObjectManager(boat1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var boat2Manager = new ObjectManager(boat2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.Stack);
-        var vehicle1Manager = new ObjectManager(vehicle1Prefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
-        var vehicle2Manager = new ObjectManager(vehicle2Prefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
-        var enemyHangarManager = new ObjectManager(enemyHangarPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
-        var hangarManager = new ObjectManager(hangarPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
-        var carManager = new ObjectManager(carPrefab, sceneInput.levelTransform, ObjectManager.PoolType.None);
+        var parentPositionOffset = sceneInput.levelTransform.position - managedObjectsParent.transform.position;
 
         // Landing Strip
         {
@@ -532,7 +552,7 @@ public class SceneBuilder : MonoBehaviour
                     {
                         var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
-                        carRef.managedObject.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform + parentPositionOffset;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
                             InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject)?.SetVip();
@@ -625,7 +645,7 @@ public class SceneBuilder : MonoBehaviour
                 if (selectedManager != null)
                 {
                     var objectRef = selectedManager.Get();
-                    objectRef.managedObject.transform.localPosition = itemLocalTransform;
+                    objectRef.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
                     
                     if (levelContents.vipTargets)
                     {
