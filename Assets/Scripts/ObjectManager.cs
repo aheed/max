@@ -146,13 +146,13 @@ public class SimpleObjectManager : IObjectPool<GameObject>
     }
 }
 
-public class SimpleObjectManager3 : IObjectPool<ManagedObject3>
+public class SimpleObjectManager4 : IObjectPool<ManagedObject4>
 {
-    private ManagedObject3 prefab;
+    private ManagedObject4 prefab;
 
     private Transform parent;
 
-    public SimpleObjectManager3(ManagedObject3 prefab, Transform parent)
+    public SimpleObjectManager4(ManagedObject4 prefab, Transform parent)
     {
         this.prefab = prefab;
         this.parent = parent;
@@ -162,18 +162,18 @@ public class SimpleObjectManager3 : IObjectPool<ManagedObject3>
 
     public void Clear() {}
 
-    public ManagedObject3 Get()
+    public ManagedObject4 Get()
     {
         return GameObject.Instantiate(prefab, parent);
     }
 
-    public PooledObject<ManagedObject3> Get(out ManagedObject3 v)
+    public PooledObject<ManagedObject4> Get(out ManagedObject4 v)
     {
         v = Get();
-        return new PooledObject<ManagedObject3>(v, this);
+        return new PooledObject<ManagedObject4>(v, this);
     }
 
-    public void Release(ManagedObject3 item)
+    public void Release(ManagedObject4 item)
     {
         GameObject.Destroy(item);
     }
@@ -258,84 +258,7 @@ public class ObjectManagerFactory
 }
 
 
-public class ObjectManagerFactory3
-{
-    public enum PoolType
-    {
-        None,
-        Stack
-    }
 
-    private readonly PoolType poolType;
-
-    private readonly ManagedObject3 prefab;
-
-    private readonly Transform parent;
-
-    private readonly bool deactivateOnRelease;
-
-    // Collection checks will throw errors if we try to release an item that is already in the pool.
-    public bool collectionChecks = true;
-    public int maxPoolSize = 200;
-
-    IObjectPool<ManagedObject3> m_Pool;
-
-    public IObjectPool<ManagedObject3> Pool
-    {
-        get
-        {
-            if (m_Pool == null)
-            {
-                if (poolType == PoolType.None)
-                {
-                    m_Pool = new SimpleObjectManager3(prefab, parent);
-                }
-                else
-                {
-                    m_Pool = new ObjectPool<ManagedObject3>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
-                }
-            }
-            return m_Pool;
-        }
-    }
-
-    public ObjectManagerFactory3(ManagedObject3 prefab, Transform parent, PoolType poolType, bool deactivateOnRelease = true)
-    {
-        this.prefab = prefab;
-        this.parent = parent;
-        this.poolType = poolType;
-        this.deactivateOnRelease = deactivateOnRelease;
-    }
-
-    ManagedObject3 CreatePooledItem()
-    {
-        var ret = GameObject.Instantiate(prefab, parent);
-        return ret;
-    }
-
-    // Called when an item is returned to the pool using Release
-    void OnReturnedToPool(ManagedObject3 obj)
-    {
-        if (deactivateOnRelease) {
-            obj.Deactivate();
-        }
-    }
-
-    // Called when an item is taken from the pool using Get
-    void OnTakeFromPool(ManagedObject3 obj)
-    {
-        if (deactivateOnRelease) {
-            obj.Reactivate();
-        }
-    }
-
-    // If the pool capacity is reached then any items returned will be destroyed.
-    // We can control what the destroy behavior does, here we destroy the GameObject.
-    void OnDestroyPoolObject(ManagedObject3 obj)
-    {
-        GameObject.Destroy(obj.gameObject);
-    }
-}
 
 public class ObjectManagerFactory4
 {
@@ -354,21 +277,21 @@ public class ObjectManagerFactory4
     private readonly bool deactivateOnRelease;
 
     // Collection checks will throw errors if we try to release an item that is already in the pool.
-    public bool collectionChecks = true;
+    public bool collectionChecks = false;
     public int maxPoolSize = 200;
 
     private readonly IObjectPool<ManagedObject4> m_Pool;
 
     private IObjectPool<ManagedObject4> CreatePool()
     {
-        /*if (poolType == PoolType.None)
+        if (poolType == PoolType.None)
         {
-            return new SimpleObjectManager3(prefab, parent);
+            return new SimpleObjectManager4(prefab, parent);
         }
         else
-        {*/
+        {
             return new ObjectPool<ManagedObject4>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
-        //}
+        }
     }
 
     public ObjectManagerFactory4(ManagedObject4 prefab, Transform parent, PoolType poolType, bool deactivateOnRelease = true)

@@ -531,9 +531,9 @@ public class SceneController : MonoBehaviour
         var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack, false);
         var boat1ManagerFactory = new ObjectManagerFactory4(boat1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
         var boat2ManagerFactory = new ObjectManagerFactory4(boat2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
-        var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
-        var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
-        var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None);
+        var vehicle1ManagerFactory = new ObjectManagerFactory4(vehicle1Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
+        var vehicle2ManagerFactory = new ObjectManagerFactory4(vehicle2Prefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
+        var enemyHangarManagerFactory = new ObjectManagerFactory4(enemyHangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None, false);
         var hangarManagerFactory = new ObjectManagerFactory4(hangarPrefab, lvlTransform, ObjectManagerFactory4.PoolType.None, false);
         var ballonManagerFactory = new ObjectManagerFactory4(balloonPrefab, balloonParent.transform, ObjectManagerFactory4.PoolType.Stack);
         var ballonShadowManagerFactory = new ObjectManagerFactory4(balloonShadowPrefab, lvlTransform, ObjectManagerFactory4.PoolType.Stack);
@@ -622,7 +622,6 @@ public class SceneController : MonoBehaviour
             var ytmp = ytmpOuter; //capture for lazy evaluation
             var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                ObjectManagerFactory3 selectedFactory3 = null;
                 ObjectManagerFactory4 selectedFactory4 = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
