@@ -76,8 +76,8 @@ public class SceneController3d : MonoBehaviour
     float landingStripWidth;
     public SceneBuilder sceneBuilder;
     GameState gameState;
-    List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
-    List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
+    List<GameObjectCollection4> pendingActivation = new();
+    List<GameObjectCollection4> activeObjects = new();
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
@@ -123,7 +123,7 @@ public class SceneController3d : MonoBehaviour
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
-        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelStartZ, managedObjects = goc.managedObjects})
+        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
@@ -437,8 +437,7 @@ public class SceneController3d : MonoBehaviour
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.z} {pendingActivation.First().zCoord}");
             var activeCollection = pendingActivation.First();
-            // Instantiate game objects, never mind return value
-            activeCollection.managedObjects = activeCollection.managedObjects.ToArray();
+            activeCollection.objectRefs = activeCollection.objectRefs.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -446,11 +445,10 @@ public class SceneController3d : MonoBehaviour
 
         while (activeObjects.Count > 0 && refobject.transform.position.z - deactivationDistance > activeObjects.First().zCoord)
         {
-            //Debug.Log($"Time to destroy game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
+            //Debug.Log($"Time to release game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
 
             var collection = activeObjects.First();
-            
-            foreach (var managedObject in collection.managedObjects)
+            foreach (var managedObject in collection.objectRefs)
             {
                 managedObject.Release();
             }

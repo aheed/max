@@ -12,10 +12,10 @@ public class SceneBuilder : MonoBehaviour
     public GameObject landingStripPrefab;
     public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
-    public GameObject flackGunPrefab;
-    public GameObject tankPrefab;
-    public GameObject tree1Prefab;
-    public GameObject tree2Prefab;    
+    public ManagedObject4 flackGunPrefab;
+    public ManagedObject4 tankPrefab;
+    public ManagedObject4 tree1Prefab;
+    public ManagedObject4 tree2Prefab;    
     public GameObject boat1Prefab;
     public GameObject boat2Prefab;
     public GameObject vehicle1Prefab;
@@ -117,21 +117,21 @@ public class SceneBuilder : MonoBehaviour
         var midX = LevelContents.gridWidth / 2;
 
         SceneOutput ret = new();
-        GameObjectCollection[] gameObjectCollections = new GameObjectCollection[LevelContents.gridHeight];
+        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[LevelContents.gridHeight];
         for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
         {
-            gameObjectCollections[ztmp] = new GameObjectCollection {
+            gameObjectCollections[ztmp] = new GameObjectCollection4 {
                 zCoord = ztmp * cellHeight, // level relative coordinate
-                managedObjects = new List<IManagedObject>()
+                objectRefs = new List<ManagedObjectReference>()
             };
         }
 
         // Object pools. Could be injected from outside or created earlier.
-        var riverSectionManagerFactory = new ObjectManagerFactory(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
-        var flakGunManagerFactory = new ObjectManagerFactory(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack, true);
-        var tankManagerFactory = new ObjectManagerFactory(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var tree1ManagerFactory = new ObjectManagerFactory(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
-        var tree2ManagerFactory = new ObjectManagerFactory(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
+        //var riverSectionManagerFactory = new ObjectManagerFactory(riverSectionPrefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
+        var flakGunManagerFactory = new ObjectManagerFactory4(flackGunPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
+        var tankManagerFactory = new ObjectManagerFactory4(tankPrefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
+        var tree1ManagerFactory = new ObjectManagerFactory4(tree1Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
+        var tree2ManagerFactory = new ObjectManagerFactory4(tree2Prefab, sceneInput.levelTransform, ObjectManagerFactory4.PoolType.Stack);
         var boat1ManagerFactory = new ObjectManagerFactory(boat1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.Stack);
         var boat2ManagerFactory = new ObjectManagerFactory(boat2Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
         var vehicle1ManagerFactory = new ObjectManagerFactory(vehicle1Prefab, sceneInput.levelTransform, ObjectManagerFactory.PoolType.None);
@@ -529,10 +529,10 @@ public class SceneBuilder : MonoBehaviour
                 }
             }            
 
-            // Car            
+            /*// Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                gameObjectCollections[road].managedObjects = gameObjectCollections[road].managedObjects.Concat((new GameObject[] {null}).Select(_ => 
+                gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] {null}).Select(_ => 
                     {
                         var managedCar = new ManagedObject(carManagerFactory.Pool);
 
@@ -545,7 +545,7 @@ public class SceneBuilder : MonoBehaviour
                         return managedCar;
                     })
                 );
-            }
+            }*/
         }
 
         
@@ -578,23 +578,24 @@ public class SceneBuilder : MonoBehaviour
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 ObjectManagerFactory selectedFactory = null;
+                ObjectManagerFactory4 selectedFactory4 = null;
                 var altitude = 0f;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        selectedFactory = flakGunManagerFactory;
+                        selectedFactory4 = flakGunManagerFactory;
                         break;
 
                     case CellContent.TANK:
-                        selectedFactory = tankManagerFactory;
+                        selectedFactory4 = tankManagerFactory;
                         break;
 
                     case CellContent.TREE1:
-                        selectedFactory = tree1ManagerFactory;
+                        selectedFactory4 = tree1ManagerFactory;
                         break;
 
                     case CellContent.TREE2:
-                        selectedFactory = tree2ManagerFactory;
+                        selectedFactory4 = tree2ManagerFactory;
                         break;
 
                     case CellContent.BOAT1:
@@ -626,22 +627,22 @@ public class SceneBuilder : MonoBehaviour
 
                 var itemLocalTransform = new Vector3(xtmp * cellWidth, altitude, ztmp * cellHeight);
 
-                List<ManagedObject> retInner = new();
-                if (selectedFactory != null)
+                List<ManagedObjectReference> retInner = new();
+                if (selectedFactory4 != null)
                 {
-                    var managedObject = new ManagedObject(selectedFactory.Pool);
-                    managedObject.GameObject.transform.localPosition = itemLocalTransform;
+                    var objectRef = selectedFactory4.Get();
+                    objectRef.managedObject.transform.localPosition = itemLocalTransform;
                     
                     if (levelContents.vipTargets)
                     {
-                        var possibleVip = InterfaceHelper.GetInterface<IVip>(managedObject.GameObject);
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(objectRef.managedObject.gameObject);
                         if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
                             possibleVip.SetVip();
                         }
                     }
 
-                    retInner.Add(managedObject);
+                    retInner.Add(objectRef);
                 }
 
                 /*if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
@@ -660,7 +661,7 @@ public class SceneBuilder : MonoBehaviour
                 return retInner;
             });
 
-            gameObjectCollections[ztmp].managedObjects = gameObjectCollections[ztmp].managedObjects.Concat(gameObjectsAtZ);
+            gameObjectCollections[ztmp].objectRefs = gameObjectCollections[ztmp].objectRefs.Concat(gameObjectsAtZ);
         }
 
         ret.gameObjects = gameObjectCollections.ToList();

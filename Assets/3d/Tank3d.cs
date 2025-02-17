@@ -1,10 +1,6 @@
 using UnityEngine;
 
-public class Tank3d : MonoBehaviour
+public class Tank3d : ManagedObject4
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    
 }

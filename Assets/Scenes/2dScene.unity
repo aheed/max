@@ -3491,7 +3491,7 @@ MonoBehaviour:
   rightTrim: 20
   visibleAreaMarkerWidth: 12
   visibleAreaMarkerHeight: 8
-  startLevelType: 3
+  startLevelType: 0
 --- !u!1 &819863074
 GameObject:
   m_ObjectHideFlags: 0

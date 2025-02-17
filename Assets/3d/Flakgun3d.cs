@@ -2,14 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class Flakgun3d : MonoBehaviour
+public class Flakgun3d : ManagedObject4
 {
     public GameObject flackProjectilePrefab;
     public float avgTimeToShootSeconds = 5.0f;
     public float projectileSpeedMax = 5.0f;
     public float projectileSpeedMin = 1.0f;
     float timeToShoot = -1.0f;
-    private SpriteRenderer spriteR;
     private bool alive = true;
 
 
@@ -63,13 +62,6 @@ public class Flakgun3d : MonoBehaviour
         HandleCollision(col);
     }*/
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-        RestartShotClock();        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -83,5 +75,17 @@ public class Flakgun3d : MonoBehaviour
         //TEMP
         var a = GameState.GetInstance().playerPosition;        
         transform.GetChild(0).GetChild(0).LookAt(a);
+    }
+
+    // Overrides
+    public override void Deactivate()
+    {
+        alive = false;
+    }
+
+    public override void Reactivate()
+    {
+        alive = true;
+        RestartShotClock();
     }
 }
