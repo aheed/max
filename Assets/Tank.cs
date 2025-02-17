@@ -2,18 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tank : ManagedObject3, IPositionObservable
+public class Tank : ManagedObject4, IPositionObservable
 {
     public Sprite normalSprite;
     public Sprite shotSprite;
-    private SpriteRenderer spriteR;
     private bool shot = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-    }
 
     void HandleCollision(Collider2D col)
     {
@@ -21,12 +14,10 @@ public class Tank : ManagedObject3, IPositionObservable
         if (collObjName.StartsWith("bullet"))
         {
             shot = true;
+            var spriteR = gameObject.GetComponent<SpriteRenderer>();
             spriteR.sprite = shotSprite;
-            if (gameObject.TryGetComponent<Collider2D>(out var collider))
-            {
-                collider.enabled = false;
-            }
-            var gameState = FindAnyObjectByType<GameState>();
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
@@ -39,7 +30,7 @@ public class Tank : ManagedObject3, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
+            GameState.GetInstance().BombLanded(bomb, gameObject);
             return;
         }
 
@@ -59,10 +50,8 @@ public class Tank : ManagedObject3, IPositionObservable
         }
         shot = false;
 
+        var spriteR = gameObject.GetComponent<SpriteRenderer>();
         spriteR.sprite = normalSprite;
-        if (gameObject.TryGetComponent<Collider2D>(out var collider))
-        {
-            collider.enabled = true;
-        }
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 }
