@@ -11,7 +11,7 @@ public class Bomb3d : MonoBehaviour
     {
         if (gameState == null)
         {
-            gameState = FindAnyObjectByType<GameState>();
+            gameState = GameState.GetInstance();
         }
         return gameState;
     }

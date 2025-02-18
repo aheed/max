@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class SceneOutput
 {
-    public List<GameObjectCollection> gameObjects;
+    public List<GameObjectCollection4> gameObjects;
     public List<EnemyHQ> enemyHQs;
     public float landingStripStartZ;
     public float landingStripEndZ;

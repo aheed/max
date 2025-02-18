@@ -29,7 +29,7 @@ public class ButtonBarDocument : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindAnyObjectByType<GameState>();
+        gameState = GameState.GetInstance();
         var uiDocument = GetComponent<UIDocument>();
 
         buttonBarUIElem = uiDocument.rootVisualElement.Q<VisualElement>("ButtonBarUI");

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class SceneBuilder : MonoBehaviour
 {
@@ -11,22 +12,22 @@ public class SceneBuilder : MonoBehaviour
     public GameObject landingStripPrefab;
     public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
-    public GameObject flackGunPrefab;
-    public GameObject tankPrefab;
-    public GameObject tree1Prefab;
-    public GameObject tree2Prefab;    
-    public GameObject boat1Prefab;
-    public GameObject boat2Prefab;
-    public GameObject vehicle1Prefab;
-    public GameObject vehicle2Prefab;
-    public GameObject enemyHangarPrefab;
+    public ManagedObject flackGunPrefab;
+    public ManagedObject tankPrefab;
+    public ManagedObject tree1Prefab;
+    public ManagedObject tree2Prefab;    
+    public ManagedObject boat1Prefab;
+    public ManagedObject boat2Prefab;
+    public ManagedObject vehicle1Prefab;
+    public ManagedObject vehicle2Prefab;
+    public ManagedObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
-    public GameObject carPrefab;
+    public ManagedObject carPrefab;
     public GameObject airstripEndPrefab;
-    public GameObject hangarPrefab;
+    public ManagedObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
     public Material riverMaterial;
@@ -41,6 +42,41 @@ public class SceneBuilder : MonoBehaviour
     float airstripAltitude = 0.001f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
+
+    private ObjectManager flakGunManager;
+    private ObjectManager tankManager;
+    private ObjectManager tree1Manager;
+    private ObjectManager tree2Manager;
+    private ObjectManager boat1Manager;
+    private ObjectManager boat2Manager;
+    private ObjectManager vehicle1Manager;
+    private ObjectManager vehicle2Manager;
+    private ObjectManager enemyHangarManager;
+    private ObjectManager hangarManager;
+    private ObjectManager carManager;
+    private GameObject managedObjectsParent;
+
+    public void Init()
+    {
+        if (managedObjectsParent != null)
+        {
+            Destroy(managedObjectsParent);
+        }
+        
+        managedObjectsParent = new GameObject("managedObjects");
+        flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree2Manager = new ObjectManager(tree2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat1Manager = new ObjectManager(boat1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat2Manager = new ObjectManager(boat2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle1Manager = new ObjectManager(vehicle1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+    }
+
 
     Mesh CreateQuadMesh(Vector3[] verts, Vector3[] quadNormals)
     {
@@ -88,8 +124,6 @@ public class SceneBuilder : MonoBehaviour
         return mesh;
     }
 
-    //public List<GameObjectCollection> PopulateScene(LevelContents levelContents) => new(); //TEMP!!!
-
     float GetRiverLeftEdgeX(float z, List<SceneRiverSegment> riverSegments)
     {
         var segment = riverSegments.FirstOrDefault(s =>  z < s.maxZ);
@@ -109,21 +143,23 @@ public class SceneBuilder : MonoBehaviour
     // Create game objects    
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
-        GameState gameState = FindAnyObjectByType<GameState>();
+        GameState gameState = GameState.GetInstance();
 
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
         float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
 
         SceneOutput ret = new();
-        GameObjectCollection[] gameObjectCollections = new GameObjectCollection[LevelContents.gridHeight];
+        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[LevelContents.gridHeight];
         for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
         {
-            gameObjectCollections[ztmp] = new GameObjectCollection {
+            gameObjectCollections[ztmp] = new GameObjectCollection4 {
                 zCoord = ztmp * cellHeight, // level relative coordinate
-                gameObjects = new List<GameObject>()
+                objectRefs = new List<ManagedObjectReference>()
             };
         }        
+
+        var parentPositionOffset = sceneInput.levelTransform.position - managedObjectsParent.transform.position;
 
         // Landing Strip
         {
@@ -516,16 +552,16 @@ public class SceneBuilder : MonoBehaviour
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                gameObjectCollections[road].gameObjects = gameObjectCollections[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
+                gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] {null}).Select(_ => 
                     {
-                        GameObject car = Instantiate(carPrefab, sceneInput.levelTransform);
+                        var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
-                        car.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform + parentPositionOffset;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
-                            InterfaceHelper.GetInterface<IVip>(car)?.SetVip();
+                            InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject)?.SetVip();
                         }
-                        return car.gameObject;
+                        return carRef;
                     })
                 );
             }
@@ -560,89 +596,90 @@ public class SceneBuilder : MonoBehaviour
             var ztmp = ztmpOuter; //capture for lazy evaluation
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                GameObject selectedPrefab = null;
+                ObjectManager selectedManager = null;
                 var altitude = 0f;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        selectedPrefab = flackGunPrefab;
+                        selectedManager = flakGunManager;
                         break;
 
                     case CellContent.TANK:
-                        selectedPrefab = tankPrefab;
+                        selectedManager = tankManager;
                         break;
 
                     case CellContent.TREE1:
-                        selectedPrefab = tree1Prefab;
+                        selectedManager = tree1Manager;
                         break;
 
                     case CellContent.TREE2:
-                        selectedPrefab = tree2Prefab;
+                        selectedManager = tree2Manager;
                         break;
 
                     case CellContent.BOAT1:
-                        selectedPrefab = boat1Prefab;
+                        selectedManager = boat1Manager;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedPrefab = boat2Prefab;
+                        selectedManager = boat2Manager;
                         altitude = gameState.riverAltitude;
                         break;
 
                     case CellContent.VEHICLE1:
-                        selectedPrefab = vehicle1Prefab;
+                        selectedManager = vehicle1Manager;
                         break;
                     
                     case CellContent.VEHICLE2:
-                        selectedPrefab = vehicle2Prefab;
+                        selectedManager = vehicle2Manager;
                         break;
 
                     case CellContent.ENEMY_HANGAR:
-                        selectedPrefab = enemyHangarPrefab;
+                        selectedManager = enemyHangarManager;
                         break;
 
                     case CellContent.HANGAR:
-                        selectedPrefab = hangarPrefab;
+                        selectedManager = hangarManager;
                         break;
                 }
 
                 var itemLocalTransform = new Vector3(xtmp * cellWidth, altitude, ztmp * cellHeight);
 
-                List<GameObject> retInner = new();
-                if (selectedPrefab != null)
+                List<ManagedObjectReference> retInner = new();
+                if (selectedManager != null)
                 {
-                    var itemGameObject = Instantiate(selectedPrefab, sceneInput.levelTransform);
-                    itemGameObject.transform.localPosition = itemLocalTransform;
+                    var objectRef = selectedManager.Get();
+                    objectRef.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
                     
                     if (levelContents.vipTargets)
                     {
-                        var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(objectRef.managedObject.gameObject);
                         if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
                             possibleVip.SetVip();
                         }
                     }
 
-                    retInner.Add(itemGameObject);
+                    retInner.Add(objectRef);
                 }
 
-                if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
+                /*if ((levelContents.cells[xtmp, ztmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, sceneInput.levelTransform);
-                    balloonShadowGameObject.transform.localPosition = itemLocalTransform;
+                    //var balloonShadowGameObject = Instantiate(balloonShadowPrefab, sceneInput.levelTransform);
+                    var managedBalloonShadow = new ManagedObject(ballonShadowManagerFactory.Pool);
+                    managedBalloonShadow.GameObject.transform.localPosition = itemLocalTransform;
 
                     var balloonGameObject = Instantiate(balloonPrefab, sceneInput.balloonParentTransform);
-                    balloonGameObject.transform.position = balloonShadowGameObject.transform.position;
+                    balloonGameObject.transform.position = managedBalloonShadow.GameObject.transform.position;
                     Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
-                    balloon.SetShadow(balloonShadowGameObject);
-                    retInner.Add(balloonShadowGameObject);
-                }
+                    balloon.SetShadow(managedBalloonShadow.GameObject);
+                    retInner.Add(managedBalloonShadow);
+                }*/
 
                 return retInner;
             });
 
-            gameObjectCollections[ztmp].gameObjects = gameObjectCollections[ztmp].gameObjects.Concat(gameObjectsAtZ);
+            gameObjectCollections[ztmp].objectRefs = gameObjectCollections[ztmp].objectRefs.Concat(gameObjectsAtZ);
         }
 
         ret.gameObjects = gameObjectCollections.ToList();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Car3d : MonoBehaviour, IVip
+public class Car3d : ManagedObject, IVip
 {
     public Material normalMaterial;
     public float speedFactor = 1.0f;    
@@ -11,7 +11,7 @@ public class Car3d : MonoBehaviour, IVip
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        gameState = FindAnyObjectByType<GameState>();
+        gameState = GameState.GetInstance();
         speed = speedFactor * gameState.maxSpeed;
         //Debug.Log($"Car3d speed is {speed}");
 

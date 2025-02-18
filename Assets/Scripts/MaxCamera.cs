@@ -54,7 +54,7 @@ public class MaxCamera : MonoBehaviour
 
    public void OnViewModeChanged()
    {
-      var viewMode = FindAnyObjectByType<GameState>().viewMode;
+      var viewMode = GameState.GetInstance().viewMode;
       if (viewMode == ViewMode.NORMAL)
       {
          cameraComponent.rect = new Rect( ) { x = 0, y = 0, width = 1, height = 1};          

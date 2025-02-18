@@ -2,15 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHangar : MonoBehaviour
+public class EnemyHangar : ManagedObject
 {
     public FlipBook bombed;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     void OnTriggerEnter2D(Collider2D col)
     {        
@@ -21,13 +15,9 @@ public class EnemyHangar : MonoBehaviour
 
         bombed.Activate();
         
-        var collider = gameObject.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
-        }
+        gameObject.GetComponent<Collider2D>().enabled = false;
 
-        var gameState = FindAnyObjectByType<GameState>();
+        var gameState = GameState.GetInstance();
         gameState.ReportEvent(GameEvent.SMALL_DETONATION);
         gameState.ReportEvent(GameEvent.MEDIUM_BANG);
 

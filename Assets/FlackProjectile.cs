@@ -32,7 +32,7 @@ public class FlackProjectile : MonoBehaviour
             Vector3 explosionPos = new Vector3(
                 transform.position.x,
                 transform.position.y,
-                FindAnyObjectByType<GameState>().GetStateContents().altitude);
+                GameState.GetInstance().GetStateContents().altitude);
             Instantiate(flackExplosionPrefab, explosionPos, Quaternion.identity);
             Destroy(gameObject);
         }

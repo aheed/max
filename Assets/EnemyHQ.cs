@@ -41,7 +41,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable
         }
 
         SetBombed();
-        var gameState = FindAnyObjectByType<GameState>();
+        var gameState = GameState.GetInstance();
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
         gameState.IncrementTargetsHit();

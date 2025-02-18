@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -75,8 +76,8 @@ public class SceneController3d : MonoBehaviour
     float landingStripWidth;
     public SceneBuilder sceneBuilder;
     GameState gameState;
-    List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
-    List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
+    List<GameObjectCollection4> pendingActivation = new();
+    List<GameObjectCollection4> activeObjects = new();
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
@@ -106,7 +107,6 @@ public class SceneController3d : MonoBehaviour
         levels[currentLevelIndex] = newLevel;
         lastLevelStartZ = llcz;
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
-        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
     }
 
     void CreateLevel()
@@ -123,7 +123,7 @@ public class SceneController3d : MonoBehaviour
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
-        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelStartZ, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
@@ -215,6 +215,7 @@ public class SceneController3d : MonoBehaviour
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
+        sceneBuilder.Init();
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
@@ -437,8 +438,7 @@ public class SceneController3d : MonoBehaviour
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.z} {pendingActivation.First().zCoord}");
             var activeCollection = pendingActivation.First();
-            // Instantiate game objects, never mind return value
-            activeCollection.gameObjects = activeCollection.gameObjects.ToArray();
+            activeCollection.objectRefs = activeCollection.objectRefs.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -446,12 +446,12 @@ public class SceneController3d : MonoBehaviour
 
         while (activeObjects.Count > 0 && refobject.transform.position.z - deactivationDistance > activeObjects.First().zCoord)
         {
-            //Debug.Log($"Time to destroy game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
+            //Debug.Log($"Time to release game objects at {refobject.transform.position.z} {activeObjects.First().zCoord}");
 
             var collection = activeObjects.First();
-            foreach (var gameObject in collection.gameObjects)
+            foreach (var objRef in collection.objectRefs)
             {
-                Destroy(gameObject);
+                objRef.Release();
             }
 
             activeObjects.RemoveAt(0);
@@ -703,7 +703,15 @@ public class SceneController3d : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            Destroy(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject>(hitObject);
+            if (managedObject != null)
+            {
+                managedObject.Release();
+            }
+            else
+            {
+                Destroy(hitObject);
+            }
         }
     
         if (bomb != null)

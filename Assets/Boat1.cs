@@ -2,29 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boat1 : MonoBehaviour, IPositionObservable
+public class Boat1 : ManagedObject, IPositionObservable
 {
+    static readonly int maxHealth = 3;
     public GameObject sunkBoatPrefab;
     GameState gameState;
-    int health = 3;
+    int health = maxHealth;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameState = FindAnyObjectByType<GameState>();
+        gameState = GameState.GetInstance();
+    }
+
+    public override void Deactivate()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        gameObject.SetActive(false);
+    }
+
+    public override void Reactivate()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = true;
+        gameObject.SetActive(true);
+        health = maxHealth;
     }
 
     void Sink()
     {
-        var collider = gameObject.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
-        }
-
-        var parent = gameObject.transform.parent;
+        var parent = transform.parent;
         Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
-        gameObject.SetActive(false);
+        Release();
 
         // Todo: report destroyed boat for scoring
     }

@@ -75,7 +75,7 @@ public class DashUIDocument : MonoBehaviour
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
 
-        gameState = FindAnyObjectByType<GameState>();
+        gameState = GameState.GetInstance();
         gameStateContents = gameState.GetStateContents();
         
         SetupCallbacks();

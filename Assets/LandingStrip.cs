@@ -20,7 +20,7 @@ public class LandingStrip : MonoBehaviour
         var bomb = col.gameObject.GetComponent<Bomb>();
         var tmp = new GameObject("tmp"); // Pass a throwaway game object to indicate something was hit
         tmp.transform.position = bomb.transform.position;
-        FindAnyObjectByType<GameState>().BombLanded(bomb, tmp);
+        GameState.GetInstance().BombLanded(bomb, tmp);
 
         // To do: Report bombed enemy airstrip for scoring
     }

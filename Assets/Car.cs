@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-public class Car : MonoBehaviour, IVip
+public class Car : ManagedObject, IVip
 {
     public float speedFactor = 1.0f;
     public Sprite[] sprites;
@@ -13,18 +13,6 @@ public class Car : MonoBehaviour, IVip
     float speed;
     VipBlinker vipBlinker;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-        gameState = FindAnyObjectByType<GameState>();
-        speed = speedFactor * gameState.maxSpeed;
-        var spriteIndex = Random.Range(0, sprites.Length);
-        spriteR.sprite = sprites[spriteIndex];
-        var colorIndex = Random.Range(0, colors.Length);
-        spriteR.color = colors[colorIndex];
-    }
 
     public void SetVip()
     {
@@ -57,5 +45,23 @@ public class Car : MonoBehaviour, IVip
                 gameState.IncrementTargetsHit();
             }
         }
+    }
+
+    // Override
+    public override void Deactivate()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public override void Reactivate()
+    {
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
+        gameState = GameState.GetInstance();
+        speed = speedFactor * gameState.maxSpeed;
+        var spriteIndex = Random.Range(0, sprites.Length);
+        spriteR.sprite = sprites[spriteIndex];
+        var colorIndex = Random.Range(0, colors.Length);
+        spriteR.color = colors[colorIndex];
+        gameObject.SetActive(true);
     }
 }

@@ -151,7 +151,7 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         side.Activate();
         roof.Activate();
 
-        var gameState = FindAnyObjectByType<GameState>();
+        var gameState = GameState.GetInstance();
         if (target != null)
         {
             Destroy(target.gameObject);

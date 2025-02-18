@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public enum GameStatus
 {
@@ -21,12 +22,6 @@ public enum GameStatus
     FINISHED  // Rule Britannia!
 }
 
-public class GameObjectCollection
-{
-    public float zCoord;
-    public IEnumerable<GameObject> gameObjects;
-}
-
 public class SceneController : MonoBehaviour
 {
     public MaxControl maxPlanePrefab;
@@ -37,29 +32,29 @@ public class SceneController : MonoBehaviour
     public GameObject roadPrefab;
     public GameObject landingStripPrefab;
     public ExpHouse housePrefab;
-    public GameObject flackGunPrefab;
-    public GameObject tankPrefab;
-    public GameObject tree1Prefab;
-    public GameObject tree2Prefab;
+    public ManagedObject flackGunPrefab;
+    public ManagedObject tankPrefab;
+    public ManagedObject tree1Prefab;
+    public ManagedObject tree2Prefab;
     public GameObject levelPrefab;
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
-    public GameObject boat1Prefab;
-    public GameObject boat2Prefab;
-    public GameObject vehicle1Prefab;
-    public GameObject vehicle2Prefab;
-    public GameObject enemyHangarPrefab;
+    public ManagedObject boat1Prefab;
+    public ManagedObject boat2Prefab;
+    public ManagedObject vehicle1Prefab;
+    public ManagedObject vehicle2Prefab;
+    public ManagedObject enemyHangarPrefab;
     public GameObject parkedPlanePrefab;
-    public GameObject balloonPrefab;
-    public GameObject balloonShadowPrefab;
+    public Balloon balloonPrefab;
+    public ManagedObject balloonShadowPrefab;
     public bridge bridgePrefab;
-    public Car carPrefab;
+    public ManagedObject carPrefab;
     public GameObject airstripEndPrefab;
-    public GameObject hangarPrefab;
+    public ManagedObject hangarPrefab;
     public EnemyHQ enemyHqPrefab;
     public GameObject bigHousePrefab;
-    public GameObject balloonParentPrefab;
+    public BalloonManager balloonParentPrefab;
     public refobj refobject;
     public float width = 1;
     public float height = 1;
@@ -127,8 +122,8 @@ public class SceneController : MonoBehaviour
     float landingStripTopY;
     float landingStripWidth;
     GameState gameState;
-    List<GameObjectCollection> pendingActivation = new List<GameObjectCollection>();
-    List<GameObjectCollection> activeObjects = new List<GameObjectCollection>();
+    List<GameObjectCollection4> pendingActivation = new();
+    List<GameObjectCollection4> activeObjects = new();
     float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
@@ -139,8 +134,52 @@ public class SceneController : MonoBehaviour
     List<float> roadLowerEdgesY;
     public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
     TvSimDocument tvSimDocumentObject;
-    GameObject balloonParent;
+    BalloonManager balloonParent;
     ////
+    
+    private ObjectManager flakGunManager;
+    private ObjectManager tankManager;
+    private ObjectManager tree1Manager;
+    private ObjectManager tree2Manager;
+    private ObjectManager boat1Manager;
+    private ObjectManager boat2Manager;
+    private ObjectManager vehicle1Manager;
+    private ObjectManager vehicle2Manager;
+    private ObjectManager enemyHangarManager;
+    private ObjectManager hangarManager;
+    private ObjectManager carManager;
+    private ObjectManager balloonManager;
+    private ObjectManager balloonShadowManager;
+    private GameObject managedObjectsParent;
+
+    public void InitSceneBuilder()
+    {
+        if (managedObjectsParent != null)
+        {
+            Destroy(managedObjectsParent);
+        }
+        
+        if (balloonParent != null)
+        {
+            Destroy(balloonParent);
+        }
+
+        managedObjectsParent = new GameObject("managedObjects");
+        balloonParent = Instantiate(balloonParentPrefab);
+        flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        tree1Manager = new ObjectManager(tree1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack, false);
+        tree2Manager = new ObjectManager(tree2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack, false);
+        boat1Manager = new ObjectManager(boat1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        boat2Manager = new ObjectManager(boat2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle1Manager = new ObjectManager(vehicle1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+        enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
+        hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
+        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        balloonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
+        balloonShadowManager = new ObjectManager(balloonShadowPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
+    }
     
     GameObject GetLevel() => levels[currentLevelIndex];
 
@@ -158,9 +197,7 @@ public class SceneController : MonoBehaviour
         var llcy = level * levelHeight;
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
-        lastLevelLowerEdgeY = llcy;
-        balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
-        InterfaceHelper.GetInterface<BalloonManager>(balloonParent).SetRefTransform(refobject.transform);
+        lastLevelLowerEdgeY = llcy;        
     }
 
 
@@ -211,7 +248,7 @@ public class SceneController : MonoBehaviour
 
     // Create game objects
     // llcx, llcy: Lower Left Corner of the level
-    public List<GameObjectCollection> PopulateScene(LevelContents levelContents)
+    public List<GameObjectCollection4> PopulateScene(LevelContents levelContents)
     {
         GameStateContents stateContents = gameState.GetStateContents();
         float cellWidth = levelWidth / LevelContents.gridWidth;
@@ -220,6 +257,8 @@ public class SceneController : MonoBehaviour
         var midX = LevelContents.gridWidth / 2;
 
         var lvlTransform = GetLevel().transform;
+
+        var parentPositionOffset = lvlTransform.position - managedObjectsParent.transform.position;
 
         // Landing Strip
         {
@@ -521,12 +560,12 @@ public class SceneController : MonoBehaviour
         prMeshFilter.mesh = prMesh;
         prMeshFilterWide.mesh = prMeshWide;
 
-        GameObjectCollection[] ret = new GameObjectCollection[LevelContents.gridHeight];
+        GameObjectCollection4[] ret = new GameObjectCollection4[LevelContents.gridHeight];
         for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
         {
-            ret[ytmp] = new GameObjectCollection {
+            ret[ytmp] = new GameObjectCollection4 {
                 zCoord = ytmp * cellHeight, // level relative coordinate
-                gameObjects = new List<GameObject>()
+                objectRefs = new List<ManagedObjectReference>()
             };
         }        
         
@@ -567,20 +606,20 @@ public class SceneController : MonoBehaviour
             {
                 bridge.SetVip();
             }
-
+            
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].gameObjects = ret[road].gameObjects.Concat((new GameObject[] {null}).Select(_ => 
+                ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] {0}).Select(_ => 
                     {
-                        Car car = Instantiate(carPrefab, lvlTransform);
+                        var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-                        car.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
-                            car.SetVip();
+                            InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject).SetVip();
                         }
-                        return car.gameObject;
+                        return carRef;
                     })
                 );
             }
@@ -600,94 +639,94 @@ public class SceneController : MonoBehaviour
             {
                 house.SetVip();
             }
-        }
+        }        
 
         // Small items: Flack guns, trees, tanks
         for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
         {
             var ytmp = ytmpOuter; //capture for lazy evaluation
-            var gameObjectsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
+            var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
-                GameObject selectedPrefab = null;
+                ObjectManager selectedManager = null;
                 switch (levelContents.cells[xtmp, ytmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
-                        selectedPrefab = flackGunPrefab;
+                        selectedManager = flakGunManager;
                         break;
 
                     case CellContent.TANK:
-                        selectedPrefab = tankPrefab;
+                        selectedManager = tankManager;
                         break;
 
                     case CellContent.TREE1:
-                        selectedPrefab = tree1Prefab;
+                        selectedManager = tree1Manager;
                         break;
 
                     case CellContent.TREE2:
-                        selectedPrefab = tree2Prefab;
+                        selectedManager = tree2Manager;
                         break;
 
                     case CellContent.BOAT1:
-                        selectedPrefab = boat1Prefab;
+                        selectedManager = boat1Manager;
                         break;
 
                     case CellContent.BOAT2:
-                        selectedPrefab = boat2Prefab;
+                        selectedManager = boat2Manager;
                         break;
 
                     case CellContent.VEHICLE1:
-                        selectedPrefab = vehicle1Prefab;
+                        selectedManager = vehicle1Manager;
                         break;
                     
                     case CellContent.VEHICLE2:
-                        selectedPrefab = vehicle2Prefab;
+                        selectedManager = vehicle2Manager;
                         break;
 
                     case CellContent.ENEMY_HANGAR:
-                        selectedPrefab = enemyHangarPrefab;
+                        selectedManager = enemyHangarManager;
                         break;
 
                     case CellContent.HANGAR:
-                        selectedPrefab = hangarPrefab;
+                        selectedManager = hangarManager;
                         break;
                 }
 
-                List<GameObject> ret = new();
-                if (selectedPrefab != null)
+                List<ManagedObjectReference> ret = new();
+                var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
+                if (selectedManager != null)
                 {
-                    var itemGameObject = Instantiate(selectedPrefab, lvlTransform);
-                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
-                    itemGameObject.transform.localPosition = itemLocalTransform;
+                    var objRef = selectedManager.Get();
+                    objRef.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
                     
                     if (levelContents.vipTargets)
                     {
-                        var possibleVip = InterfaceHelper.GetInterface<IVip>(itemGameObject);
+                        var possibleVip = InterfaceHelper.GetInterface<IVip>(objRef.managedObject.gameObject);
                         if (possibleVip != null && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             possibleVip.SetVip();
                         }
                     }
 
-                    ret.Add(itemGameObject);
+                    ret.Add(objRef);
                 }
 
                 if ((levelContents.cells[xtmp, ytmp] & CellContent.AIR_MASK) == CellContent.BALLOON)
                 {
-                    var balloonShadowGameObject = Instantiate(balloonShadowPrefab, lvlTransform);
-                    var itemLocalTransform = new Vector3(xtmp * cellWidth + ytmp * cellHeight * neutralSlope, ytmp * cellHeight, -0.24f);
-                    balloonShadowGameObject.transform.localPosition = itemLocalTransform;
+                    var managedBalloonShadow = balloonShadowManager.Get();
+                    managedBalloonShadow.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
 
-                    var balloonGameObject = Instantiate(balloonPrefab, balloonParent.transform);
-                    balloonGameObject.transform.position = balloonShadowGameObject.transform.position;
-                    Balloon balloon = InterfaceHelper.GetInterface<Balloon>(balloonGameObject);
-                    balloon.SetShadow(balloonShadowGameObject);
-                    ret.Add(balloonShadowGameObject);
+                    var balloonRef = balloonManager.Get();
+                    var balloon = balloonRef.managedObject as Balloon;
+                    balloon.transform.position = managedBalloonShadow.managedObject.transform.position;
+                    balloon.InitAltitude();
+                    balloon.SetShadow(managedBalloonShadow.managedObject);
+                    ret.Add(balloonRef);
                 }
 
                 return ret;
             });
 
-            ret[ytmp].gameObjects = ret[ytmp].gameObjects.Concat(gameObjectsAtY);
+            ret[ytmp].objectRefs = ret[ytmp].objectRefs.Concat(releaseActionsAtY);
         }
 
         return ret.ToList();
@@ -697,7 +736,7 @@ public class SceneController : MonoBehaviour
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection {zCoord = goc.zCoord + lastLevelLowerEdgeY, gameObjects = goc.gameObjects})
+        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelLowerEdgeY, objectRefs = goc.objectRefs})
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -780,6 +819,7 @@ public class SceneController : MonoBehaviour
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
+        InitSceneBuilder();
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
@@ -1030,8 +1070,8 @@ public class SceneController : MonoBehaviour
         {
             //Debug.Log($"Time to activate more game objects at {refobject.transform.position.y} {pendingActivation.First().yCoord}");
             var activeCollection = pendingActivation.First();
-            // Instantiate game objects, never mind return value
-            activeCollection.gameObjects = activeCollection.gameObjects.ToArray();
+            // Instantiate game objects
+            activeCollection.objectRefs = activeCollection.objectRefs.ToArray();
             pendingActivation.RemoveAt(0);
             activeObjects.Add(activeCollection);
             break;
@@ -1042,9 +1082,9 @@ public class SceneController : MonoBehaviour
             //Debug.Log($"Time to destroy game objects at {refobject.transform.position.y} {activeObjects.First().yCoord}");
 
             var collection = activeObjects.First();
-            foreach (var gameObject in collection.gameObjects)
+            foreach (var objRef in collection.objectRefs)
             {
-                Destroy(gameObject);
+                objRef.Release();
             }
 
             activeObjects.RemoveAt(0);
@@ -1292,12 +1332,20 @@ public class SceneController : MonoBehaviour
                 gameState.ReportEvent(GameEvent.SMALL_DETONATION);
                 gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             }
-            Destroy(hitObject);
+            var managedObject = InterfaceHelper.GetInterface<ManagedObject>(hitObject);
+            if (managedObject != null)
+            {
+                managedObject.Release();
+            }
+            else
+            {
+                Destroy(hitObject);
+            }
         }
     
         if (bomb != null)
         {
-            Destroy(bomb.gameObject);
+            Destroy(bomb);
         }
     }
 }

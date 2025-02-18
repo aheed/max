@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlackGun : MonoBehaviour, IPositionObservable
+public class FlackGun : ManagedObject, IPositionObservable
 {
     public GameObject flackProjectilePrefab;
+    public Sprite normalSprite;
     public Sprite shotSprite;
     public float avgTimeToShootSeconds = 5.0f;
     float timeToShoot = -1.0f;
@@ -26,18 +27,18 @@ public class FlackGun : MonoBehaviour, IPositionObservable
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         if (collObjName.StartsWith("bullet"))
         {
-            spriteR.sprite = shotSprite;
-            var collider = gameObject.GetComponent<Collider2D>();
-            if (collider != null)
-            {
-                collider.enabled = false;
-            }
-            alive = false;
-            var gameState = FindAnyObjectByType<GameState>();
+            var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
             // Todo: report destroyed flack gun for scoring
+
+            spriteR.sprite = shotSprite;
+            if (gameObject.TryGetComponent<Collider2D>(out var collider))
+            {
+                collider.enabled = false;
+            }
+            alive = false;
         }
 
         //no collision
@@ -48,18 +49,11 @@ public class FlackGun : MonoBehaviour, IPositionObservable
         if (col.name.StartsWith("bomb"))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            FindAnyObjectByType<GameState>().BombLanded(bomb, gameObject);
+            GameState.GetInstance().BombLanded(bomb, gameObject);
             return;
         }
 
         HandleCollision(col);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteR = gameObject.GetComponent<SpriteRenderer>();
-        RestartShotClock();        
     }
 
     // Update is called once per frame
@@ -76,4 +70,26 @@ public class FlackGun : MonoBehaviour, IPositionObservable
     public Vector2 GetPosition() => transform.position;
     public float GetAltitude() => Altitudes.strafeMaxAltitude / 2;
     public float GetHeight() => Altitudes.strafeMaxAltitude;
+
+    // Overrides
+
+    public override void Deactivate()
+    {
+        alive = false;
+    }
+
+    public override void Reactivate()
+    {
+        alive = true;
+
+        spriteR = gameObject.GetComponent<SpriteRenderer>();
+
+        spriteR.sprite = normalSprite;
+        if (gameObject.TryGetComponent<Collider2D>(out var collider))
+        {
+            collider.enabled = true;
+        }
+
+        RestartShotClock();
+    }
 }

@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : MonoBehaviour, IPositionObservable
+public class Balloon : ManagedObject, IPositionObservable
 {
     public float startAltitudeQuotientMax = 0.3f;
     public float height = 0.3f;
     public GameObject popPrefab;
     private SpriteRenderer spriteR;
-    private GameObject shadow = null;
+    private ManagedObject shadow = null;
 
     private float startParentAltitude;
 
-    public void SetShadow(GameObject shadow) => this.shadow = shadow;
+    public void SetShadow(ManagedObject shadow) => this.shadow = shadow;
 
     float GetParentAltitude() => gameObject.transform.parent.localPosition.y;
 
@@ -21,9 +21,35 @@ public class Balloon : MonoBehaviour, IPositionObservable
     // Start is called before the first frame update
     void Start()
     {
-        var gameState = FindAnyObjectByType<GameState>();
-        spriteR = gameObject.GetComponent<SpriteRenderer>();        
-        
+        Reactivate();
+    }
+
+    void Pop()
+    {
+        var pop = Instantiate(popPrefab, gameObject.transform.position, Quaternion.identity);
+        pop.GetComponent<SpriteRenderer>().sortingOrder = GetSortingOrder();
+
+        // Move out of view
+        Vector3 localPosition = transform.localPosition;
+        localPosition.y += GameState.GetInstance().maxAltitude * 10;
+        transform.localPosition = localPosition;
+
+        Release();
+    }
+
+    public override void Deactivate()
+    {        
+        if (shadow != null)
+        {
+            shadow.Release();
+            shadow = null;
+        }
+    }
+
+    public void InitAltitude()
+    {
+        spriteR = GetComponent<SpriteRenderer>();
+        var gameState = GameState.GetInstance();        
         var startAltitude = UnityEngine.Random.Range(
             gameState.minAltitude,
             gameState.maxAltitude * startAltitudeQuotientMax);
@@ -35,22 +61,6 @@ public class Balloon : MonoBehaviour, IPositionObservable
         localPosition += new Vector3(0, startAltitude, startAltitude);
         transform.localPosition = localPosition;
         spriteR.sortingOrder = GetSortingOrder();
-    }
-
-    void Pop()
-    {
-        var pop = Instantiate(popPrefab, gameObject.transform.position, Quaternion.identity);
-        pop.GetComponent<SpriteRenderer>().sortingOrder = GetSortingOrder();
-        Destroy(gameObject);
-    }
-
-    void OnDestroy()
-    {
-        if (shadow != null)
-        {
-            Destroy(shadow);
-            shadow = null;
-        }
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -68,7 +78,7 @@ public class Balloon : MonoBehaviour, IPositionObservable
             collObjName.StartsWith("max"))
         {
             //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
-            FindAnyObjectByType<GameState>().IncrementTargetsHit();
+            GameState.GetInstance().IncrementTargetsHit();
         }
         else 
         {
