@@ -4,6 +4,7 @@ using UnityEngine.ProBuilder;
 public class House4 : MonoBehaviour, IVip
 {
     public GameObject targetPrefab;
+    public GameObject explosionPrefab;
     public float sizeFactor = 0.3f;
     Vector3 size;
 
@@ -74,5 +75,6 @@ public class House4 : MonoBehaviour, IVip
         var bombed = inner.GetChild(1);
         alive.gameObject.SetActive(false);
         bombed.gameObject.SetActive(true);
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
     }
 }
