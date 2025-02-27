@@ -14,9 +14,10 @@ public class House4 : MonoBehaviour, IVip
         //Debug.Log($"House4 Setting size to {newSize}");
         
         var inner = transform.GetChild(0);
-        var eastWall = inner.GetChild(0).gameObject;
-        var southWall = inner.GetChild(1).gameObject;
-        //var roof = inner.GetChild(2).gameObject;
+        var alive = inner.GetChild(0);
+        //var bombed = inner.GetChild(1);
+        var eastWall = alive.GetChild(0).gameObject;
+        var southWall = alive.GetChild(1).gameObject;
         
         inner.transform.localScale = newSize * sizeFactor;
 
@@ -62,11 +63,16 @@ public class House4 : MonoBehaviour, IVip
         if (IsVip())
         {
             GameState.GetInstance().IncrementTargetsHit();
+            Destroy(target);
+            target = null;
         }
 
-        GameState.GetInstance().BombLanded(col.gameObject, gameObject);
+        GameState.GetInstance().BombLanded(col.gameObject, new GameObject());
 
-        // Todo: spawn explosion/destroyed house
+        var inner = transform.GetChild(0);
+        var alive = inner.GetChild(0);
+        var bombed = inner.GetChild(1);
+        alive.gameObject.SetActive(false);
+        bombed.gameObject.SetActive(true);
     }
-
 }
