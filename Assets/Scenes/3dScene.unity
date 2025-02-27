@@ -752,7 +752,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 0
+  startLevelType: 1
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -31385,6 +31385,10 @@ PrefabInstance:
     - target: {fileID: 218899342934717783, guid: 5d15225c7d13b4000b89ea6ea6b0a876, type: 3}
       propertyPath: m_Name
       value: House4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928439613642073728, guid: 5d15225c7d13b4000b89ea6ea6b0a876, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.48
       objectReference: {fileID: 0}
     - target: {fileID: 4444828199237844454, guid: 5d15225c7d13b4000b89ea6ea6b0a876, type: 3}
       propertyPath: m_LocalPosition.x
