@@ -671,6 +671,7 @@ public class SceneController3d : MonoBehaviour
         if (hitObject == null)
         {
             var prefab = bombCraterPrefab;
+            var craterAltitude = 0.01f;
 
             if (IsOverRiver(bomb.transform.position))
             {
@@ -680,6 +681,7 @@ public class SceneController3d : MonoBehaviour
                     return;
                 }
                 prefab = bombSplashPrefab;
+                craterAltitude = gameState.riverAltitude + 0.01f;
             }
             
             if (IsOverRoad(bomb.transform.position))
@@ -688,6 +690,7 @@ public class SceneController3d : MonoBehaviour
                 //todo: report road or bridge hit for scoring
             }
             Vector3 craterPosition = bomb.transform.position;
+            craterPosition.y = craterAltitude;
             Instantiate(prefab, craterPosition, Quaternion.identity, GetLevel().transform);
             if (prefab != bombSplashPrefab)
             {
