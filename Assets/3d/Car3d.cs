@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 public class Car3d : ManagedObject, IVip
@@ -56,5 +57,26 @@ public class Car3d : ManagedObject, IVip
         return isVip;
     }    
 
-    // Todo - add collision logic
+    void OnTriggerEnter(Collider col)
+    {
+        GameObject hitObject = null;
+        if (col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
+        {
+            
+        }
+        else if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
+        {
+            hitObject = col.gameObject;
+        }
+        else
+        {
+            return;
+        }
+
+        gameState.BombLanded(hitObject, gameObject);
+        if(IsVip())
+        {
+            gameState.IncrementTargetsHit();
+        }
+    }
 }

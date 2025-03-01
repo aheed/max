@@ -71,7 +71,7 @@ public class ZeroObjectPool : IObjectPool<ManagedObject>
 
     public void Release(ManagedObject item)
     {
-        GameObject.Destroy(item);
+        GameObject.Destroy(item.gameObject);
     }
 }
 
