@@ -7,20 +7,23 @@ public class Splash3d : MonoBehaviour
     public float maxScale = 0.5f;
     float timeToLiveSec;
     Material material;
+    Color color;
 
     void UpdateScale()
     {
         var scale = minScale + (maxScale - minScale) * (1f - timeToLiveSec / lifeSpanSec);
         transform.localScale = new Vector3(scale, 1f, scale);
-        var opacity = timeToLiveSec / lifeSpanSec;
-        material.SetFloat("_Alpha", opacity);
+        color.a = timeToLiveSec / lifeSpanSec;
+        material.color = color;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         timeToLiveSec = lifeSpanSec;
-        material = transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        material = new Material(transform.GetChild(0).GetComponent<MeshRenderer>().material);
+        color = material.color;
+        transform.GetChild(0).GetComponent<MeshRenderer>().material = material;
         UpdateScale();
     }
 

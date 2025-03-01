@@ -133,4 +133,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeSpanSec: 1.2
   minScale: 0.1
-  maxScale: 1.5
+  maxScale: 0.6
