@@ -11,7 +11,7 @@ public class PlaneController : MonoBehaviour
         var yRotation = oncoming ? 180 : 0;
         if (!alive)
         {
-            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 90);
+            //planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 90);
         }
         else if (moveX > 0)
         {
