@@ -57,7 +57,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     float offsetZ = 0;
     bool bombDamage = false;
     bool gunDamage = false;
-    bool alive = true;
 
     PlaneController GetController()
     {
@@ -68,30 +67,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         return controller;
     }
 
-    void SetAppearance(float moveX, bool alive)
-    {
-        if (this.alive != alive)
-        {
-            this.alive = alive;
-            var currentWingMaterial = alive ? normalWingMaterial : crashedWingMaterial;
-            var wings = transform.GetChild(0).GetChild(0).GetChild(0);
-            for (var i = 0; i < wings.childCount; ++i)
-            {
-                var child = wings.GetChild(i);
-                child.GetComponent<MeshRenderer>().material = currentWingMaterial;
-            }
-
-            var currentFuselageMaterial = alive ? normalFuselageMaterial : crashedWingMaterial; 
-            var fuselage = transform.GetChild(0).GetChild(0).GetChild(1);
-            for (var i = 0; i < fuselage.childCount; ++i)
-            {
-                var child = fuselage.GetChild(i);
-                child.GetComponent<MeshRenderer>().material = currentFuselageMaterial;
-            }            
-        }
-
-        GetController().SetAppearance(moveX, alive);
-    }
+    void SetAppearance(float moveX, bool alive) => GetController().SetAppearance(moveX, alive);
 
     // Start is called before the first frame update
     void Start()
