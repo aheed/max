@@ -254,6 +254,11 @@ public class GameState : MonoBehaviour
         {
             SetStatus(GameStatus.KILLED_BY_FLACK);
         }
+
+        if (!damage && gameStateContents.gameStatus == GameStatus.KILLED_BY_FLACK)
+        {
+            SetStatus(GameStatus.FLYING);
+        }
     }
 
     public void SetTargetsHit(int hits, int hitsMin)

@@ -40,8 +40,8 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     {
         // Assume a certain structure of the model
             return new MeshRenderer[] {
-            GetModel().transform.Find("body/WingUpper").GetComponent<MeshRenderer>(),
-            GetModel().transform.Find("body/WingLower").GetComponent<MeshRenderer>(),
+            GetModel().transform.Find("body/Wings/WingUpper").GetComponent<MeshRenderer>(),
+            GetModel().transform.Find("body/Wings/WingLower").GetComponent<MeshRenderer>(),
         };
     }
 
