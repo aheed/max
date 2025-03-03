@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 096ee9d761947d8ae99f2d5e6f237799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalWingMaterial: {fileID: 2100000, guid: df2fcbf952192353b9599d2cf858b8a6, type: 2}
+  crashedWingMaterial: {fileID: 2100000, guid: 30051d7705cf2ecf980f7a3c54b83a4e, type: 2}
+  normalFuselageMaterial: {fileID: 2100000, guid: 9405cd343c1d073ed80359bef4f9e903, type: 2}
   refObject: {fileID: 0}
   glideDescentRate: 0.3
   deadDescentRate: 1.5
@@ -134,7 +137,15 @@ MonoBehaviour:
     m_Id: 41a11f7d-dacc-4a84-99a1-90712b42995a
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8dfdeffd-b00b-4d13-b0db-9ce690074b66
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Flack
+      m_Flags: 0
     m_Flags: 0
   DebugRepairAction:
     m_Name: Debug Repair
@@ -143,7 +154,15 @@ MonoBehaviour:
     m_Id: 5f86350f-11f7-4188-9e57-247852fc69a8
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a27311fb-bd11-47cf-b10d-09d9924950f8
+      m_Path: <Keyboard>/g
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Repair
+      m_Flags: 0
     m_Flags: 0
   DebugAuxAction:
     m_Name: Debug Aux
@@ -258,35 +277,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1843289560126352479, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 1784
+      value: 1823
       objectReference: {fileID: 0}
     - target: {fileID: 2814851019501669808, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 1323
+      value: 1362
       objectReference: {fileID: 0}
     - target: {fileID: 3158697255845427763, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 1594
+      value: 1633
       objectReference: {fileID: 0}
     - target: {fileID: 3573120687391141561, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 2379
+      value: 2443
       objectReference: {fileID: 0}
     - target: {fileID: 4253647429123018779, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 2379
+      value: 2526
       objectReference: {fileID: 0}
     - target: {fileID: 6013526631556361664, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 5583
+      value: 5656
       objectReference: {fileID: 0}
     - target: {fileID: 6076193253328617358, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 1690
+      value: 1729
       objectReference: {fileID: 0}
     - target: {fileID: 7582345622121271908, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_VersionIndex
-      value: 1260
+      value: 1299
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

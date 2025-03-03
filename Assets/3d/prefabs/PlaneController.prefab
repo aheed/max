@@ -44,3 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beff4519013256826aaa0055fc063a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalWingMaterial: {fileID: 2100000, guid: df2fcbf952192353b9599d2cf858b8a6, type: 2}
+  crashedWingMaterial: {fileID: 2100000, guid: 30051d7705cf2ecf980f7a3c54b83a4e, type: 2}
+  normalFuselageMaterial: {fileID: 2100000, guid: 9405cd343c1d073ed80359bef4f9e903, type: 2}
+  planeModel: {fileID: 0}
+  oncoming: 0

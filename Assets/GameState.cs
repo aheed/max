@@ -75,7 +75,8 @@ public class GameState : MonoBehaviour
 {
     public static Material carBlinkMaterial;
     public static Material boatBlinkMaterial;
-    public static Material genericBlinkMaterial;
+    public static Material planeBlinkMaterial;
+    public static Material targetBlinkMaterial;
     public float maxSpeed = 2.0f;
     public float minAltitude = 0.1f;
     public float maxAltitude = 2.0f;
@@ -253,6 +254,11 @@ public class GameState : MonoBehaviour
         if (damage && candidates >= nofDamages)
         {
             SetStatus(GameStatus.KILLED_BY_FLACK);
+        }
+
+        if (!damage && gameStateContents.gameStatus == GameStatus.KILLED_BY_FLACK)
+        {
+            SetStatus(GameStatus.FLYING);
         }
     }
 

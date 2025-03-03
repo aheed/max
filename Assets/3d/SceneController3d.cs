@@ -17,9 +17,10 @@ public class SceneController3d : MonoBehaviour
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
     public GameObject refobject;
+    public Material targetMaterial;
     public Material planeTargetMaterial;
     public Material carTargetMaterial;
-    public Material boatTargetMaterial;
+    public Material boatTargetMaterial;    
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
@@ -235,11 +236,13 @@ public class SceneController3d : MonoBehaviour
         // Make copies of materials to avoid changing the .mat files
         GameState.carBlinkMaterial = new Material(carTargetMaterial);
         GameState.boatBlinkMaterial = new Material(boatTargetMaterial);
-        GameState.genericBlinkMaterial = new Material(planeTargetMaterial);
+        GameState.planeBlinkMaterial = new Material(planeTargetMaterial);
+        GameState.targetBlinkMaterial = new Material(targetMaterial);
         targetBlinker = new TargetMaterialBlinker(new [] {
-            GameState.genericBlinkMaterial,
+            GameState.planeBlinkMaterial,
             GameState.carBlinkMaterial,
-            GameState.boatBlinkMaterial});
+            GameState.boatBlinkMaterial,
+            GameState.targetBlinkMaterial});
         StartNewGame();
     }
 
@@ -340,7 +343,7 @@ public class SceneController3d : MonoBehaviour
 
         startPos.y = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
 
-        Debug.Log("Time to spawn enemy plane. oncoming: " + oncoming);
+        
         
         EnemyPlane3d enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
@@ -353,6 +356,8 @@ public class SceneController3d : MonoBehaviour
         {
             enemyPlane.SetVip();
         }
+
+        Debug.Log("Time to spawn enemy plane. oncoming: " + oncoming + "vip:" + enemyPlane.IsVip());
     }
 
     LevelPrerequisite GetNewLevelPrereq()

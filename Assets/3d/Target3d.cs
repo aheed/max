@@ -10,7 +10,7 @@ public class Target3d : MonoBehaviour
 
     void Start()
     {
-        SetBlinkableMaterial(GameState.genericBlinkMaterial);
+        SetBlinkableMaterial(GameState.targetBlinkMaterial);
     }
 
 }
