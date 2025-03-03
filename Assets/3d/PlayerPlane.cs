@@ -15,8 +15,6 @@ using UnityEngine.UI;
 public class PlayerPlane : MonoBehaviour, IPlaneObservable
 {
     public Material normalWingMaterial;
-    public Material crashedWingMaterial;
-    public Material normalFuselageMaterial;
     public Transform refObject;    
     public float glideDescentRate = 0.3f;
     public float deadDescentRate = 1.5f;
@@ -81,6 +79,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.START, OnStart);
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+        OnStart();
         Reset();
     }
 
@@ -472,6 +471,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     }
 
     public void OnStart() {
+        GetController().normalWingMaterial = normalWingMaterial;
         SetAppearance(0, true);
         Vector3 tmpLocalPosition = transform.localPosition;
         if (tmpLocalPosition.y < landingAltitude) 

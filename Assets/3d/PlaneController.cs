@@ -2,12 +2,26 @@ using UnityEngine;
 
 public class PlaneController : MonoBehaviour
 {
-    public Material normalWingMaterial;
     public Material crashedWingMaterial;
-    public Material normalFuselageMaterial;    
+    public Material normalFuselageMaterial;
+    public Material normalWingMaterial;
     public GameObject planeModel;
     public bool oncoming;
-    bool alive = true;
+    bool alive = false;
+
+    MeshRenderer[] GetBlinkableRenderers()
+    {
+        // Assume a certain structure of the model
+        var wings = planeModel.transform.GetChild(0).GetChild(0);
+        return wings.GetComponentsInChildren<MeshRenderer>();        
+    }
+
+    MeshRenderer[] GetFuselageRenderers()
+    {
+        // Assume a certain structure of the model
+        var fuselage = planeModel.transform.GetChild(0).GetChild(1);
+        return fuselage.GetComponentsInChildren<MeshRenderer>();        
+    }
 
     public void SetAppearance(float moveX, bool alive)
     {
@@ -34,20 +48,16 @@ public class PlaneController : MonoBehaviour
         {
             this.alive = alive;
             var currentWingMaterial = alive ? normalWingMaterial : crashedWingMaterial;
-            var wings = planeModel.transform.GetChild(0).GetChild(0);
-            for (var i = 0; i < wings.childCount; ++i)
+            foreach (var renderer in GetBlinkableRenderers())
             {
-                var child = wings.GetChild(i);
-                child.GetComponent<MeshRenderer>().material = currentWingMaterial;
+                renderer.material = currentWingMaterial;
             }
 
             var currentFuselageMaterial = alive ? normalFuselageMaterial : crashedWingMaterial; 
-            var fuselage = planeModel.transform.GetChild(0).GetChild(1);
-            for (var i = 0; i < fuselage.childCount; ++i)
+            foreach (var renderer in GetFuselageRenderers())
             {
-                var child = fuselage.GetChild(i);
-                child.GetComponent<MeshRenderer>().material = currentFuselageMaterial;
-            }            
+                renderer.material = currentFuselageMaterial;
+            }
         }
     }
 }

@@ -36,15 +36,6 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         return model;
     }
 
-    MeshRenderer[] GetBlinkableRenderers()
-    {
-        // Assume a certain structure of the model
-            return new MeshRenderer[] {
-            GetModel().transform.Find("body/Wings/WingUpper").GetComponent<MeshRenderer>(),
-            GetModel().transform.Find("body/Wings/WingLower").GetComponent<MeshRenderer>(),
-        };
-    }
-
     PlaneController GetController()
     {
         if (controller == null)
@@ -61,21 +52,17 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         if (speed < 0)
         {
             GetController().oncoming = true;
-            GetController().SetAppearance(0, !crashed);
         }
     }
 
     void SetBlinkableMaterial(Material material)
     {
-        foreach (var renderer in GetBlinkableRenderers())
-        {
-            renderer.material = material;
-        }
+        GetController().normalWingMaterial = material;
     }
 
     public void SetVip()
     {
-        SetBlinkableMaterial(GameState.genericBlinkMaterial);
+        SetBlinkableMaterial(GameState.planeBlinkMaterial);
         isVip = true;
     }
 
@@ -100,6 +87,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         }
 
         Register();
+        GetController().SetAppearance(0, !crashed);
     }
 
     void Register()
@@ -208,11 +196,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
         GetController().SetAppearance(0, false);
         
-        /*var collider = gameObject.GetComponent<Collider2D>();
+        var collider = gameObject.GetComponent<BoxCollider>();
         if (collider != null)
         {
             collider.enabled = false;
-        }*/
+        }
         GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
     }    
 }
