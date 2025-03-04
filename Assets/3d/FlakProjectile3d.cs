@@ -6,6 +6,7 @@ public class FlakProjectile3d : MonoBehaviour
     public static readonly float lifeSpanSec = 2.0f;
     public float inaccuracy = 0.1f;
     public float forwardAimOffset = 0.1f;
+    public static float maxSpeed = 3f;
     float timeToLiveSec = lifeSpanSec;
     Vector3 velocity;
 
@@ -13,6 +14,14 @@ public class FlakProjectile3d : MonoBehaviour
             v.x * (1 + Random.Range(-inaccuracy, inaccuracy)),
             v.y * (1 + Random.Range(-inaccuracy, inaccuracy)),
             v.z * (1 + Random.Range(-inaccuracy, inaccuracy)));
+
+    public static bool IsWithinRange(Vector3 position, Vector3 targetPosition, Vector3 targetvelocity)
+    {
+        var endPosition = targetPosition + targetvelocity * lifeSpanSec;
+        var trajectory = endPosition - position;
+        var requiredVelocity = trajectory / lifeSpanSec;
+        return requiredVelocity.magnitude < maxSpeed;
+    }
 
     public void Initialize(Vector3 position, Vector3 targetPosition, Vector3 targetvelocity)
     {

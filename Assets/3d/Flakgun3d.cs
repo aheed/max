@@ -19,6 +19,15 @@ public class Flakgun3d : ManagedObject
 
     void Shoot()
     {
+        if(!FlakProjectile3d.IsWithinRange(
+            transform.position,
+            GameState.GetInstance().playerPosition,
+            new Vector3(0, 0, GameState.GetInstance().maxSpeed)))
+        {
+            //Debug.Log("Flakgun3d: Player out of range");
+            return;
+        }
+
         var gameObject = Instantiate(flackProjectilePrefab, transform.position, Quaternion.identity);
         var flakProjectile = InterfaceHelper.GetInterface<FlakProjectile3d>(gameObject);
 
