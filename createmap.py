@@ -52,6 +52,7 @@ def create_normal_map(width, height, filename):
                     d = y - nearest_center - flat_area_width
                     d_relative = d / (area_height / 2)
                     ny = - exponential_decay(d_relative, 2, 1.8, 0.2)
+                nz = math.sqrt(1.0 - ny * ny) # normalize the normal vector
 
             # Convert normal vector from range [-1, 1] to range [0.0, 1.0]
             nx = (nx + 1.0) * 0.5
