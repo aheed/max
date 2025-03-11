@@ -2,6 +2,13 @@ from PIL import Image
 import numpy as np
 import math
 
+def wing_shape_normal_y(y: float, max_normal: float, min_normal: float, pivot: float) -> float:
+    if y < pivot:
+        k = (max_normal - min_normal) / pivot
+        return max_normal - k * y
+    else:
+        return min_normal
+
 def exponential_decay(x: float, k: float, x_multiplier: float, x_offset: float) -> float:
     """
     Computes the value of the exponential decay function y = e^(-kx).
@@ -30,6 +37,9 @@ def create_normal_map(width, height, filename):
     flat_area_width = area_height * 0.1
     flattening_factor = 2.0
 
+    min_ny = 1.0
+    max_ny = 0.0
+
     # Generate normal map data
     for y in range(height):
         for x in range(width):
@@ -52,7 +62,15 @@ def create_normal_map(width, height, filename):
                     d = y - nearest_center - flat_area_width
                     d_relative = d / (area_height / 2)
                     ny = - exponential_decay(d_relative, 2, 1.8, 0.2)
-                nz = math.sqrt(1.0 - ny * ny) # normalize the normal vector
+
+            ny += wing_shape_normal_y(y/height, 0.6, -0.2, 0.3)
+
+            if ny < min_ny:
+                min_ny = ny
+            if ny > max_ny:
+                max_ny = ny
+
+            nz = math.sqrt(1.0 - ny * ny) # normalize the normal vector
 
             # Convert normal vector from range [-1, 1] to range [0.0, 1.0]
             nx = (nx + 1.0) * 0.5
@@ -69,6 +87,7 @@ def create_normal_map(width, height, filename):
 
     # Save the image as a PNG file
     normal_map.save(filename)
+    print(f"Normal map saved to {filename}\nmin_ny: {min_ny}, max_ny: {max_ny}")
 
 # Example usage
 create_normal_map(512, 128, 'normal_map.png')
