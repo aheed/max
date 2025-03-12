@@ -19248,7 +19248,7 @@ MonoBehaviour:
   leftTrim: 2
   rightTrim: 5
   roadAltitude: 0.01
-  carAltitude: 0
+  carAltitude: 0.01
   parllelRoadSideWidth: 0.1
   parallelRoadWidth: 0.5
 --- !u!4 &1636314947
