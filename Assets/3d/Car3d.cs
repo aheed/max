@@ -59,21 +59,21 @@ public class Car3d : ManagedObject, IVip
 
     void OnTriggerEnter(Collider col)
     {
-        GameObject hitObject = null;
+        GameObject bombGameObject = null;
         if (col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
         {
             
         }
         else if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
         {
-            hitObject = col.gameObject;
+            bombGameObject = col.gameObject;
         }
         else
         {
             return;
         }
 
-        gameState.BombLanded(hitObject, gameObject);
+        gameState.BombLanded(bombGameObject, gameObject);
         if(IsVip())
         {
             gameState.IncrementTargetsHit();

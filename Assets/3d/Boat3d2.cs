@@ -63,6 +63,8 @@ public class Boat3d2 : ManagedObject, IVip
             }
 
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
+            GameState.GetInstance().ReportEvent(GameEvent.SMALL_DETONATION);
+            GameState.GetInstance().ReportEvent(GameEvent.MEDIUM_BANG);
             Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
         }
 
