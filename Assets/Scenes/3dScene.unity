@@ -31736,6 +31736,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlakGun3d
       objectReference: {fileID: 0}
+    - target: {fileID: 692099989183021016, guid: 879a2afc710da46c28877a65b14fc4c5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5877512772560085210, guid: 879a2afc710da46c28877a65b14fc4c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.2009706
