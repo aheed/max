@@ -171,11 +171,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
             // Todo: report the victory
         }
-        else if (col.gameObject.name.StartsWith("player", true, CultureInfo.InvariantCulture))
+        else if (col.name.StartsWith("player", true, CultureInfo.InvariantCulture))
         {
             // mid air collision
         }

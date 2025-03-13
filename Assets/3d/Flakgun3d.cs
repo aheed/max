@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -10,6 +12,7 @@ public class Flakgun3d : ManagedObject
     public float projectileSpeedMin = 1.0f;
     float timeToShoot = -1.0f;
     private bool alive = true;
+    private bool demolished = false;
 
 
     void RestartShotClock()
@@ -37,39 +40,25 @@ public class Flakgun3d : ManagedObject
             new Vector3(0, 0, GameState.GetInstance().maxSpeed));
     }
 
-    /*void HandleCollision(Collider2D col)
+    void OnTriggerEnter(Collider col)
     {
-        var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
-        if (collObjName.StartsWith("bullet"))
+        if (col.name.StartsWith("Bomb"))
         {
-            spriteR.sprite = shotSprite;
-            var collider = gameObject.GetComponent<Collider2D>();
-            if (collider != null)
-            {
-                collider.enabled = false;
-            }
-            alive = false;
+            Demolish();
+            GameState.GetInstance().BombLanded(col.gameObject, gameObject);
+
+            // Todo: report destroyed flak gun for scoring
+        }
+        else if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            Demolish();
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
 
-            // Todo: report destroyed flack gun for scoring
+            // Todo: report destroyed flak gun for scoring
         }
-
-        //no collision
     }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.name.StartsWith("bomb"))
-        {
-            var bomb = col.gameObject.GetComponent<Bomb>();
-            GameState.GetInstance().BombLanded(bomb, gameObject);
-            return;
-        }
-
-        HandleCollision(col);
-    }*/
 
     // Update is called once per frame
     void Update()
@@ -86,6 +75,37 @@ public class Flakgun3d : ManagedObject
         transform.GetChild(0).GetChild(0).LookAt(a);
     }
 
+    GameObject GetHealthyModel()
+    {
+        return transform.GetChild(0).gameObject;
+    }
+
+    GameObject GetDemolishedModel()
+    {
+        return transform.GetChild(1).gameObject;
+    }
+
+    void Demolish()
+    {
+        if (demolished)
+        {
+            return;
+        }
+
+        demolished = true;
+        alive = false;
+
+        GetHealthyModel().SetActive(false);
+        GetDemolishedModel().SetActive(true);
+
+        var collider = gameObject.GetComponent<BoxCollider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+    }
+
+
     // Overrides
     public override void Deactivate()
     {
@@ -94,6 +114,18 @@ public class Flakgun3d : ManagedObject
 
     public override void Reactivate()
     {
+        if (demolished)
+        {
+            demolished = false;
+            GetHealthyModel().SetActive(true);
+            GetDemolishedModel().SetActive(false);
+            var collider = gameObject.GetComponent<BoxCollider>();
+            if (collider != null)
+            {
+                collider.enabled = true;
+            }
+        }
+
         alive = true;
         RestartShotClock();
     }
