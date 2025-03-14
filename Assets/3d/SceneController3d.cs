@@ -676,7 +676,8 @@ public class SceneController3d : MonoBehaviour
         if (hitObject == null)
         {
             var prefab = bombCraterPrefab;
-            var craterAltitude = 0.01f;
+            
+            var craterAltitude = gameState.craterAltitude;
 
             if (IsOverRiver(bomb.transform.position))
             {
@@ -686,7 +687,7 @@ public class SceneController3d : MonoBehaviour
                     return;
                 }
                 prefab = bombSplashPrefab;
-                craterAltitude = gameState.riverAltitude + 0.01f;
+                craterAltitude += gameState.riverAltitude;
             }
             
             if (IsOverRoad(bomb.transform.position))
@@ -705,12 +706,9 @@ public class SceneController3d : MonoBehaviour
         }
         else
         {
-            if (!IsOverRiver(hitObject.transform.position) || IsOverRoad(hitObject.transform.position))
-            {
-                Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
-                gameState.ReportEvent(GameEvent.SMALL_DETONATION);
-                gameState.ReportEvent(GameEvent.MEDIUM_BANG);
-            }
+            Instantiate(mushroomCloudPrefab, hitObject.transform.position, Quaternion.identity, GetLevel().transform);
+            gameState.ReportEvent(GameEvent.SMALL_DETONATION);
+            gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             var managedObject = InterfaceHelper.GetInterface<ManagedObject>(hitObject);
             if (managedObject != null)
             {

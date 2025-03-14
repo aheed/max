@@ -19,8 +19,6 @@ public class Boat3d1 : ManagedObject
         if (col.name.StartsWith("Bomb"))
         {
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
-            GameState.GetInstance().ReportEvent(GameEvent.SMALL_DETONATION);
-            GameState.GetInstance().ReportEvent(GameEvent.MEDIUM_BANG);
             Sink();
             return;
         }

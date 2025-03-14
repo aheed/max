@@ -39,6 +39,10 @@ public class Bridge3d : MonoBehaviour, IVip
             target = null;
         }
 
-        GameState.GetInstance().BombLanded(col.gameObject, new GameObject());
+        var tmpGameObject = new GameObject();
+        var impactPosition = col.gameObject.transform.position;
+        impactPosition.y = GameState.GetInstance().craterAltitude;
+        tmpGameObject.transform.position = impactPosition;
+        GameState.GetInstance().BombLanded(col.gameObject, tmpGameObject);
     }
 }
