@@ -55,6 +55,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     float offsetZ = 0;
     bool bombDamage = false;
     bool gunDamage = false;
+    bool lastAlive = false;
 
     PlaneController GetController()
     {
@@ -65,7 +66,14 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         return controller;
     }
 
-    void SetAppearance(float moveX, bool alive) => GetController().SetAppearance(moveX, alive);
+    void SetAppearance(float moveX, bool alive) {
+        GetController().SetAppearance(moveX, alive);
+        if (alive != lastAlive)
+        {
+            lastAlive = alive;
+            transform.GetChild(2).gameObject.SetActive(!alive);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -472,6 +480,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
     public void OnStart() {
         GetController().normalWingMaterial = normalWingMaterial;
+        lastAlive = false;
         SetAppearance(0, true);
         Vector3 tmpLocalPosition = transform.localPosition;
         if (tmpLocalPosition.y < landingAltitude) 
