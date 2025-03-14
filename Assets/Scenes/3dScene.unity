@@ -753,7 +753,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 0
+  startLevelType: 1
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -33474,7 +33474,7 @@ PrefabInstance:
       objectReference: {fileID: 1736221641}
     - target: {fileID: 6718339745882272846, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_VersionIndex
-      value: 6579
+      value: 6696
       objectReference: {fileID: 0}
     - target: {fileID: 6718339745882272846, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -33598,7 +33598,7 @@ PrefabInstance:
       objectReference: {fileID: 1886035419}
     - target: {fileID: 8562082310324131367, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_VersionIndex
-      value: 4427
+      value: 4544
       objectReference: {fileID: 0}
     - target: {fileID: 8562082310324131367, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
       propertyPath: m_Tangents.Array.data[0].w
