@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 public class Boat3d2 : ManagedObject, IVip
@@ -47,6 +48,12 @@ public class Boat3d2 : ManagedObject, IVip
         transform.position = position;        
     }
 
+    void Sink()
+    {
+        Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
+        alive = false;
+    }
+
     void OnTriggerEnter(Collider col)
     {
         //Debug.Log($"3D Boat 2 Hit!!!!!! Collided with {col.gameObject.name}");
@@ -65,10 +72,16 @@ public class Boat3d2 : ManagedObject, IVip
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
             GameState.GetInstance().ReportEvent(GameEvent.SMALL_DETONATION);
             GameState.GetInstance().ReportEvent(GameEvent.MEDIUM_BANG);
-            Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
+            Sink();
         }
 
-        alive = false;
+        if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            GameState.GetInstance().ReportEvent(GameEvent.MEDIUM_BANG);
+            Sink();
+            Release();
+            return;
+        }
     }
 
     public override void Deactivate()
