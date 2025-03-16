@@ -22,7 +22,8 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     float speed = 0.1f;
     int moveX = 0;
     int lastMoveX = 0;
-    bool crashed =  false;
+    bool crashed = false;
+    bool lastCrashed = false;
     GameObject model;
     PlaneController controller;
     bool isVip = false;
@@ -76,6 +77,16 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         moveCooldownSec = UnityEngine.Random.Range(moveIntervalSecMin, moveIntervalSecMax);
     }
 
+    void SetAppearance(int moveX)
+    {
+        if(crashed != lastCrashed)
+        {
+            lastCrashed = crashed;
+            transform.GetChild(2).gameObject.SetActive(crashed);
+        }
+        GetController().SetAppearance(moveX, !crashed);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,7 +98,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         }
 
         Register();
-        GetController().SetAppearance(0, !crashed);
+        SetAppearance(0);
     }
 
     void Register()
@@ -165,7 +176,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         if (moveX != lastMoveX)
         {
             lastMoveX = moveX;
-            GetController().SetAppearance(moveX, !crashed);
+            SetAppearance(moveX);
         }
     }
 
@@ -194,7 +205,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         crashCooldownSec = crashDurationSec;
         crashExplosionsLeft = crashExplosions;
 
-        GetController().SetAppearance(0, false);
+        SetAppearance(0);
         
         var collider = gameObject.GetComponent<BoxCollider>();
         if (collider != null)

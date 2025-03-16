@@ -742,8 +742,8 @@ MonoBehaviour:
   enemyPlaneSpeedMin: 1.5
   enemyPlaneOncomingSpeedMin: -1.5
   enemyPlaneOncomingSpeedMax: -0.5
-  enemyPlaneIntervalSecMax: 15
-  enemyPlaneIntervalSecMin: 5
+  enemyPlaneIntervalSecMax: 12
+  enemyPlaneIntervalSecMin: 3
   windIntervalSecMax: 10
   windIntervalSecMin: 5
   vipProbability: 0.5
