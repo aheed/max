@@ -16,9 +16,9 @@ public class House4 : MonoBehaviour, IVip
         
         var inner = transform.GetChild(0);
         var alive = inner.GetChild(0);
-        //var bombed = inner.GetChild(1);
         var eastWall = alive.GetChild(0).gameObject;
-        var southWall = alive.GetChild(1).gameObject;
+        var westWall = alive.GetChild(1).gameObject;
+        var southWall = alive.GetChild(2).gameObject;
         
         inner.transform.localScale = newSize * sizeFactor;
 
@@ -26,6 +26,9 @@ public class House4 : MonoBehaviour, IVip
         var newEastMaterial = new Material(eastRenderer.sharedMaterial);
         newEastMaterial.mainTextureScale = new Vector2(newSize.y, newSize.z);
         eastRenderer.material = newEastMaterial;
+
+        var westRenderer = westWall.GetComponent<MeshRenderer>();
+        westRenderer.material = newEastMaterial;
 
         var southRenderer = southWall.GetComponent<MeshRenderer>();
         var newSouthMaterial = new Material(southRenderer.sharedMaterial);
