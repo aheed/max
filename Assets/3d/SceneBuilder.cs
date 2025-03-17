@@ -235,12 +235,10 @@ public class SceneBuilder : MonoBehaviour
             var cityWidth = LevelContents.gridWidth * cellWidth;
             var cityHeight = (levelContents.city.yEnd - levelContents.city.yStart) * cellHeight;
 
-            //var cityGameObject = Instantiate(landingStripPrefab, lvlTransform);
             var cityGameObject = new GameObject("city");
             cityGameObject.transform.parent = sceneInput.levelTransform;
 
             var cityOffsetZ = levelContents.city.yStart * cellHeight;
-            //var cityOffsetX = cityOffsetY * neutralSlope;
             var cityLocalTransform = new Vector3(0, roadAltitude, cityOffsetZ);
             cityGameObject.transform.localPosition = cityLocalTransform;
 
