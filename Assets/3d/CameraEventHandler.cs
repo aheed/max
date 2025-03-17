@@ -16,13 +16,13 @@ public class CameraEventHandler : MonoBehaviour
     Vector3 targetLocalPosition;
     Vector3 shakeVelocity;
     Camera cameraComponent;
-    Transform cameraTransform;
+    Transform innerViewTargetTransform;
 
     void Start()
     {
         // Assume the camera is a component of the parent game object
-        cameraTransform = transform.parent.GetChild(0);
-        cameraComponent = cameraTransform.gameObject.GetComponent<Camera>();
+        innerViewTargetTransform = transform.parent.GetChild(1).GetChild(0);
+        cameraComponent = transform.parent.GetChild(0).gameObject.GetComponent<Camera>();
         OnViewModeChanged();
         GameState.GetInstance().Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
         GameState.GetInstance().Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
@@ -30,12 +30,12 @@ public class CameraEventHandler : MonoBehaviour
 
     void Update()
     {
-        var diff = cameraTransform.localPosition - targetLocalPosition;
-        cameraTransform.localPosition -= diff * correctionRate;
+        var diff = innerViewTargetTransform.localPosition - targetLocalPosition;
+        innerViewTargetTransform.localPosition -= diff * correctionRate;
 
         if (shakeMovesLeft > 0)
         {
-            cameraTransform.localPosition += shakeVelocity * Time.deltaTime;
+            innerViewTargetTransform.localPosition += shakeVelocity * Time.deltaTime;
 
             shakeCooldown -= Time.deltaTime;
             if (shakeCooldown <= 0)
