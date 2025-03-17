@@ -42,6 +42,9 @@ public class SceneBuilder : MonoBehaviour
     float airstripAltitude = 0.001f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
+    public float bigHouseSizeX = 6f;
+    public float bigHouseSizeY = 10f;
+    public float bigHouseSizeZ = 5f;
 
     private ObjectManager flakGunManager;
     private ObjectManager tankManager;
@@ -278,24 +281,22 @@ public class SceneBuilder : MonoBehaviour
                     hqInstance.SetBombed();
                 }
                 var targetOffsetZ = hq.y * cellHeight;
-                //var targetOffsetX = targetOffsetY * neutralSlope;
                 var targetLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth, roadAltitude, targetOffsetZ);
                 hqInstance.transform.localPosition = targetLocalTransform;
                 return hqInstance as IEnemyHQ;
             }).ToList();
 
-            /*// Big houses
-            var sortedBigHouseList = levelContents.city.bigHouses
-                .OrderBy(h => h.y)
-                .ToList(); //Not necessary, use original list instead???
-            foreach (var bigHouse in sortedBigHouseList)
+            // Big houses
+            foreach (var bigHouse in levelContents.city.bigHouses)
             {
-                var bigHouseGameObject = Instantiate(bigHousePrefab, sceneInput.levelTransform);
+                var bigHouseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
+                var house = InterfaceHelper.GetInterface<House4>(bigHouseGameObject);
                 var bigHouseOffsetZ = bigHouse.y * cellHeight;
                 var bigHouseXPosRel = bigHouse.x * cellWidth;
-                var bigHouseLocalTransform = new Vector3(bigHouseXPosRel, 0f, bigHouseOffsetZ);
+                var bigHouseLocalTransform = new Vector3(bigHouseXPosRel, 2 * roadAltitude, bigHouseOffsetZ);
                 bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
-            }*/
+                house.SetSize(new Vector3(bigHouseSizeX, bigHouseSizeY, bigHouseSizeZ));
+            }
         }
 
         // River

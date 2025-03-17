@@ -19315,6 +19315,9 @@ MonoBehaviour:
   carAltitude: 0.01
   parllelRoadSideWidth: 0.1
   parallelRoadWidth: 0.5
+  bigHouseSizeX: 6
+  bigHouseSizeY: 12
+  bigHouseSizeZ: 5
 --- !u!4 &1636314947
 Transform:
   m_ObjectHideFlags: 0
