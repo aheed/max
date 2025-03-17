@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHQ : MonoBehaviour, IPositionObservable
+public class EnemyHQ : MonoBehaviour, IPositionObservable, IEnemyHQ
 {
     public Sprite bombedSprite;
     private SpriteRenderer spriteR;

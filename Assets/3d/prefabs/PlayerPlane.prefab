@@ -170,7 +170,15 @@ MonoBehaviour:
     m_Id: 04d70b6c-169a-4af5-8fa7-e4ff1435fb2c
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 165eebf5-608f-468c-87d9-e7482ea5376e
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Aux
+      m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
   bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
