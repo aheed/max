@@ -367,8 +367,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         if (DebugAuxAction.WasPressedThisFrame())
         {
-            //gameState.ReportEvent(GameEvent.BIG_DETONATION);
-            gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
+            gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
         
         bulletCooldown -= Time.deltaTime;

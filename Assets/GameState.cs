@@ -65,7 +65,7 @@ public class GameStateContents
     public Vector2 windDirection = new Vector2(0f, 0f);
     public int targetsHit;
     public int targetsHitMin;
-    public List<EnemyHQ> enemyHQs;
+    public List<IEnemyHQ> enemyHQs;
     public LevelPrerequisite latestLevelPrereq;
     public Dictionary<GameObject, float> enemyPlaneAltitudes;
     public float maxAltitudeDiffForPlaneCollision;

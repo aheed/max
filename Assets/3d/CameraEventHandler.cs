@@ -21,7 +21,7 @@ public class CameraEventHandler : MonoBehaviour
     void Start()
     {
         // Assume the camera is a component of the parent game object
-        cameraTransform = transform.parent;
+        cameraTransform = transform.parent.GetChild(0);
         cameraComponent = cameraTransform.gameObject.GetComponent<Camera>();
         OnViewModeChanged();
         GameState.GetInstance().Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
@@ -30,20 +30,20 @@ public class CameraEventHandler : MonoBehaviour
 
     void Update()
     {
-        var diff = transform.localPosition - targetLocalPosition;
-        transform.localPosition -= diff * correctionRate;
+        var diff = cameraTransform.localPosition - targetLocalPosition;
+        cameraTransform.localPosition -= diff * correctionRate;
 
         if (shakeMovesLeft > 0)
         {
-            transform.localPosition += shakeVelocity * Time.deltaTime;
+            cameraTransform.localPosition += shakeVelocity * Time.deltaTime;
 
             shakeCooldown -= Time.deltaTime;
             if (shakeCooldown <= 0)
             {
             shakeVelocity = new Vector3(
                 UnityEngine.Random.Range(-shakeAmplitude, shakeAmplitude),
-                UnityEngine.Random.Range(-shakeAmplitude, shakeAmplitude),
-                0f);
+                0f,
+                UnityEngine.Random.Range(-shakeAmplitude, shakeAmplitude));
             shakeCooldown = shakeMoveIntervalSec;
             --shakeMovesLeft;
             }

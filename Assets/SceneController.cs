@@ -439,7 +439,7 @@ public class SceneController : MonoBehaviour
                 var targetOffsetX = targetOffsetY * neutralSlope;
                 var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
                 hqInstance.transform.localPosition = targetLocalTransform;
-                return hqInstance;
+                return hqInstance as IEnemyHQ;
             }).ToList();
 
             // Big houses

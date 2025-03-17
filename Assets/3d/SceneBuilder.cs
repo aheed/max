@@ -28,7 +28,7 @@ public class SceneBuilder : MonoBehaviour
     public ManagedObject carPrefab;
     public GameObject airstripEndPrefab;
     public ManagedObject hangarPrefab;
-    public EnemyHQ enemyHqPrefab;
+    public EnemyHQ3d enemyHqPrefab;
     public GameObject bigHousePrefab;
     public Material riverMaterial;
     public Material groundMaterial;
@@ -37,7 +37,7 @@ public class SceneBuilder : MonoBehaviour
     public Material landingStripMaterial;
     public int leftTrim = 2;
     public int rightTrim = 5;
-    public float roadAltitude = 0.01f;
+    public float roadAltitude = 0.002f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.001f;
     public float parllelRoadSideWidth = 0.1f;
@@ -226,77 +226,77 @@ public class SceneBuilder : MonoBehaviour
             }*/
         }
 
-        /*
+        
         if (levelContents.city != null)
         {
             var cityWidth = LevelContents.gridWidth * cellWidth;
             var cityHeight = (levelContents.city.yEnd - levelContents.city.yStart) * cellHeight;
 
-            var cityGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            //var cityGameObject = Instantiate(landingStripPrefab, lvlTransform);
+            var cityGameObject = new GameObject("city");
+            cityGameObject.transform.parent = sceneInput.levelTransform;
 
-            var cityOffsetY = levelContents.city.yStart * cellHeight;
-            var cityOffsetX = cityOffsetY * neutralSlope;
-            var cityLocalTransform = new Vector3(cityOffsetX, cityOffsetY, -0.22f);
+            var cityOffsetZ = levelContents.city.yStart * cellHeight;
+            //var cityOffsetX = cityOffsetY * neutralSlope;
+            var cityLocalTransform = new Vector3(0, roadAltitude, cityOffsetZ);
             cityGameObject.transform.localPosition = cityLocalTransform;
-
-            var lsUpperCornerOffsetX = cityHeight * neutralSlope;
 
             var cityllcX = 0;
             var citylrcX = cityWidth;
-            var cityulcX = lsUpperCornerOffsetX;
-            var cityurcX = citylrcX + lsUpperCornerOffsetX;
-            var cityllcY = 0;
-            var citylrcY = 0;
-            var cityulcY = cityHeight;
-            var cityurcY = cityHeight;
+            var cityulcX = 0;
+            var cityurcX = cityWidth;
+            var cityllcZ = 0;
+            var citylrcZ = 0;
+            var cityulcZ = cityHeight;
+            var cityurcZ = cityHeight;
 
             var cityMeshFilter = cityGameObject.AddComponent<MeshFilter>();
             var cityMeshRenderer = cityGameObject.AddComponent<MeshRenderer>();
             cityMeshRenderer.material = landingStripMaterial;
 
-            var cityVerts = new List<Vector2>
+            var cityVerts = new Vector3[]
             {
-                new Vector2(cityllcX, cityllcY),
-                new Vector2(citylrcX, citylrcY),
-                new Vector2(cityulcX, cityulcY),
-                new Vector2(cityurcX, cityurcY)
+                new Vector3(cityllcX, 0, cityllcZ),
+                new Vector3(citylrcX, 0, citylrcZ),
+                new Vector3(cityulcX, 0, cityulcZ),
+                new Vector3(cityurcX, 0, cityurcZ)
             };
 
-            var cityMesh = CreateQuadMesh(cityVerts);
+            var cityUpNormalsArray = new Vector3[]
+            {
+                Vector3.up,
+            };
+
+            var cityMesh = CreateQuadMesh(cityVerts, cityUpNormalsArray);
             cityMeshFilter.mesh = cityMesh;
 
-            stateContents.enemyHQs = levelContents.city.enemyHQs.Select(hq =>
+            ret.enemyHQs = levelContents.city.enemyHQs.Select(hq =>
             {
-                var hqInstance = Instantiate(enemyHqPrefab, lvlTransform);
+                EnemyHQ3d hqInstance = Instantiate(enemyHqPrefab, sceneInput.levelTransform);
                 if (hq.bombed)
                 {
                     hqInstance.SetBombed();
                 }
-                var targetOffsetY = hq.y * cellHeight;
-                var targetOffsetX = targetOffsetY * neutralSlope;
-                var targetLocalTransform = new Vector3(targetOffsetX + (LevelContents.gridWidth / 2) * cellWidth, targetOffsetY, -0.23f);
+                var targetOffsetZ = hq.y * cellHeight;
+                //var targetOffsetX = targetOffsetY * neutralSlope;
+                var targetLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth, roadAltitude, targetOffsetZ);
                 hqInstance.transform.localPosition = targetLocalTransform;
-                return hqInstance;
+                return hqInstance as IEnemyHQ;
             }).ToList();
 
-            // Big houses
+            /*// Big houses
             var sortedBigHouseList = levelContents.city.bigHouses
                 .OrderBy(h => h.y)
-                .ToList();
-            var zSortOrder = -0.23f;
-            var zSortOrderIncrement = 0.0001f;
+                .ToList(); //Not necessary, use original list instead???
             foreach (var bigHouse in sortedBigHouseList)
             {
-                var bigHouseGameObject = Instantiate(bigHousePrefab, lvlTransform);
-                var bigHouseOffsetY = bigHouse.y * cellHeight;
-                var bigHouseOffsetX = bigHouseOffsetY * neutralSlope;
+                var bigHouseGameObject = Instantiate(bigHousePrefab, sceneInput.levelTransform);
+                var bigHouseOffsetZ = bigHouse.y * cellHeight;
                 var bigHouseXPosRel = bigHouse.x * cellWidth;
-                var bigHouseLocalTransform = new Vector3(bigHouseOffsetX + bigHouseXPosRel, bigHouseOffsetY, zSortOrder);
+                var bigHouseLocalTransform = new Vector3(bigHouseXPosRel, 0f, bigHouseOffsetZ);
                 bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
-                zSortOrder += zSortOrderIncrement;
-            }
-        }*/
-
+            }*/
+        }
 
         // River
         ret.riverSectionGameObject = new GameObject("riversection");
@@ -597,7 +597,7 @@ public class SceneBuilder : MonoBehaviour
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
             {
                 ObjectManager selectedManager = null;
-                var altitude = 0f;
+                var altitude = 2 * roadAltitude;
                 switch (levelContents.cells[xtmp, ztmp] & CellContent.LAND_MASK)
                 {
                     case CellContent.FLACK_GUN:
