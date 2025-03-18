@@ -16,6 +16,7 @@ public class SceneController3d : MonoBehaviour
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
+    public BossShadowCaster bossShadowCasterPrefab;
     public GameObject refobject;
     public Material targetMaterial;
     public Material planeTargetMaterial;
@@ -326,7 +327,16 @@ public class SceneController3d : MonoBehaviour
     }
 
     void SpawnEnemyPlane()
-    {        
+    {   
+        // Temp
+        Debug.Log("Time to spawn boss shadow");
+        BossShadowCaster bossShadowCaster = Instantiate(bossShadowCasterPrefab);
+        bossShadowCaster.Init(refobject);
+        return;
+        //
+
+
+
         var startPos = refobject.transform.position;
 
         bool oncoming = UnityEngine.Random.Range(0f, 1.0f) < enemyPlaneOncomingProbability;
