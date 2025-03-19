@@ -2318,4 +2318,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flackExplosionPrefab: {fileID: 7847806008530047970, guid: 320af7e31a2f912b384141d4678e62da, type: 3}
   inaccuracy: 0.2
-  forwardAimOffset: 0.3
+  forwardAimOffset: 0.15

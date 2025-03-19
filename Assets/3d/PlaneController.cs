@@ -7,6 +7,7 @@ public class PlaneController : MonoBehaviour
     public Material normalWingMaterial;
     public GameObject planeModel;
     public float correctionRate = 20f;
+    public float maxRotation = 30f;
     bool alive = false;
     float targetZRotation;
     float currentZRotation;
@@ -31,6 +32,11 @@ public class PlaneController : MonoBehaviour
         yRotation = oncoming ? 180 : 0;
     }
 
+    public void Tilt()
+    {
+        currentZRotation += Random.Range(-maxRotation, maxRotation);
+    }
+
     public void SetAppearance(float moveX, bool alive)
     {
         //Debug.Log($"SetAppearance moveX={moveX} alive={alive} oncoming={oncoming}");
@@ -41,11 +47,11 @@ public class PlaneController : MonoBehaviour
         }
         else if (moveX > 0)
         {
-            targetZRotation = -30;
+            targetZRotation = -maxRotation;
         }
         else if (moveX < 0)
         {
-            targetZRotation = 30;
+            targetZRotation = maxRotation;
         }
         else
         {

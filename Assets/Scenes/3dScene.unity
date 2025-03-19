@@ -734,11 +734,11 @@ MonoBehaviour:
   minRestartWaitSeconds: 1
   fuelRateLow: 0.6
   fuelRateHigh: 0.9
-  refuelRate: 4.1
+  refuelRate: 20
   fuelFullTankMargin: 0.01
   fuelRefillMargin: 0.05
-  bombLoadTimeSec: 0.08
-  repairTimeSec: 0.8
+  bombLoadTimeSec: 0.05
+  repairTimeSec: 0.5
   enemyPlaneSpeedMax: 2.5
   enemyPlaneSpeedMin: 1.5
   enemyPlaneOncomingSpeedMin: -1.5
@@ -16922,7 +16922,7 @@ PrefabInstance:
       objectReference: {fileID: 2087734674}
     - target: {fileID: 457764952989616606, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2430
+      value: 2433
       objectReference: {fileID: 0}
     - target: {fileID: 507222170476185451, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -16942,7 +16942,7 @@ PrefabInstance:
       objectReference: {fileID: 160523943}
     - target: {fileID: 765577513080471133, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2701
+      value: 2704
       objectReference: {fileID: 0}
     - target: {fileID: 1147520403995015173, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Name
@@ -16958,7 +16958,7 @@ PrefabInstance:
       objectReference: {fileID: 1687628679}
     - target: {fileID: 1214938974571113175, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 3486
+      value: 3489
       objectReference: {fileID: 0}
     - target: {fileID: 1214938974571113175, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[9].x
@@ -17218,7 +17218,7 @@ PrefabInstance:
       objectReference: {fileID: 844730301}
     - target: {fileID: 1895433899186279541, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 3480
+      value: 3483
       objectReference: {fileID: 0}
     - target: {fileID: 1895433899186279541, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[5].x
@@ -17550,7 +17550,7 @@ PrefabInstance:
       objectReference: {fileID: 560372360}
     - target: {fileID: 4097920298351765553, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2888
+      value: 2891
       objectReference: {fileID: 0}
     - target: {fileID: 4267565045869016930, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -17574,7 +17574,7 @@ PrefabInstance:
       objectReference: {fileID: 1572520257}
     - target: {fileID: 5220786811011077642, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2367
+      value: 2370
       objectReference: {fileID: 0}
     - target: {fileID: 5274729558533195033, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -17634,7 +17634,7 @@ PrefabInstance:
       objectReference: {fileID: 591426653}
     - target: {fileID: 8232092237624666542, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 6687
+      value: 6690
       objectReference: {fileID: 0}
     - target: {fileID: 8232092237624666542, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[0].x
@@ -17830,7 +17830,7 @@ PrefabInstance:
       objectReference: {fileID: 44703261}
     - target: {fileID: 8437752597151759328, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2797
+      value: 2800
       objectReference: {fileID: 0}
     - target: {fileID: 8677513665217814829, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -33937,7 +33937,7 @@ PrefabInstance:
       objectReference: {fileID: 213357215}
     - target: {fileID: 7615501311391811077, guid: 0baf565c56e630fbc99106bf753f27a3, type: 3}
       propertyPath: m_VersionIndex
-      value: 779
+      value: 794
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35137,7 +35137,7 @@ PrefabInstance:
       objectReference: {fileID: 1379821429}
     - target: {fileID: 457764952989616606, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2430
+      value: 2433
       objectReference: {fileID: 0}
     - target: {fileID: 507222170476185451, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -35157,7 +35157,7 @@ PrefabInstance:
       objectReference: {fileID: 986646431}
     - target: {fileID: 765577513080471133, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2701
+      value: 2704
       objectReference: {fileID: 0}
     - target: {fileID: 1147520403995015173, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Name
@@ -35173,7 +35173,7 @@ PrefabInstance:
       objectReference: {fileID: 437086751}
     - target: {fileID: 1214938974571113175, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 3486
+      value: 3489
       objectReference: {fileID: 0}
     - target: {fileID: 1214938974571113175, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[9].x
@@ -35433,7 +35433,7 @@ PrefabInstance:
       objectReference: {fileID: 254411688}
     - target: {fileID: 1895433899186279541, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 3480
+      value: 3483
       objectReference: {fileID: 0}
     - target: {fileID: 1895433899186279541, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[5].x
@@ -35765,7 +35765,7 @@ PrefabInstance:
       objectReference: {fileID: 596812479}
     - target: {fileID: 4097920298351765553, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2888
+      value: 2891
       objectReference: {fileID: 0}
     - target: {fileID: 4267565045869016930, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -35789,7 +35789,7 @@ PrefabInstance:
       objectReference: {fileID: 1908989150}
     - target: {fileID: 5220786811011077642, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2367
+      value: 2370
       objectReference: {fileID: 0}
     - target: {fileID: 5274729558533195033, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -35849,7 +35849,7 @@ PrefabInstance:
       objectReference: {fileID: 1638120109}
     - target: {fileID: 8232092237624666542, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 6687
+      value: 6690
       objectReference: {fileID: 0}
     - target: {fileID: 8232092237624666542, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Tangents.Array.data[0].x
@@ -36045,7 +36045,7 @@ PrefabInstance:
       objectReference: {fileID: 223744564}
     - target: {fileID: 8437752597151759328, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_VersionIndex
-      value: 2797
+      value: 2800
       objectReference: {fileID: 0}
     - target: {fileID: 8677513665217814829, guid: a7cb74ab49d467c0994e0a25003324bf, type: 3}
       propertyPath: m_Mesh
@@ -36536,7 +36536,7 @@ PrefabInstance:
       objectReference: {fileID: 1089913548}
     - target: {fileID: 9046440813127650191, guid: 320af7e31a2f912b384141d4678e62da, type: 3}
       propertyPath: m_VersionIndex
-      value: 662
+      value: 701
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

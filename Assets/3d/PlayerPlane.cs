@@ -252,6 +252,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     void HandleFlackHit()
     {
         //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+        controller.Tilt();
         gameState.SetRandomDamage(true);
     }
 
@@ -504,6 +505,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         if (col.gameObject.name.StartsWith("FlakEx"))
         {
             //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
+            HandleFlackHit();
         }
     }
 }
