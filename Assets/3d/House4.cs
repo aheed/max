@@ -66,7 +66,7 @@ public class House4 : MonoBehaviour, IVip
 
         if (IsVip())
         {
-            GameState.GetInstance().IncrementTargetsHit();
+            GameState.GetInstance().TargetHit();
             Destroy(target);
             target = null;
         }

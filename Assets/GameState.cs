@@ -21,6 +21,7 @@ public enum GameEvent
     SMALL_BANG,
     MEDIUM_BANG,
     BIG_BANG,
+    TARGETS_CHANGED,
     TARGET_HIT,
     VIEW_MODE_CHANGED,
     BOMB_LANDED,
@@ -83,6 +84,7 @@ public class GameState : MonoBehaviour
     public float minSafeAltitude = 0.2f;
     public float riverAltitude = -0.3f;
     public float craterAltitude = 0.01f;
+    public float searchLightAltitude = 0.15f;
     public float maxHorizPosition = 2.0f;
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
@@ -267,13 +269,13 @@ public class GameState : MonoBehaviour
     {
         gameStateContents.targetsHit = hits;
         gameStateContents.targetsHitMin = hitsMin;
-        ReportEvent(GameEvent.TARGET_HIT);
+        ReportEvent(GameEvent.TARGETS_CHANGED);
     }
 
-    public void IncrementTargetsHit()
+    public void TargetHit()
     {
-        SetTargetsHit(gameStateContents.targetsHit + 1,
-            gameStateContents.targetsHitMin); // unchanged
+        ++gameStateContents.targetsHit;
+        ReportEvent(GameEvent.TARGET_HIT);
     }
 
     public int GetTargetsHit()

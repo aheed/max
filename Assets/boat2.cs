@@ -61,7 +61,7 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
             gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             if (IsVip())
             {
-                gameState.IncrementTargetsHit();
+                gameState.TargetHit();
             }
             Sink();
             return;
@@ -83,7 +83,7 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
             gameState.ReportEvent(GameEvent.MEDIUM_BANG);
             if (IsVip())
             {
-                gameState.IncrementTargetsHit();
+                gameState.TargetHit();
             }
             Sink();
         }

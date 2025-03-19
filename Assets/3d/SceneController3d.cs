@@ -16,6 +16,7 @@ public class SceneController3d : MonoBehaviour
     public GameObject bombSplashPrefab;
     public GameObject bombCraterPrefab;
     public GameObject mushroomCloudPrefab;
+    public BossShadowCaster bossShadowCasterPrefab;
     public GameObject refobject;
     public Material targetMaterial;
     public Material planeTargetMaterial;
@@ -231,6 +232,7 @@ public class SceneController3d : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
+        GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
 
         // Make copies of materials to avoid changing the .mat files
@@ -325,8 +327,15 @@ public class SceneController3d : MonoBehaviour
         windCooldown = UnityEngine.Random.Range(windIntervalSecMin, windIntervalSecMax);
     }
 
+    void SpawnBossShadow()
+    {
+        Debug.Log("Time to spawn boss shadow");
+        BossShadowCaster bossShadowCaster = Instantiate(bossShadowCasterPrefab);
+        bossShadowCaster.Init(refobject);
+    }
+
     void SpawnEnemyPlane()
-    {        
+    {   
         var startPos = refobject.transform.position;
 
         bool oncoming = UnityEngine.Random.Range(0f, 1.0f) < enemyPlaneOncomingProbability;
@@ -393,6 +402,12 @@ public class SceneController3d : MonoBehaviour
             riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed
         };
+    }
+
+    bool AllEnemyHQsBombed()
+    {
+        var enemyHQs = gameState.GetStateContents().enemyHQs;
+        return enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed());
     }
 
     // Update is called once per frame
@@ -547,9 +562,7 @@ public class SceneController3d : MonoBehaviour
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                var enemyHQs = gameState.GetStateContents().enemyHQs;
-                gameState.SetStatus(enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed()) ?
-                    GameStatus.FINISHED : GameStatus.REFUELLING);
+                gameState.SetStatus(AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);
             }
             gameState.SetSpeed(newSpeed);
         }
@@ -636,6 +649,14 @@ public class SceneController3d : MonoBehaviour
         Vector3 delta = levelVelocity * Time.deltaTime;
         refobject.transform.position += delta;
         gameState.playerPosition = maxPlane.gameObject.transform.position;
+    }
+
+    private void OnTargetHitCallback()
+    {
+        if(AllEnemyHQsBombed())
+        {
+            SpawnBossShadow();
+        }
     }
 
     private void OnGameStatusChangedCallback() =>

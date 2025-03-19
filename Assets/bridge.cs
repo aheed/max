@@ -30,7 +30,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
             {
                 Destroy(target.gameObject);
                 target = null;
-                GameState.GetInstance().IncrementTargetsHit();
+                GameState.GetInstance().TargetHit();
             }
 
             //todo: report road or bridge hit for scoring

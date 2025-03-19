@@ -30,10 +30,11 @@ public class EnemyHQ3d : MonoBehaviour, IEnemyHQ
             return;
         }
 
+        Destroy(col.gameObject);
         SetBombed();
         var gameState = GameState.GetInstance();
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
-        gameState.IncrementTargetsHit();
+        gameState.TargetHit();
     }
 }

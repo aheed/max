@@ -42,7 +42,7 @@ public class Car : ManagedObject, IVip
             gameState.BombLanded(bomb, gameObject);
             if(IsVip())
             {
-                gameState.IncrementTargetsHit();
+                gameState.TargetHit();
             }
         }
     }

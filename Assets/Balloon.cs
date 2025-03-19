@@ -78,7 +78,7 @@ public class Balloon : ManagedObject, IPositionObservable
             collObjName.StartsWith("max"))
         {
             //Debug.Log($"bullet height:{bullet.GetHeight()} alt:{bullet.GetAltitude()} collision with balloon height:{GetHeight()} alt: {GetAltitude()} hit");
-            GameState.GetInstance().IncrementTargetsHit();
+            GameState.GetInstance().TargetHit();
         }
         else 
         {

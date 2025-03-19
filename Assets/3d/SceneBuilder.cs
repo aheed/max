@@ -26,6 +26,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
     public ManagedObject carPrefab;
+    public ManagedObject searchLightPrefab;
     public GameObject airstripEndPrefab;
     public ManagedObject hangarPrefab;
     public EnemyHQ3d enemyHqPrefab;
@@ -57,6 +58,7 @@ public class SceneBuilder : MonoBehaviour
     private ObjectManager enemyHangarManager;
     private ObjectManager hangarManager;
     private ObjectManager carManager;
+    private ObjectManager searchLightManager;
     private GameObject managedObjectsParent;
 
     public void Init()
@@ -78,6 +80,7 @@ public class SceneBuilder : MonoBehaviour
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
     }
 
 
@@ -639,6 +642,11 @@ public class SceneBuilder : MonoBehaviour
 
                     case CellContent.HANGAR:
                         selectedManager = hangarManager;
+                        break;
+
+                    case CellContent.SEARCH_LIGHT:
+                        selectedManager = searchLightManager;
+                        altitude = gameState.searchLightAltitude;
                         break;
                 }
 

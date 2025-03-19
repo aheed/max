@@ -22,6 +22,7 @@ public enum CellContent
     VEHICLE1,
     VEHICLE2,
     ENEMY_HANGAR,
+    SEARCH_LIGHT,
     BALLOON = 1 << 6,
     LAND_MASK = 0x3F,
     AIR_MASK = 0xC0
@@ -630,6 +631,11 @@ public class LevelBuilder
                         bigHousesList.Add(new HousePosition {x = midX - bigHouseRoadDistance, y = y});
                         bigHousesList.Add(new HousePosition {x = midX + bigHouseRoadDistance, y = y});
                     }
+                }
+
+                if (y % 10 == 0 && ret.cells[midX, y] == CellContent.ROAD)
+                {
+                    ret.cells[midX, y] = CellContent.SEARCH_LIGHT;
                 }
                 continue;
             }
