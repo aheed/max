@@ -6,8 +6,11 @@ public class PlaneController : MonoBehaviour
     public Material normalFuselageMaterial;
     public Material normalWingMaterial;
     public GameObject planeModel;
-    public bool oncoming;
+    public float correctionRate = 20f;
     bool alive = false;
+    float targetZRotation;
+    float currentZRotation;
+    float yRotation = 0;
 
     MeshRenderer[] GetBlinkableRenderers()
     {
@@ -23,25 +26,30 @@ public class PlaneController : MonoBehaviour
         return fuselage.GetComponentsInChildren<MeshRenderer>();        
     }
 
+    public void SetOncoming(bool oncoming)
+    {
+        yRotation = oncoming ? 180 : 0;
+    }
+
     public void SetAppearance(float moveX, bool alive)
     {
         //Debug.Log($"SetAppearance moveX={moveX} alive={alive} oncoming={oncoming}");
-        var yRotation = oncoming ? 180 : 0;
+        
         if (!alive)
         {
             //planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 90);
         }
         else if (moveX > 0)
         {
-            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, -30);
+            targetZRotation = -30;
         }
         else if (moveX < 0)
         {
-            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 30);
+            targetZRotation = 30;
         }
         else
         {
-            planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+            targetZRotation = 0;
         }
 
         if (this.alive != alive)
@@ -59,5 +67,11 @@ public class PlaneController : MonoBehaviour
                 renderer.material = currentFuselageMaterial;
             }
         }
+    }
+
+    void Update()
+    {
+        currentZRotation += (targetZRotation - currentZRotation) * correctionRate * Time.deltaTime;
+        planeModel.transform.rotation = Quaternion.Euler(0, yRotation, currentZRotation);
     }
 }

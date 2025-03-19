@@ -52,7 +52,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         this.speed = speed;
         if (speed < 0)
         {
-            GetController().oncoming = true;
+            GetController().SetOncoming(true);
         }
     }
 
