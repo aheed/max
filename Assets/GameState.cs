@@ -21,6 +21,7 @@ public enum GameEvent
     SMALL_BANG,
     MEDIUM_BANG,
     BIG_BANG,
+    TARGETS_CHANGED,
     TARGET_HIT,
     VIEW_MODE_CHANGED,
     BOMB_LANDED,
@@ -267,13 +268,13 @@ public class GameState : MonoBehaviour
     {
         gameStateContents.targetsHit = hits;
         gameStateContents.targetsHitMin = hitsMin;
-        ReportEvent(GameEvent.TARGET_HIT);
+        ReportEvent(GameEvent.TARGETS_CHANGED);
     }
 
-    public void IncrementTargetsHit()
+    public void TargetHit()
     {
-        SetTargetsHit(gameStateContents.targetsHit + 1,
-            gameStateContents.targetsHitMin); // unchanged
+        ++gameStateContents.targetsHit;
+        ReportEvent(GameEvent.TARGET_HIT);
     }
 
     public int GetTargetsHit()

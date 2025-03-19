@@ -299,6 +299,7 @@ public class DashUIDocument : MonoBehaviour
         gameState.Subscribe(GameEvent.ALT_CHANGED, UpdateAlt);
         gameState.Subscribe(GameEvent.BOMBS_CHANGED, UpdateBombs);
         gameState.Subscribe(GameEvent.SCORE_CHANGED, UpdateScore);
+        gameState.Subscribe(GameEvent.TARGETS_CHANGED, UpdateTargets);
         gameState.Subscribe(GameEvent.TARGET_HIT, UpdateTargets);
         gameState.Subscribe(GameEvent.DAMAGE_SUSTAINED, () => {
             audioSource.PlayOneShot(damageClip);

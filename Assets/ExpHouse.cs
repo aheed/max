@@ -156,7 +156,7 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         {
             Destroy(target.gameObject);
             target = null;
-            gameState.IncrementTargetsHit();
+            gameState.TargetHit();
         }
 
         var bomb = col.gameObject.GetComponent<Bomb>();

@@ -34,7 +34,7 @@ public class Bridge3d : MonoBehaviour, IVip
 
         if (IsVip())
         {
-            GameState.GetInstance().IncrementTargetsHit();
+            GameState.GetInstance().TargetHit();
             Destroy(target);
             target = null;
         }

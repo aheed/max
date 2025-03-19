@@ -198,7 +198,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
         if(IsVip())
         {
-            GameState.GetInstance().IncrementTargetsHit();
+            GameState.GetInstance().TargetHit();
         }
         crashed = true;
         Deregister();

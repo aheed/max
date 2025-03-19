@@ -13,7 +13,7 @@ public class BossShadowCaster : MonoBehaviour
     public void Init(GameObject obj)
     {
         refObject = obj;
-        var startPosition = refObject.transform.position + new Vector3(startOffsetX, altitude, -maxDistanceZ / 2);
+        var startPosition = refObject.transform.position + new Vector3(startOffsetX, altitude, -maxDistanceZ);
         transform.position = startPosition;
         var refSpeed = GameState.GetInstance().maxSpeed;
         velocity = new Vector3(speedX * refSpeed, 0, speedZ * refSpeed);

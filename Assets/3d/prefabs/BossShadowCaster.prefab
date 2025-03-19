@@ -49,7 +49,7 @@ MonoBehaviour:
   maxDistanceZ: 20
   speedX: 0.6
   speedZ: 2.5
-  startOffsetX: -6
+  startOffsetX: -8
   velocity: {x: 0, y: 0, z: 0}
 --- !u!1 &6546443189493521406
 GameObject:

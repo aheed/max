@@ -206,7 +206,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
         if(IsVip())
         {
-            gameState.IncrementTargetsHit();
+            gameState.TargetHit();
         }
         crashed = true;
         Deregister();

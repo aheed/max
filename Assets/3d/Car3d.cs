@@ -76,7 +76,7 @@ public class Car3d : ManagedObject, IVip
         gameState.BombLanded(bombGameObject, gameObject);
         if(IsVip())
         {
-            gameState.IncrementTargetsHit();
+            gameState.TargetHit();
         }
     }
 }

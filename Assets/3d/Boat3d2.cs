@@ -66,7 +66,7 @@ public class Boat3d2 : ManagedObject, IVip
         {
             if (IsVip())
             {
-                GameState.GetInstance().IncrementTargetsHit();
+                GameState.GetInstance().TargetHit();
             }
 
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
