@@ -46,11 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   altitude: 6
+  Bsh1SpeedX: 2
+  Bsh1CrossDistanceZ: -12
+  Bsh1Scale: 0.04
   maxDistanceZ: 20
   speedX: 0.6
   speedZ: 2.5
   startOffsetX: -8
-  velocity: {x: 0, y: 0, z: 0}
 --- !u!1 &6546443189493521406
 GameObject:
   m_ObjectHideFlags: 0

@@ -163,21 +163,55 @@ MonoBehaviour:
       m_Action: Debug Repair
       m_Flags: 0
     m_Flags: 0
-  DebugAuxAction:
-    m_Name: Debug Aux
+  DebugAuxAction1:
+    m_Name: Debug Aux Action 1
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 04d70b6c-169a-4af5-8fa7-e4ff1435fb2c
+    m_Id: 372c3f1c-3ff6-477b-b640-c5da9a8137e2
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: 165eebf5-608f-468c-87d9-e7482ea5376e
+      m_Id: 9a0b1873-6e17-428a-9dc7-45201293d426
       m_Path: <Keyboard>/q
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Debug Aux
+      m_Action: Debug Aux Action 1
+      m_Flags: 0
+    m_Flags: 0
+  DebugAuxAction2:
+    m_Name: Debug Aux Action 2
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a9e33016-2f4f-421a-967e-5595337f882e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0303cf08-6e7f-4b4c-a8c7-03bcb735a686
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Aux Action 2
+      m_Flags: 0
+    m_Flags: 0
+  DebugAuxAction3:
+    m_Name: Debug Aux Action 3
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b1c1b72b-ba79-49d3-a89e-49c559c6ee1a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cf0cf526-ef3c-4b12-b138-be59108a68bc
+      m_Path: <Keyboard>/e
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Debug Aux Action 3
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}

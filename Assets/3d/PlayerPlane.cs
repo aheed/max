@@ -33,7 +33,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction FireAction;
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
-    public InputAction DebugAuxAction;    
+    public InputAction DebugAuxAction1;
+    public InputAction DebugAuxAction2;
+    public InputAction DebugAuxAction3;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;    
     private Vector2 touchStartPosition, touchEndPosition;
@@ -83,7 +85,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         EnhancedTouchSupport.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
-        DebugAuxAction.Enable();
+        DebugAuxAction1.Enable();
+        DebugAuxAction2.Enable();
+        DebugAuxAction3.Enable();
         gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.START, OnStart);
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
@@ -366,10 +370,19 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             gameState.SetRandomDamage(false);
         }
 
-        if (DebugAuxAction.WasPressedThisFrame())
+        if (DebugAuxAction1.WasPressedThisFrame())
         {
-            gameState.ReportEvent(GameEvent.BIG_DETONATION);
+            gameState.ReportEvent(GameEvent.DEBUG_ACTION1);
+            //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
+        }
+        if (DebugAuxAction2.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.DEBUG_ACTION2);
+        }
+        if (DebugAuxAction3.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.DEBUG_ACTION3);
         }
         
         bulletCooldown -= Time.deltaTime;

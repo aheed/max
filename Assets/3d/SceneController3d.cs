@@ -233,6 +233,9 @@ public class SceneController3d : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
 
         // Make copies of materials to avoid changing the .mat files
@@ -327,11 +330,11 @@ public class SceneController3d : MonoBehaviour
         windCooldown = UnityEngine.Random.Range(windIntervalSecMin, windIntervalSecMax);
     }
 
-    void SpawnBossShadow()
+    void SpawnBossShadow(BossShadowVariant variant)
     {
         Debug.Log("Time to spawn boss shadow");
         BossShadowCaster bossShadowCaster = Instantiate(bossShadowCasterPrefab);
-        bossShadowCaster.Init(refobject);
+        bossShadowCaster.Init(refobject, variant);
     }
 
     void SpawnEnemyPlane()
@@ -655,8 +658,23 @@ public class SceneController3d : MonoBehaviour
     {
         if(AllEnemyHQsBombed())
         {
-            SpawnBossShadow();
+            SpawnBossShadow(BossShadowVariant.BSH3);
         }
+    }
+
+    private void OnDebugCallback1()
+    {
+        SpawnBossShadow(BossShadowVariant.BSH1);
+    }
+
+    private void OnDebugCallback2()
+    {
+        SpawnBossShadow(BossShadowVariant.BSH2);
+    }
+
+    private void OnDebugCallback3()
+    {
+        SpawnBossShadow(BossShadowVariant.BSH3);
     }
 
     private void OnGameStatusChangedCallback() =>
