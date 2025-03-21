@@ -656,9 +656,27 @@ public class SceneController3d : MonoBehaviour
 
     private void OnTargetHitCallback()
     {
-        if(AllEnemyHQsBombed())
+        if (gameState.GetTargetsHit() != gameState.GetStateContents().targetsHitMin)
         {
-            SpawnBossShadow(BossShadowVariant.BSH3);
+            return;
+        }
+
+        switch(gameState.GetStateContents().latestLevelPrereq.levelType)
+        {
+            case LevelType.NORMAL:
+                SpawnBossShadow(BossShadowVariant.BSH1);
+                break;
+            case LevelType.ROAD:
+                SpawnBossShadow(BossShadowVariant.BSH2);
+                break;
+            case LevelType.CITY:
+                SpawnBossShadow(BossShadowVariant.BSH3);
+                break;
+            case LevelType.BALLOONS:
+                break;
+            default:
+                Debug.LogError($"Invalid level type {gameState.GetStateContents().latestLevelPrereq.levelType}");
+                break;
         }
     }
 
