@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum BossShadowVariant
@@ -13,11 +14,14 @@ public class BossShadowCaster : MonoBehaviour
     public float altitude = 8f;
 
     // BSH1
-    //public float maxDistanceX = 10f;
     public float Bsh1SpeedX = 1.2f;
-    //public float Bsh1StartOffsetX = 0f;
     public float Bsh1CrossDistanceZ = 1f;
     public float Bsh1Scale = 0.1f;
+
+    // BSH2
+    public float Bsh2SpeedZ = 0.8f;
+    public float Bsh2Scale = 0.1f;
+    public float Bsh2OffsetX = -2f;
     
     // BSH3
     public float maxDistanceZ = 10f;
@@ -44,7 +48,12 @@ public class BossShadowCaster : MonoBehaviour
         }
         else if (variant == BossShadowVariant.BSH2)
         {
-            Debug.LogError("Not implemented");
+            var refSpeed = GameState.GetInstance().maxSpeed;
+            var startPosition = refObject.transform.position + new Vector3(Bsh2OffsetX, altitude, maxDistanceZ);
+            transform.position = startPosition;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            transform.localScale = new Vector3(Bsh2Scale, Bsh2Scale, Bsh2Scale);
+            velocity = new Vector3(0, 0, -Bsh2SpeedZ * refSpeed);
         }
         else if (variant == BossShadowVariant.BSH3)
         {
@@ -63,13 +72,13 @@ public class BossShadowCaster : MonoBehaviour
             return;
         }
 
-        if(transform.position.z - refObject.transform.position.z > maxDistanceZ)
+        transform.position += velocity * Time.deltaTime;
+
+        if(Math.Abs(transform.position.z - refObject.transform.position.z) > maxDistanceZ)
         {
-            //transform.position = refObject.transform.position - new Vector3(0, 0, maxDistanceZ);
+            Debug.Log("Destroying boss shadow sssssssssssssssssssssssssssssssssssssss");
             Destroy(gameObject);
             return;
-        }
-        
-        transform.position += velocity * Time.deltaTime;
+        }        
     }
 }
