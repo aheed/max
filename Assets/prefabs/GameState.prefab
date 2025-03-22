@@ -48,6 +48,9 @@ MonoBehaviour:
   minAltitude: 0.1
   maxAltitude: 4
   minSafeAltitude: 0.3
+  riverAltitude: -0.3
+  craterAltitude: 0.01
+  searchLightAltitude: 0.15
   maxHorizPosition: 4
   safeTakeoffSpeedQuotient: 0.8
   acceleration: 0.4
@@ -56,4 +59,5 @@ MonoBehaviour:
   maxFuel: 100
   startFuelQuotient: 0.9
   targetsHitMin1: 10
-  targetsHitMin2: 15
+  targetsHitMin2: 10
+  playerPosition: {x: 0, y: 0, z: 0}

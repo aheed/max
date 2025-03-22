@@ -27,6 +27,9 @@ public enum GameEvent
     BOMB_LANDED,
     GAME_STATUS_CHANGED,
     ENEMY_PLANE_STATUS_CHANGED,
+    DEBUG_ACTION1,
+    DEBUG_ACTION2,
+    DEBUG_ACTION3,
 }
 
 public enum DamageIndex
