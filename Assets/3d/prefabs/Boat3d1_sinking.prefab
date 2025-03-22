@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3582731409686577074}
-  - component: {fileID: 9030621906250089415}
   - component: {fileID: 871302105868798234}
   m_Layer: 0
   m_Name: Boat3d1_sinking
@@ -35,27 +34,6 @@ Transform:
   - {fileID: 4836086325934278761}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &9030621906250089415
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 150685130249457549}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.3800943, y: 1.3166845, z: 5.702448}
-  m_Center: {x: -0.07842846, y: 0.5128461, z: 0.04755199}
 --- !u!114 &871302105868798234
 MonoBehaviour:
   m_ObjectHideFlags: 0

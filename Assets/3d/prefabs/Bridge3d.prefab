@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5039077971745866076}
   - component: {fileID: 363864964814428801}
   m_Layer: 0
-  m_Name: FarSide
+  m_Name: BridgeFarSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 975154358492188884}
   - component: {fileID: 41384520295909340}
   m_Layer: 0
-  m_Name: RoadSection
+  m_Name: BridgeRoadSection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 4200376463109361103}
   - component: {fileID: 9011872214422262403}
   m_Layer: 0
-  m_Name: NearSide
+  m_Name: BridgeNearSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

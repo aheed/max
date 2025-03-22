@@ -519,8 +519,24 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         if (col.gameObject.name.StartsWith("FlakEx"))
         {
-            //Debug.Log($"Ouch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by Flack");
             HandleFlackHit();
+            return;
+        }
+
+        if (col.gameObject.name.StartsWith("EnemyPlane"))
+        {
+            gameState.SetStatus(GameStatus.COLLIDED);
+            return;
+        }
+
+        if (col.gameObject.name.StartsWith("House") ||
+            col.gameObject.name.StartsWith("Tree") ||
+            col.gameObject.name.StartsWith("Bridge") ||
+            col.gameObject.name.StartsWith("Boat"))
+        {
+            Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
+            gameState.SetStatus(GameStatus.DEAD);
+            return; 
         }
     }
 }
