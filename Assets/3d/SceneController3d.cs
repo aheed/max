@@ -342,20 +342,9 @@ public class SceneController3d : MonoBehaviour
         var startPos = refobject.transform.position;
 
         bool oncoming = UnityEngine.Random.Range(0f, 1.0f) < enemyPlaneOncomingProbability;
-        if (oncoming)
-        {
-            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition, gameState.maxHorizPosition);
-            startPos.z += activationDistance;
-        }
-        else
-        {
-            startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition - 2 * gameState.maxAltitude, gameState.maxHorizPosition - 2 * gameState.maxAltitude);
-            startPos.z += -deactivationDistance;
-        }
-
-        startPos.y = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
-
-        
+        startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition / 3, gameState.maxHorizPosition / 3);
+        startPos.z += oncoming ? activationDistance : -deactivationDistance;
+        startPos.y = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude * 0.8f);
         
         EnemyPlane3d enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
