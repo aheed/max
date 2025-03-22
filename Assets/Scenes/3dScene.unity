@@ -754,7 +754,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 2
+  startLevelType: 0
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -5942,18 +5942,6 @@ PrefabInstance:
     - target: {fileID: 1825594760818826404, guid: 9636914132e39b897ad76a7c928fe313, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4662293394953399201, guid: 9636914132e39b897ad76a7c928fe313, type: 3}
-      propertyPath: maxSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4662293394953399201, guid: 9636914132e39b897ad76a7c928fe313, type: 3}
-      propertyPath: riverAltitude
-      value: -0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4662293394953399201, guid: 9636914132e39b897ad76a7c928fe313, type: 3}
-      propertyPath: minSafeAltitude
-      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7913791782987231132, guid: 9636914132e39b897ad76a7c928fe313, type: 3}
       propertyPath: m_Name
