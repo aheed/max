@@ -76,7 +76,7 @@ public class BossShadowCaster : MonoBehaviour
 
         if(Math.Abs(transform.position.z - refObject.transform.position.z) > maxDistanceZ)
         {
-            Debug.Log("Destroying boss shadow sssssssssssssssssssssssssssssssssssssss");
+            //Debug.Log("Destroying boss shadow sssssssssssssssssssssssssssssssssssssss");
             Destroy(gameObject);
             return;
         }        

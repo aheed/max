@@ -8,9 +8,13 @@ public class PlaneController : MonoBehaviour
     public GameObject planeModel;
     public float correctionRate = 20f;
     public float maxRotation = 30f;
+    public float rollDurationSec = 0.89f;
     bool alive = false;
     float targetZRotation;
     float currentZRotation;
+    float currentRollZRotation;
+    float currentRollDurationSec = 100f;
+    float rollRate;
     float yRotation = 0;
 
     MeshRenderer[] GetBlinkableRenderers()
@@ -35,6 +39,13 @@ public class PlaneController : MonoBehaviour
     public void Tilt()
     {
         currentZRotation += Random.Range(-maxRotation, maxRotation);
+    }
+
+    public void Roll(bool clockwise)
+    {
+        rollRate = (clockwise ? -1 : 1) * 360 / rollDurationSec;
+        currentRollZRotation = 0;
+        currentRollDurationSec = 0;
     }
 
     public void SetAppearance(float moveX, bool alive)
@@ -76,8 +87,27 @@ public class PlaneController : MonoBehaviour
     }
 
     void Update()
-    {
-        currentZRotation += (targetZRotation - currentZRotation) * correctionRate * Time.deltaTime;
+    {   
+        if (currentRollDurationSec < rollDurationSec)
+        {
+            currentRollDurationSec += Time.deltaTime;
+            currentRollZRotation = rollRate * currentRollDurationSec;
+
+            if (currentRollDurationSec > rollDurationSec)
+            {
+                currentRollZRotation = 0;
+                if (currentZRotation > 180)
+                {
+                    currentZRotation -= 360;
+                }
+                else if (currentZRotation < -180)
+                {
+                    currentZRotation += 360;
+                }
+            }
+        }
+
+        currentZRotation += ((targetZRotation + currentRollZRotation) - currentZRotation) * correctionRate * Time.deltaTime;
         planeModel.transform.rotation = Quaternion.Euler(0, yRotation, currentZRotation);
     }
 }

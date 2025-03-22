@@ -49,3 +49,5 @@ MonoBehaviour:
   normalWingMaterial: {fileID: 2100000, guid: df2fcbf952192353b9599d2cf858b8a6, type: 2}
   planeModel: {fileID: 0}
   correctionRate: 20
+  maxRotation: 30
+  rollDuration: 0.9

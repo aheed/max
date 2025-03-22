@@ -372,12 +372,14 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         if (DebugAuxAction1.WasPressedThisFrame())
         {
+            controller.Roll(true);
             gameState.ReportEvent(GameEvent.DEBUG_ACTION1);
             //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
         if (DebugAuxAction2.WasPressedThisFrame())
         {
+            controller.Roll(false);
             gameState.ReportEvent(GameEvent.DEBUG_ACTION2);
         }
         if (DebugAuxAction3.WasPressedThisFrame())
