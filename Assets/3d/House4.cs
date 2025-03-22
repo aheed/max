@@ -78,6 +78,11 @@ public class House4 : MonoBehaviour, IVip
         var bombed = inner.GetChild(1);
         alive.gameObject.SetActive(false);
         bombed.gameObject.SetActive(true);
+        var collider = gameObject.GetComponentInChildren<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
     }
 }
