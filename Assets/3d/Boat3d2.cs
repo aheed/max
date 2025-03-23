@@ -73,12 +73,19 @@ public class Boat3d2 : ManagedObject, IVip
             Sink();
         }
 
-        if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        if (col.name.StartsWith("Bullet"))
         {
             GameState.GetInstance().ReportEvent(GameEvent.MEDIUM_BANG);
             Sink();
             Release();
             return;
+        }
+
+        if (col.name.StartsWith("riverbank") ||
+            col.name.StartsWith("Bridge") ||
+            col.name.StartsWith("Boat"))
+        {
+            alive = false;
         }
     }
 
