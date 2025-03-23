@@ -296,7 +296,7 @@ public class SceneBuilder : MonoBehaviour
                 var bigHouseXPosRel = bigHouse.x * cellWidth;
                 var bigHouseLocalTransform = new Vector3(bigHouseXPosRel, 2 * roadAltitude, bigHouseOffsetZ);
                 bigHouseGameObject.transform.localPosition = bigHouseLocalTransform;
-                house.SetSize(new Vector3(bigHouseSizeX, bigHouseSizeY, bigHouseSizeZ));
+                house.SetAppearance(new Vector3(bigHouseSizeX, bigHouseSizeY, bigHouseSizeZ), false);
             }
         }
 
@@ -583,7 +583,7 @@ public class SceneBuilder : MonoBehaviour
             var houseLocalPosition = new Vector3(houseSpec.position.x * cellWidth, houseOffsetY, houseSpec.position.y * cellHeight);
             houseGameObject.transform.localPosition = houseLocalPosition;
 
-            house.SetSize(new Vector3(houseSpec.width, houseSpec.height, houseSpec.depth));
+            house.SetAppearance(new Vector3(houseSpec.width, houseSpec.height, houseSpec.depth), true);
 
             if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
             {

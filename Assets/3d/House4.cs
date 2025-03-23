@@ -10,10 +10,15 @@ public class House4 : MonoBehaviour, IVip
 
     GameObject target = null;
 
-    public void SetSize(Vector3 newSize)
+    Color[] randomColors = new Color[] {
+        new Color(0.98f, 0.8f, 0.5f),
+        new Color(0.9f, 0.1f, 0.9f),
+        new Color(0.9f, 0.2f, 0.2f),
+        new Color(0.9f, 0.9f, 0.9f),
+    };
+
+    public void SetAppearance(Vector3 newSize, bool randomColor)
     {
-        //Debug.Log($"House4 Setting size to {newSize}");
-        
         var inner = transform.GetChild(0);
         var alive = inner.GetChild(0);
         var eastWall = alive.GetChild(0).gameObject;
@@ -34,6 +39,14 @@ public class House4 : MonoBehaviour, IVip
         var newSouthMaterial = new Material(southRenderer.sharedMaterial);
         newSouthMaterial.mainTextureScale = new Vector2(newSize.x, newSize.y);
         southRenderer.material = newSouthMaterial;
+
+        if (randomColor)
+        {
+            var colorIndex = Random.Range(0, randomColors.Length);
+            var color = randomColors[colorIndex];
+            newEastMaterial.color = color;
+            newSouthMaterial.color = color;
+        }
 
         // Move the house up by half its height so it sits on the ground
         var position = transform.position;
