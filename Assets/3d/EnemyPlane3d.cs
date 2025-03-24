@@ -53,14 +53,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         if (speed < 0)
         {
             GetController().SetOncoming(true);
-            return;
         }
-        
-        /*if (speed == 0)
-        {
-            GetController().SetParked();
-            return;
-        }*/
     }
 
     void SetBlinkableMaterial(Material material)

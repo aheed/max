@@ -36,11 +36,6 @@ public class PlaneController : MonoBehaviour
         yRotation = oncoming ? 180 : 0;
     }
 
-    public void SetParked()
-    {
-        yRotation = 45;
-    }
-
     public void Tilt()
     {
         currentZRotation += Random.Range(-maxRotation, maxRotation);

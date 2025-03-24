@@ -754,7 +754,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 1
+  startLevelType: 0
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:

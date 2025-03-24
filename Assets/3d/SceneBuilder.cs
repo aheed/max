@@ -221,11 +221,10 @@ public class SceneBuilder : MonoBehaviour
             lsGameObject.transform.localPosition = lsLocalPosition;         
             
             // parked planes
-            var nofParkedPlanes = UnityEngine.Random.Range(1, 4);
+            var nofParkedPlanes = UnityEngine.Random.Range(1, 3);
             for (int i = 0; i < nofParkedPlanes; i++)
             {
                 EnemyPlane3d parkedPlane = Instantiate(parkedPlanePrefab, lsGameObject.transform);
-                //parkedPlane.transform.rotation = Quaternion.Euler(10, 45, 0);
                 parkedPlane.transform.Rotate(-25, 45, 0);
                 var parkedPlaneZ = (i+1) * lsHeight / (nofParkedPlanes+1) - lsHeight / 2;
                 var ppLocalPosition = new Vector3(0, parkedPlaneAltitude, parkedPlaneZ);
