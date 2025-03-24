@@ -53,7 +53,14 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         if (speed < 0)
         {
             GetController().SetOncoming(true);
+            return;
         }
+        
+        /*if (speed == 0)
+        {
+            GetController().SetParked();
+            return;
+        }*/
     }
 
     void SetBlinkableMaterial(Material material)
@@ -154,11 +161,14 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             //Debug.Log($"Enemy plane too far in front ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
         }
-
-        if (speed < 0 && refObject.transform.position.z - transform.position.z > maxDistanceBehind)
+        else if (speed < 0 && refObject.transform.position.z - transform.position.z > maxDistanceBehind)
         {
             //Debug.Log($"Enemy plane too far behind ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
+        }
+        else if (speed == 0f)
+        {
+            return;
         }
 
         moveCooldownSec -= Time.deltaTime;

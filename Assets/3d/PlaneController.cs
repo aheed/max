@@ -36,6 +36,11 @@ public class PlaneController : MonoBehaviour
         yRotation = oncoming ? 180 : 0;
     }
 
+    public void SetParked()
+    {
+        yRotation = 45;
+    }
+
     public void Tilt()
     {
         currentZRotation += Random.Range(-maxRotation, maxRotation);
@@ -108,6 +113,6 @@ public class PlaneController : MonoBehaviour
         }
 
         currentZRotation += ((targetZRotation + currentRollZRotation) - currentZRotation) * correctionRate * Time.deltaTime;
-        planeModel.transform.rotation = Quaternion.Euler(0, yRotation, currentZRotation);
+        planeModel.transform.localRotation = Quaternion.Euler(0, yRotation, currentZRotation);
     }
 }
