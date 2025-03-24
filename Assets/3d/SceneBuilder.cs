@@ -21,7 +21,7 @@ public class SceneBuilder : MonoBehaviour
     public ManagedObject vehicle1Prefab;
     public ManagedObject vehicle2Prefab;
     public ManagedObject enemyHangarPrefab;
-    public GameObject parkedPlanePrefab;
+    public EnemyPlane3d parkedPlanePrefab;
     public GameObject balloonPrefab;
     public GameObject balloonShadowPrefab;
     public GameObject bridgePrefab;
@@ -41,6 +41,7 @@ public class SceneBuilder : MonoBehaviour
     public float roadAltitude = 0.002f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.001f;
+    public float parkedPlaneAltitude = 0.15f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
     public float bigHouseSizeX = 6f;
@@ -218,20 +219,20 @@ public class SceneBuilder : MonoBehaviour
                 airstripAltitude,
                 enemyAirstrip * cellHeight + lsHeight / 2);
             lsGameObject.transform.localPosition = lsLocalPosition;         
-
-            /*
+            
             // parked planes
-            var nofParkedPlanes = UnityEngine.Random.Range(1, 4);
+            var nofParkedPlanes = UnityEngine.Random.Range(1, 3);
             for (int i = 0; i < nofParkedPlanes; i++)
             {
-                var parkedPlane = Instantiate(parkedPlanePrefab, lsGameObject.transform);
-                var parkedPlaneY = lsllcY + (i+1) * lsHeight / (nofParkedPlanes+1);
-                var parkedPlaneX = parkedPlaneY * neutralSlope + lsWidth / 2;
-                var ppLocalTransform = new Vector3(parkedPlaneX, parkedPlaneY, -0.01f);
-                parkedPlane.transform.localPosition = ppLocalTransform;
-            }*/
+                EnemyPlane3d parkedPlane = Instantiate(parkedPlanePrefab, lsGameObject.transform);
+                parkedPlane.transform.Rotate(-25, 45, 0);
+                var parkedPlaneZ = (i+1) * lsHeight / (nofParkedPlanes+1) - lsHeight / 2;
+                var ppLocalPosition = new Vector3(0, parkedPlaneAltitude, parkedPlaneZ);
+                parkedPlane.transform.localPosition = ppLocalPosition;
+                parkedPlane.SetVip();
+                parkedPlane.SetSpeed(0);
+            }
         }
-
         
         if (levelContents.city != null)
         {

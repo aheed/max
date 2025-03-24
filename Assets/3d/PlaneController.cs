@@ -108,6 +108,6 @@ public class PlaneController : MonoBehaviour
         }
 
         currentZRotation += ((targetZRotation + currentRollZRotation) - currentZRotation) * correctionRate * Time.deltaTime;
-        planeModel.transform.rotation = Quaternion.Euler(0, yRotation, currentZRotation);
+        planeModel.transform.localRotation = Quaternion.Euler(0, yRotation, currentZRotation);
     }
 }

@@ -19605,7 +19605,7 @@ MonoBehaviour:
   vehicle1Prefab: {fileID: -7668174176783186871, guid: 2ecbcd88c7941b8ddab33a032e37bf68, type: 3}
   vehicle2Prefab: {fileID: 8588223239852420487, guid: ff0aa3d302628f73f9c0862f613dc3c1, type: 3}
   enemyHangarPrefab: {fileID: 6794356900591465683, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
-  parkedPlanePrefab: {fileID: 0}
+  parkedPlanePrefab: {fileID: 1651244251128591268, guid: 55f196b9dbc3da056ad52ff7903b8fe6, type: 3}
   balloonPrefab: {fileID: 0}
   balloonShadowPrefab: {fileID: 0}
   bridgePrefab: {fileID: 7238803995979680964, guid: c2ed317b22ddede37b06d13ed2847864, type: 3}
@@ -19624,6 +19624,7 @@ MonoBehaviour:
   rightTrim: 5
   roadAltitude: 0.01
   carAltitude: 0.01
+  parkedPlaneAltitude: 0.15
   parllelRoadSideWidth: 0.1
   parallelRoadWidth: 0.5
   bigHouseSizeX: 6

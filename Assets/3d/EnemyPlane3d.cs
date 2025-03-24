@@ -154,11 +154,14 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             //Debug.Log($"Enemy plane too far in front ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
         }
-
-        if (speed < 0 && refObject.transform.position.z - transform.position.z > maxDistanceBehind)
+        else if (speed < 0 && refObject.transform.position.z - transform.position.z > maxDistanceBehind)
         {
             //Debug.Log($"Enemy plane too far behind ({transform.position.z} vs {refObject.transform.position.z})");
             Deactivate();
+        }
+        else if (speed == 0f)
+        {
+            return;
         }
 
         moveCooldownSec -= Time.deltaTime;
@@ -189,6 +192,10 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         else if (col.name.StartsWith("player", true, CultureInfo.InvariantCulture))
         {
             // mid air collision
+        }
+        else if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
+        {
+            Destroy(col.gameObject);
         }
         else 
         {
