@@ -230,7 +230,7 @@ public class SceneBuilder : MonoBehaviour
                 var parkedPlaneZ = (i+1) * lsHeight / (nofParkedPlanes+1) - lsHeight / 2;
                 var ppLocalPosition = new Vector3(0, parkedPlaneAltitude, parkedPlaneZ);
                 parkedPlane.transform.localPosition = ppLocalPosition;
-                
+                parkedPlane.SetVip();
                 parkedPlane.SetSpeed(0);
             }
         }

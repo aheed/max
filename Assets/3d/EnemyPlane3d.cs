@@ -200,6 +200,10 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         {
             // mid air collision
         }
+        else if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
+        {
+            Destroy(col.gameObject);
+        }
         else 
         {
             return; //no collision
