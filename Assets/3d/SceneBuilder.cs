@@ -181,8 +181,14 @@ public class SceneBuilder : MonoBehaviour
             var lsMeshFilter = lsQuadTransform.gameObject.GetComponent<MeshFilter>();
             var meshSize =  lsMeshFilter.mesh.bounds.size;
             var localScale = lsGameObject.transform.localScale;
-            localScale.x = lsWidth / (meshSize.x * lsQuadTransform.localScale.x);
-            localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            //localScale.x = lsWidth / (meshSize.x * lsQuadTransform.localScale.x);
+            //localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.y); // mesh y corresponds to world z because of the mesh orientation
+            localScale.x = lsWidth / meshSize.x;
+            //localScale.z = lsHeight / meshSize.y; // mesh y corresponds to world z because of the mesh orientation
+            
+            localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.x); // mesh x corresponds to world z because of the mesh orientation
+            //localScale.z = lsHeight / meshSize.z;
+
             lsGameObject.transform.localScale = localScale;
             
             // position
