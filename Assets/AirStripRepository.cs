@@ -3,9 +3,6 @@ using UnityEngine;
 public static class AirStripRepository
 {
     static AirStripInfo[] airStrips = {
-        new AirStripInfo("Surprise Runway", "One minute, nothing but battlefield. The next, a perfect airstrip appears. Amazing!"),
-        new AirStripInfo("Fumes & Hope Airfield", "Out of fuel? We’ve got some… maybe."),
-        new AirStripInfo("Barely Legal Landing Zone", "Cleared for approach… probably."),
         new AirStripInfo("Oops Field", "Land at your own risk—good luck!"),
         new AirStripInfo("Last Chance Airstrip", "If you miss this one, hope you can swim."),
         new AirStripInfo("Splat Flats", "Come in hot, leave in pieces."),
