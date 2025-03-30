@@ -1,0 +1,6 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="Main" style="flex-grow: 1; color: rgb(255, 255, 120);">
+        <engine:Label text="Some Name" name="Name" style="font-size: 36px;" />
+        <engine:Label text="Some humorous and quirky slogan ft strip" name="Slogan" style="font-size: 24px;" />
+    </engine:VisualElement>
+</engine:UXML>
