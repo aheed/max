@@ -1,6 +1,8 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="Main" style="flex-grow: 1; color: rgb(255, 255, 120);">
-        <engine:Label text="Some Name" name="Name" style="font-size: 36px;" />
-        <engine:Label text="Some humorous and quirky slogan ft strip" name="Slogan" style="font-size: 24px;" />
+    <engine:VisualElement name="Main" style="flex-grow: 1; color: rgb(255, 255, 120); -unity-text-align: upper-center; background-image: url(&quot;project://database/Assets/3d/Textures/friendlylandingstripHorizontal.png?fileID=2800000&amp;guid=5db9eae07ed274f92b375834d2175edd&amp;type=3#friendlylandingstripHorizontal&quot;); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-wrap: nowrap;">
+        <engine:VisualElement name="TextParent" style="flex-grow: 1; margin-right: 8%; margin-left: 8%;">
+            <engine:Label text="We Have No Idea How We Got Here Either Airbase" name="Name" style="font-size: 20px; margin-top: 0; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=c9d62e1ac8d9091589e92fc73dde8dee&amp;type=3#NotInter-Regular&quot;); -unity-font-style: bold; white-space: normal; padding-top: 0; margin-right: 8px; margin-left: 8px; padding-bottom: 0; margin-bottom: 1px;" />
+            <engine:Label text="&quot;Nothing to see here, just a completely normal, friendly airstrip in a completely illogical location.&quot;" name="Slogan" style="font-size: 18px; white-space: normal; -unity-font-style: italic; padding-right: 0; padding-left: 0; margin-top: 2px;" />
+        </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>
