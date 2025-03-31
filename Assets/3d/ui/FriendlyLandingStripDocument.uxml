@@ -1,6 +1,0 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="Main" style="flex-grow: 1; color: rgb(255, 255, 120); rotate: 0; transform-origin: center;">
-        <engine:Label text="Evennnnnnnnnnnnnn More" name="Name" style="font-size: 48px;" />
-        <engine:Label text="Evennnnnnnnnnnnnn More" name="Slogan" style="font-size: 48px;" />
-    </engine:VisualElement>
-</engine:UXML>
