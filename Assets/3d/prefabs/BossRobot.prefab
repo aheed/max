@@ -402,7 +402,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missilePrefab: {fileID: 1528986769072107574, guid: 6123a1bbd3a089450a7473c1fd455ab5, type: 3}
   targetObject: {fileID: 0}
-  launchIntervalSec: 2
+  launchIntervalSec: 20
+  missileStartOffsetZ: 0.2
 --- !u!1 &7150645125172310726
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +919,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2464079284429615810, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 2464079284429615810, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1080,7 +1081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2464079284429615810, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 2464079284429615810, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_LocalPosition.z

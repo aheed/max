@@ -5,6 +5,7 @@ public class BossRobot : MonoBehaviour
     public BossMissile missilePrefab;
     public GameObject targetObject;
     public float launchIntervalSec = 2.0f;
+    public float missileStartOffsetZ = 0.3f;
 
     float launchCooldown = 0.0f;
 
@@ -26,10 +27,9 @@ public class BossRobot : MonoBehaviour
     void LaunchMissile()
     {
         var missileTransform = GetLauncherTransform();
-        var missileStartPosition = transform.position + missileTransform.localPosition;
-        var missileStartRotation = missileTransform.rotation;
+        var missileStartPosition = missileTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
-        var missile = Instantiate(missilePrefab, missileStartPosition, missileStartRotation);
+        var missile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, missileTransform);
         missile.targetObject = targetObject;
 
         Debug.Log("Missile launched!");
