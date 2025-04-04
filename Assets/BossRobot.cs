@@ -9,12 +9,13 @@ public class BossRobot : MonoBehaviour
 
     float launchCooldown = 0.0f;
     BossMissile[] standbyMissiles = new BossMissile[2];
+    int nextMissileIndex = 0;
 
-    Transform GetLauncherTransform()
+    Transform GetLauncherTransform(int missileIndex)
     {
         // Logic to get the position of the missile launcher
         // For example, return the position of a child object named "MissileLauncher"
-        Transform missileLauncher = transform.GetChild(2);
+        Transform missileLauncher = transform.GetChild(2 + missileIndex);
         if (missileLauncher != null)
         {
             return missileLauncher;
@@ -27,23 +28,23 @@ public class BossRobot : MonoBehaviour
     }
     void LaunchMissile()
     {
-        var missileIndex = 0;
-        var missile = standbyMissiles[missileIndex];
+        var missile = standbyMissiles[nextMissileIndex];
         if (missile != null && missile.ReadyToLaunch())
         {
             missile.Launch();
-            standbyMissiles[missileIndex] = null;
+            standbyMissiles[nextMissileIndex] = null;
+            nextMissileIndex = (nextMissileIndex + 1) % standbyMissiles.Length;
             Debug.Log("Missile launched!");
         }
 
-        var missileTransform = GetLauncherTransform();
+        var missileTransform = GetLauncherTransform(nextMissileIndex);
         var missileStartPosition = missileTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
         var newMissile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, missileTransform);
         newMissile.targetObject = targetObject;
-        standbyMissiles[missileIndex] = newMissile;
+        standbyMissiles[nextMissileIndex] = newMissile;
 
-        Debug.Log("Missile loaded!");
+        Debug.Log($"Missile loaded! {nextMissileIndex}");
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
