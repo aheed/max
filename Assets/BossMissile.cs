@@ -3,6 +3,7 @@ using UnityEngine;
 public enum MissileStage
 {
     PRELAUNCH,
+    STANDBY,
     EXITINGLAUNCHER,
     FLIGHT
 }
@@ -20,6 +21,21 @@ public class BossMissile : MonoBehaviour
     Vector3 startPosition;
     float zDistanceTravelled;
 
+    public void Launch()
+    {
+        if (stage != MissileStage.STANDBY)
+        {
+            Debug.LogWarning("Missile is not in standby state!");
+            return;
+        }
+        stage = MissileStage.EXITINGLAUNCHER;
+        Debug.Log("Missile launched!");
+    }
+
+    public bool ReadyToLaunch()
+    {
+        return stage == MissileStage.STANDBY;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -50,8 +66,8 @@ public class BossMissile : MonoBehaviour
             
             if (zDistanceTravelled > zDistanceMaxStage1)
             {
-                stage = MissileStage.EXITINGLAUNCHER;
-                Debug.Log("Missile exiting launcher");
+                stage = MissileStage.STANDBY;
+                Debug.Log("Missile in standby");
             }
         }
         else if (stage == MissileStage.EXITINGLAUNCHER)

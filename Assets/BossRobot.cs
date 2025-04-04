@@ -8,6 +8,7 @@ public class BossRobot : MonoBehaviour
     public float missileStartOffsetZ = 0.3f;
 
     float launchCooldown = 0.0f;
+    BossMissile[] standbyMissiles = new BossMissile[2];
 
     Transform GetLauncherTransform()
     {
@@ -26,13 +27,23 @@ public class BossRobot : MonoBehaviour
     }
     void LaunchMissile()
     {
+        var missileIndex = 0;
+        var missile = standbyMissiles[missileIndex];
+        if (missile != null && missile.ReadyToLaunch())
+        {
+            missile.Launch();
+            standbyMissiles[missileIndex] = null;
+            Debug.Log("Missile launched!");
+        }
+
         var missileTransform = GetLauncherTransform();
         var missileStartPosition = missileTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
-        var missile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, missileTransform);
-        missile.targetObject = targetObject;
+        var newMissile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, missileTransform);
+        newMissile.targetObject = targetObject;
+        standbyMissiles[missileIndex] = newMissile;
 
-        Debug.Log("Missile launched!");
+        Debug.Log("Missile loaded!");
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

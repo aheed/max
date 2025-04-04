@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missilePrefab: {fileID: 1528986769072107574, guid: 6123a1bbd3a089450a7473c1fd455ab5, type: 3}
   targetObject: {fileID: 0}
-  launchIntervalSec: 20
+  launchIntervalSec: 8
   missileStartOffsetZ: 0.2
 --- !u!1 &7150645125172310726
 GameObject:
