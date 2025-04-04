@@ -361,6 +361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7235837312226984660}
+  - component: {fileID: -4716222135628229251}
   m_Layer: 0
   m_Name: BossRobot
   m_TagString: Untagged
@@ -387,6 +388,21 @@ Transform:
   - {fileID: 4716483869509877318}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4716222135628229251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4973067419543055520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f00b5e67dc11d5b7deb31b7410341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missilePrefab: {fileID: 1528986769072107574, guid: 6123a1bbd3a089450a7473c1fd455ab5, type: 3}
+  targetObject: {fileID: 0}
+  launchIntervalSec: 2
 --- !u!1 &7150645125172310726
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,10 +737,10 @@ MonoBehaviour:
   - {x: 0, y: 0, z: -1, w: -1}
   - {x: 0, y: 0, z: -1, w: -1}
   - {x: 0, y: 0, z: -1, w: -1}
-  - {x: -0.09950372, y: 0, z: 0.9950372, w: -1}
-  - {x: -0.05030086, y: 0.009876866, z: 0.9986853, w: -1}
-  - {x: -0.05030086, y: 0.009876866, z: 0.9986853, w: -1}
-  - {x: 0, y: 0.0197981, z: 0.999804, w: -1}
+  - {x: 0, y: 0, z: 1, w: -1}
+  - {x: 0, y: 0, z: 1, w: -1}
+  - {x: 0, y: 0, z: 1, w: -1}
+  - {x: 0, y: 0, z: 1, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
@@ -741,16 +757,16 @@ MonoBehaviour:
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
-  - {x: -0.999999, y: 0, z: 0.0014153442, w: -1}
-  - {x: -0.999999, y: 0, z: 0.0014154615, w: -1}
-  - {x: -0.9999999, y: -0.00038646473, z: 0.00019323236, w: -1}
-  - {x: -0.99999994, y: -0.0003707163, z: 0, w: -1}
-  - {x: -0.99999994, y: -0.0003707163, z: 0, w: -1}
-  - {x: -0.99999994, y: -0.00037073853, z: 0, w: -1}
-  - {x: -0.99999994, y: -0.00037071685, z: 0, w: -1}
-  - {x: -0.99999994, y: -0.00037069063, z: 0, w: -1}
-  - {x: -0.99999994, y: -0.00037068292, z: 0, w: -1}
-  - {x: -0.9999999, y: -0.0004153125, z: 0.000276875, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
   m_Colors: []
   m_UnwrapParameters:
     m_HardAngle: 88
@@ -762,29 +778,9 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_VersionIndex: 3677
   m_IsSelectable: 1
-  m_SelectedFaces: 08000000
-  m_SelectedEdges:
-  - a: 44
-    b: 43
-  - a: 43
-    b: 42
-  - a: 45
-    b: 44
-  - a: 42
-    b: 41
-  - a: 41
-    b: 40
-  - a: 40
-    b: 39
-  - a: 39
-    b: 38
-  - a: 38
-    b: 37
-  - a: 37
-    b: 36
-  - a: 36
-    b: 45
-  m_SelectedVertices: 2c0000002b0000002a0000002d000000290000002800000027000000260000002500000024000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &3955553751853250379
 MonoBehaviour:
   m_ObjectHideFlags: 0
