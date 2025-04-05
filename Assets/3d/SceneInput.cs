@@ -14,5 +14,6 @@ public class SceneInput
     public float vipProbability;
     public Transform balloonParentTransform;
     public float roadHeight;
-    
+    public Transform referenceObjectTransform;
+    public GameObject playerPlaneObject;
 }

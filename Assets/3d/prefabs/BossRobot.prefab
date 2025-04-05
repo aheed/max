@@ -248,7 +248,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3527
+  m_VersionIndex: 3725
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -404,6 +404,9 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   launchIntervalSec: 8
   missileStartOffsetZ: 0.2
+  fightDistance: 4
+  approachDistance: 12
+  approachSpeed: 1
 --- !u!1 &7150645125172310726
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +780,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3677
+  m_VersionIndex: 3875
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -890,6 +893,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 7235837312226984660}
     m_Modifications:
     - target: {fileID: 1382835494486891565, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
+      objectReference: {fileID: 0}
+    - target: {fileID: 1382835494486891565, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
       value: -1
       objectReference: {fileID: 0}
@@ -955,7 +962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_VersionIndex
-      value: 1461
+      value: 1659
       objectReference: {fileID: 0}
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
@@ -980,6 +987,10 @@ PrefabInstance:
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[7].y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901561794634652584, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
       objectReference: {fileID: 0}
     - target: {fileID: 5901561794634652584, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
@@ -1008,6 +1019,10 @@ PrefabInstance:
     - target: {fileID: 7400575693983940287, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Name
       value: launcherWest
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275163161247331521, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
       objectReference: {fileID: 0}
     - target: {fileID: 8275163161247331521, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
@@ -1051,6 +1066,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7235837312226984660}
     m_Modifications:
+    - target: {fileID: 1382835494486891565, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
+      objectReference: {fileID: 0}
     - target: {fileID: 1382835494486891565, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
       value: -1
@@ -1117,7 +1136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_VersionIndex
-      value: 1464
+      value: 1662
       objectReference: {fileID: 0}
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
@@ -1142,6 +1161,10 @@ PrefabInstance:
     - target: {fileID: 5532755352267049000, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[7].y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901561794634652584, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
       objectReference: {fileID: 0}
     - target: {fileID: 5901561794634652584, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
@@ -1170,6 +1193,10 @@ PrefabInstance:
     - target: {fileID: 7400575693983940287, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Name
       value: launcherEast
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275163161247331521, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1868
       objectReference: {fileID: 0}
     - target: {fileID: 8275163161247331521, guid: 4064f9b89d4a57ff8a71b7536d6d04f6, type: 3}
       propertyPath: m_Tangents.Array.data[6].w
