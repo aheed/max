@@ -131,6 +131,7 @@ public class SceneController3d : MonoBehaviour
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
+        gameState.GetStateContents().bossDefeated = latestLevel.bossType == BossType.NONE;
         landingStripStartZ = sceneOutput.landingStripStartZ;
         landingStripEndZ = sceneOutput.landingStripEndZ;
         landingStripWidth = sceneOutput.landingStripWidth;
@@ -150,7 +151,7 @@ public class SceneController3d : MonoBehaviour
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
             case LevelType.ROBOT_BOSS:
-                return levelPrereq.bossDestroyed ? 1 : 0;
+                return levelPrereq.boss ? 1 : 0;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -221,7 +222,7 @@ public class SceneController3d : MonoBehaviour
                 levelType = startLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false},
-                bossDestroyed = false
+                boss = startLevelType == LevelType.ROBOT_BOSS
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -383,7 +384,7 @@ public class SceneController3d : MonoBehaviour
             {
                 newLevelType = LevelType.ROAD;
             }
-            else // if (latestLevelType == LevelType.ROAD) 
+            else if (latestLevelType == LevelType.ROAD) 
             {
                 newLevelType = LevelType.CITY;
             }
@@ -397,15 +398,14 @@ public class SceneController3d : MonoBehaviour
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
             new List<bool> {false, false, false};
 
-        var bossDestroyed = latestLevelType == LevelType.ROBOT_BOSS ?
-            //gameState.GetStateContents().bossDefeated : false;
-            false : // TEMP
-            false;
+        //var bossDestroyed = latestLevelType == LevelType.ROBOT_BOSS ?
+        //    gameState.GetStateContents().bossDefeated : false;
 
         return new LevelPrerequisite {
             levelType = newLevelType,
             riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
-            enemyHQsBombed = enemyHQsBombed
+            enemyHQsBombed = enemyHQsBombed,
+            boss = gameState.GetStateContents().bossDefeated
         };
     }
 
@@ -567,7 +567,7 @@ public class SceneController3d : MonoBehaviour
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                gameState.SetStatus(AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);
+                gameState.SetStatus(AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);                
             }
             gameState.SetSpeed(newSpeed);
         }
@@ -675,6 +675,7 @@ public class SceneController3d : MonoBehaviour
                 SpawnBossShadow(BossShadowVariant.BSH3);
                 break;
             case LevelType.BALLOONS:
+            case LevelType.ROBOT_BOSS:
                 break;
             default:
                 Debug.LogError($"Invalid level type {gameState.GetStateContents().latestLevelPrereq.levelType}");

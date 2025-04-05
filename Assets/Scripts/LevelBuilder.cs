@@ -97,7 +97,7 @@ public class LevelPrerequisite
     public bool riverLeftOfAirstrip;
 
     public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
-    public bool bossDestroyed;
+    public bool boss;
 }
 
 public class LevelContents
@@ -712,7 +712,7 @@ public class LevelBuilder
             ret.city.bigHouses = bigHousesList;
         }
 
-        ret.bossType = levelType == LevelType.ROBOT_BOSS ? BossType.ROBOT : BossType.NONE;
+        ret.bossType = levelPrerequisite.boss && levelType == LevelType.ROBOT_BOSS ? BossType.ROBOT : BossType.NONE;
         
         return ret;
     }

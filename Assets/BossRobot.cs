@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 public class BossRobot : MonoBehaviour
@@ -97,5 +98,25 @@ public class BossRobot : MonoBehaviour
             LaunchMissile();
             launchCooldown = launchIntervalSec;
         }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        // Temporary implementation to destroy the robot when hit by a bullet
+        // This should be replaced with registering missiles hit while in laucher
+
+        //Debug.Log($"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj Boss Hit by {col.name}");
+        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            return;
+        }
+
+        Destroy(col.gameObject);
+        var gameState = GameState.GetInstance();
+        gameState.GetStateContents().bossDefeated = true;
+        gameState.ReportEvent(GameEvent.BIG_DETONATION);
+        gameState.ReportEvent(GameEvent.BIG_BANG);
+        gameState.TargetHit();
+        Destroy(gameObject);
     }
 }

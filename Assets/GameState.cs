@@ -73,6 +73,7 @@ public class GameStateContents
     public LevelPrerequisite latestLevelPrereq;
     public Dictionary<GameObject, float> enemyPlaneAltitudes;
     public float maxAltitudeDiffForPlaneCollision;
+    public bool bossDefeated;
 }
 
 public class GameState : MonoBehaviour
@@ -283,6 +284,11 @@ public class GameState : MonoBehaviour
 
     public int GetTargetsHit()
     {
+        if (gameStateContents.latestLevelPrereq.levelType == LevelType.ROBOT_BOSS)
+        {
+            return gameStateContents.bossDefeated ? 1 : 0;
+        }
+
         return gameStateContents.latestLevelPrereq.levelType == LevelType.CITY && gameStateContents.enemyHQs != null ?
             gameStateContents.enemyHQs.Where(h => h.IsBombed()).Count() :
             gameStateContents.targetsHit;
