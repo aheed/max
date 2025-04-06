@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 public class BossRobot : MonoBehaviour
@@ -8,6 +9,12 @@ public class BossRobot : MonoBehaviour
         APPROACHING,
         FIGHTING,
         DEFEATED
+    }
+
+    class LauncherState
+    {
+        public GameObject missileLauncher;
+        public BossMissile standbyMissile;
     }
 
     public BossMissile missilePrefab;
@@ -21,7 +28,9 @@ public class BossRobot : MonoBehaviour
     GameObject refObject;
     BossRobotStage stage = BossRobotStage.APPROACHING;
     float launchCooldown = 0.0f;
-    BossMissile[] standbyMissiles = new BossMissile[2];
+    
+    //BossMissile[] standbyMissiles = new BossMissile[2];
+    LauncherState[] launchers = new LauncherState[2];
     int nextMissileIndex = 0;
 
     
@@ -43,24 +52,56 @@ public class BossRobot : MonoBehaviour
     }
     void LaunchMissile()
     {
-        var missile = standbyMissiles[nextMissileIndex];
+        var launcherState = launchers[nextMissileIndex];
+        if (launcherState == null)
+        {
+            return;
+        }
+
+        var missile = launcherState.standbyMissile;
         if (missile != null && missile.ReadyToLaunch())
         {
             missile.Launch();
-            standbyMissiles[nextMissileIndex] = null;
-            nextMissileIndex = (nextMissileIndex + 1) % standbyMissiles.Length;
+            launcherState.standbyMissile = null;
+            nextMissileIndex = (nextMissileIndex + 1) % launchers.Length;
             Debug.Log("Missile launched!");
         }
 
-        var missileTransform = GetLauncherTransform(nextMissileIndex);
-        var missileStartPosition = missileTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
+        //var missileTransform = GetLauncherTransform(nextMissileIndex);
+        var launcherTransform = launcherState.missileLauncher.transform;
+        var missileStartPosition = launcherTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
-        var newMissile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, missileTransform);
+        var newMissile = Instantiate(missilePrefab, missileStartPosition, Quaternion.identity, launcherTransform);
         newMissile.targetObject = targetObject;
-        standbyMissiles[nextMissileIndex] = newMissile;
+        newMissile.SetDestroyedInLauncherCallback(MissileDestroyedInLauncherCallback);
+        launcherState.standbyMissile = newMissile;
 
         Debug.Log($"Missile loaded! {nextMissileIndex}");
     }
+
+    void MissileDestroyedInLauncherCallback(GameObject launcher)
+    {
+        Debug.Log($"Missile destroyed in launcher! {launcher.name}");
+        int i = 0;
+        for (; i < launchers.Length; ++i)
+        {
+            var candidateLauncherState = launchers[i];
+            if (candidateLauncherState?.missileLauncher == launcher)
+            {
+                // todo: effects
+                Destroy(candidateLauncherState.missileLauncher);
+                launchers[i] = null;
+                break;
+            }
+        }
+
+        if (launchers.Count(l => l != null) == 0)
+        {
+            // All launchers are destroyed
+            Defeat();    
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -68,6 +109,13 @@ public class BossRobot : MonoBehaviour
         var tmpPosition = refObject.transform.position;
         tmpPosition.z += approachDistance;
         transform.position = tmpPosition;
+
+        for (int i = 0; i < launchers.Length; ++i)
+        {
+            launchers[i] = new LauncherState();
+            launchers[i].missileLauncher = GetLauncherTransform(i).gameObject;
+            launchers[i].standbyMissile = null;
+        }
     }
 
     // Update is called once per frame
@@ -100,29 +148,32 @@ public class BossRobot : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider col)
+    void Defeat()
     {
-        // Temporary implementation to destroy the robot when hit by a bullet
-        // This should be replaced with registering missiles hit while in laucher
+        stage = BossRobotStage.DEFEATED;
+        Debug.Log("Boss Robot is defeated!");
 
-        //Debug.Log($"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj Boss Hit by {col.name}");
-        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
-        {
-            return;
-        }
-
-        Destroy(col.gameObject);
         var gameState = GameState.GetInstance();
         gameState.ReportBossDefeated();
-        //gameState.GetStateContents().bossDefeated = true;
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
-        //gameState.TargetHit();
 
         // todo: add destruction animation
         // Destroy the boss robot after a delay to allow for animation
         // Destroy(gameObject, 2.0f);
         // For now, just destroy it immediately        
         Destroy(gameObject);
+    }
+
+
+    void OnTriggerEnter(Collider col)
+    {
+        //Debug.Log($"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj Boss Hit by {col.name}");
+        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            return;
+        }
+
+        // todo: hit effect, sound and visuals
     }
 }
