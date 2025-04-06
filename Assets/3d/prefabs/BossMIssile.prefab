@@ -86,7 +86,7 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   speedStage1: 0.15
   speedStage2: 0.5
-  speedStage3: 1
+  speedStage3: 2.5
   homingSpeed: 1
   zDistanceMaxStage1: 0.2
   zDistanceMaxStage2: 0.5

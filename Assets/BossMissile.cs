@@ -100,9 +100,8 @@ public class BossMissile : MonoBehaviour
         }
         else if (stage == MissileStage.FLIGHT)
         {
-            var tmp = Vector2.MoveTowards(transform.position, targetObject.transform.position, speedStage3 * Time.deltaTime);
-            //var tmp = Vector3.MoveTowards(transform.position, targetObject.transform.position, speedStage3 * Time.deltaTime);
-            transform.position = new Vector3(tmp.x, tmp.y, transform.position.z - homingSpeed * Time.deltaTime);
+            var tmp = Vector2.MoveTowards(transform.position, targetObject.transform.position, homingSpeed * Time.deltaTime);
+            transform.position = new Vector3(tmp.x, tmp.y, transform.position.z - speedStage3 * Time.deltaTime);
             if ((targetObject.transform.position.z - transform.position.z) > zDistanceMaxStage3)
             {
                 Destroy(gameObject);

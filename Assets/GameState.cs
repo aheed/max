@@ -295,6 +295,11 @@ public class GameState : MonoBehaviour
             gameStateContents.targetsHit;
     }
 
+    public bool IsGameOver()
+    {
+        return gameStateContents.gameStatus == GameStatus.DEAD;
+    }
+
     public void ReportBossDefeated()
     {
         gameStateContents.bossDefeated = true;

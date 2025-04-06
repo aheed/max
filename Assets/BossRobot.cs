@@ -24,6 +24,7 @@ public class BossRobot : MonoBehaviour
     public float fightDistance = 2.0f;
     public float approachDistance = 8.0f;
     public float approachSpeed = 1f;
+    public float moveSpeed = 1f;
     public float maxOffsetZ = 0.8f;
     public float minOffsetZ = -0.4f;
     public float minOffsetX = -0.7f;
@@ -31,16 +32,15 @@ public class BossRobot : MonoBehaviour
     public float minOffsetY = 0.12f;
     public float maxOffsetY = 1.2f;
     public float moveDelayMaxSec = 4.5f;
-    public float moveDelayMinSec = 1.5f;    
+    public float moveDelayMinSec = 1.5f;
 
     GameObject refObject;
     BossRobotStage stage = BossRobotStage.APPROACHING;
     float launchCooldown = 0.0f;
     float moveCooldown = 0.0f;
-    
-    //BossMissile[] standbyMissiles = new BossMissile[2];
     LauncherState[] launchers = new LauncherState[2];
     int nextMissileIndex = 0;
+    Vector3 destinationOffset;
 
     Vector3 GetRandomOffset()
     {
@@ -52,6 +52,7 @@ public class BossRobot : MonoBehaviour
 
     void ResetMoveCooldown()
     {
+        destinationOffset = GetRandomOffset();
         moveCooldown = Random.Range(moveDelayMinSec, moveDelayMaxSec);
     }
 
@@ -103,6 +104,11 @@ public class BossRobot : MonoBehaviour
 
     void LaunchMissile()
     {
+        if (GameState.GetInstance().IsGameOver())
+        {
+            return;
+        }
+        
         var launcherState = launchers[nextMissileIndex];
         for (int i = 0; launcherState == null && i < launchers.Length; ++i)
         {
@@ -209,10 +215,11 @@ public class BossRobot : MonoBehaviour
         moveCooldown -= Time.deltaTime;
         if (moveCooldown <= 0.0f)
         {
-            var offset = GetRandomOffset();
-            transform.position = refObject.transform.position + offset;
             ResetMoveCooldown();
         }
+
+        var destination = refObject.transform.position + destinationOffset;
+        transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
     }
 
     void Defeat()
