@@ -50,24 +50,20 @@ public class BossRobot : MonoBehaviour
             return transform; // Fallback to the robot's position
         }
     }
-    void LaunchMissile()
+
+    int GetNextLauncherIndex()
     {
-        var launcherState = launchers[nextMissileIndex];
+        return (nextMissileIndex + 1) % launchers.Length;
+    }
+
+    void LoadMissile(LauncherState launcherState)
+    {
         if (launcherState == null)
         {
+            Debug.LogWarning("Attempt to load missile in missing launcher!");
             return;
         }
 
-        var missile = launcherState.standbyMissile;
-        if (missile != null && missile.ReadyToLaunch())
-        {
-            missile.Launch();
-            launcherState.standbyMissile = null;
-            nextMissileIndex = (nextMissileIndex + 1) % launchers.Length;
-            Debug.Log("Missile launched!");
-        }
-
-        //var missileTransform = GetLauncherTransform(nextMissileIndex);
         var launcherTransform = launcherState.missileLauncher.transform;
         var missileStartPosition = launcherTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
@@ -77,6 +73,39 @@ public class BossRobot : MonoBehaviour
         launcherState.standbyMissile = newMissile;
 
         Debug.Log($"Missile loaded! {nextMissileIndex}");
+    }
+
+    /*void LoadMissile(int launcherIndex)
+    {
+        var launcherState = launchers[launcherIndex];
+        LoadMissile(launcherState);
+    }*/
+
+    void LaunchMissile()
+    {
+        var launcherState = launchers[nextMissileIndex];
+        for (int i = 0; launcherState == null && i < launchers.Length; ++i)
+        {
+            nextMissileIndex = GetNextLauncherIndex();
+            launcherState = launchers[nextMissileIndex];
+        }
+
+        if (launcherState == null)
+        {
+            Debug.LogWarning("Attempt to launch missile with no available launchers!");
+            return;
+        }
+
+        var missile = launcherState.standbyMissile;
+        if (missile != null && missile.ReadyToLaunch())
+        {
+            missile.Launch();
+            launcherState.standbyMissile = null;
+            nextMissileIndex = GetNextLauncherIndex();
+            Debug.Log("Missile launched!");
+        }
+
+        LoadMissile(launcherState);
     }
 
     void MissileDestroyedInLauncherCallback(GameObject launcher)
@@ -135,8 +164,17 @@ public class BossRobot : MonoBehaviour
                 {
                     stage = BossRobotStage.FIGHTING;
                     Debug.Log("Boss Robot is now fighting!");
-                }                
+                    foreach (var launcherState in launchers)
+                    {
+                        LoadMissile(launcherState);
+                    }
+                }            
             }
+            return;
+        }
+
+        if (stage != BossRobotStage.FIGHTING)
+        {
             return;
         }
 
