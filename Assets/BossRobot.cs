@@ -119,7 +119,7 @@ public class BossRobot : MonoBehaviour
         var missile = launcherState.standbyMissile;
         if (missile != null && missile.ReadyToLaunch())
         {
-            missile.Launch();
+            missile.Launch(refObject.transform);
             launcherState.standbyMissile = null;
             nextMissileIndex = GetNextLauncherIndex();
             Debug.Log("Missile launched!");

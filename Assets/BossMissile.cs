@@ -27,14 +27,16 @@ public class BossMissile : MonoBehaviour
     Vector3 startPosition;
     float zDistanceTravelled;
     Action<GameObject> DestroyedInLauncherCallback;
+    Transform flightParentTransform;
 
-    public void Launch()
+    public void Launch(Transform flightParent)
     {
         if (stage != MissileStage.STANDBY)
         {
             Debug.LogWarning("Missile is not in standby state!");
             return;
         }
+        flightParentTransform = flightParent;
         stage = MissileStage.EXITINGLAUNCHER;
         Debug.Log("Missile launched!");
     }
@@ -92,6 +94,7 @@ public class BossMissile : MonoBehaviour
             if (zDistanceTravelled > zDistanceMaxStage2)
             {
                 stage = MissileStage.FLIGHT;
+                transform.parent = flightParentTransform;
                 Debug.Log("Missile taking flight");
             }
         }
