@@ -131,7 +131,11 @@ public class SceneController3d : MonoBehaviour
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
-        gameState.GetStateContents().bossDefeated = latestLevel.bossType == BossType.NONE;
+        if (sceneOutput.boss != null)
+        {
+            gameState.GetStateContents().boss = sceneOutput.boss;
+            gameState.GetStateContents().bossDefeated = false;
+        }
         landingStripStartZ = sceneOutput.landingStripStartZ;
         landingStripEndZ = sceneOutput.landingStripEndZ;
         landingStripWidth = sceneOutput.landingStripWidth;
@@ -216,6 +220,11 @@ public class SceneController3d : MonoBehaviour
         riverSegments = new();
         newLevelTask = null;
         var stateContents = gameState.GetStateContents();
+        if (stateContents.boss != null)
+        {
+            Destroy(stateContents.boss);
+            stateContents.boss = null;
+        }
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 
             {
@@ -401,11 +410,13 @@ public class SceneController3d : MonoBehaviour
         //var bossDestroyed = latestLevelType == LevelType.ROBOT_BOSS ?
         //    gameState.GetStateContents().bossDefeated : false;
 
+        var newBoss = newLevelType == LevelType.ROBOT_BOSS && latestLevelType != LevelType.ROBOT_BOSS;
+
         return new LevelPrerequisite {
             levelType = newLevelType,
             riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed,
-            boss = gameState.GetStateContents().bossDefeated
+            boss = newBoss
         };
     }
 
@@ -567,7 +578,9 @@ public class SceneController3d : MonoBehaviour
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                gameState.SetStatus(AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);                
+                var bossDefeated = gameState.GetStateContents().latestLevelPrereq.levelType == LevelType.ROBOT_BOSS &&
+                    gameState.GetStateContents().bossDefeated;
+                gameState.SetStatus(bossDefeated || AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);                
             }
             gameState.SetSpeed(newSpeed);
         }

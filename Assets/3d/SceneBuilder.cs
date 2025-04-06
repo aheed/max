@@ -600,6 +600,7 @@ public class SceneBuilder : MonoBehaviour
             var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 0f, bossOffsetZ);
             var bossGameObject = Instantiate(robotBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
             bossGameObject.targetObject = sceneInput.playerPlaneObject;
+            ret.boss = bossGameObject.gameObject;
         }
 
         // Small items: Flack guns, trees, tanks

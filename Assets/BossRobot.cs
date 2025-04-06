@@ -113,10 +113,16 @@ public class BossRobot : MonoBehaviour
 
         Destroy(col.gameObject);
         var gameState = GameState.GetInstance();
-        gameState.GetStateContents().bossDefeated = true;
+        gameState.ReportBossDefeated();
+        //gameState.GetStateContents().bossDefeated = true;
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
-        gameState.TargetHit();
+        //gameState.TargetHit();
+
+        // todo: add destruction animation
+        // Destroy the boss robot after a delay to allow for animation
+        // Destroy(gameObject, 2.0f);
+        // For now, just destroy it immediately        
         Destroy(gameObject);
     }
 }
