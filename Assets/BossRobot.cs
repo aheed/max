@@ -156,6 +156,7 @@ public class BossRobot : MonoBehaviour
     {
         refObject = transform.parent.gameObject;
         var tmpPosition = refObject.transform.position;
+        tmpPosition.y += minOffsetY;
         tmpPosition.z += approachDistance;
         transform.position = tmpPosition;
 
@@ -176,8 +177,7 @@ public class BossRobot : MonoBehaviour
             {
                 float distance = Vector3.Distance(transform.position, refObject.transform.position);
                 
-                // Move towards the target
-                Vector3 direction = (refObject.transform.position - transform.position).normalized;
+                Vector3 direction = new Vector3(0f, 0f, -1f);
                 transform.position += direction * approachSpeed * Time.deltaTime;
 
                 if (distance < fightDistance)

@@ -412,7 +412,7 @@ MonoBehaviour:
   minOffsetZ: -0.4
   minOffsetX: -1.7
   maxOffsetX: 1.7
-  minOffsetY: 0.12
+  minOffsetY: 0.2
   maxOffsetY: 0.7
   moveDelayMaxSec: 4.5
   moveDelayMinSec: 1.5
