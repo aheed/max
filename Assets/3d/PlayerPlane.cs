@@ -538,5 +538,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             gameState.SetStatus(GameStatus.DEAD);
             return; 
         }
+
+        if (col.gameObject.name.StartsWith("Boss"))
+        {
+            Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
+            gameState.SetStatus(GameStatus.KILLED_BY_FLACK);
+            return; 
+        }
     }
 }

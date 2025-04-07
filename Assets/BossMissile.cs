@@ -113,7 +113,11 @@ public class BossMissile : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        if (col.name.StartsWith("playerplane", true, CultureInfo.InvariantCulture))
+        {
+            health = 0;
+        }
+        else if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
             return;
         }

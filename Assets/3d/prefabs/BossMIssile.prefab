@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 6785933048237240062}
   - component: {fileID: 4473389121425849863}
   m_Layer: 0
-  m_Name: Cone
+  m_Name: BossMissileCylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1700,7 +1700,7 @@ GameObject:
   - component: {fileID: 3672910637148868245}
   - component: {fileID: 5187754014617835698}
   m_Layer: 0
-  m_Name: Pipe
+  m_Name: BossMissilePipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2906,11 +2906,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6896199405719146298, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Name
-      value: Fin (1)
+      value: BossMIssileFin
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_VersionIndex
-      value: 870
+      value: 873
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Tangents.Array.data[3].x
@@ -3118,11 +3118,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6896199405719146298, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Name
-      value: Fin (2)
+      value: BossMIssileFin
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_VersionIndex
-      value: 870
+      value: 873
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Tangents.Array.data[3].x
@@ -3232,11 +3232,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6896199405719146298, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Name
-      value: Fin
+      value: BossMIssileFin
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_VersionIndex
-      value: 870
+      value: 873
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Tangents.Array.data[3].x
@@ -3346,11 +3346,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6896199405719146298, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Name
-      value: Fin (3)
+      value: BossMIssileFin
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_VersionIndex
-      value: 870
+      value: 873
       objectReference: {fileID: 0}
     - target: {fileID: 7441749783476811520, guid: 17be0ba378662dc3eb8fcce59d2b0258, type: 3}
       propertyPath: m_Tangents.Array.data[3].x

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4370824509132842027}
   - component: {fileID: 8909421173296375254}
   m_Layer: 0
-  m_Name: Fin
+  m_Name: BossMissileFin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
