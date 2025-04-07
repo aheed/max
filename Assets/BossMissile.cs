@@ -51,6 +51,13 @@ public class BossMissile : MonoBehaviour
         DestroyedInLauncherCallback = callback;
     }
 
+    public void Explode()
+    {
+        transform.GetChild(0).gameObject.SetActive(false); // model
+        transform.GetChild(1).gameObject.SetActive(true); // explosion effect
+        Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -128,10 +135,9 @@ public class BossMissile : MonoBehaviour
         var gameState = GameState.GetInstance();
         gameState.ReportEvent(GameEvent.SMALL_DETONATION);
         gameState.ReportEvent(GameEvent.SMALL_BANG);
-        Destroy(gameObject);
 
-        // todo: explosion effect
-
+        Explode();
+        
         if(stage != MissileStage.FLIGHT)
         {
             if (DestroyedInLauncherCallback != null)

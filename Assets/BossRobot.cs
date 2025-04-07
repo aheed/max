@@ -8,7 +8,8 @@ public class BossRobot : MonoBehaviour
     {
         APPROACHING,
         FIGHTING,
-        DEFEATED
+        DEFEATED,
+        EXPLODED
     }
 
     class LauncherState
@@ -150,8 +151,12 @@ public class BossRobot : MonoBehaviour
             var candidateLauncherState = launchers[i];
             if (candidateLauncherState?.missileLauncher == launcher)
             {
-                // todo: effects
-                Destroy(candidateLauncherState.missileLauncher);
+                candidateLauncherState.missileLauncher.transform.GetChild(0).gameObject.SetActive(false);
+                if (candidateLauncherState.standbyMissile != null)
+                {
+                    Debug.Log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs Standby missile exploded!");
+                    candidateLauncherState.standbyMissile.Explode();
+                }
                 launchers[i] = null;
                 break;
             }
@@ -225,8 +230,16 @@ public class BossRobot : MonoBehaviour
             {
                 GameState.GetInstance().ReportEvent(GameEvent.BIG_DETONATION);
                 GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
-                Destroy(gameObject);
+                transform.GetChild(0).gameObject.SetActive(false); // model
+                transform.GetChild(1).gameObject.SetActive(false); // model
+                transform.GetChild(4).gameObject.SetActive(true); // explosion effect
+                stage = BossRobotStage.EXPLODED;
+                Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
             }
+            return;
+        }
+        else if (stage == BossRobotStage.EXPLODED)
+        {
             return;
         }
 
@@ -263,6 +276,7 @@ public class BossRobot : MonoBehaviour
         // todo: hit effect, sound and visuals
 
         // TEMP
+        return;
         var launcherState = launchers[nextMissileIndex];
         for (int i = 0; launcherState == null && i < launchers.Length; ++i)
         {
