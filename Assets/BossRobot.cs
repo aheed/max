@@ -93,6 +93,12 @@ public class BossRobot : MonoBehaviour
             return;
         }
 
+        if (launcherState.standbyMissile != null)
+        {
+            //Debug.LogWarning("Attempt to load missile in already loaded launcher!");
+            return;
+        }
+
         var launcherTransform = launcherState.missileLauncher.transform;
         var missileStartPosition = launcherTransform.position + new Vector3(0f, 0f, missileStartOffsetZ);
 
