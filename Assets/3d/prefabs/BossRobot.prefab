@@ -409,6 +409,7 @@ MonoBehaviour:
   approachDistance: 12
   approachSpeed: 1
   moveSpeed: 1
+  moveSpeedDefeated: 2.5
   maxOffsetZ: 0.4
   minOffsetZ: -0.4
   minOffsetX: -1.7
@@ -417,6 +418,9 @@ MonoBehaviour:
   maxOffsetY: 0.7
   moveDelayMaxSec: 3.5
   moveDelayMinSec: 0.3
+  moveDelayDefeated: 0.03
+  defeatedLifeSpanSec: 1.01
+  timeToLiveSec: 0
 --- !u!54 &6869402326685120292
 Rigidbody:
   m_ObjectHideFlags: 0

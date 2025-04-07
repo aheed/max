@@ -25,6 +25,7 @@ public class BossRobot : MonoBehaviour
     public float approachDistance = 8.0f;
     public float approachSpeed = 1f;
     public float moveSpeed = 1f;
+    public float moveSpeedDefeated = 3.5f;
     public float maxOffsetZ = 0.8f;
     public float minOffsetZ = -0.4f;
     public float minOffsetX = -0.7f;
@@ -33,6 +34,8 @@ public class BossRobot : MonoBehaviour
     public float maxOffsetY = 1.2f;
     public float moveDelayMaxSec = 4.5f;
     public float moveDelayMinSec = 1.5f;
+    public float moveDelayDefeated = 0.05f;
+    public float defeatedLifeSpanSec = 1.5f;
 
     GameObject refObject;
     BossRobotStage stage = BossRobotStage.APPROACHING;
@@ -41,6 +44,8 @@ public class BossRobot : MonoBehaviour
     LauncherState[] launchers = new LauncherState[2];
     int nextMissileIndex = 0;
     Vector3 destinationOffset;
+    float currentMoveSpeed;
+    float timeToLiveSec;
 
     Vector3 GetRandomOffset()
     {
@@ -53,7 +58,9 @@ public class BossRobot : MonoBehaviour
     void ResetMoveCooldown()
     {
         destinationOffset = GetRandomOffset();
-        moveCooldown = Random.Range(moveDelayMinSec, moveDelayMaxSec);
+        moveCooldown = stage == BossRobotStage.FIGHTING ?
+            Random.Range(moveDelayMinSec, moveDelayMaxSec) :
+            moveDelayDefeated;
     }
 
     Transform GetLauncherTransform(int missileIndex)
@@ -108,7 +115,7 @@ public class BossRobot : MonoBehaviour
         {
             return;
         }
-        
+
         var launcherState = launchers[nextMissileIndex];
         for (int i = 0; launcherState == null && i < launchers.Length; ++i)
         {
@@ -153,7 +160,7 @@ public class BossRobot : MonoBehaviour
         if (launchers.Count(l => l != null) == 0)
         {
             // All launchers are destroyed
-            Defeat();    
+            Defeat();
         }
     }
 
@@ -172,6 +179,8 @@ public class BossRobot : MonoBehaviour
             launchers[i].missileLauncher = GetLauncherTransform(i).gameObject;
             launchers[i].standbyMissile = null;
         }
+
+        currentMoveSpeed = moveSpeed;
     }
 
     // Update is called once per frame
@@ -200,8 +209,24 @@ public class BossRobot : MonoBehaviour
             return;
         }
 
-        if (stage != BossRobotStage.FIGHTING)
+        moveCooldown -= Time.deltaTime;
+        if (moveCooldown <= 0.0f)
         {
+            ResetMoveCooldown();
+        }
+
+        var destination = refObject.transform.position + destinationOffset;
+        transform.position = Vector3.MoveTowards(transform.position, destination, currentMoveSpeed * Time.deltaTime);
+
+        if (stage == BossRobotStage.DEFEATED)
+        {
+            timeToLiveSec -= Time.deltaTime;
+            if (timeToLiveSec <= 0.0f)
+            {
+                GameState.GetInstance().ReportEvent(GameEvent.BIG_DETONATION);
+                GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
+                Destroy(gameObject);
+            }
             return;
         }
 
@@ -211,15 +236,6 @@ public class BossRobot : MonoBehaviour
             LaunchMissile();
             launchCooldown = launchIntervalSec;
         }
-
-        moveCooldown -= Time.deltaTime;
-        if (moveCooldown <= 0.0f)
-        {
-            ResetMoveCooldown();
-        }
-
-        var destination = refObject.transform.position + destinationOffset;
-        transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
     }
 
     void Defeat()
@@ -228,15 +244,11 @@ public class BossRobot : MonoBehaviour
         Debug.Log("Boss Robot is defeated!");
 
         var gameState = GameState.GetInstance();
-        gameState.ReportBossDefeated();
-        gameState.ReportEvent(GameEvent.BIG_DETONATION);
-        gameState.ReportEvent(GameEvent.BIG_BANG);
+        gameState.ReportBossDefeated();        
 
-        // todo: add destruction animation
-        // Destroy the boss robot after a delay to allow for animation
-        // Destroy(gameObject, 2.0f);
-        // For now, just destroy it immediately        
-        Destroy(gameObject);
+        currentMoveSpeed = moveSpeedDefeated;
+        ResetMoveCooldown();
+        timeToLiveSec = defeatedLifeSpanSec;
     }
 
 
@@ -249,5 +261,20 @@ public class BossRobot : MonoBehaviour
         }
 
         // todo: hit effect, sound and visuals
+
+        // TEMP
+        var launcherState = launchers[nextMissileIndex];
+        for (int i = 0; launcherState == null && i < launchers.Length; ++i)
+        {
+            nextMissileIndex = GetNextLauncherIndex();
+            launcherState = launchers[nextMissileIndex];
+        }
+
+        if (launcherState == null)
+        {
+            return;
+        }
+
+        MissileDestroyedInLauncherCallback(launcherState.missileLauncher);
     }
 }
