@@ -19,6 +19,7 @@ public class BossRobot : MonoBehaviour
     }
 
     public BossMissile missilePrefab;
+    public GameObject hitEffectPrefab;
     public GameObject targetObject;
     public float launchIntervalSec = 2.0f;
     public float missileStartOffsetZ = 0.3f;
@@ -37,6 +38,8 @@ public class BossRobot : MonoBehaviour
     public float moveDelayMinSec = 1.5f;
     public float moveDelayDefeated = 0.05f;
     public float defeatedLifeSpanSec = 1.5f;
+    public float hitEffectLifeSpanSec = 0.5f;
+    public float hitEffectOffsetZ = 0.26f;
 
     GameObject refObject;
     BossRobotStage stage = BossRobotStage.APPROACHING;
@@ -277,7 +280,11 @@ public class BossRobot : MonoBehaviour
             return;
         }
 
-        // todo: hit effect, sound and visuals
+        // Get position of surface of the robot at approximate point of collision (z not exact)
+        var contactPoint = col.transform.position;
+        contactPoint.z = transform.position.z - hitEffectOffsetZ;
+        var hitEffect = Instantiate(hitEffectPrefab, contactPoint, Quaternion.identity, transform);
+        Destroy(hitEffect, hitEffectLifeSpanSec);
 
         // TEMP
         // For debug: destroy a launcher on hit

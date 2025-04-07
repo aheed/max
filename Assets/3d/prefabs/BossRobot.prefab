@@ -345,11 +345,11 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &4973067419543055520
@@ -403,6 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missilePrefab: {fileID: 1528986769072107574, guid: 6123a1bbd3a089450a7473c1fd455ab5, type: 3}
+  hitEffectPrefab: {fileID: 4811049796235425825, guid: f067b3096f5c89fffa00192ab4299fa5, type: 3}
   targetObject: {fileID: 0}
   launchIntervalSec: 3
   missileStartOffsetZ: 0.2
@@ -411,7 +412,7 @@ MonoBehaviour:
   approachSpeed: 1
   moveSpeed: 1
   moveSpeedDefeated: 2.5
-  maxOffsetZ: 0.4
+  maxOffsetZ: 0.1
   minOffsetZ: -0.4
   minOffsetX: -1.7
   maxOffsetX: 1.7
@@ -421,6 +422,8 @@ MonoBehaviour:
   moveDelayMinSec: 0.3
   moveDelayDefeated: 0.03
   defeatedLifeSpanSec: 1.01
+  hitEffectLifeSpanSec: 0.18
+  hitEffectOffsetZ: 0.28
 --- !u!54 &6869402326685120292
 Rigidbody:
   m_ObjectHideFlags: 0
