@@ -101,7 +101,7 @@ public class BossRobot : MonoBehaviour
         newMissile.SetDestroyedInLauncherCallback(MissileDestroyedInLauncherCallback);
         launcherState.standbyMissile = newMissile;
 
-        Debug.Log($"Missile loaded! {nextMissileIndex}");
+        //Debug.Log($"Missile loaded! {nextMissileIndex}");
     }
 
     /*void LoadMissile(int launcherIndex)
@@ -136,7 +136,7 @@ public class BossRobot : MonoBehaviour
             missile.Launch(refObject.transform);
             launcherState.standbyMissile = null;
             nextMissileIndex = GetNextLauncherIndex();
-            Debug.Log("Missile launched!");
+            //Debug.Log("Missile launched!");
         }
 
         LoadMissile(launcherState);
@@ -144,7 +144,7 @@ public class BossRobot : MonoBehaviour
 
     void MissileDestroyedInLauncherCallback(GameObject launcher)
     {
-        Debug.Log($"Missile destroyed in launcher! {launcher.name}");
+        //Debug.Log($"Missile destroyed in launcher! {launcher.name}");
         int i = 0;
         for (; i < launchers.Length; ++i)
         {
@@ -154,7 +154,6 @@ public class BossRobot : MonoBehaviour
                 candidateLauncherState.missileLauncher.transform.GetChild(0).gameObject.SetActive(false);
                 if (candidateLauncherState.standbyMissile != null)
                 {
-                    Debug.Log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs Standby missile exploded!");
                     candidateLauncherState.standbyMissile.Explode();
                 }
                 launchers[i] = null;
@@ -254,7 +253,7 @@ public class BossRobot : MonoBehaviour
     void Defeat()
     {
         stage = BossRobotStage.DEFEATED;
-        Debug.Log("Boss Robot is defeated!");
+        //Debug.Log("Boss Robot is defeated!");
 
         var gameState = GameState.GetInstance();
         gameState.ReportBossDefeated();        
@@ -267,7 +266,6 @@ public class BossRobot : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        //Debug.Log($"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj Boss Hit by {col.name}");
         if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
             return;
@@ -276,7 +274,9 @@ public class BossRobot : MonoBehaviour
         // todo: hit effect, sound and visuals
 
         // TEMP
-        return;
+        // For debug: destroy a launcher on hit
+        
+        /* 
         var launcherState = launchers[nextMissileIndex];
         for (int i = 0; launcherState == null && i < launchers.Length; ++i)
         {
@@ -290,5 +290,6 @@ public class BossRobot : MonoBehaviour
         }
 
         MissileDestroyedInLauncherCallback(launcherState.missileLauncher);
+        */
     }
 }

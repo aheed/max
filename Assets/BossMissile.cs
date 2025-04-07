@@ -38,7 +38,7 @@ public class BossMissile : MonoBehaviour
         }
         flightParentTransform = flightParent;
         stage = MissileStage.EXITINGLAUNCHER;
-        Debug.Log("Missile launched!");
+        //Debug.Log("Missile launched!");
     }
 
     public bool ReadyToLaunch()
@@ -61,7 +61,6 @@ public class BossMissile : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //startPosition = transform.position;
         startPosition = transform.localPosition;
         zDistanceTravelled = 0.0f;
     }
@@ -80,29 +79,24 @@ public class BossMissile : MonoBehaviour
         if (stage == MissileStage.PRELAUNCH)
         {
             zDistanceTravelled += speedStage1 * Time.deltaTime;
-            //transform.position += new Vector3(0f, 0f, -speedStage1 * Time.deltaTime);
-            //transform.localPosition = new Vector3(0f, 0f, -zDistanceTravelled);
-            //transform.position = startPosition + new Vector3(0f, 0f, -zDistanceTravelled);
             transform.localPosition = startPosition + new Vector3(0f, 0f, -zDistanceTravelled);
             
             if (zDistanceTravelled > zDistanceMaxStage1)
             {
                 stage = MissileStage.STANDBY;
-                Debug.Log("Missile in standby");
+                //Debug.Log("Missile in standby");
             }
         }
         else if (stage == MissileStage.EXITINGLAUNCHER)
         {
             zDistanceTravelled += speedStage2 * Time.deltaTime;
-            //transform.localPosition = new Vector3(0f, 0f, -zDistanceTravelled);
-            //transform.position = startPosition + new Vector3(0f, 0f, -zDistanceTravelled);
             transform.localPosition = startPosition + new Vector3(0f, 0f, -zDistanceTravelled);
             
             if (zDistanceTravelled > zDistanceMaxStage2)
             {
                 stage = MissileStage.FLIGHT;
                 transform.parent = flightParentTransform;
-                Debug.Log("Missile taking flight");
+                //Debug.Log("Missile taking flight");
             }
         }
         else if (stage == MissileStage.FLIGHT)
@@ -112,7 +106,7 @@ public class BossMissile : MonoBehaviour
             if ((targetObject.transform.position.z - transform.position.z) > zDistanceMaxStage3)
             {
                 Destroy(gameObject);
-                Debug.Log("Missile out of range!");
+                //Debug.Log("Missile out of range!");
             }
         }
     }
