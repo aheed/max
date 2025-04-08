@@ -184,6 +184,8 @@ public class SceneController3d : MonoBehaviour
 
     void StartNewGame()
     {
+        LevelType firstLevelType = LevelSelection.startLevelOverride ? 
+            LevelSelection.startLevel : startLevelType;
         levelWidth = (levelLength * LevelContents.gridWidth) / LevelContents.gridHeight;
         level = -1;
         //var levelLowerLeftCornerX = 0f;
@@ -228,10 +230,10 @@ public class SceneController3d : MonoBehaviour
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 
             {
-                levelType = startLevelType,
+                levelType = firstLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false},
-                boss = startLevelType == LevelType.ROBOT_BOSS
+                boss = firstLevelType == LevelType.ROBOT_BOSS
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();

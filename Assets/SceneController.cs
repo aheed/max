@@ -777,6 +777,8 @@ public class SceneController : MonoBehaviour
 
     void StartNewGame()
     {
+        LevelType firstLevelType = LevelSelection.startLevelOverride ? 
+            LevelSelection.startLevel : startLevelType;
         levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.gridHeight;
         level = -1;
         var levelLowerLeftCornerX = 0f;
@@ -814,7 +816,7 @@ public class SceneController : MonoBehaviour
         gameState.Reset();
         stateContents.latestLevelPrereq = new LevelPrerequisite 
             {
-                levelType = startLevelType,
+                levelType = firstLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false}
             };
