@@ -71,7 +71,7 @@ public class BossRobot : MonoBehaviour
     {
         // Logic to get the position of the missile launcher
         // For example, return the position of a child object named "MissileLauncher"
-        Transform missileLauncher = transform.GetChild(2 + missileIndex);
+        Transform missileLauncher = transform.GetChild(1 + missileIndex);
         if (missileLauncher != null)
         {
             return missileLauncher;
@@ -239,8 +239,7 @@ public class BossRobot : MonoBehaviour
                 GameState.GetInstance().ReportEvent(GameEvent.BIG_DETONATION);
                 GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
                 transform.GetChild(0).gameObject.SetActive(false); // model
-                transform.GetChild(1).gameObject.SetActive(false); // model
-                transform.GetChild(4).gameObject.SetActive(true); // explosion effect
+                transform.GetChild(3).gameObject.SetActive(true); // explosion effect
                 stage = BossRobotStage.EXPLODED;
                 Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
             }
