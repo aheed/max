@@ -21,6 +21,7 @@ public class BossMissile : MonoBehaviour
     public float zDistanceMaxStage1 = 0.1f;
     public float zDistanceMaxStage2 = 0.5f;
     public float zDistanceMaxStage3 = 1.5f;
+    public float healthBarOffsetY = 1f;
     static readonly int maxHealth = 4;
     int health = maxHealth;
     MissileStage stage = MissileStage.PRELAUNCH;
@@ -28,6 +29,8 @@ public class BossMissile : MonoBehaviour
     float zDistanceTravelled;
     Action<GameObject> DestroyedInLauncherCallback;
     Transform flightParentTransform;
+    GameObject billBoard;
+    GameObject billBoardImage;
 
     public void Launch(Transform flightParent)
     {
@@ -63,11 +66,24 @@ public class BossMissile : MonoBehaviour
     {
         startPosition = transform.localPosition;
         zDistanceTravelled = 0.0f;
+        billBoard = transform.GetChild(3).gameObject;
+        billBoardImage = billBoard.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
+        var healthBarPosition = transform.position;
+        healthBarPosition.y += healthBarOffsetY;
+        var healthBarScreenPosition = Camera.main.WorldToScreenPoint(healthBarPosition);
+        
+        //c.y += healthBarScreenOffsetY;
+        billBoardImage.transform.position = healthBarScreenPosition;
+
+        //Set the size of the billboard image
+        billBoardImage.transform.localScale = new Vector3((float)health / maxHealth, 1f, 1f);
+        //billBoardImage.transform.   width = 0.5f * Screen.width;
+
         //Temp
         if(targetObject == null)
         {
