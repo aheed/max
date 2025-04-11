@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 using System.Xml;
+using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.UI;
 using UnityEngine;
 
 public enum MissileStage
@@ -31,6 +33,7 @@ public class BossMissile : MonoBehaviour
     Transform flightParentTransform;
     GameObject billBoard;
     GameObject billBoardImage;
+    public UnityEngine.UI.Image healthBarImage;
 
     public void Launch(Transform flightParent)
     {
@@ -66,8 +69,8 @@ public class BossMissile : MonoBehaviour
     {
         startPosition = transform.localPosition;
         zDistanceTravelled = 0.0f;
-        billBoard = transform.GetChild(3).gameObject;
-        billBoardImage = billBoard.transform.GetChild(0).gameObject;
+        billBoard = transform.GetChild(3).GetChild(0).gameObject;
+        //billBoardImage = billBoard.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -78,11 +81,12 @@ public class BossMissile : MonoBehaviour
         var healthBarScreenPosition = Camera.main.WorldToScreenPoint(healthBarPosition);
         
         //c.y += healthBarScreenOffsetY;
-        billBoardImage.transform.position = healthBarScreenPosition;
+        //billBoardImage.transform.position = healthBarScreenPosition;
+        billBoard.transform.position = healthBarScreenPosition;
 
         //Set the size of the billboard image
-        billBoardImage.transform.localScale = new Vector3((float)health / maxHealth, 1f, 1f);
-        //billBoardImage.transform.   width = 0.5f * Screen.width;
+        //billBoardImage.transform.localScale = new Vector3((float)health / maxHealth, 1f, 1f);
+        healthBarImage.fillAmount = (float)health / maxHealth;
 
         //Temp
         if(targetObject == null)
