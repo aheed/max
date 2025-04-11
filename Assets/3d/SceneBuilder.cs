@@ -31,6 +31,7 @@ public class SceneBuilder : MonoBehaviour
     public ManagedObject hangarPrefab;
     public EnemyHQ3d enemyHqPrefab;
     public GameObject bigHousePrefab;
+    public BossRobot robotBossPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -591,7 +592,16 @@ public class SceneBuilder : MonoBehaviour
                 house.SetVip();
             }
         }
-        
+
+        // Boss
+        if (levelContents.bossType == BossType.ROBOT)
+        {
+            var bossOffsetZ = LevelContents.bossY * cellHeight;
+            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 0f, bossOffsetZ);
+            var bossGameObject = Instantiate(robotBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
+            bossGameObject.targetObject = sceneInput.playerPlaneObject;
+            ret.boss = bossGameObject.gameObject;
+        }
 
         // Small items: Flack guns, trees, tanks
         for (var ztmpOuter = 0; ztmpOuter < LevelContents.gridHeight; ztmpOuter++)

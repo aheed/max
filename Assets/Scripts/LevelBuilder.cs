@@ -33,8 +33,21 @@ public enum LevelType
     NORMAL,
     ROAD,
     CITY,
-    BALLOONS
+    BALLOONS,
+    ROBOT_BOSS,
 }
+
+public enum BossType
+{
+    NONE,
+    ROBOT
+}
+
+/*public class BossSpec
+{
+    public bossType type;
+    public int y;
+}*/
 
 public class RiverSegment
 {
@@ -84,12 +97,14 @@ public class LevelPrerequisite
     public bool riverLeftOfAirstrip;
 
     public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
+    public bool boss;
 }
 
 public class LevelContents
 {
     public static readonly int gridHeight = 300;
     public static readonly int gridWidth = 100;
+    public static readonly int bossY = 50;
     public IEnumerable<HouseSpec> houses = new List<HouseSpec>();
     public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
     public IEnumerable<RoadSegment> roadSegments = new List<RoadSegment>();
@@ -102,6 +117,7 @@ public class LevelContents
     public HousePosition hangar;
     public City city;
     public bool vipTargets;
+    public BossType bossType;
 }
 
 public class LevelBuilder 
@@ -159,7 +175,9 @@ public class LevelBuilder
 
     public static bool PossibleVipTargets(LevelType levelType)
     {
-        return levelType != LevelType.CITY && levelType != LevelType.BALLOONS;
+        return levelType != LevelType.CITY && 
+            levelType != LevelType.BALLOONS &&
+            levelType != LevelType.ROBOT_BOSS;
     }
 
     public bool TrueByProbability(float probability)
@@ -211,7 +229,7 @@ public class LevelBuilder
         var riverLeftOfAirstrip = levelPrerequisite.riverLeftOfAirstrip;
         ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip; // May be overridden below
         
-        if (levelType == LevelType.NORMAL || levelType == LevelType.BALLOONS)
+        if (levelType == LevelType.NORMAL || levelType == LevelType.BALLOONS || levelType == LevelType.ROBOT_BOSS)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -500,7 +518,7 @@ public class LevelBuilder
             }
         }    
 
-        if (levelType == LevelType.ROAD || levelType == LevelType.NORMAL)
+        if (levelType == LevelType.ROAD || levelType == LevelType.NORMAL || levelType == LevelType.ROBOT_BOSS)
         {
             var houses = new List<HouseSpec>();
             for (var y = 0; y < LevelContents.gridHeight; y++)
@@ -693,6 +711,8 @@ public class LevelBuilder
         {
             ret.city.bigHouses = bigHousesList;
         }
+
+        ret.bossType = levelPrerequisite.boss && levelType == LevelType.ROBOT_BOSS ? BossType.ROBOT : BossType.NONE;
         
         return ret;
     }
