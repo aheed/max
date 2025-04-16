@@ -754,7 +754,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 4
+  startLevelType: 5
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -19616,6 +19616,7 @@ MonoBehaviour:
   enemyHqPrefab: {fileID: 3387814505127676548, guid: 0a4870682343bd5abb1215ebb4324043, type: 3}
   bigHousePrefab: {fileID: 0}
   robotBossPrefab: {fileID: -4716222135628229251, guid: 8160017e60fb1b264872e87f1c4d935c, type: 3}
+  redBaronBossPrefab: {fileID: 93079018367311720, guid: ef7f5e7ded26e690aa35205b1e79061c, type: 3}
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
   groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: 54c26c8f9c6246c019b8b7f00e8f3a84, type: 2}
@@ -33670,63 +33671,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!1001 &1756238891460912416
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054227752786404711, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
-      propertyPath: m_Name
-      value: uploads_files_2889899_red+baron
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
 --- !u!1001 &1985243924984454351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37928,4 +37872,3 @@ SceneRoots:
   - {fileID: 369080053}
   - {fileID: 108618693}
   - {fileID: 46058436}
-  - {fileID: 1756238891460912416}

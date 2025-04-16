@@ -32,6 +32,7 @@ public class SceneBuilder : MonoBehaviour
     public EnemyHQ3d enemyHqPrefab;
     public GameObject bigHousePrefab;
     public BossRobot robotBossPrefab;
+    public GameObject redBaronBossPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -601,6 +602,13 @@ public class SceneBuilder : MonoBehaviour
             var bossGameObject = Instantiate(robotBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
             bossGameObject.targetObject = sceneInput.playerPlaneObject;
             ret.boss = bossGameObject.gameObject;
+        }
+        else if (levelContents.bossType == BossType.RED_BARON)
+        {
+            var bossOffsetZ = 3f; // TEMP
+            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 1f, bossOffsetZ);
+            var bossGameObject = Instantiate(redBaronBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
+            ret.boss = bossGameObject;
         }
 
         // Small items: Flack guns, trees, tanks

@@ -63,6 +63,17 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("3DScene");
     }
 
+    void On3dRedBaronClicked(ClickEvent evt)
+    {
+        Debug.Log("3D Red baron button clicked");
+
+        LevelSelection.startLevelOverride = true;
+        LevelSelection.startLevel = LevelType.RED_BARON_BOSS;
+        
+        // Load 3D scene, red baron level
+        SceneManager.LoadScene("3DScene");
+    }
+
     private void ChangedActiveScene(Scene current, Scene next)
     {
         string currentName = current.name;
