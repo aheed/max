@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     Button twoDBalloonbutton;
     Button threeDbutton;
     Button threeDRobotButton;
+    Button threeDRedBaronButton;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,10 +19,12 @@ public class MainMenu : MonoBehaviour
         twoDBalloonbutton = uiDocument.rootVisualElement.Q<Button>("2dBalloon");
         threeDbutton = uiDocument.rootVisualElement.Q<Button>("3d");
         threeDRobotButton = uiDocument.rootVisualElement.Q<Button>("3dRobot");
+        threeDRedBaronButton = uiDocument.rootVisualElement.Q<Button>("3dRedBaron");
         twoDbutton.RegisterCallback<ClickEvent>(On2dClicked);
         twoDBalloonbutton.RegisterCallback<ClickEvent>(On2dBalloonClicked);
         threeDbutton.RegisterCallback<ClickEvent>(On3dClicked);
         threeDRobotButton.RegisterCallback<ClickEvent>(On3dRobotClicked);
+        threeDRedBaronButton.RegisterCallback<ClickEvent>(On3dRedBaronClicked);
         SceneManager.activeSceneChanged += ChangedActiveScene;
     }
 
