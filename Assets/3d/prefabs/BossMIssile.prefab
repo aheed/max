@@ -7315,6 +7315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: testBillboard
       objectReference: {fileID: 0}
+    - target: {fileID: 7287342527622394872, guid: 6eb4428c35a8cc4e2959286909ff9199, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
