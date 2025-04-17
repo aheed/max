@@ -285,7 +285,8 @@ public class GameState : MonoBehaviour
 
     public int GetTargetsHit()
     {
-        if (gameStateContents.latestLevelPrereq.levelType == LevelType.ROBOT_BOSS)
+        if (gameStateContents.latestLevelPrereq.levelType == LevelType.ROBOT_BOSS ||
+            gameStateContents.latestLevelPrereq.levelType == LevelType.RED_BARON_BOSS)
         {
             return gameStateContents.boss == null ? 1 : 0;
         }

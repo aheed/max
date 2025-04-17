@@ -35,12 +35,14 @@ public enum LevelType
     CITY,
     BALLOONS,
     ROBOT_BOSS,
+    RED_BARON_BOSS,
 }
 
 public enum BossType
 {
     NONE,
-    ROBOT
+    ROBOT,
+    RED_BARON
 }
 
 /*public class BossSpec
@@ -177,7 +179,8 @@ public class LevelBuilder
     {
         return levelType != LevelType.CITY && 
             levelType != LevelType.BALLOONS &&
-            levelType != LevelType.ROBOT_BOSS;
+            levelType != LevelType.ROBOT_BOSS &&
+            levelType != LevelType.RED_BARON_BOSS;
     }
 
     public bool TrueByProbability(float probability)
@@ -229,7 +232,10 @@ public class LevelBuilder
         var riverLeftOfAirstrip = levelPrerequisite.riverLeftOfAirstrip;
         ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip; // May be overridden below
         
-        if (levelType == LevelType.NORMAL || levelType == LevelType.BALLOONS || levelType == LevelType.ROBOT_BOSS)
+        if (levelType == LevelType.NORMAL ||
+            levelType == LevelType.BALLOONS ||
+            levelType == LevelType.ROBOT_BOSS ||
+            levelType == LevelType.RED_BARON_BOSS)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -518,7 +524,10 @@ public class LevelBuilder
             }
         }    
 
-        if (levelType == LevelType.ROAD || levelType == LevelType.NORMAL || levelType == LevelType.ROBOT_BOSS)
+        if (levelType == LevelType.ROAD ||
+            levelType == LevelType.NORMAL ||
+            levelType == LevelType.ROBOT_BOSS ||
+            levelType == LevelType.RED_BARON_BOSS)
         {
             var houses = new List<HouseSpec>();
             for (var y = 0; y < LevelContents.gridHeight; y++)
@@ -712,7 +721,18 @@ public class LevelBuilder
             ret.city.bigHouses = bigHousesList;
         }
 
-        ret.bossType = levelPrerequisite.boss && levelType == LevelType.ROBOT_BOSS ? BossType.ROBOT : BossType.NONE;
+        ret.bossType = BossType.NONE;
+        if (levelPrerequisite.boss)
+        {
+            if (levelType == LevelType.ROBOT_BOSS)
+            {
+                ret.bossType = BossType.ROBOT;
+            }
+            else if (levelType == LevelType.RED_BARON_BOSS)
+            {
+                ret.bossType = BossType.RED_BARON;
+            }
+        }
         
         return ret;
     }

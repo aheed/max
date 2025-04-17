@@ -5,5 +5,6 @@
         <engine:Button text="2D Balloons" name="2dBalloon" class="main-button" />
         <engine:Button text="3D Classic" name="3d" class="main-button" />
         <engine:Button text="3D Boss Lvl" name="3dRobot" class="main-menu-button main-button" />
+        <engine:Button text="3D Red Baron" name="3dRedBaron" class="main-menu-button main-button" />
     </engine:VisualElement>
 </engine:UXML>
