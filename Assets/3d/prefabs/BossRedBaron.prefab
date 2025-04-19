@@ -47,6 +47,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDelayMaxSec: 2.5
   moveDelayMinSec: 1
+  maneuverDelayMaxSec: 8.5
+  maneuverDelayMinSec: 2.5
+  maneuverDurationSec: 1
+  loopOffsetY: 0.5
+  loopOffsetZ: 0.5
   offsetMaxX: 3.5
   offsetMaxY: 0.5
   yawFactor: 3.5
