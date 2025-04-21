@@ -15,13 +15,15 @@ public class BossRedBaron : MonoBehaviour
     public float moveDelayMinSec = 1.5f;
     public float maneuverDelayMaxSec = 8.5f;
     public float maneuverDelayMinSec = 2.5f;
-    public float maneuverDurationSec = 1.5f;
+    public float rollDurationSec = 1.5f;
+    public float loopDurationSec = 2.5f;
     public float loopOffsetY = 0.5f;
     public float loopOffsetZ = 0.5f;
     public float offsetMaxX = 2.5f;
     public float offsetMaxY = 1.5f;
     public float yawFactor = 10f;
 
+    float maneuverDurationSec;
     float moveCooldownX = 0.0f;
     float moveCooldownY = 0.0f;
     float maneuverCooldown;
@@ -45,12 +47,15 @@ public class BossRedBaron : MonoBehaviour
 
     void ResetMoveCooldownX()
     {
-        targetLocalPosition = startLocalPosition + new Vector3(
-            Random.Range(-offsetMaxX, offsetMaxX),
-            0f,
-            0f
-        );
-        positionControllerX.SetTarget(targetLocalPosition.x);
+        if (!IsManeuvering())
+        {
+            targetLocalPosition = startLocalPosition + new Vector3(
+                Random.Range(-offsetMaxX, offsetMaxX),
+                0f,
+                0f
+            );
+            positionControllerX.SetTarget(targetLocalPosition.x);
+        }
         moveCooldownX = Random.Range(moveDelayMinSec, moveDelayMaxSec);
     }
 
@@ -68,10 +73,22 @@ public class BossRedBaron : MonoBehaviour
     void ResetManeuverCooldown()
     {
         maneuverCooldown = Random.Range(maneuverDelayMinSec, maneuverDelayMaxSec);
-        maneuverRateRadPerSec = (float)System.Math.PI * 2 / maneuverDurationSec;
         maneuverElapsedSec = 0f;
         maneuverAngleRad = 0f;
         maneuverType = (ManeuverType)Random.Range(1, (int)ManeuverType.NOF_MANEUVER_TYPES);
+        if (maneuverType == ManeuverType.ROLL_LEFT || maneuverType == ManeuverType.ROLL_RIGHT)
+        {
+            maneuverDurationSec = rollDurationSec;
+        }
+        else if (maneuverType == ManeuverType.LOOP)
+        {
+            maneuverDurationSec = loopDurationSec;
+        }
+        else
+        {
+            maneuverDurationSec = 0f;
+        }
+        maneuverRateRadPerSec = (float)System.Math.PI * 2 / maneuverDurationSec;
         Debug.Log($"Starting maneuver    Maneuver type: {maneuverType}");
     }
 
@@ -97,6 +114,11 @@ public class BossRedBaron : MonoBehaviour
         maneuverAngleRad = 0f;
         maneuverOffsetY = 0f;
         maneuverOffsetZ = 0f;
+    }
+
+    bool IsManeuvering()
+    {
+        return maneuverType != ManeuverType.NONE;
     }
 
     // Update is called once per frame
@@ -150,9 +172,7 @@ public class BossRedBaron : MonoBehaviour
                 maneuverRollRad = 0f;
                 maneuverPitchRad = maneuverAngleRad;
                 maneuverOffsetY = Mathf.Sin(maneuverAngleRad - ((float)System.Math.PI / 2)) * loopOffsetY + loopOffsetY;
-                //Debug.Log($"maneuverOffsetY={maneuverOffsetY}");
                 maneuverOffsetZ = -(Mathf.Sin(maneuverAngleRad - ((float)System.Math.PI / 2)) * loopOffsetZ + loopOffsetZ);
-                Debug.Log($"maneuverOffsetZ={maneuverOffsetZ}");
             }
         }
 
