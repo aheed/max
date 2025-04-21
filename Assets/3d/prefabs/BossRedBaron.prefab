@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2639238254705781826}
   - component: {fileID: 5410459772394480967}
+  - component: {fileID: 2437807129451300612}
   m_Layer: 0
   m_Name: BossRedBaron
   m_TagString: Untagged
@@ -56,6 +57,29 @@ MonoBehaviour:
   offsetMaxX: 3.5
   offsetMaxY: 0.5
   yawFactor: 3.5
+  healthBarOffsetY: 1
+  maxHealth: 3
+--- !u!65 &2437807129451300612
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93079018367311720}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.17492205, y: 0.17409647, z: 0.43118316}
+  m_Center: {x: 0, y: 0, z: 0.20159703}
 --- !u!1001 &5563165862791707441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,15 +90,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.25
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.25
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.25
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1714118757005492189, guid: 640ba0167d31ee8ce9ee76a6b5f51e2c, type: 3}
       propertyPath: m_LocalPosition.x

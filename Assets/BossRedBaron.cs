@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 enum ManeuverType
@@ -22,6 +23,9 @@ public class BossRedBaron : MonoBehaviour
     public float offsetMaxX = 2.5f;
     public float offsetMaxY = 1.5f;
     public float yawFactor = 10f;
+    public float healthBarOffsetY = 1f;
+    public int maxHealth = 10;
+    int health;
 
     float maneuverDurationSec;
     float moveCooldownX = 0.0f;
@@ -114,6 +118,8 @@ public class BossRedBaron : MonoBehaviour
         maneuverAngleRad = 0f;
         maneuverOffsetY = 0f;
         maneuverOffsetZ = 0f;
+
+        health = maxHealth;
     }
 
     bool IsManeuvering()
@@ -210,5 +216,40 @@ public class BossRedBaron : MonoBehaviour
                 Time.deltaTime * 2.0f
             );
         */
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        Debug.Log($"Red baron collided with                 {col.gameObject.name}");
+
+        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            return;
+        }
+
+        // todo: hit effect, sound and visuals
+
+        --health;
+        if (health > 0)
+        {
+            return;
+        }
+
+        var gameState = GameState.GetInstance();
+        gameState.ReportEvent(GameEvent.BIG_DETONATION);
+        gameState.ReportEvent(GameEvent.BIG_BANG);
+        gameState.ReportBossDefeated();
+
+        Explode();
+    }
+
+    void Explode()
+    {
+        Debug.Log("Red baron exploded !!!!!!!!!!!! ****************");
+        /*
+        transform.GetChild(0).gameObject.SetActive(false); // model
+        transform.GetChild(1).gameObject.SetActive(true); // explosion effect
+        */
+        Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
     }
 }
