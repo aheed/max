@@ -12,11 +12,11 @@ public class HealthBar : MonoBehaviour
 
     public void SetHealth(int currentHealth, int maxHealth)
     {
-        /*if (!isVisible && currentHealth != maxHealth)
+        if (!isVisible && currentHealth != maxHealth)
         {
             images.SetActive(true);
             isVisible = true;
-        }*/
+        }
         
         var relativeHealth = (float)currentHealth / maxHealth;
 
@@ -37,8 +37,7 @@ public class HealthBar : MonoBehaviour
         }
 
         isVisible = false;
-        //images.SetActive(isVisible);
-        images.SetActive(true); //TEMP
+        images.SetActive(isVisible);
 
         SetHealth(1, 1);
     }
