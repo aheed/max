@@ -28,9 +28,6 @@ public class BossMissile : MonoBehaviour
     float zDistanceTravelled;
     Action<GameObject> DestroyedInLauncherCallback;
     Transform flightParentTransform;
-    GameObject billBoard;
-    GameObject billBoardImage;
-    public UnityEngine.UI.Image healthBarImage;
 
     public void Launch(Transform flightParent)
     {
@@ -66,33 +63,11 @@ public class BossMissile : MonoBehaviour
     {
         startPosition = transform.localPosition;
         zDistanceTravelled = 0.0f;
-        billBoard = transform.GetChild(3).GetChild(0).gameObject;
-        //billBoardImage = billBoard.transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var healthBarPosition = transform.position;
-        healthBarPosition.y += healthBarOffsetY;
-        var healthBarScreenPosition = Camera.main.WorldToScreenPoint(healthBarPosition);
-        
-        //c.y += healthBarScreenOffsetY;
-        //billBoardImage.transform.position = healthBarScreenPosition;
-        billBoard.transform.position = healthBarScreenPosition;
-
-        //Set the size of the billboard image
-        //billBoardImage.transform.localScale = new Vector3((float)health / maxHealth, 1f, 1f);
-        healthBarImage.fillAmount = (float)health / maxHealth;
-
-        //Temp
-        if(targetObject == null)
-        {
-            Debug.LogWarning("Target object is not assigned!");
-            Destroy(gameObject);
-            return;
-        }
-
         if (stage == MissileStage.PRELAUNCH)
         {
             zDistanceTravelled += speedStage1 * Time.deltaTime;
