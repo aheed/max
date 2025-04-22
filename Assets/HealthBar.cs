@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-    public float offsetY = 1f;
+    public float offsetY = 0.1f;
+    public float offsetX = 0.1f;
     GameObject images;
-    GameObject parent;
+    GameObject inner;
     UnityEngine.UI.Image healthBarImage;
     Camera cam;
     bool isVisible;
@@ -26,9 +27,8 @@ public class HealthBar : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
-        parent = transform.parent.gameObject;
-
-        images = transform.GetChild(0).gameObject;
+        inner = transform.GetChild(0).gameObject;
+        images = inner.transform.GetChild(0).GetChild(0).gameObject;
         healthBarImage = images.transform.GetChild(1).GetComponent<UnityEngine.UI.Image>();
         if (healthBarImage == null)
         {
@@ -45,11 +45,11 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        var healthBarPosition = parent.transform.position;
+        inner.transform.rotation = Quaternion.Euler(0, 0, 0);
+        var healthBarPosition = transform.position;
         healthBarPosition.y += offsetY;
+        healthBarPosition.x += offsetX;
         var healthBarScreenPosition = cam.WorldToScreenPoint(healthBarPosition);
         images.transform.position = healthBarScreenPosition;
-
-        //var healthBarScreenPosition = cam.WorldToScreenPoint(transform.position);
     }
 }
