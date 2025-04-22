@@ -25,8 +25,9 @@ public class BossRedBaron : MonoBehaviour
     public float yawFactor = 10f;
     public float healthBarOffsetY = 1f;
     public int maxHealth = 10;
-    int health;
 
+    HealthBar healthBar;
+    int health;
     float maneuverDurationSec;
     float moveCooldownX = 0.0f;
     float moveCooldownY = 0.0f;
@@ -120,6 +121,11 @@ public class BossRedBaron : MonoBehaviour
         maneuverOffsetZ = 0f;
 
         health = maxHealth;
+        healthBar = GetComponentInChildren<HealthBar>();
+        if (healthBar == null)
+        {
+            Debug.LogError("HealthBar component not found!");
+        }
     }
 
     bool IsManeuvering()
@@ -230,6 +236,9 @@ public class BossRedBaron : MonoBehaviour
         // todo: hit effect, sound and visuals
 
         --health;
+
+        healthBar.SetHealth(health, maxHealth);
+
         if (health > 0)
         {
             return;
