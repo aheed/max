@@ -119,8 +119,9 @@ GameObject:
   - component: {fileID: 271850510654938147}
   - component: {fileID: 2161996427506511249}
   - component: {fileID: 6309731344672563187}
+  - component: {fileID: 5687778098905476920}
   m_Layer: 0
-  m_Name: testBillboard
+  m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,6 +193,19 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &5687778098905476920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7287342527622394872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6041c8c258355e849af59bae90871e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetY: 0
 --- !u!1 &7455754292544353900
 GameObject:
   m_ObjectHideFlags: 0
