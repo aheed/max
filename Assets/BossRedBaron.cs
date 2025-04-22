@@ -255,10 +255,13 @@ public class BossRedBaron : MonoBehaviour
     void Explode()
     {
         Debug.Log("Red baron exploded !!!!!!!!!!!! ****************");
-        /*
         transform.GetChild(0).gameObject.SetActive(false); // model
         transform.GetChild(1).gameObject.SetActive(true); // explosion effect
-        */
+        var Collider = GetComponent<Collider>();
+        if (Collider != null)
+        {
+            Collider.enabled = false;
+        }
         Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
     }
 }
