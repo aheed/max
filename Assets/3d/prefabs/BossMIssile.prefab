@@ -93,6 +93,8 @@ MonoBehaviour:
   zDistanceMaxStage1: 0.2
   zDistanceMaxStage2: 0.5
   zDistanceMaxStage3: 1.5
+  healthBarOffsetY: 0.5
+  healthBarImage: {fileID: 0}
 --- !u!54 &5665301039471177536
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Xml;
 using UnityEngine;
 
 public enum MissileStage
@@ -21,6 +20,7 @@ public class BossMissile : MonoBehaviour
     public float zDistanceMaxStage1 = 0.1f;
     public float zDistanceMaxStage2 = 0.5f;
     public float zDistanceMaxStage3 = 1.5f;
+    public float healthBarOffsetY = 1f;
     static readonly int maxHealth = 4;
     int health = maxHealth;
     MissileStage stage = MissileStage.PRELAUNCH;
@@ -68,14 +68,6 @@ public class BossMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Temp
-        if(targetObject == null)
-        {
-            Debug.LogWarning("Target object is not assigned!");
-            Destroy(gameObject);
-            return;
-        }
-
         if (stage == MissileStage.PRELAUNCH)
         {
             zDistanceTravelled += speedStage1 * Time.deltaTime;
