@@ -605,8 +605,7 @@ public class SceneBuilder : MonoBehaviour
         }
         else if (levelContents.bossType == BossType.RED_BARON)
         {
-            var bossOffsetZ = 3f; // TEMP
-            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 1f, bossOffsetZ);
+            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(-10f, 20f, 0f);
             var bossGameObject = Instantiate(redBaronBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
             ret.boss = bossGameObject;
         }

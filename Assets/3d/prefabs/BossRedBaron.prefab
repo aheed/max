@@ -59,7 +59,8 @@ MonoBehaviour:
   offsetMaxY: 0.5
   yawFactor: 3.5
   healthBarOffsetY: 1
-  maxHealth: 3
+  maxHealth: 25
+  midPosition: {x: 0, y: 0.8, z: 3}
 --- !u!65 &2437807129451300612
 BoxCollider:
   m_ObjectHideFlags: 0

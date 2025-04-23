@@ -46,12 +46,13 @@ public class KineticSystem
     }
 
     // Constructor
-    public KineticSystem(float inertiaKgm2, float mass, float sideForceFactor)
+    public KineticSystem(float inertiaKgm2, float mass, float sideForceFactor, float startPositionMeters)
     {
         this.inertiaKgm2 = inertiaKgm2;
         this.massKg = mass;
         this.sideForceFactor = sideForceFactor;
         Reset();
+        this.PositionMeters = startPositionMeters;
     }
 
     public void SimulateByTorque(float deltaTSec, float torqueNm)

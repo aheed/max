@@ -25,6 +25,7 @@ public class BossRedBaron : MonoBehaviour
     public float yawFactor = 10f;
     public float healthBarOffsetY = 1f;
     public int maxHealth = 10;
+    public Vector3 midPosition;
 
     HealthBar healthBar;
     int health;
@@ -40,8 +41,6 @@ public class BossRedBaron : MonoBehaviour
     float maneuverOffsetY;
     float maneuverOffsetZ;
     ManeuverType maneuverType = ManeuverType.NONE;
-    Vector3 targetLocalPosition;
-    Vector3 startLocalPosition;
     KineticSystem kineticSystemX;
     KineticSystem kineticSystemY;
     PidController positionControllerX;
@@ -54,24 +53,16 @@ public class BossRedBaron : MonoBehaviour
     {
         if (!IsManeuvering())
         {
-            targetLocalPosition = startLocalPosition + new Vector3(
-                Random.Range(-offsetMaxX, offsetMaxX),
-                0f,
-                0f
-            );
-            positionControllerX.SetTarget(targetLocalPosition.x);
+            var targetX = Random.Range(-offsetMaxX, offsetMaxX);
+            positionControllerX.SetTarget(targetX);
         }
         moveCooldownX = Random.Range(moveDelayMinSec, moveDelayMaxSec);
     }
 
     void ResetMoveCooldownY()
     {
-        targetLocalPosition = startLocalPosition + new Vector3(
-            0f,
-            Random.Range(-offsetMaxY, offsetMaxY),
-            0f
-        );
-        positionControllerY.SetTarget(targetLocalPosition.y);
+        var targetY = Random.Range(-offsetMaxY, offsetMaxY);
+        positionControllerY.SetTarget(targetY);
         moveCooldownY = Random.Range(moveDelayMinSec, moveDelayMaxSec);
     }
 
@@ -100,10 +91,10 @@ public class BossRedBaron : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        startLocalPosition = transform.localPosition;
-
-        kineticSystemX = new KineticSystem(0.5f, 1f, 10f);
-        kineticSystemY = new KineticSystem(0.5f, 1f, 10f);
+        var startX = transform.localPosition.x - midPosition.x;
+        kineticSystemX = new KineticSystem(0.5f, 1f, 10f, startX);
+        var startY = transform.localPosition.y - midPosition.y;
+        kineticSystemY = new KineticSystem(0.5f, 1f, 10f, startY);
         positionControllerX = new PidController(2.5f, 0f, 1.2f, (float)System.Math.PI / 4f);
         positionControllerY = new PidController(0.5f, 0f, 0.5f, (float)System.Math.PI / 4f);
         angleControllerX = new PidController(350f, 0f, 15f, 100f);
@@ -205,9 +196,9 @@ public class BossRedBaron : MonoBehaviour
         //kineticSystemY.SimulateByAngle(Time.deltaTime, targetAngleY);
 
         transform.localPosition = new Vector3(
-            kineticSystemX.PositionMeters,
-            kineticSystemY.PositionMeters + maneuverOffsetY,
-            startLocalPosition.z + maneuverOffsetZ
+            midPosition.x + kineticSystemX.PositionMeters,
+            midPosition.y + kineticSystemY.PositionMeters + maneuverOffsetY,
+            midPosition.z + maneuverOffsetZ
         );
 
         transform.localRotation = Quaternion.Euler(
