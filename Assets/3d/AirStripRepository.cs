@@ -24,7 +24,7 @@ public static class AirStripRepository
         new AirStripInfo("Kaboom Korner", "Your one-stop shop for gas, ammo, and mild explosions."),
         new AirStripInfo("Last Resort Landing", "If you're here, you probably need all three: fuel, repairs, and firepower."),
         new AirStripInfo("Thud Valley Airstrip", "Named after the sound of bad landings and big bombs."),
-        new AirStripInfo("Loosely Secured Ordnance Field (L.S.O. Field)", "We swear we keep track of every bomb… most of the time."),
+        new AirStripInfo("Loosely Secured Ordnance Field", "We swear we keep track of every bomb… most of the time."),
         new AirStripInfo("Full Send Airstrip", "Topped off, locked and loaded, ready for chaos."),
         new AirStripInfo("Fly ‘N’ Die Depot", "Refuel, rearm, and remember your will."),
         new AirStripInfo("Blown Gasket Airfield", "Engines, bombs, pilots… something’s always blowing up!"),
