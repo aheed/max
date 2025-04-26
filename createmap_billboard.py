@@ -34,7 +34,7 @@ def create_normal_map(width, height, filename):
     area_centers = [(i + 0.5) * area_height for i in range(num_areas)]
 
     # Define the width of the flat area around each center
-    flat_area_width = area_height * 0.0
+    flat_area_width = area_height * 0.28
     flattening_factor = 2.0
 
     min_ny = 1.0
