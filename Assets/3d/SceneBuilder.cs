@@ -49,6 +49,7 @@ public class SceneBuilder : MonoBehaviour
     public float bigHouseSizeX = 6f;
     public float bigHouseSizeY = 10f;
     public float bigHouseSizeZ = 5f;
+    public float groundOverlap = 3f;
 
     private ObjectManager flakGunManager;
     private ObjectManager tankManager;
@@ -427,6 +428,22 @@ public class SceneBuilder : MonoBehaviour
             groundRightOfRiverVerts.Add(new Vector3(0f, 0f, sceneInput.levelHeight));
             groundRightOfRiverVerts.Add(new Vector3(sceneInput.levelWidth, 0f, sceneInput.levelHeight));
             UpNormals.Add(Vector3.up);
+        }
+
+        var overlapVector = new Vector3(0f, 0f, groundOverlap);
+        for(int i = 0; i < 2; i++)
+        {
+            if (groundLeftOfRiverVerts.Count > i)
+            {
+                groundLeftOfRiverVerts[i] -= overlapVector;
+                groundLeftOfRiverVerts[groundLeftOfRiverVerts.Count - 1 - i] += overlapVector;
+            }
+
+            if (groundRightOfRiverVerts.Count > i)
+            {
+                groundRightOfRiverVerts[i] -= overlapVector;
+                groundRightOfRiverVerts[groundRightOfRiverVerts.Count - 1 - i] += overlapVector;
+            }
         }
 
         ret.riverVerts = riverVerts;
