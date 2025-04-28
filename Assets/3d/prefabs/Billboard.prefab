@@ -481,33 +481,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7254641074442589444}
     m_Modifications:
-    - target: {fileID: 1607155729753207622, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811088857753803040, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2109071715606241323, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 784
-      objectReference: {fileID: 0}
-    - target: {fileID: 3323845152165251653, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 790
       objectReference: {fileID: 0}
     - target: {fileID: 4227532875063727846, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_Name
       value: BillboardSpotlight1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227532875063727846, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4976727958712190366, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5493792453609738168, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_LocalPosition.x
@@ -549,17 +529,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5643296554691819791, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6724014494825968259, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 724
+      value: 730
       objectReference: {fileID: 0}
     - target: {fileID: 8083711455410425939, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 710
+      value: 716
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -589,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109071715606241323, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 784
+      value: 790
       objectReference: {fileID: 0}
     - target: {fileID: 3323845152165251653, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -653,11 +629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6724014494825968259, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 724
+      value: 730
       objectReference: {fileID: 0}
     - target: {fileID: 8083711455410425939, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_VersionIndex
-      value: 710
+      value: 716
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
