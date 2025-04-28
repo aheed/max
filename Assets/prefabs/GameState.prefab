@@ -53,7 +53,7 @@ MonoBehaviour:
   searchLightAltitude: 0.15
   maxHorizPosition: 4
   safeTakeoffSpeedQuotient: 0.8
-  acceleration: 0.4
+  acceleration: 0.9
   viewMode: 0
   maxBombs: 30
   maxFuel: 100

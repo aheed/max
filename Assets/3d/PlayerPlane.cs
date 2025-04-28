@@ -532,7 +532,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         if (col.gameObject.name.StartsWith("House") ||
             col.gameObject.name.StartsWith("Tree") ||
             col.gameObject.name.StartsWith("Bridge") ||
-            col.gameObject.name.StartsWith("Boat"))
+            col.gameObject.name.StartsWith("Boat") || 
+            col.gameObject.name.StartsWith("Billboard"))
         {
             Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
             gameState.SetStatus(GameStatus.DEAD);

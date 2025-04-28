@@ -430,7 +430,9 @@ public class SceneBuilder : MonoBehaviour
             UpNormals.Add(Vector3.up);
         }
 
-        var overlapVector = new Vector3(0f, 0f, groundOverlap);
+        var overlapVector = new Vector3(0f,
+             -0.001f, // tiny altitude offset to avoid z-fighting
+             groundOverlap);
         for(int i = 0; i < 2; i++)
         {
             if (groundLeftOfRiverVerts.Count > i)

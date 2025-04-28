@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4033731428885061207}
   - component: {fileID: 1669436983671536845}
   m_Layer: 0
-  m_Name: banner
+  m_Name: BillboardBanner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -491,7 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493792453609738168, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.05
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5493792453609738168, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_LocalPosition.y
@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493792453609738168, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.05
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5493792453609738168, guid: 9e426fddc9fae628abe68a33705a9324, type: 3}
       propertyPath: m_LocalPosition.y
