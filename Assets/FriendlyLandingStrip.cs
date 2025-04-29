@@ -11,6 +11,7 @@ public class FriendlyLandingStrip : MonoBehaviour
         SetText(billboardDocument, airStripInfo.name.ToUpper());
         //SetText(billboardDocument, "TOTALLY NOT BEHIND ENEMY LINES AIRSTRIP");
         //SetText(billboardDocument, "CHECKPOINT CHARLIE’S REFUEL & AMMO");
+        //SetText(billboardDocument, "REFUEL & RELOAD: ENEMY TERRITORY EDITION");
 
         var tarmacDocument = transform.GetChild(1).GetComponent<UIDocument>();
         SetText(tarmacDocument, $"\"{airStripInfo.slogan}\"");
