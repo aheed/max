@@ -100,13 +100,15 @@ public class LevelPrerequisite
 
     public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
     public bool boss;
+    public bool missionComplete;
 }
 
 public class LevelContents
 {
-    public static readonly int gridHeight = 300;
+    public static readonly int fullGridHeight = 300;
     public static readonly int gridWidth = 100;
     public static readonly int bossY = 50;
+    public int gridHeight;
     public IEnumerable<HouseSpec> houses = new List<HouseSpec>();
     public IEnumerable<RiverSegment> riverSegments = new List<RiverSegment>();
     public IEnumerable<RoadSegment> roadSegments = new List<RoadSegment>();
@@ -115,7 +117,7 @@ public class LevelContents
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
     public IEnumerable<int> enemyAirstrips = new List<int>();
-    public CellContent[,] cells = new CellContent[gridWidth, gridHeight];
+    public CellContent[,] cells = new CellContent[gridWidth, fullGridHeight];
     public HousePosition hangar;
     public City city;
     public bool vipTargets;
@@ -199,9 +201,10 @@ public class LevelBuilder
     {
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
-        var approachLength = (int)(LevelContents.gridHeight * approachQuotient);
-        var cityApproachLength = (int)(LevelContents.gridHeight * outsideCityQuotient);
-        var finalApproachLength = (int)(LevelContents.gridHeight * finalApproachQuotient);
+        ret.gridHeight = LevelContents.fullGridHeight;
+        var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
+        var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
+        var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);
 
         ret.vipTargets = PossibleVipTargets(levelPrerequisite.levelType);
 
@@ -243,10 +246,10 @@ public class LevelBuilder
             int riverLowerLeftCornerX = riverLowerLeftCornerXStart;
             ret.riverLowerLeftCornerX = riverLowerLeftCornerXStart;
             List<RiverSegment> riverSegments = new List<RiverSegment>();
-            for (var y = 0; y < LevelContents.gridHeight;)
+            for (var y = 0; y < ret.gridHeight;)
             {
                 var segmentHeight = _rnd.Next(minRiverSegmentHeight, maxRiverSegmentHeight);
-                var maxSegmentHeight = LevelContents.gridHeight - y;
+                var maxSegmentHeight = ret.gridHeight - y;
                 if (segmentHeight > maxSegmentHeight)
                 {
                     segmentHeight = maxSegmentHeight;
@@ -260,7 +263,7 @@ public class LevelBuilder
                 riverLeftOfAirstrip = midRiverX < midX;
                 var minSlopeIndex = 0;
                 var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-                var yDistanceToEnd = LevelContents.gridHeight - y;
+                var yDistanceToEnd = ret.gridHeight - y;
                 bool approaching = yDistanceToEnd < approachLength;
                 bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 bool takingOff = y < approachLength;
@@ -369,7 +372,7 @@ public class LevelBuilder
             // Roads across
             var cooldown = 0;
             List<int> roads = new List<int>();
-            for (var y = landingStripHeight + cooldown; y < (LevelContents.gridHeight - roadHeight - cooldown); y++)
+            for (var y = landingStripHeight + cooldown; y < (ret.gridHeight - roadHeight - cooldown); y++)
             {
                 if (cooldown <= 0 && TrueByProbability(roadProbability))
                 {
@@ -402,10 +405,10 @@ public class LevelBuilder
             int roadLowerLeftCornerX = roadLowerLeftCornerXStart;
             ret.roadLowerLeftCornerX = roadLowerLeftCornerXStart;
             List<RoadSegment> roadSegments = new List<RoadSegment>();
-            for (var y = 0; y < LevelContents.gridHeight;)
+            for (var y = 0; y < ret.gridHeight;)
             {
                 var segmentHeight = roadSegmentHeight;
-                var maxSegmentHeight = LevelContents.gridHeight - y;
+                var maxSegmentHeight = ret.gridHeight - y;
                 if (segmentHeight > maxSegmentHeight)
                 {
                     segmentHeight = maxSegmentHeight;
@@ -419,7 +422,7 @@ public class LevelBuilder
                 //riverLeftOfAirstrip = midRiverX < midX;
                 //var minSlopeIndex = 0;
                 //var maxSlopeIndexExclusive = riverSlopes.Length - 1;
-                var yDistanceToEnd = LevelContents.gridHeight - y;
+                var yDistanceToEnd = ret.gridHeight - y;
                 bool approaching = yDistanceToEnd < approachLength;
                 //bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 //bool takingOff = y < approachLength;
@@ -485,7 +488,7 @@ public class LevelBuilder
                 // Enemy airstrips
                 var cooldown = 0;
                 List<int> strips = new List<int>();
-                for (var y = enemyAirstripMinDistance; y < (LevelContents.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
+                for (var y = enemyAirstripMinDistance; y < (ret.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
                 {
                     if (cooldown <= 0 && TrueByProbability(enemyAirstripProbability))
                     {
@@ -530,7 +533,7 @@ public class LevelBuilder
             levelType == LevelType.RED_BARON_BOSS)
         {
             var houses = new List<HouseSpec>();
-            for (var y = 0; y < LevelContents.gridHeight; y++)
+            for (var y = 0; y < ret.gridHeight; y++)
             {
                 for (var x = 0; x < LevelContents.gridWidth; x++)
                 {
@@ -539,7 +542,7 @@ public class LevelBuilder
                     {
                         //Debug.Log($"House please!");
                         var spaceEnough =   x < (LevelContents.gridWidth - houseWidth) &&
-                                            y < (LevelContents.gridHeight - houseHeight) &&
+                                            y < (ret.gridHeight - houseHeight) &&
                                             x > houseWidth &&
                                             y > houseHeight;
                         for (var xtmp = x - houseWidth; (xtmp < (x + houseWidth)) && spaceEnough; xtmp++)
@@ -599,7 +602,7 @@ public class LevelBuilder
         if (levelType == LevelType.CITY)
         {
             var yStart = cityApproachLength;
-            var yEnd = LevelContents.gridHeight - cityApproachLength;
+            var yEnd = ret.gridHeight - cityApproachLength;
 
             var enemyHqDistance = (yEnd - yStart) / (levelPrerequisite.enemyHQsBombed.Count() + 1);
             var yOffset = yStart + enemyHqDistance;
@@ -629,9 +632,9 @@ public class LevelBuilder
         }
 
         var bigHousesList = new List<HousePosition>();        
-        for (var y = 0; y < LevelContents.gridHeight; y++)
+        for (var y = 0; y < ret.gridHeight; y++)
         {
-            var yDistanceToEnd = LevelContents.gridHeight - y;
+            var yDistanceToEnd = ret.gridHeight - y;
             var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;            
             if (inCity)
             {

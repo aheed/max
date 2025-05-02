@@ -156,12 +156,12 @@ public class SceneBuilder : MonoBehaviour
         GameState gameState = GameState.GetInstance();
 
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
-        float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;
+        float cellHeight = sceneInput.levelHeight / levelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
 
         SceneOutput ret = new();
-        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[LevelContents.gridHeight];
-        for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
+        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[levelContents.gridHeight];
+        for (var ztmp = 0; ztmp < levelContents.gridHeight; ztmp++)
         {
             gameObjectCollections[ztmp] = new GameObjectCollection4 {
                 zCoord = ztmp * cellHeight, // level relative coordinate
@@ -630,7 +630,7 @@ public class SceneBuilder : MonoBehaviour
         }
 
         // Small items: Flack guns, trees, tanks
-        for (var ztmpOuter = 0; ztmpOuter < LevelContents.gridHeight; ztmpOuter++)
+        for (var ztmpOuter = 0; ztmpOuter < levelContents.gridHeight; ztmpOuter++)
         {
             var ztmp = ztmpOuter; //capture for lazy evaluation
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>

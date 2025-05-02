@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SceneController3d : MonoBehaviour
@@ -33,7 +30,7 @@ public class SceneController3d : MonoBehaviour
     public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
     public static readonly int neutralRiverSlopeIndex = 2;
     float levelWidth;
-    public float levelLength = 80f;
+    public float cellLength = 80f / LevelContents.fullGridHeight;
     public float activationDistance = 8f;
     public float deactivationDistance = 8f;
     public float minRestartWaitSeconds = 1.0f;
@@ -63,8 +60,9 @@ public class SceneController3d : MonoBehaviour
     TargetMaterialBlinker targetBlinker;    
 
     //// Game status
-    int level = -1;
-    float prepTimeForNextLevelQuotient = 0.90f;
+    //float prepTimeForNextLevelQuotient = 0.90f;
+    float prepTimeForNextLevelLength = 20f;
+    float landingIndicationLength = 15f;
     float lastLevelStartZ = 0f;
     int currentLevelIndex = 0;
     static int nofLevels = 2;
@@ -103,11 +101,8 @@ public class SceneController3d : MonoBehaviour
             Destroy(oldLevel);
         }
         
-        level++;
-        var llcz = level * levelLength;
-        var newLevel = Instantiate(new GameObject("level"), new Vector3(0f, 0f, llcz), Quaternion.identity);
-        levels[currentLevelIndex] = newLevel;
-        lastLevelStartZ = llcz;
+        var newLevel = Instantiate(new GameObject("level"), new Vector3(0f, 0f, lastLevelStartZ), Quaternion.identity);
+        levels[currentLevelIndex] = newLevel;        
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
     }
 
@@ -118,7 +113,7 @@ public class SceneController3d : MonoBehaviour
         {
             levelTransform = GetLevel().transform,
             levelWidth = levelWidth,
-            levelHeight = levelLength,
+            levelHeight = cellLength * latestLevel.gridHeight,
             vipProbability = vipProbability,
             balloonParentTransform = balloonParent.transform,
             roadHeight = roadHeight,
@@ -188,8 +183,8 @@ public class SceneController3d : MonoBehaviour
     {
         LevelType firstLevelType = LevelSelection.startLevelOverride ? 
             LevelSelection.startLevel : startLevelType;
-        levelWidth = (levelLength * LevelContents.gridWidth) / LevelContents.gridHeight;
-        level = -1;
+        levelWidth = cellLength * LevelContents.gridWidth;
+        lastLevelStartZ = 0f;
         //var levelLowerLeftCornerX = 0f;
         var refObjStartOffset = 0.8f;
         //var newRefObjPos = new Vector3(levelLowerLeftCornerX + levelWidth / 2 + refObjStartOffset, refObjStartOffset, 0f);
@@ -235,7 +230,8 @@ public class SceneController3d : MonoBehaviour
                 levelType = firstLevelType,
                 riverLeftOfAirstrip=true,
                 enemyHQsBombed = new List<bool> {false, false, false},
-                boss = firstLevelType == LevelType.ROBOT_BOSS || firstLevelType == LevelType.RED_BARON_BOSS
+                boss = firstLevelType == LevelType.ROBOT_BOSS || firstLevelType == LevelType.RED_BARON_BOSS,
+                missionComplete = false,
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -417,11 +413,18 @@ public class SceneController3d : MonoBehaviour
         var newBoss = (newLevelType == LevelType.ROBOT_BOSS || newLevelType == LevelType.RED_BARON_BOSS)
            && latestLevelType != newLevelType;
 
+        var missionComplete = false;
+        if (newLevelType == LevelType.RED_BARON_BOSS && gameState.GetStateContents().bossDefeated)
+        {
+            missionComplete = true;
+        }
+
         return new LevelPrerequisite {
             levelType = newLevelType,
             riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed,
-            boss = newBoss
+            boss = newBoss,
+            missionComplete = missionComplete,
         };
     }
 
@@ -437,12 +440,13 @@ public class SceneController3d : MonoBehaviour
         gameState = GameState.GetInstance();
         GameStateContents stateContents = gameState.GetStateContents();
 
-        if (refobject.transform.position.z > (lastLevelStartZ + levelLength * prepTimeForNextLevelQuotient))
+        if (refobject.transform.position.z > (lastLevelStartZ + latestLevel.gridHeight * cellLength - prepTimeForNextLevelLength))
         {
             if (!asyncLevelBuild)
             {
                 Debug.Log("Time to build new level (sync) ***************");
                 stateContents.latestLevelPrereq = GetNewLevelPrereq();
+                lastLevelStartZ += latestLevel.gridHeight * cellLength;
                 latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
                 CreateLevel();
                 gameState.SetTargetsHit(
@@ -467,6 +471,7 @@ public class SceneController3d : MonoBehaviour
                     if (newLevelTask.IsCompleted)
                     {
                         Debug.Log($"New level built in {framesToBuildLevelDbg} frames ***************");
+                        lastLevelStartZ += latestLevel.gridHeight * cellLength;
                         latestLevel = newLevelTask.Result;
                         CreateLevel();
                         newLevelTask = null;
@@ -509,12 +514,13 @@ public class SceneController3d : MonoBehaviour
         } 
 
         var distanceDiff = refobject.transform.position.z - lastLevelStartZ;
+
+        // todo: extra condition: there must be a landing strip on upcoming level
         gameState.SetApproachingLanding(
-            (distanceDiff > levelLength * (1-LevelBuilder.finalApproachQuotient)) ||
+            (distanceDiff > latestLevel.gridHeight * cellLength - landingIndicationLength) ||
             distanceDiff < 0);
 
         // Update game state
-
         stateContents.floorAltitude = gameState.minAltitude +
              (IsOverRiver(maxPlane.transform.position) ? gameState.riverAltitude : 0f);
 
