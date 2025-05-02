@@ -171,7 +171,7 @@ public class SceneBuilder : MonoBehaviour
 
         var parentPositionOffset = sceneInput.levelTransform.position - managedObjectsParent.transform.position;
 
-        // Landing Strip
+        if (levelContents.landingStrip)
         {
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;

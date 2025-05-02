@@ -117,6 +117,7 @@ public class BossRedBaron : MonoBehaviour
         {
             Debug.LogError("HealthBar component not found!");
         }
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
     }
 
     bool IsManeuvering()
@@ -215,17 +216,8 @@ public class BossRedBaron : MonoBehaviour
         */
     }
 
-    void OnTriggerEnter(Collider col)
+    void TakeHit()
     {
-        Debug.Log($"Red baron collided with                 {col.gameObject.name}");
-
-        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
-        {
-            return;
-        }
-
-        // todo: hit effect, sound and visuals
-
         --health;
 
         healthBar.SetHealth(health, maxHealth);
@@ -243,6 +235,24 @@ public class BossRedBaron : MonoBehaviour
         Explode();
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        Debug.Log($"Red baron collided with                 {col.gameObject.name}");
+
+        if (!col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
+        {
+            return;
+        }
+
+        TakeHit();
+    }
+
+    private void OnDebugCallback1()
+    {
+        //Fake a hit
+        TakeHit();
+    }
+
     void Explode()
     {
         Debug.Log("Red baron exploded !!!!!!!!!!!! ****************");
@@ -254,5 +264,10 @@ public class BossRedBaron : MonoBehaviour
             Collider.enabled = false;
         }
         Destroy(gameObject, 2.0f); // destroy after 2 seconds to allow explosion effect to play
+    }
+
+    void OnDestroy()
+    {
+        GameState.GetInstance().Unsubscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
     }
 }

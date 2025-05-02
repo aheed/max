@@ -1223,7 +1223,7 @@ MonoBehaviour:
   minDistanceRiverAirstrip: 5
   maxDistanceRiverToAdjust: 2
   roadHeight: 0.4
-  levelLength: 80
+  cellLength: 0.26666668
   activationDistance: 8
   deactivationDistance: 8
   minRestartWaitSeconds: 1
@@ -1249,7 +1249,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 0
+  startLevelType: 5
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:

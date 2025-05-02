@@ -101,6 +101,7 @@ public class LevelPrerequisite
     public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
     public bool boss;
     public bool missionComplete;
+    public bool firstLevel;
 }
 
 public class LevelContents
@@ -122,6 +123,7 @@ public class LevelContents
     public City city;
     public bool vipTargets;
     public BossType bossType;
+    public bool landingStrip;
 }
 
 public class LevelBuilder 
@@ -208,13 +210,18 @@ public class LevelBuilder
 
         ret.vipTargets = PossibleVipTargets(levelPrerequisite.levelType);
 
-        // Landing Strip
-        var lsllcX = midX - (landingStripWidth / 2);
-        for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
-        {
-            for (var y = 0; y < landingStripHeight; y++)
+        ret.landingStrip = levelPrerequisite.firstLevel ||
+            levelPrerequisite.missionComplete ||
+            levelPrerequisite.levelType != LevelType.RED_BARON_BOSS;
+        if (ret.landingStrip)
+        { 
+            var lsllcX = midX - (landingStripWidth / 2);
+            for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
             {
-                ret.cells[x, y] = CellContent.LANDING_STRIP;
+                for (var y = 0; y < landingStripHeight; y++)
+                {
+                    ret.cells[x, y] = CellContent.LANDING_STRIP;
+                }
             }
         }
 

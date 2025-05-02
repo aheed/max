@@ -232,6 +232,7 @@ public class SceneController3d : MonoBehaviour
                 enemyHQsBombed = new List<bool> {false, false, false},
                 boss = firstLevelType == LevelType.ROBOT_BOSS || firstLevelType == LevelType.RED_BARON_BOSS,
                 missionComplete = false,
+                firstLevel = true,
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -250,7 +251,7 @@ public class SceneController3d : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
@@ -425,6 +426,7 @@ public class SceneController3d : MonoBehaviour
             enemyHQsBombed = enemyHQsBombed,
             boss = newBoss,
             missionComplete = missionComplete,
+            firstLevel = false,
         };
     }
 
