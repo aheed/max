@@ -107,6 +107,7 @@ public class LevelPrerequisite
 public class LevelContents
 {
     public static readonly int fullGridHeight = 300;
+    public static readonly int shortGridHeight = 100;
     public static readonly int gridWidth = 100;
     public static readonly int bossY = 50;
     public int gridHeight;
@@ -204,6 +205,11 @@ public class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         ret.gridHeight = LevelContents.fullGridHeight;
+        if (levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
+            !levelPrerequisite.firstLevel)
+        {
+            ret.gridHeight = LevelContents.shortGridHeight;
+        }
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);

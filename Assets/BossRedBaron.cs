@@ -85,7 +85,7 @@ public class BossRedBaron : MonoBehaviour
             maneuverDurationSec = 0f;
         }
         maneuverRateRadPerSec = (float)System.Math.PI * 2 / maneuverDurationSec;
-        Debug.Log($"Starting maneuver    Maneuver type: {maneuverType}");
+        //Debug.Log($"Starting maneuver    Maneuver type: {maneuverType}");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -159,7 +159,7 @@ public class BossRedBaron : MonoBehaviour
                 maneuverOffsetY = 0f;
                 maneuverOffsetZ = 0f;
                 maneuverType = ManeuverType.NONE;
-                Debug.Log("Maneuver completed");
+                //Debug.Log("Maneuver completed");
             }
             else if (maneuverType == ManeuverType.ROLL_LEFT)
             {
