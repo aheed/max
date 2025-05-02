@@ -268,6 +268,12 @@ public class BossRedBaron : MonoBehaviour
 
     void OnDestroy()
     {
-        GameState.GetInstance().Unsubscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        var gameState = GameState.GetInstance();
+        if (gameState == null)
+        {
+            return;
+        }
+
+        gameState.Unsubscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
     }
 }
