@@ -27,6 +27,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     GameObject model;
     PlaneController controller;
     bool isVip = false;
+    IEnemyPlaneNavigator navigator;
 
     GameObject GetModel()
     {
@@ -45,6 +46,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             controller.planeModel = GetModel();
         }
         return controller;
+    }
+
+    public void SetNavigator(IEnemyPlaneNavigator navigator)
+    {
+        this.navigator = navigator;
     }
 
     public void SetSpeed(float speed)
@@ -99,6 +105,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
         Register();
         SetAppearance(0);
+        navigator?.Start();
     }
 
     void Register()
@@ -167,15 +174,21 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         moveCooldownSec -= Time.deltaTime;
         if (moveCooldownSec <= 0)
         {
-            moveX = speed < 0 ? 0 : UnityEngine.Random.Range(-1, 2);
+            SetMoveX(speed < 0 ? 0 : UnityEngine.Random.Range(-1, 2));
             SetMoveCooldown();
         }
 
         var progX = moveX * GameState.horizontalSpeed * Time.deltaTime;
         var progZ = speed * Time.deltaTime;
         Vector3 progress = new (progX, 0f, progZ);
-        transform.position += progress;
+        transform.position += progress;        
 
+        navigator?.Update();
+    }
+
+    public void SetMoveX(int moveX)
+    {
+        this.moveX = moveX;
         if (moveX != lastMoveX)
         {
             lastMoveX = moveX;
