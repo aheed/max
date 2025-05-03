@@ -60,9 +60,7 @@ public class SceneController3d : MonoBehaviour
     TargetMaterialBlinker targetBlinker;    
 
     //// Game status
-    //float prepTimeForNextLevelQuotient = 0.90f;
     float prepTimeForNextLevelLength = 20f;
-    float landingIndicationLength = 15f;
     float lastLevelStartZ = 0f;
     int currentLevelIndex = 0;
     static int nofLevels = 2;
@@ -450,6 +448,7 @@ public class SceneController3d : MonoBehaviour
                 stateContents.latestLevelPrereq = GetNewLevelPrereq();
                 lastLevelStartZ += latestLevel.gridHeight * cellLength;
                 latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
+                gameState.SetApproachingLanding(latestLevel.landingStrip);
                 CreateLevel();
                 gameState.SetTargetsHit(
                     GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
@@ -475,6 +474,7 @@ public class SceneController3d : MonoBehaviour
                         Debug.Log($"New level built in {framesToBuildLevelDbg} frames ***************");
                         lastLevelStartZ += latestLevel.gridHeight * cellLength;
                         latestLevel = newLevelTask.Result;
+                        gameState.SetApproachingLanding(latestLevel.landingStrip);
                         CreateLevel();
                         newLevelTask = null;
                     }
@@ -517,10 +517,10 @@ public class SceneController3d : MonoBehaviour
 
         var distanceDiff = refobject.transform.position.z - lastLevelStartZ;
 
-        // todo: extra condition: there must be a landing strip on upcoming level
-        gameState.SetApproachingLanding(
-            (distanceDiff > latestLevel.gridHeight * cellLength - landingIndicationLength) ||
-            distanceDiff < 0);
+        if (distanceDiff > 0f)
+        {
+            gameState.SetApproachingLanding(false);
+        }
 
         // Update game state
         stateContents.floorAltitude = gameState.minAltitude +
