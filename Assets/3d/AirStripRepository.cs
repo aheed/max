@@ -57,7 +57,7 @@ public static class AirStripRepository
         new AirStripInfo("You Again? Airfield", "Every time you think you’re stranded, surprise! We’re right where you need us."),
         new AirStripInfo("The Last Safe Pixel", "Everything around us is a burning battlefield, but our tarmac is spotless."),
         new AirStripInfo("Secret Enemy-Adjacent Landing Zone", "Nothing to see here, just a completely normal, friendly airstrip in a completely illogical location."),
-        new AirStripInfo("We Have No Idea How We Got Here Either Airbase", "One moment it’s a bombed-out ruin, the next we’ve got a functioning vending machine."),
+        new AirStripInfo("We Have No Idea How We Got Here Either Base", "One moment it’s a bombed-out ruin, the next we’ve got a functioning vending machine."),
         new AirStripInfo("Flak Alley Express", "Dodge 300 enemy bullets, and boom—welcome to your local friendly refueling station!"),
         new AirStripInfo("Checkpoint Mirage", "It might look like a bombed-out crater, but surprise! We’ve got a fully stocked ammo depot."),
         new AirStripInfo("The Conveniently Placed Tarmac", "Lost? Outnumbered? Running on fumes? Don’t worry, we’re always exactly where you need us."),

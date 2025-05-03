@@ -60,7 +60,6 @@ public class SceneBuilder : MonoBehaviour
     private ObjectManager vehicle1Manager;
     private ObjectManager vehicle2Manager;
     private ObjectManager enemyHangarManager;
-    private ObjectManager hangarManager;
     private ObjectManager carManager;
     private ObjectManager searchLightManager;
     private GameObject managedObjectsParent;
@@ -82,7 +81,6 @@ public class SceneBuilder : MonoBehaviour
         vehicle1Manager = new ObjectManager(vehicle1Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
-        hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
     }
@@ -156,12 +154,12 @@ public class SceneBuilder : MonoBehaviour
         GameState gameState = GameState.GetInstance();
 
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
-        float cellHeight = sceneInput.levelHeight / LevelContents.gridHeight;
+        float cellHeight = sceneInput.levelHeight / levelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
 
         SceneOutput ret = new();
-        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[LevelContents.gridHeight];
-        for (var ztmp = 0; ztmp < LevelContents.gridHeight; ztmp++)
+        GameObjectCollection4[] gameObjectCollections = new GameObjectCollection4[levelContents.gridHeight];
+        for (var ztmp = 0; ztmp < levelContents.gridHeight; ztmp++)
         {
             gameObjectCollections[ztmp] = new GameObjectCollection4 {
                 zCoord = ztmp * cellHeight, // level relative coordinate
@@ -171,7 +169,7 @@ public class SceneBuilder : MonoBehaviour
 
         var parentPositionOffset = sceneInput.levelTransform.position - managedObjectsParent.transform.position;
 
-        // Landing Strip
+        if (levelContents.landingStrip)
         {
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
@@ -630,7 +628,7 @@ public class SceneBuilder : MonoBehaviour
         }
 
         // Small items: Flack guns, trees, tanks
-        for (var ztmpOuter = 0; ztmpOuter < LevelContents.gridHeight; ztmpOuter++)
+        for (var ztmpOuter = 0; ztmpOuter < levelContents.gridHeight; ztmpOuter++)
         {
             var ztmp = ztmpOuter; //capture for lazy evaluation
             var gameObjectsAtZ = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
@@ -675,10 +673,6 @@ public class SceneBuilder : MonoBehaviour
 
                     case CellContent.ENEMY_HANGAR:
                         selectedManager = enemyHangarManager;
-                        break;
-
-                    case CellContent.HANGAR:
-                        selectedManager = hangarManager;
                         break;
 
                     case CellContent.SEARCH_LIGHT:

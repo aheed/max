@@ -252,7 +252,7 @@ public class SceneController : MonoBehaviour
     {
         GameStateContents stateContents = gameState.GetStateContents();
         float cellWidth = levelWidth / LevelContents.gridWidth;
-        float cellHeight = levelHeight / LevelContents.gridHeight;
+        float cellHeight = levelHeight / LevelContents.fullGridHeight;
         float neutralSlope = riverSlopes[neutralRiverSlopeIndex];
         var midX = LevelContents.gridWidth / 2;
 
@@ -560,8 +560,8 @@ public class SceneController : MonoBehaviour
         prMeshFilter.mesh = prMesh;
         prMeshFilterWide.mesh = prMeshWide;
 
-        GameObjectCollection4[] ret = new GameObjectCollection4[LevelContents.gridHeight];
-        for (var ytmp = 0; ytmp < LevelContents.gridHeight; ytmp++)
+        GameObjectCollection4[] ret = new GameObjectCollection4[LevelContents.fullGridHeight];
+        for (var ytmp = 0; ytmp < LevelContents.fullGridHeight; ytmp++)
         {
             ret[ytmp] = new GameObjectCollection4 {
                 zCoord = ytmp * cellHeight, // level relative coordinate
@@ -642,7 +642,7 @@ public class SceneController : MonoBehaviour
         }        
 
         // Small items: Flack guns, trees, tanks
-        for (var ytmpOuter = 0; ytmpOuter < LevelContents.gridHeight; ytmpOuter++)
+        for (var ytmpOuter = 0; ytmpOuter < LevelContents.fullGridHeight; ytmpOuter++)
         {
             var ytmp = ytmpOuter; //capture for lazy evaluation
             var releaseActionsAtY = Enumerable.Range(leftTrim, LevelContents.gridWidth - rightTrim - leftTrim).SelectMany(xtmp =>
@@ -779,7 +779,7 @@ public class SceneController : MonoBehaviour
     {
         LevelType firstLevelType = LevelSelection.startLevelOverride ? 
             LevelSelection.startLevel : startLevelType;
-        levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.gridHeight;
+        levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.fullGridHeight;
         level = -1;
         var levelLowerLeftCornerX = 0f;
         var refObjStartOffset = 0.8f;
