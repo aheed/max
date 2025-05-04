@@ -208,9 +208,9 @@ public class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         ret.gridHeight = LevelContents.fullGridHeight;
-        if ((levelPrerequisite.levelType == LevelType.RED_BARON_BOSS ||
-             levelPrerequisite.levelType == LevelType.INTRO) && 
-            !levelPrerequisite.firstLevel)
+        if ((levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
+            !levelPrerequisite.firstLevel) ||
+            levelPrerequisite.levelType == LevelType.INTRO)
         {
             ret.gridHeight = LevelContents.shortGridHeight;
         }

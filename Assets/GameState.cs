@@ -288,7 +288,7 @@ public class GameState : MonoBehaviour
         if (gameStateContents.latestLevelPrereq.levelType == LevelType.ROBOT_BOSS ||
             gameStateContents.latestLevelPrereq.levelType == LevelType.RED_BARON_BOSS)
         {
-            return gameStateContents.boss == null ? 1 : 0;
+            return gameStateContents.bossDefeated ? 1 : 0;
         }
 
         return gameStateContents.latestLevelPrereq.levelType == LevelType.CITY && gameStateContents.enemyHQs != null ?
@@ -304,7 +304,6 @@ public class GameState : MonoBehaviour
     public void ReportBossDefeated()
     {
         gameStateContents.bossDefeated = true;
-        gameStateContents.boss = null;
         ReportEvent(GameEvent.TARGETS_CHANGED);
     }
 

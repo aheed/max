@@ -149,9 +149,8 @@ public class SceneController3d : MonoBehaviour
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
-                return levelPrereq.boss ? 1 : 0; // todo: correct???????
             case LevelType.INTRO:
-                return GameState.GetInstance().GetStateContents().bossDefeated ? 1 : 0;
+                return GameState.GetInstance().GetTargetsHit();
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
