@@ -36,13 +36,15 @@ public enum LevelType
     BALLOONS,
     ROBOT_BOSS,
     RED_BARON_BOSS,
+    INTRO,
 }
 
 public enum BossType
 {
     NONE,
     ROBOT,
-    RED_BARON
+    RED_BARON,
+    INTRO_CONTROLLER
 }
 
 /*public class BossSpec
@@ -102,6 +104,7 @@ public class LevelPrerequisite
     public bool boss;
     public bool missionComplete;
     public bool firstLevel;
+    public bool enemyAircraft;
 }
 
 public class LevelContents
@@ -205,7 +208,8 @@ public class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         ret.gridHeight = LevelContents.fullGridHeight;
-        if (levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
+        if ((levelPrerequisite.levelType == LevelType.RED_BARON_BOSS ||
+             levelPrerequisite.levelType == LevelType.INTRO) && 
             !levelPrerequisite.firstLevel)
         {
             ret.gridHeight = LevelContents.shortGridHeight;
@@ -218,7 +222,8 @@ public class LevelBuilder
 
         ret.landingStrip = levelPrerequisite.firstLevel ||
             levelPrerequisite.missionComplete ||
-            levelPrerequisite.levelType != LevelType.RED_BARON_BOSS;
+            (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
+             levelPrerequisite.levelType != LevelType.INTRO);
         if (ret.landingStrip)
         { 
             var lsllcX = midX - (landingStripWidth / 2);
@@ -644,6 +649,7 @@ public class LevelBuilder
             }
         }
 
+        var randomFlakGuns = levelType != LevelType.INTRO;
         var bigHousesList = new List<HousePosition>();        
         for (var y = 0; y < ret.gridHeight; y++)
         {
@@ -693,7 +699,7 @@ public class LevelBuilder
                 }
 
                 // Flack guns
-                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
+                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && randomFlakGuns)
                 {
                     ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
@@ -747,6 +753,10 @@ public class LevelBuilder
             else if (levelType == LevelType.RED_BARON_BOSS)
             {
                 ret.bossType = BossType.RED_BARON;
+            }
+            else if (levelType == LevelType.INTRO)
+            {
+                ret.bossType = BossType.INTRO_CONTROLLER;
             }
         }
         

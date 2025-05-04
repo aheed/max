@@ -33,6 +33,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject bigHousePrefab;
     public BossRobot robotBossPrefab;
     public GameObject redBaronBossPrefab;
+    public GameObject introControllerPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -624,6 +625,14 @@ public class SceneBuilder : MonoBehaviour
         {
             var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(-10f, 20f, 0f);
             var bossGameObject = Instantiate(redBaronBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
+            ret.boss = bossGameObject;
+        }
+        else if (levelContents.bossType == BossType.INTRO_CONTROLLER)
+        {
+            //Debug.Log("Instantiate Intro controller");
+            var bossOffsetZ = LevelContents.bossY * cellHeight;
+            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 0f, bossOffsetZ);
+            var bossGameObject = Instantiate(introControllerPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
             ret.boss = bossGameObject;
         }
 
