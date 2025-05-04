@@ -25,8 +25,11 @@ class CallbackSpec
 
 public class IntroController : MonoBehaviour
 {
+    public EnemyPlane3d targetPlanePrefab;
+
     IntroControllerStage stage = IntroControllerStage.PRE_START;
     CallbackSpec[] callbacks;
+    EnemyPlane3d targetPlane;
 
     void RegisterCallbacks()
     {
@@ -40,6 +43,11 @@ public class IntroController : MonoBehaviour
     void UnregisterCallbacks()
     {
         var gameState = GameState.GetInstance();
+        if (gameState == null)
+        {
+            return;
+        }
+
         foreach (var cb in callbacks)
         {
             gameState.Unsubscribe(cb.gameEvent, cb.action);
@@ -58,15 +66,27 @@ public class IntroController : MonoBehaviour
         RegisterCallbacks();
     }
 
+    void SpawnTargetPlane()
+    {
+        var targetPlanePosition = transform.parent.position;
+        targetPlanePosition.y = GameState.GetInstance().maxAltitude / 3;
+        targetPlane = Instantiate(targetPlanePrefab, targetPlanePosition, Quaternion.identity);
+        //targetPlane = Instantiate(targetPlanePrefab);
+        targetPlane.refObject = transform.parent;
+        targetPlane.SetNavigator(new IntroLevelEnemyPlaneNavigator(targetPlane));
+        targetPlane.SetVip();
+    }
+
     void OnDebugAction2()
     {
         // spawn enemy plane
         Debug.Log("IntroController.OnDebugAction2");
+        SpawnTargetPlane();
     }
 
     void OnAltitudeChanged()
     {
-        Debug.Log("IntroController.OnAltitudeChanged");
+        //Debug.Log("IntroController.OnAltitudeChanged");
         var gameState = GameState.GetInstance();
         if (stage == IntroControllerStage.TAKE_OFF)
         {
