@@ -149,9 +149,9 @@ public class SceneController3d : MonoBehaviour
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
-                return levelPrereq.boss ? 1 : 0;
+                return levelPrereq.boss ? 1 : 0; // todo: correct???????
             case LevelType.INTRO:
-                return 0; // TEMP!!
+                return GameState.GetInstance().GetStateContents().bossDefeated ? 1 : 0;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -399,6 +399,7 @@ public class SceneController3d : MonoBehaviour
     bool IsMissionComplete(LevelType newLevelType, bool bossDefeated, bool reachedTargetLimit)
     {
         return (newLevelType == LevelType.RED_BARON_BOSS && bossDefeated) ||
+            (newLevelType == LevelType.INTRO && bossDefeated) ||
             reachedTargetLimit;
     }
 
@@ -619,9 +620,11 @@ public class SceneController3d : MonoBehaviour
             {
                 newSpeed = 0f;
                 var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;                
-                var bossDefeated = (latestLevelType == LevelType.ROBOT_BOSS || latestLevelType == LevelType.RED_BARON_BOSS) &&
+                var bossDefeated = (latestLevelType == LevelType.ROBOT_BOSS ||
+                                    latestLevelType == LevelType.RED_BARON_BOSS ||
+                                    latestLevelType == LevelType.INTRO) &&
                     gameState.GetStateContents().bossDefeated;
-                gameState.SetStatus(bossDefeated || AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);                
+                gameState.SetStatus(bossDefeated || AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);
             }
             gameState.SetSpeed(newSpeed);
         }

@@ -108,6 +108,7 @@ public class IntroController : MonoBehaviour
     void OnTargetHitCallback()
     {
         Debug.Log("IntroLevelController.OnTargetHitCallback");
+        GameState.GetInstance().ReportBossDefeated();
         stage = IntroControllerStage.LANDING;
         Debug.Log("------> Victory! Now land the plane");
     }
