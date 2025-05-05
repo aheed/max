@@ -304,13 +304,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
             //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
 
-            if (theTouch.screenPosition.x < (Screen.width / 2))
+            /*if (theTouch.screenPosition.x < (Screen.width / 2))
                 //&& theTouch.fingerId != moveFingerId)
             {
                 fireTouch = true;
                 //Debug.Log($"Touch Fire at {theTouch.position}");
             }
-            else 
+            else */
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
                      theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
