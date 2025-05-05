@@ -105,6 +105,7 @@ public class LevelPrerequisite
     public bool missionComplete;
     public bool firstLevel;
     public bool enemyAircraft;
+    public bool wind;
 }
 
 public class LevelContents

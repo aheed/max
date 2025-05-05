@@ -235,7 +235,8 @@ public class SceneController3d : MonoBehaviour
                        firstLevelType == LevelType.INTRO,
                 missionComplete = false,
                 firstLevel = true,
-                enemyAircraft = firstLevelType != LevelType.INTRO
+                enemyAircraft = firstLevelType != LevelType.INTRO,
+                wind = firstLevelType != LevelType.INTRO,
             };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -360,7 +361,7 @@ public class SceneController3d : MonoBehaviour
 
     void SpawnEnemyPlane()
     {   
-        if (GameState.GetInstance().GetStateContents().latestLevelPrereq.levelType == LevelType.INTRO)
+        if (!GameState.GetInstance().GetStateContents().latestLevelPrereq.enemyAircraft)
         {
             return;
         }
@@ -451,7 +452,8 @@ public class SceneController3d : MonoBehaviour
             boss = ShallCreateNewBoss(newLevelType, latestLevelType),
             missionComplete = IsMissionComplete(newLevelType, gameState.GetStateContents().bossDefeated, reachedTargetLimit),
             firstLevel = false,
-            enemyAircraft = newLevelType != LevelType.INTRO
+            enemyAircraft = newLevelType != LevelType.INTRO,
+            wind = newLevelType != LevelType.INTRO,
         };
     }
 
@@ -591,8 +593,11 @@ public class SceneController3d : MonoBehaviour
                 windCooldown -= Time.deltaTime;
                 if (windCooldown <= 0)
                 {
-                    stateContents.windDirection = GameStateContents.windDirections[UnityEngine.Random.Range(0, GameStateContents.windDirections.Length)];
-                    gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);
+                    if (stateContents.latestLevelPrereq.wind)
+                    {
+                        stateContents.windDirection = GameStateContents.windDirections[UnityEngine.Random.Range(0, GameStateContents.windDirections.Length)];
+                        gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);    
+                    }
                     SetWindCooldown();
                     //Debug.Log($"New wind {stateContents.windDirection} {stateContents.wind}");
                 }
