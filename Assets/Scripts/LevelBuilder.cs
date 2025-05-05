@@ -110,7 +110,7 @@ public class LevelPrerequisite
 public class LevelContents
 {
     public static readonly int fullGridHeight = 300;
-    public static readonly int shortGridHeight = 100;
+    public static readonly int shortGridHeight = 115;
     public static readonly int gridWidth = 100;
     public static readonly int bossY = 50;
     public int gridHeight;
