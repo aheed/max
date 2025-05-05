@@ -30,6 +30,8 @@ public enum GameEvent
     DEBUG_ACTION1,
     DEBUG_ACTION2,
     DEBUG_ACTION3,
+    BULLET_FIRED,
+    BOMB_DROPPED,
 }
 
 public enum DamageIndex

@@ -10,8 +10,9 @@ public class IntroLevelEnemyPlaneNavigator : IEnemyPlaneNavigator
     public static readonly float maxOffsetX = 2f;
     public static readonly float endDistanceZ = 3f;
     public static readonly float startSpeedFactor = 0.5f;
+    public EnemyPlaneNavigatorStage stage = EnemyPlaneNavigatorStage.APPROACHING;
     EnemyPlane3d enemyPlane;
-    EnemyPlaneNavigatorStage stage = EnemyPlaneNavigatorStage.APPROACHING;
+
 
     public IntroLevelEnemyPlaneNavigator(EnemyPlane3d enemyPlane)
     {

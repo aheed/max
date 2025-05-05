@@ -119,6 +119,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
         bulletCooldown = bulletIntervalSeconds;
+        gameState.ReportEvent(GameEvent.BULLET_FIRED);
     }
 
     void HandleMove(Vector2 move)
@@ -479,6 +480,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
         gameState.IncrementBombs(-1);
+        gameState.ReportEvent(GameEvent.BOMB_DROPPED);
     }
 
     public void OnGameStatusChanged()
