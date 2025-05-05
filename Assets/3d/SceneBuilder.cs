@@ -9,7 +9,7 @@ public class SceneBuilder : MonoBehaviour
     public float carOffsetX = -5f;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
-    public GameObject landingStripPrefab;
+    public FriendlyLandingStrip landingStripPrefab;
     public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
     public ManagedObject flackGunPrefab;
@@ -176,6 +176,10 @@ public class SceneBuilder : MonoBehaviour
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
             var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
+            if (levelContents.airstripInfo != null)
+            {
+                lsGameObject.airStripInfo = levelContents.airstripInfo;
+            }
 
             // scale
             var lsQuadTransform = lsGameObject.transform.GetChild(0);

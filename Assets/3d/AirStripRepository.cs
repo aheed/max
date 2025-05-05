@@ -106,6 +106,12 @@ public static class AirStripRepository
         new AirStripInfo("Fumes & Hope Airfield", "Out of fuel? We’ve got some… maybe."),
     };
 
+    public static AirStripInfo introLevelStartAirStrip = 
+        new AirStripInfo("Ace Academy Airfield", "");
+
+    public static AirStripInfo introLevelEndAirStrip = 
+        new AirStripInfo("End of Lesson Airfield", "Welcome back, cadet! Now land before you run out of fuel!");
+
     public static AirStripInfo GetRandomAirStrip()
     {
         return airStrips[Random.Range(0, airStrips.Length)];

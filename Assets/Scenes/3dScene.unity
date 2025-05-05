@@ -20913,7 +20913,7 @@ MonoBehaviour:
   carOffsetX: 3
   riverSectionPrefab: {fileID: 0}
   roadPrefab: {fileID: 0}
-  landingStripPrefab: {fileID: 3680093815632735650, guid: ab4df0b7fb75471f2a38669aa1495fdd, type: 3}
+  landingStripPrefab: {fileID: 7521342511423359227, guid: ab4df0b7fb75471f2a38669aa1495fdd, type: 3}
   enemyLandingStripPrefab: {fileID: 1898967470445361769, guid: 3e6d8f6addb634e06b156788ad5213d7, type: 3}
   housePrefab: {fileID: 218899342934717783, guid: 5d15225c7d13b4000b89ea6ea6b0a876, type: 3}
   flackGunPrefab: {fileID: 289847287154985913, guid: 879a2afc710da46c28877a65b14fc4c5, type: 3}

@@ -129,6 +129,7 @@ public class LevelContents
     public bool vipTargets;
     public BossType bossType;
     public bool landingStrip;
+    public AirStripInfo airstripInfo;
 }
 
 public class LevelBuilder 
@@ -234,6 +235,13 @@ public class LevelBuilder
                 {
                     ret.cells[x, y] = CellContent.LANDING_STRIP;
                 }
+            }
+
+            if (levelPrerequisite.levelType == LevelType.INTRO)
+            {
+                ret.airstripInfo = levelPrerequisite.firstLevel ? 
+                    AirStripRepository.introLevelStartAirStrip : 
+                    AirStripRepository.introLevelEndAirStrip;
             }
         }
 
