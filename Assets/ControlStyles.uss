@@ -27,3 +27,17 @@
     transition-timing-function: ease-in-out;
     transition-delay: 0s;
 }
+
+.swipe-hint-up {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+}
+
+.swipe-hint-up-animation {
+    top: 20%;
+    transition-property: top;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+}
