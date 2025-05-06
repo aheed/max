@@ -293,7 +293,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
 
         ///////////////////
-        bool fireTouch = false;
+        //bool fireTouch = false;
         //for (int i = 0; i < Input.touchCount; i++)
         //var touches = TouchAction.ReadValue<Vector2>();
         //foreach (var theTouch in touches)
@@ -352,7 +352,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
         
         //////////////////
-        if (fireTouch || FireAction.IsPressed())
+        if (stateContents.firing || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
