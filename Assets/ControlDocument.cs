@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,8 +6,12 @@ public class ControlDocument : MonoBehaviour
 {
     static readonly string swipeDownAnimationClass = "swipe-hint-down-animation";
     static readonly int delayRerunAnimationMs = 600;
+    static readonly float delayAnimationShortSec = 0.3f;
+    static readonly float delayAnimationLongSec = 1.6f;
+
     VisualElement fireElem;
     VisualElement downSwipeHintElem;
+    VisualElement fireTapHintElem;
     //GameState gameState;
     GameStateContents gameStateContents;
 
@@ -22,7 +27,10 @@ public class ControlDocument : MonoBehaviour
         fireElem.RegisterCallback<PointerOutEvent>(OnFireOut);
 
         downSwipeHintElem = uiDocument.rootVisualElement.Q<VisualElement>("DownSwipeHint");
-        SetupSwipeAnimation();
+        fireTapHintElem = uiDocument.rootVisualElement.Q<VisualElement>("FireTapHint");
+
+        //SetupSwipeAnimation();
+        StartCoroutine(HintCoroutine());
     }
 
     void SetupSwipeAnimation()
@@ -35,6 +43,35 @@ public class ControlDocument : MonoBehaviour
             downSwipeHintElem.schedule.Execute(() => downSwipeHintElem.AddToClassList(swipeDownAnimationClass)).StartingIn(delayRerunAnimationMs + 10);
         });
         downSwipeHintElem.schedule.Execute(() => downSwipeHintElem.AddToClassList(swipeDownAnimationClass)).StartingIn(100);
+    }
+
+    IEnumerator SomeCoroutine() {
+        //Declare a yield instruction.
+        WaitForSeconds wait = new WaitForSeconds(3);
+
+        //for(int i = 0; i < 10; i++) {
+        while (true) {
+            Debug.Log("Coroutine runningggggggggggggggggggggg");
+            yield return wait; //Pause the loop for 3 seconds.
+        }
+    }
+
+    IEnumerator HintCoroutine() {
+        WaitForSeconds waitShort = new WaitForSeconds(delayAnimationShortSec);
+        WaitForSeconds waitLong = new WaitForSeconds(delayAnimationLongSec);
+
+        while (true) {
+            downSwipeHintElem.RemoveFromClassList(swipeDownAnimationClass);
+            downSwipeHintElem.visible = false;
+            fireTapHintElem.visible = false;
+            Debug.Log("Hint Coroutine 1");
+            yield return waitShort;
+            downSwipeHintElem.visible = true;
+            downSwipeHintElem.AddToClassList(swipeDownAnimationClass);
+            fireTapHintElem.visible = true;
+            Debug.Log("Hint Coroutine 2");
+            yield return waitLong;
+        }
     }
 
     // Update is called once per frame
