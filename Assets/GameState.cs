@@ -77,7 +77,6 @@ public class GameStateContents
     public float maxAltitudeDiffForPlaneCollision;
     public bool bossDefeated;
     public GameObject boss;
-    public bool firing;
 }
 
 public class GameState : MonoBehaviour

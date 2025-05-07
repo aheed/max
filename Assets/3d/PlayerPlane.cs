@@ -292,25 +292,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             move.y = move.y * -1f;
         }
 
-        ///////////////////
-        //bool fireTouch = false;
-        //for (int i = 0; i < Input.touchCount; i++)
-        //var touches = TouchAction.ReadValue<Vector2>();
-        //foreach (var theTouch in touches)
+        bool fireTouch = false;
         foreach (var theTouch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
         {
-            //Touch theTouch;
-            //theTouch = Input.GetTouch(i);
-
-            //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
-
-            /*if (theTouch.screenPosition.x < (Screen.width / 2))
-                //&& theTouch.fingerId != moveFingerId)
-            {
-                fireTouch = true;
-                //Debug.Log($"Touch Fire at {theTouch.position}");
-            }
-            else */
+            if (theTouch.screenPosition.x > (Screen.width / 4) || 
+                theTouch.screenPosition.y > (Screen.height / 2))
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
                      theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
@@ -349,10 +335,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                     touchStartPosition = theTouch.screenPosition;
                 }
             }
+            else {
+                fireTouch = true;
+                //Debug.Log($"Touch Fire at {theTouch.position}");
+            }
         }
         
-        //////////////////
-        if (stateContents.firing || FireAction.IsPressed())
+        if (fireTouch || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
