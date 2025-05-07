@@ -31,6 +31,7 @@ public class IntroController : MonoBehaviour
     CallbackSpec[] callbacks;
     EnemyPlane3d targetPlane;
     IntroLevelEnemyPlaneNavigator targetPlaneNavigator;
+    ControlDocument controlDocument;
 
 
     void RegisterCallbacks()
@@ -56,9 +57,18 @@ public class IntroController : MonoBehaviour
         }
     }
 
+    void ResetHints()
+    {
+        controlDocument.SetFireHintVisible(false);
+        controlDocument.SetUpSwipeHintVisible(false);
+        controlDocument.SetDownSwipeHintVisible(false);
+    }
+
     void Start()
     {
         Debug.Log("IntroController.Start");
+        controlDocument = FindAnyObjectByType<ControlDocument>();
+        ResetHints();
         callbacks = new CallbackSpec[] 
         {
             new() { gameEvent = GameEvent.GAME_STATUS_CHANGED, action = OnGameStatusChangedCallback },
@@ -107,14 +117,20 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.TAKE_OFF:
                 DisplayText("Swipe up to take off");
+                controlDocument.SetUpSwipeHintVisible(true);
                 break;
             case IntroControllerStage.FIRE_DEMO:
+                controlDocument.SetUpSwipeHintVisible(false);
+                controlDocument.SetFireHintVisible(true);
                 DisplayText("Fire your machine gun");
                 break;
             case IntroControllerStage.BOMB_DEMO:
+                controlDocument.SetUpSwipeHintVisible(false);
+                controlDocument.SetDownSwipeHintVisible(true);
                 DisplayText("Drop a bomb");
                 break;
             case IntroControllerStage.ENEMY_APPROACHING:
+                ResetHints();
                 SpawnTargetPlane();
                 break;
             case IntroControllerStage.ENEMY_SITTING_DUCK:
@@ -159,6 +175,7 @@ public class IntroController : MonoBehaviour
         else if (gameStatus == GameStatus.DEAD)
         {
             stage = IntroControllerStage.CRASHED;
+            ResetHints();
             DisplayText("Try again");
         }
     }

@@ -110,7 +110,7 @@ public static class AirStripRepository
         new AirStripInfo("Ace Academy Airfield", "");
 
     public static AirStripInfo introLevelEndAirStrip = 
-        new AirStripInfo("End of Lesson Airfield", "Welcome back, cadet! Now land before you run out of fuel!");
+        new AirStripInfo("School's Out Runway", "Welcome back, cadet! Now land before you run out of fuel!");
 
     public static AirStripInfo GetRandomAirStrip()
     {
