@@ -62,12 +62,17 @@ public class IntroController : MonoBehaviour
         controlDocument.SetFireHintVisible(false);
         controlDocument.SetUpSwipeHintVisible(false);
         controlDocument.SetDownSwipeHintVisible(false);
+        controlDocument.SetFullScreenTapHintVisible(false);
     }
 
     void Start()
     {
         Debug.Log("IntroController.Start");
         controlDocument = FindAnyObjectByType<ControlDocument>();
+        var buttonBarDocument = FindAnyObjectByType<ButtonBarDocument>();
+        var fullScreenTapHintElem = buttonBarDocument.GetFullScreenTapHintElem();
+        controlDocument.SetFullScreenTapHintElement(fullScreenTapHintElem);
+        
         ResetHints();
         callbacks = new CallbackSpec[] 
         {
@@ -111,6 +116,7 @@ public class IntroController : MonoBehaviour
     void AdvanceStage()
     {
         stage += 1;
+        ResetHints();
         switch (stage)
         {
             case IntroControllerStage.ACCELERATING:
@@ -120,18 +126,18 @@ public class IntroController : MonoBehaviour
                 controlDocument.SetUpSwipeHintVisible(true);
                 break;
             case IntroControllerStage.FIRE_DEMO:
-                controlDocument.SetUpSwipeHintVisible(false);
                 controlDocument.SetFireHintVisible(true);
                 DisplayText("Fire your machine gun");
                 break;
             case IntroControllerStage.BOMB_DEMO:
-                controlDocument.SetUpSwipeHintVisible(false);
+                controlDocument.SetFireHintVisible(true);
                 controlDocument.SetDownSwipeHintVisible(true);
                 DisplayText("Drop a bomb");
                 break;
             case IntroControllerStage.ENEMY_APPROACHING:
-                ResetHints();
+                controlDocument.SetFullScreenTapHintVisible(true);
                 SpawnTargetPlane();
+                DisplayText("This game is best viewed in full screen mode and in landscape orientation");
                 break;
             case IntroControllerStage.ENEMY_SITTING_DUCK:
                 DisplayText("Shoot the enemy plane");

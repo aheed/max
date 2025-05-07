@@ -12,11 +12,23 @@ public class ControlDocument : MonoBehaviour
     VisualElement upSwipeHintElem;
     VisualElement downSwipeHintElem;
     VisualElement fireTapHintElem;
+    VisualElement fullScreenTapHintElem;
     //GameState gameState;
     GameStateContents gameStateContents;
     bool fireHintVisible = false;
     bool upSwipeHintVisible = false;
     bool downSwipeHintVisible = false;
+    bool fullscreenTapHintVisible = false;
+
+    public void SetFullScreenTapHintElement(VisualElement tapHintElem)
+    {
+        fullScreenTapHintElem = tapHintElem;
+    }
+
+    public void SetFullScreenTapHintVisible(bool visible)
+    {
+        fullscreenTapHintVisible = visible;
+    }
 
     public void SetFireHintVisible(bool visible)
     {
@@ -57,7 +69,11 @@ public class ControlDocument : MonoBehaviour
             upSwipeHintElem.visible = false;
             downSwipeHintElem.visible = false;
             fireTapHintElem.visible = false;
-            Debug.Log("Hint Coroutine 1");
+            if (fullScreenTapHintElem != null)
+            {
+                fullScreenTapHintElem.visible = false;
+            }
+            //Debug.Log("Hint Coroutine 1");
             yield return waitShort;
             
             upSwipeHintElem.AddToClassList(swipeUpAnimationClass);
@@ -65,7 +81,11 @@ public class ControlDocument : MonoBehaviour
             upSwipeHintElem.visible = upSwipeHintVisible;
             downSwipeHintElem.visible = downSwipeHintVisible;
             fireTapHintElem.visible = fireHintVisible;
-            Debug.Log("Hint Coroutine 2");
+            if (fullScreenTapHintElem != null)
+            {
+                fullScreenTapHintElem.visible = fullscreenTapHintVisible;
+            }
+            //Debug.Log("Hint Coroutine 2");
             yield return waitLong;
         }
     }
