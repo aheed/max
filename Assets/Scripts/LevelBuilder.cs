@@ -226,12 +226,17 @@ public class LevelBuilder
             levelPrerequisite.missionComplete ||
             (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
              levelPrerequisite.levelType != LevelType.INTRO);
-        if (ret.landingStrip)
-        { 
+
+        var clearSpaceHeight = 
+            levelPrerequisite.levelType == LevelType.INTRO ?
+                ret.gridHeight : landingStripHeight;
+
+        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
+        {
             var lsllcX = midX - (landingStripWidth / 2);
             for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
             {
-                for (var y = 0; y < landingStripHeight; y++)
+                for (var y = 0; y < clearSpaceHeight; y++)
                 {
                     ret.cells[x, y] = CellContent.LANDING_STRIP;
                 }
