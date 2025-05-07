@@ -153,7 +153,7 @@ public class IntroController : MonoBehaviour
                 DisplayText("Victory! Now land on the nearest airstrip");
                 break;
             case IntroControllerStage.FINISHED:
-                DisplayText("Done! You are on your own now");
+                DisplayText("Congratulations! You have completed your training mission. You are on your own now");
                 break;
             /*case IntroControllerStage.CRASHED:
                 DisplayText("Try again");
