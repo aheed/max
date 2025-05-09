@@ -185,7 +185,7 @@ public class IntroController : MonoBehaviour
                 DisplayText("\"L\" on the dashboard means you are approaching a friendly airstrip\n\n\"P\" = Enemy plane alert\n\"W\" = Wind alert");
                 break;
             case IntroControllerStage.FINISHED:
-                DisplayText("Congratulations! You have completed your training mission. You are on your own now");
+                DisplayText("Congratulations! You have completed your training mission. You are on your own now!");
                 break;
             case IntroControllerStage.CRASHED:
                 DisplayText("Try again\n\nTap Fire button to restart");
