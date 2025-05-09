@@ -128,6 +128,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         Vector2 apparentMove = move;
         var forcedDescent = 0f;
 
+        if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
+        {
+            Debug.Log("No turn at low altitude");
+            apparentMove.x = 0f;
+        }
+
         switch(stateContents.gameStatus)
         {
             case GameStatus.FINISHED:
@@ -140,7 +146,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
-                    gameState.SetStatus(GameStatus.DEAD);
+                    //gameState.SetStatus(GameStatus.DEAD);
+                    Debug.Log("No takeoff at low speed");
+                    apparentMove.y = 0;
                 }
                 break;
             case GameStatus.DECELERATING:
@@ -246,12 +254,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             lastApparentMove = apparentMove;
         }
 
-        if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
+        /*if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
         //if (apparentMove.x != 0f && IsAtMinAltitude())
         {
             //Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
             gameState.SetStatus(GameStatus.DEAD);
-        }
+        }*/
     }
 
     void HandleFlackHit()
