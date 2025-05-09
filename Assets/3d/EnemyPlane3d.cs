@@ -28,6 +28,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     PlaneController controller;
     bool isVip = false;
     IEnemyPlaneNavigator navigator;
+    bool isDestructible = true;
 
     GameObject GetModel()
     {
@@ -46,6 +47,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             controller.planeModel = GetModel();
         }
         return controller;
+    }
+
+    public void SetDestructible(bool destructible)
+    {
+        isDestructible = destructible;
     }
 
     public void SetNavigator(IEnemyPlaneNavigator navigator)
@@ -198,6 +204,11 @@ public class EnemyPlane3d : MonoBehaviour, IVip
 
     void OnTriggerEnter(Collider col)
     {
+        if (!isDestructible)
+        {
+            return;
+        }
+        
         if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
             // Todo: report the victory

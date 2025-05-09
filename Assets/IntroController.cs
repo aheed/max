@@ -9,6 +9,7 @@ enum IntroControllerStage
     TAKE_OFF,
     FIRE_DEMO,
     BOMB_DEMO,
+    FULL_SCREEN,
     ENEMY_APPROACHING,
     ENEMY_SITTING_DUCK,
     ENEMY_RIGHT_ALTITUDE,
@@ -34,6 +35,7 @@ public class IntroController : MonoBehaviour
     IntroLevelEnemyPlaneNavigator targetPlaneNavigator;
     ControlDocument controlDocument;
     DialogDocument dialogDocument;
+    bool fullScreen;
 
 
     void RegisterCallbacks()
@@ -65,6 +67,8 @@ public class IntroController : MonoBehaviour
         controlDocument.SetUpSwipeHintVisible(false);
         controlDocument.SetDownSwipeHintVisible(false);
         controlDocument.SetFullScreenTapHintVisible(false);
+        dialogDocument.ShowDialog();
+        dialogDocument.HideOkButton();
     }
 
     void Start()
@@ -76,6 +80,7 @@ public class IntroController : MonoBehaviour
         var buttonBarDocument = FindAnyObjectByType<ButtonBarDocument>();
         var fullScreenTapHintElem = buttonBarDocument.GetFullScreenTapHintElem();
         controlDocument.SetFullScreenTapHintElement(fullScreenTapHintElem);
+        fullScreen = Screen.fullScreen;
         
         ResetHints();
         callbacks = new CallbackSpec[] 
@@ -92,6 +97,15 @@ public class IntroController : MonoBehaviour
 
     void Update()
     {
+        if (Screen.fullScreen != fullScreen)
+        {
+            fullScreen = Screen.fullScreen;
+            if (stage == IntroControllerStage.FULL_SCREEN)
+            {
+                AdvanceStage();
+            }
+        }
+
         if (stage == IntroControllerStage.ENEMY_APPROACHING && 
             targetPlaneNavigator?.stage == EnemyPlaneNavigatorStage.SITTING_DUCK)
         {
@@ -109,6 +123,7 @@ public class IntroController : MonoBehaviour
         targetPlaneNavigator = new IntroLevelEnemyPlaneNavigator(targetPlane);
         targetPlane.SetNavigator(targetPlaneNavigator);
         targetPlane.SetVip();
+        targetPlane.SetDestructible(false);
         stage = IntroControllerStage.ENEMY_APPROACHING;
     }
 
@@ -125,6 +140,7 @@ public class IntroController : MonoBehaviour
         switch (stage)
         {
             case IntroControllerStage.ACCELERATING:
+                DisplayText("Welcome!");
                 break;
             case IntroControllerStage.TAKE_OFF:
                 DisplayText("Swipe up to take off");
@@ -132,23 +148,28 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.FIRE_DEMO:
                 controlDocument.SetFireHintVisible(true);
-                DisplayText("Fire your machine gun");
+                DisplayText("Tap to fire your machine gun");
                 break;
             case IntroControllerStage.BOMB_DEMO:
                 controlDocument.SetFireHintVisible(true);
                 controlDocument.SetDownSwipeHintVisible(true);
-                DisplayText("Drop a bomb");
+                DisplayText("Drop a bomb by swiping down while firing");
+                break;
+            case IntroControllerStage.FULL_SCREEN:
+                DisplayText("This game is best viewed in full screen mode and in landscape orientation");
+                controlDocument.SetFullScreenTapHintVisible(true);
+                dialogDocument.ShowOkButton();
                 break;
             case IntroControllerStage.ENEMY_APPROACHING:
-                controlDocument.SetFullScreenTapHintVisible(true);
                 SpawnTargetPlane();
-                DisplayText("This game is best viewed in full screen mode and in landscape orientation");
+                dialogDocument.HideDialog();
                 break;
             case IntroControllerStage.ENEMY_SITTING_DUCK:
+                targetPlane.SetDestructible(true);
                 DisplayText("Shoot the enemy plane");
                 break;
             case IntroControllerStage.ENEMY_RIGHT_ALTITUDE:
-                DisplayText("Blue dashboard indicates presence of an enemy plane at your altitude");
+                DisplayText("Blue dashboard indicates presence of an enemy plane at your altitude. Take him out!");
                 break;
             case IntroControllerStage.BOMB_BUILDING:
                 //DisplayText("Bomb the building");
@@ -187,7 +208,8 @@ public class IntroController : MonoBehaviour
         {
             stage = IntroControllerStage.CRASHED;
             ResetHints();
-            DisplayText("Try again");
+            DisplayText("Try again\n\nTap Fire button to restart");
+            controlDocument.SetFireHintVisible(true);
         }
     }
 
@@ -250,5 +272,6 @@ public class IntroController : MonoBehaviour
     void OnOkButtonClicked()
     {
         Debug.Log("IntroController.OnOkButtonClicked");
+        AdvanceStage();
     }
 }

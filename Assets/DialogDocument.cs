@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 public class DialogDocument : MonoBehaviour
 {
+    VisualElement dialogUIElem;
     TextField dialogTextField;
     Button okButton;
 
@@ -21,22 +22,34 @@ public class DialogDocument : MonoBehaviour
 
     public void ShowDialog()
     {
-        dialogTextField.style.visibility = Visibility.Visible;
+        dialogUIElem.style.visibility = Visibility.Visible;
+        Debug.Log("Dialog shown");
     }
 
     public void HideDialog()
     {
-        dialogTextField.style.visibility = Visibility.Hidden;
+        dialogUIElem.style.visibility = Visibility.Hidden;
+        Debug.Log("Dialog hidden");
+    }
+
+    public void ShowOkButton()
+    {
+        okButton.style.visibility = Visibility.Visible;
+    }
+    public void HideOkButton()
+    {
+        okButton.style.visibility = Visibility.Hidden;
     }
 
     void Start()
     {
         var dialogDocument = GetComponent<UIDocument>();
+        dialogUIElem = dialogDocument.rootVisualElement.Q<VisualElement>("DialogUI");
         dialogTextField = dialogDocument.rootVisualElement.Q<TextField>("MsgToPlayer");
         okButton = dialogDocument.rootVisualElement.Q<Button>("OkButton");
         okButton.RegisterCallback<ClickEvent>(OnOkButtonClicked);
 
-        dialogTextField.SetValueWithoutNotify("Welcome to the game! Press start to begin your adventure.");
+        dialogTextField.SetValueWithoutNotify("");
         // Initialize dialog text
         //dialogText = "Welcome to the game! Press start to begin your adventure.";
         
