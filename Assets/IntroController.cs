@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.UIElements;
 
 enum IntroControllerStage 
 {
@@ -32,6 +33,7 @@ public class IntroController : MonoBehaviour
     EnemyPlane3d targetPlane;
     IntroLevelEnemyPlaneNavigator targetPlaneNavigator;
     ControlDocument controlDocument;
+    DialogDocument dialogDocument;
 
 
     void RegisterCallbacks()
@@ -69,6 +71,8 @@ public class IntroController : MonoBehaviour
     {
         Debug.Log("IntroController.Start");
         controlDocument = FindAnyObjectByType<ControlDocument>();
+        dialogDocument = FindAnyObjectByType<DialogDocument>();
+        dialogDocument.SetOkButtonCallback(OnOkButtonClicked);
         var buttonBarDocument = FindAnyObjectByType<ButtonBarDocument>();
         var fullScreenTapHintElem = buttonBarDocument.GetFullScreenTapHintElem();
         controlDocument.SetFullScreenTapHintElement(fullScreenTapHintElem);
@@ -111,6 +115,7 @@ public class IntroController : MonoBehaviour
     void DisplayText(string text)
     {
         Debug.Log($"------------------> {text}"); //TEMP!!
+        dialogDocument.SetDialogText(text);
     }
 
     void AdvanceStage()
@@ -240,5 +245,10 @@ public class IntroController : MonoBehaviour
     void OnDestroy()
     {
         UnregisterCallbacks();
+    }
+
+    void OnOkButtonClicked()
+    {
+        Debug.Log("IntroController.OnOkButtonClicked");
     }
 }

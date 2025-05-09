@@ -1,21 +1,40 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DialogDocument : MonoBehaviour
 {
     TextField dialogTextField;
-    //string dialogText;
+    Button okButton;
 
-    void DisplayDialog()
+    Action onOkButtonClicked;
+
+    public void SetOkButtonCallback(Action callback)
     {
-        // Display the dialog text on the screen
-        //Debug.Log(dialogText);
+        onOkButtonClicked = callback;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void SetDialogText(string dialogText)
+    {
+        dialogTextField.SetValueWithoutNotify(dialogText);
+    }
+
+    public void ShowDialog()
+    {
+        dialogTextField.style.visibility = Visibility.Visible;
+    }
+
+    public void HideDialog()
+    {
+        dialogTextField.style.visibility = Visibility.Hidden;
+    }
+
     void Start()
     {
-        dialogTextField = GetComponent<UIDocument>().rootVisualElement.Q<TextField>("MsgToPlayer");
+        var dialogDocument = GetComponent<UIDocument>();
+        dialogTextField = dialogDocument.rootVisualElement.Q<TextField>("MsgToPlayer");
+        okButton = dialogDocument.rootVisualElement.Q<Button>("OkButton");
+        okButton.RegisterCallback<ClickEvent>(OnOkButtonClicked);
 
         dialogTextField.SetValueWithoutNotify("Welcome to the game! Press start to begin your adventure.");
         // Initialize dialog text
@@ -23,6 +42,11 @@ public class DialogDocument : MonoBehaviour
         
         // Display the dialog text on the screen
         //DisplayDialog();
+    }
+
+    void OnOkButtonClicked(ClickEvent evt)
+    {
+        onOkButtonClicked();
     }
 
 }
