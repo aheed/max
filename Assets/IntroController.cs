@@ -15,6 +15,7 @@ enum IntroControllerStage
     ENEMY_RIGHT_ALTITUDE,
     BOMB_BUILDING,
     LANDING,
+    LANDING_APPROACH,
     FINISHED,
     CRASHED
 }
@@ -90,7 +91,8 @@ public class IntroController : MonoBehaviour
             new() { gameEvent = GameEvent.ALT_CHANGED, action = OnAltitudeChangedCallback },
             new() { gameEvent = GameEvent.TARGET_HIT, action = OnTargetHitCallback },
             new() { gameEvent = GameEvent.BULLET_FIRED, action = OnBulletFiredCallback },
-            new() { gameEvent = GameEvent.BOMB_DROPPED, action = OnBombDroppedCallback }
+            new() { gameEvent = GameEvent.BOMB_DROPPED, action = OnBombDroppedCallback },
+            new() { gameEvent = GameEvent.LANDING_CHANGED, action = OnLandingChangedCallback }
         };
         RegisterCallbacks();
     }
@@ -177,13 +179,18 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.LANDING:
                 DisplayText("Victory! Now land on the nearest airstrip");
+                CheckLandingApproach();
+                break;
+            case IntroControllerStage.LANDING_APPROACH:
+                DisplayText("\"L\" on the dashboard means you are approaching a friendly airstrip\n\n\"P\" = Enemy plane alert\n\"W\" = Wind alert");
                 break;
             case IntroControllerStage.FINISHED:
                 DisplayText("Congratulations! You have completed your training mission. You are on your own now");
                 break;
-            /*case IntroControllerStage.CRASHED:
-                DisplayText("Try again");
-                break;*/
+            case IntroControllerStage.CRASHED:
+                DisplayText("Try again\n\nTap Fire button to restart");
+                controlDocument.SetFireHintVisible(true);
+                break;
         }
     }
 
@@ -206,10 +213,8 @@ public class IntroController : MonoBehaviour
         }
         else if (gameStatus == GameStatus.DEAD)
         {
-            stage = IntroControllerStage.CRASHED;
-            ResetHints();
-            DisplayText("Try again\n\nTap Fire button to restart");
-            controlDocument.SetFireHintVisible(true);
+            stage = IntroControllerStage.CRASHED-1;
+            AdvanceStage();
         }
     }
 
@@ -273,5 +278,20 @@ public class IntroController : MonoBehaviour
     {
         Debug.Log("IntroController.OnOkButtonClicked");
         AdvanceStage();
+    }
+
+    void CheckLandingApproach()
+    {
+        var gameState = GameState.GetInstance();
+        if (stage == IntroControllerStage.LANDING &&
+            gameState.GetStateContents().approachingLanding)
+        {
+            AdvanceStage();
+        }
+    }
+
+    void OnLandingChangedCallback()
+    {
+        CheckLandingApproach();
     }
 }
