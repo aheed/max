@@ -216,6 +216,10 @@ public class LevelBuilder
         {
             ret.gridHeight = LevelContents.shortGridHeight;
         }
+        if (ret.gridHeight % 2 != 0)
+        {
+            ret.gridHeight--;
+        }
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);
