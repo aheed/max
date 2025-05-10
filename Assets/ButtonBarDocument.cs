@@ -20,11 +20,16 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement muteElem;
     VisualElement pilotElem;
     VisualElement helpElem;
+    VisualElement fullScreenTapHintElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
     bool rightSideExpanded = false;
     List<VisualElement> expandedRightSide = new();
     
+    public VisualElement GetFullScreenTapHintElem()
+    {
+        return fullScreenTapHintElem;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +45,8 @@ public class ButtonBarDocument : MonoBehaviour
 
         fullScreenElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenButton");
         fullScreenElem.RegisterCallback<PointerDownEvent>(OnFullScreenClicked);
+
+        fullScreenTapHintElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenTapHint");
 
         muteElem = uiDocument.rootVisualElement.Q<VisualElement>("MuteButton");
         muteElem.RegisterCallback<ClickEvent>(OnMuteClicked);

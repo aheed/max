@@ -1,0 +1,43 @@
+.swipe-hint {
+    flex-grow: 1;
+    background-image: url("project://database/Assets/UI%20Toolkit/drag-finger-down.png?fileID=2800000&guid=023d6abce0bbe14f28ed948f389b30b8&type=3#drag-finger-down");
+    width: auto;
+    height: auto;
+    -unity-background-scale-mode: scale-to-fit;
+    max-width: 20%;
+    max-height: 30%;
+    min-width: 20%;
+    min-height: 30%;
+    padding-right: 0;
+    margin-right: 0;
+    -unity-background-image-tint-color: rgb(240, 250, 37);
+    opacity: 0.9;
+}
+
+.swipe-hint-down {
+    position: absolute;
+    top: 20%;
+    left: 40%;
+}
+
+.swipe-hint-down-animation {
+    top: 40%;
+    transition-property: top;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+}
+
+.swipe-hint-up {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+}
+
+.swipe-hint-up-animation {
+    top: 20%;
+    transition-property: top;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+}

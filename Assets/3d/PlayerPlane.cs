@@ -119,6 +119,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
         bulletCooldown = bulletIntervalSeconds;
+        gameState.ReportEvent(GameEvent.BULLET_FIRED);
     }
 
     void HandleMove(Vector2 move)
@@ -126,6 +127,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         GameStateContents stateContents = gameState.GetStateContents();
         Vector2 apparentMove = move;
         var forcedDescent = 0f;
+
+        if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
+        {
+            Debug.Log("No turn at low altitude");
+            apparentMove.x = 0f;
+        }
 
         switch(stateContents.gameStatus)
         {
@@ -139,7 +146,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
-                    gameState.SetStatus(GameStatus.DEAD);
+                    //gameState.SetStatus(GameStatus.DEAD);
+                    Debug.Log("No takeoff at low speed");
+                    apparentMove.y = 0;
                 }
                 break;
             case GameStatus.DECELERATING:
@@ -245,12 +254,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             lastApparentMove = apparentMove;
         }
 
-        if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
+        /*if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
         //if (apparentMove.x != 0f && IsAtMinAltitude())
         {
             //Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
             gameState.SetStatus(GameStatus.DEAD);
-        }
+        }*/
     }
 
     void HandleFlackHit()
@@ -291,25 +300,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             move.y = move.y * -1f;
         }
 
-        ///////////////////
         bool fireTouch = false;
-        //for (int i = 0; i < Input.touchCount; i++)
-        //var touches = TouchAction.ReadValue<Vector2>();
-        //foreach (var theTouch in touches)
         foreach (var theTouch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
         {
-            //Touch theTouch;
-            //theTouch = Input.GetTouch(i);
-
-            //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
-
-            if (theTouch.screenPosition.x < (Screen.width / 2))
-                //&& theTouch.fingerId != moveFingerId)
-            {
-                fireTouch = true;
-                //Debug.Log($"Touch Fire at {theTouch.position}");
-            }
-            else 
+            if (theTouch.screenPosition.x > (Screen.width / 4) || 
+                theTouch.screenPosition.y > (Screen.height / 2))
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
                      theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
@@ -348,9 +343,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                     touchStartPosition = theTouch.screenPosition;
                 }
             }
+            else {
+                fireTouch = true;
+                //Debug.Log($"Touch Fire at {theTouch.position}");
+            }
         }
         
-        //////////////////
         if (fireTouch || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
@@ -479,6 +477,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
         gameState.IncrementBombs(-1);
+        gameState.ReportEvent(GameEvent.BOMB_DROPPED);
     }
 
     public void OnGameStatusChanged()

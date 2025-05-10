@@ -36,13 +36,15 @@ public enum LevelType
     BALLOONS,
     ROBOT_BOSS,
     RED_BARON_BOSS,
+    INTRO,
 }
 
 public enum BossType
 {
     NONE,
     ROBOT,
-    RED_BARON
+    RED_BARON,
+    INTRO_CONTROLLER
 }
 
 /*public class BossSpec
@@ -102,12 +104,14 @@ public class LevelPrerequisite
     public bool boss;
     public bool missionComplete;
     public bool firstLevel;
+    public bool enemyAircraft;
+    public bool wind;
 }
 
 public class LevelContents
 {
     public static readonly int fullGridHeight = 300;
-    public static readonly int shortGridHeight = 100;
+    public static readonly int shortGridHeight = 115;
     public static readonly int gridWidth = 100;
     public static readonly int bossY = 50;
     public int gridHeight;
@@ -125,6 +129,7 @@ public class LevelContents
     public bool vipTargets;
     public BossType bossType;
     public bool landingStrip;
+    public AirStripInfo airstripInfo;
 }
 
 public class LevelBuilder 
@@ -205,10 +210,15 @@ public class LevelBuilder
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
         ret.gridHeight = LevelContents.fullGridHeight;
-        if (levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
-            !levelPrerequisite.firstLevel)
+        if ((levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
+            !levelPrerequisite.firstLevel) ||
+            levelPrerequisite.levelType == LevelType.INTRO)
         {
             ret.gridHeight = LevelContents.shortGridHeight;
+        }
+        if (ret.gridHeight % 2 != 0)
+        {
+            ret.gridHeight--;
         }
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
@@ -218,16 +228,29 @@ public class LevelBuilder
 
         ret.landingStrip = levelPrerequisite.firstLevel ||
             levelPrerequisite.missionComplete ||
-            levelPrerequisite.levelType != LevelType.RED_BARON_BOSS;
-        if (ret.landingStrip)
-        { 
+            (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
+             levelPrerequisite.levelType != LevelType.INTRO);
+
+        var clearSpaceHeight = 
+            levelPrerequisite.levelType == LevelType.INTRO ?
+                ret.gridHeight : landingStripHeight;
+
+        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
+        {
             var lsllcX = midX - (landingStripWidth / 2);
             for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
             {
-                for (var y = 0; y < landingStripHeight; y++)
+                for (var y = 0; y < clearSpaceHeight; y++)
                 {
                     ret.cells[x, y] = CellContent.LANDING_STRIP;
                 }
+            }
+
+            if (levelPrerequisite.levelType == LevelType.INTRO)
+            {
+                ret.airstripInfo = levelPrerequisite.firstLevel ? 
+                    AirStripRepository.introLevelStartAirStrip : 
+                    AirStripRepository.introLevelEndAirStrip;
             }
         }
 
@@ -644,6 +667,7 @@ public class LevelBuilder
             }
         }
 
+        var randomFlakGuns = levelType != LevelType.INTRO;
         var bigHousesList = new List<HousePosition>();        
         for (var y = 0; y < ret.gridHeight; y++)
         {
@@ -693,7 +717,7 @@ public class LevelBuilder
                 }
 
                 // Flack guns
-                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight)
+                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && randomFlakGuns)
                 {
                     ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
@@ -747,6 +771,10 @@ public class LevelBuilder
             else if (levelType == LevelType.RED_BARON_BOSS)
             {
                 ret.bossType = BossType.RED_BARON;
+            }
+            else if (levelType == LevelType.INTRO)
+            {
+                ret.bossType = BossType.INTRO_CONTROLLER;
             }
         }
         

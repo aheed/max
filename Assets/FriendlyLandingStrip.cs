@@ -3,9 +3,11 @@ using UnityEngine.UIElements;
 
 public class FriendlyLandingStrip : MonoBehaviour
 {
+    public AirStripInfo airStripInfo;
+
     void Start()
     {
-        var airStripInfo = AirStripRepository.GetRandomAirStrip();
+        airStripInfo ??= AirStripRepository.GetRandomAirStrip();
 
         var billboardDocument = transform.GetChild(2).GetComponent<UIDocument>();
         SetText(billboardDocument, airStripInfo.name.ToUpper());
@@ -14,7 +16,7 @@ public class FriendlyLandingStrip : MonoBehaviour
         //SetText(billboardDocument, "REFUEL & RELOAD: ENEMY TERRITORY EDITION");
 
         var tarmacDocument = transform.GetChild(1).GetComponent<UIDocument>();
-        SetText(tarmacDocument, $"\"{airStripInfo.slogan}\"");
+        SetText(tarmacDocument, string.IsNullOrEmpty(airStripInfo.slogan) ? string.Empty : $"\"{airStripInfo.slogan}\"");
     }
 
     void SetText(UIDocument uiDocument, string slogan)

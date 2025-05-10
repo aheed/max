@@ -79,8 +79,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.13, z: 0.3}
-  m_Center: {x: 0, y: -0.08, z: 0.07}
+  m_Size: {x: 0.5, y: 0.1, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0.07}
 --- !u!1001 &269386427204958303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -845,6 +845,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1843289560126352479, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1826
+      objectReference: {fileID: 0}
+    - target: {fileID: 2814851019501669808, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1365
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158697255845427763, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1636
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573120687391141561, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 2719
+      objectReference: {fileID: 0}
     - target: {fileID: 3573120687391141561, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
       propertyPath: m_Tangents.Array.data[9].x
       value: 1
@@ -1013,17 +1029,21 @@ PrefabInstance:
       propertyPath: m_Tangents.Array.data[47].z
       value: 0.0008648682
       objectReference: {fileID: 0}
-    - target: {fileID: 8148230658681267901, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
+    - target: {fileID: 4253647429123018779, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 2680
       objectReference: {fileID: 0}
-    - target: {fileID: 8148230658681267901, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
+    - target: {fileID: 6013526631556361664, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 5659
       objectReference: {fileID: 0}
-    - target: {fileID: 8148230658681267901, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
+    - target: {fileID: 6076193253328617358, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1732
+      objectReference: {fileID: 0}
+    - target: {fileID: 7582345622121271908, guid: 6be4220f5cede3bada83b34b1e112eda, type: 3}
+      propertyPath: m_VersionIndex
+      value: 1302
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

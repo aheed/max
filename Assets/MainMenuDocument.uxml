@@ -1,8 +1,9 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=b4f8a81b384ed51e5bec6a3c2f7a7acd&amp;type=3#MainMenuStyles" />
-    <engine:VisualElement name="ButtonGroup" style="flex-grow: 1; font-size: 48px; -unity-font-style: bold; margin-right: 15%; margin-left: 15%; justify-content: space-evenly; margin-top: 20%; margin-bottom: 20%;">
+    <engine:VisualElement name="ButtonGroup" style="flex-grow: 1; font-size: 48px; -unity-font-style: bold; margin-right: 15%; margin-left: 15%; justify-content: space-evenly; margin-top: 10%; margin-bottom: 10%;">
         <engine:Button text="2D Classic" name="2d" class="main-button" />
         <engine:Button text="2D Balloons" name="2dBalloon" class="main-button" />
+        <engine:Button text="3D Intro" name="3dIntro" class="main-button" />
         <engine:Button text="3D Classic" name="3d" class="main-button" />
         <engine:Button text="3D Boss Lvl" name="3dRobot" class="main-menu-button main-button" />
         <engine:Button text="3D Red Baron" name="3dRedBaron" class="main-menu-button main-button" />
