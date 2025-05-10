@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -29,6 +30,7 @@ public class MainMenu : MonoBehaviour
         threeDRobotButton.RegisterCallback<ClickEvent>(On3dRobotClicked);
         threeDRedBaronButton.RegisterCallback<ClickEvent>(On3dRedBaronClicked);
         SceneManager.activeSceneChanged += ChangedActiveScene;
+        EnhancedTouchSupport.Enable();
     }
 
     void On2dClicked(ClickEvent evt)
@@ -99,5 +101,14 @@ public class MainMenu : MonoBehaviour
         }
 
         Debug.Log("Scenes: " + currentName + ", " + next.name);
+    }
+
+    void Update()
+    {
+        if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
+        {
+            Globals.touchScreenDetected = true;
+            Debug.Log("Touch screen detected");
+        }
     }
 }

@@ -75,7 +75,8 @@ public class IntroController : MonoBehaviour
     void Start()
     {
         Debug.Log("IntroController.Start");
-        controlDocument = FindAnyObjectByType<ControlDocument>();
+        controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
+        controlDocument.gameObject.SetActive(true);
         dialogDocument = FindAnyObjectByType<DialogDocument>();
         dialogDocument.SetOkButtonCallback(OnOkButtonClicked);
         var buttonBarDocument = FindAnyObjectByType<ButtonBarDocument>();

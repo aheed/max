@@ -244,6 +244,8 @@ public class SceneController3d : MonoBehaviour
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
         gameState.ReportEvent(GameEvent.START);
+        var controlDocument = FindAnyObjectByType<ControlDocument>();
+        controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
     }
 
     void Start()
