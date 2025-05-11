@@ -9,7 +9,7 @@ public class SceneBuilder : MonoBehaviour
     public float carOffsetX = -5f;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
-    public GameObject landingStripPrefab;
+    public FriendlyLandingStrip landingStripPrefab;
     public GameObject enemyLandingStripPrefab;
     public GameObject housePrefab;
     public ManagedObject flackGunPrefab;
@@ -33,6 +33,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject bigHousePrefab;
     public BossRobot robotBossPrefab;
     public GameObject redBaronBossPrefab;
+    public GameObject introControllerPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -174,24 +175,28 @@ public class SceneBuilder : MonoBehaviour
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.landingStripHeight * cellHeight;
 
-            var lsGameObject = Instantiate(landingStripPrefab, sceneInput.levelTransform);
+            var friendlyStrip = Instantiate(landingStripPrefab, sceneInput.levelTransform);
+            if (levelContents.airstripInfo != null)
+            {
+                friendlyStrip.airStripInfo = levelContents.airstripInfo;
+            }
 
             // scale
-            var lsQuadTransform = lsGameObject.transform.GetChild(0);
+            var lsQuadTransform = friendlyStrip.transform.GetChild(0);
             var lsMeshFilter = lsQuadTransform.gameObject.GetComponent<MeshFilter>();
             var meshSize =  lsMeshFilter.mesh.bounds.size;
-            var localScale = lsGameObject.transform.localScale;
+            var localScale = friendlyStrip.transform.localScale;
 
             localScale.x = lsWidth / meshSize.x;
             localScale.z = lsHeight / (meshSize.y * lsQuadTransform.localScale.x); // mesh size y and mesh scale x correspond to world z because of the mesh orientation
-            lsGameObject.transform.localScale = localScale;
+            friendlyStrip.transform.localScale = localScale;
             
             // position
             var zOffset = lsHeight / 2;
             var lsLocalPosition = new Vector3((LevelContents.gridWidth / 2) * cellWidth, airstripAltitude, zOffset);
-            lsGameObject.transform.localPosition = lsLocalPosition;
+            friendlyStrip.transform.localPosition = lsLocalPosition;
 
-            ret.landingStripStartZ = lsGameObject.transform.position.z - zOffset;
+            ret.landingStripStartZ = friendlyStrip.transform.position.z - zOffset;
             ret.landingStripEndZ = ret.landingStripStartZ + lsHeight;
             ret.landingStripWidth = lsWidth;
         }
@@ -624,6 +629,13 @@ public class SceneBuilder : MonoBehaviour
         {
             var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(-10f, 20f, 0f);
             var bossGameObject = Instantiate(redBaronBossPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
+            ret.boss = bossGameObject;
+        }
+        else if (levelContents.bossType == BossType.INTRO_CONTROLLER)
+        {
+            var bossOffsetZ = LevelContents.bossY * cellHeight;
+            var bossPosition = sceneInput.referenceObjectTransform.position + new Vector3(0f, 0f, bossOffsetZ);
+            var bossGameObject = Instantiate(introControllerPrefab, bossPosition, Quaternion.identity, sceneInput.referenceObjectTransform);
             ret.boss = bossGameObject;
         }
 

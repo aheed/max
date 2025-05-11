@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: e9e306e229cb6b1efaaa8122835a3342
+guid: 950c6bec8ce3154639f981292f95af48
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1969691694854626271
-    second: uvtempl_0
+      213: 2227795170630097428
+    second: drag-finger-up_0
+  - first:
+      213: -7804859757941401447
+    second: drag-finger-up_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: uvtempl_0
+      name: drag-finger-up_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 42
         y: 0
-        width: 1024
-        height: 1024
+        width: 214
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +144,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fdbd8dc1920c55b10800000000000000
-      internalID: 1969691694854626271
+      spriteID: 41adcb187e7baee10800000000000000
+      internalID: 2227795170630097428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: drag-finger-up_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 179
+        width: 39
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 998592ee6619fa390800000000000000
+      internalID: -7804859757941401447
       vertices: []
       indices: 
       edges: []
@@ -160,8 +185,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      uvtempl_0: 1969691694854626271
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
