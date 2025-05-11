@@ -434,19 +434,6 @@ public class SceneController3d : MonoBehaviour
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
             new List<bool> {false, false, false};
 
-        //var bossDestroyed = latestLevelType == LevelType.ROBOT_BOSS ?
-        //    gameState.GetStateContents().bossDefeated : false;
-
-        //var newBoss = (newLevelType == LevelType.ROBOT_BOSS || newLevelType == LevelType.RED_BARON_BOSS)
-        //   && latestLevelType != newLevelType;
-
-        /*var missionComplete = false;
-        if ((newLevelType == LevelType.RED_BARON_BOSS && gameState.GetStateContents().bossDefeated) ||
-            reachedTargetLimit)
-        {
-            missionComplete = true;
-        }*/
-
         return new LevelPrerequisite {
             levelType = newLevelType,
             riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,

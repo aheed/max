@@ -121,7 +121,6 @@ public class IntroController : MonoBehaviour
         var targetPlanePosition = transform.parent.position;
         targetPlanePosition.y = GameState.GetInstance().maxAltitude / 3;
         targetPlane = Instantiate(targetPlanePrefab, targetPlanePosition, Quaternion.identity);
-        //targetPlane = Instantiate(targetPlanePrefab);
         targetPlane.refObject = transform.parent;
         targetPlaneNavigator = new IntroLevelEnemyPlaneNavigator(targetPlane);
         targetPlane.SetNavigator(targetPlaneNavigator);
@@ -132,7 +131,6 @@ public class IntroController : MonoBehaviour
 
     void DisplayText(string text)
     {
-        Debug.Log($"------------------> {text}"); //TEMP!!
         dialogDocument.SetDialogText(text);
     }
 
@@ -175,8 +173,9 @@ public class IntroController : MonoBehaviour
                 DisplayText("Blue dashboard indicates presence of an enemy plane at your altitude. Take him out!");
                 break;
             case IntroControllerStage.BOMB_BUILDING:
+                //todo: add a building
                 //DisplayText("Bomb the building");
-                ++stage;
+                ++stage; // skip this stage for now
                 break;
             case IntroControllerStage.LANDING:
                 DisplayText("Victory! Now land on the nearest airstrip");
@@ -221,15 +220,12 @@ public class IntroController : MonoBehaviour
 
     void OnDebugAction2()
     {
-        // spawn enemy plane
         Debug.Log("IntroController.OnDebugAction2");
-        //SpawnTargetPlane();
         AdvanceStage();
     }
 
     void OnAltitudeChangedCallback()
     {
-        //Debug.Log("IntroController.OnAltitudeChanged");
         var gameState = GameState.GetInstance();
         if (stage == IntroControllerStage.TAKE_OFF)
         {
@@ -248,7 +244,6 @@ public class IntroController : MonoBehaviour
 
     void OnTargetHitCallback()
     {
-        //Debug.Log("IntroLevelController.OnTargetHitCallback");
         GameState.GetInstance().ReportBossDefeated();
         stage = IntroControllerStage.LANDING-1;
         AdvanceStage();
@@ -277,7 +272,6 @@ public class IntroController : MonoBehaviour
 
     void OnOkButtonClicked()
     {
-        Debug.Log("IntroController.OnOkButtonClicked");
         AdvanceStage();
     }
 

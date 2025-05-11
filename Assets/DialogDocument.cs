@@ -49,12 +49,7 @@ public class DialogDocument : MonoBehaviour
         okButton = dialogDocument.rootVisualElement.Q<Button>("OkButton");
         okButton.RegisterCallback<ClickEvent>(OnOkButtonClicked);
 
-        dialogTextField.SetValueWithoutNotify("");
-        // Initialize dialog text
-        //dialogText = "Welcome to the game! Press start to begin your adventure.";
-        
-        // Display the dialog text on the screen
-        //DisplayDialog();
+        dialogTextField.SetValueWithoutNotify(string.Empty);
     }
 
     void OnOkButtonClicked(ClickEvent evt)

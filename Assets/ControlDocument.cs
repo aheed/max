@@ -13,7 +13,6 @@ public class ControlDocument : MonoBehaviour
     VisualElement downSwipeHintElem;
     VisualElement fireTapHintElem;
     VisualElement fullScreenTapHintElem;
-    //GameState gameState;
     GameStateContents gameStateContents;
     bool fireHintVisible = false;
     bool upSwipeHintVisible = false;
@@ -55,7 +54,6 @@ public class ControlDocument : MonoBehaviour
         upSwipeHintElem = uiDocument.rootVisualElement.Q<VisualElement>("UpSwipeHint");
         fireTapHintElem = uiDocument.rootVisualElement.Q<VisualElement>("FireTapHint");
 
-        //SetupSwipeAnimation();
         StartCoroutine(HintCoroutine());
     }
 

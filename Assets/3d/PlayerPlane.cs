@@ -130,7 +130,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
         {
-            Debug.Log("No turn at low altitude");
+            //Debug.Log("No turn at low altitude");
             apparentMove.x = 0f;
         }
 
@@ -146,8 +146,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
-                    //gameState.SetStatus(GameStatus.DEAD);
-                    Debug.Log("No takeoff at low speed");
+                    //Debug.Log("No takeoff at low speed");
                     apparentMove.y = 0;
                 }
                 break;
@@ -188,7 +187,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             (significantWind ? stateContents.windDirection.x * GameState.windSpeed * Time.deltaTime : 0f);
 
         var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
-        //if (apparentMove.x == 0f || (offsetY <= 0 && moveY < 0f))
         if (apparentMove.x == 0f)
         {
             tmpLocalPosition.y += moveY;
@@ -198,13 +196,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             deltaOffsetZ = moveY;
         }
         
-        //if (stateContents.gameStatus == GameStatus.FLYING &&
         if (GetAltitude() > landingAltitude &&
             deltaOffsetZ == 0f &&
             offsetZ > 0)
         {
             deltaOffsetZ = -offsetDecreaseRate * Time.deltaTime;
-            //tmpLocalPosition.x += deltaOffsetZ * SceneController.riverSlopes[SceneController.neutralRiverSlopeIndex];
         }
         var tmpOffsetZ = offsetZ + deltaOffsetZ;        
 
@@ -253,13 +249,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             SetAppearance(apparentMove.x, true);
             lastApparentMove = apparentMove;
         }
-
-        /*if (apparentMove.x != 0f && GetAltitude() < (stateContents.floorAltitude + minSafeTurnAltitude))
-        //if (apparentMove.x != 0f && IsAtMinAltitude())
-        {
-            //Debug.Log($"Crash ! isOnGround={isOnGround} isOnRiver={isOnRiver}");
-            gameState.SetStatus(GameStatus.DEAD);
-        }*/
     }
 
     void HandleFlackHit()
@@ -307,9 +296,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                 theTouch.screenPosition.y > (Screen.height / 2))
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
-                     theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
-                        //theTouch.position.x > (Screen.width / 2) &&
-                        //theTouch.fingerId == moveFingerId)
+                     theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))
                 {
                     touchEndPosition = theTouch.screenPosition;
 
@@ -335,8 +322,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                     move.x = x3 == 0f? 0f : x3 > 0f ? maxMove : -maxMove;
                     move.y = y3 == 0f? 0f : y3 > 0f ? -maxMove : maxMove;
 
-                    Debug.Log($"Got Move {x},{y} {x2},{y2} {x3},{y3} {move.x},{move.y}");
-                    //touchStartPosition = theTouch.position;
+                    //Debug.Log($"Got Move {x},{y} {x2},{y2} {x3},{y3} {move.x},{move.y}");
                 }
                 else if (theTouch.phase == UnityEngine.InputSystem.TouchPhase.Began)
                 {
@@ -414,7 +400,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
     public float GetHeight()
     {
-        // todo: use box collider height
         var collider = GetComponent<BoxCollider>();
         return collider.size.y;
     }
