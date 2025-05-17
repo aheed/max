@@ -176,7 +176,7 @@ public class SceneController : MonoBehaviour
         vehicle2Manager = new ObjectManager(vehicle2Prefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
         hangarManager = new ObjectManager(hangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None, false);
-        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         balloonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
         balloonShadowManager = new ObjectManager(balloonShadowPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
     }
