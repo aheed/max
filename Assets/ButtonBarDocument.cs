@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class ButtonBarDocument : MonoBehaviour
@@ -20,6 +21,7 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement muteElem;
     VisualElement pilotElem;
     VisualElement helpElem;
+    VisualElement homeElem;
     VisualElement fullScreenTapHintElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
@@ -55,14 +57,18 @@ public class ButtonBarDocument : MonoBehaviour
         pilotElem.RegisterCallback<ClickEvent>(OnPilotClicked);
 
         helpElem = uiDocument.rootVisualElement.Q<VisualElement>("HelpButton");
-        helpElem.RegisterCallback<ClickEvent>(OnHelpClicked);
+        helpElem?.RegisterCallback<ClickEvent>(OnHelpClicked);
+
+        homeElem = uiDocument.rootVisualElement.Q<VisualElement>("HomeButton");
+        homeElem.RegisterCallback<ClickEvent>(OnHomeClicked);
 
         dotsElem = uiDocument.rootVisualElement.Q<VisualElement>("DotsButton");
         dotsElem.RegisterCallback<ClickEvent>(OnDotsClicked);
 
         expandedRightSide.Add(muteElem);
         expandedRightSide.Add(pilotElem);
-        expandedRightSide.Add(helpElem);
+        //expandedRightSide.Add(helpElem);
+        expandedRightSide.Add(homeElem);
         
 
         UpdateAll();
@@ -166,6 +172,15 @@ public class ButtonBarDocument : MonoBehaviour
         return;
         
         FindAnyObjectByType<UserGuide>(FindObjectsInactive.Include).gameObject.SetActive(true);
+    }
+
+    void OnHomeClicked(ClickEvent evt)
+    {
+        Debug.Log("Home clicked");
+        if (evt.target != homeElem)
+            return;
+        
+        SceneManager.LoadScene("mainMenuScene");
     }
 
     void UpdateRightSideExpanded()

@@ -857,7 +857,9 @@ public class SceneController : MonoBehaviour
         var vaMesh = CreateQuadMesh(vaVerts);
         vaMeshFilter.mesh = vaMesh;
         vaGameObject.SetActive(false);
-        
+
+        //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
+        UserGuide.SetOpenState(false);
         Settings.Update();
 
         StartNewGame();

@@ -37,8 +37,7 @@ public static class Settings
     // Get all settings from permanent storage and
     // make them take effect accordingly.
     public static void Update()
-    {
-        UserGuide.SetOpenState(!UserGuideHasBeenDisplayed());
+    {        
         SetMute(GetMute());
     }
 }

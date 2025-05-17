@@ -250,6 +250,8 @@ public class SceneController3d : MonoBehaviour
 
     void Start()
     {   
+        //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
+        UserGuide.SetOpenState(false);
         Settings.Update();
 
         
