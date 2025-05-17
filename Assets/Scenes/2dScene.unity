@@ -3457,7 +3457,7 @@ MonoBehaviour:
   riverMaterial: {fileID: 2100000, guid: ea8d7ce4ef66b3210b86d629dd1c00c2, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: b867665235b5f0ee7bc1a4e4c1811b6a, type: 2}
   roadMaterial: {fileID: 2100000, guid: c6ff5aad5c34c669dbecd9c2ff6e72a4, type: 2}
-  landingStripMaterial: {fileID: 2100000, guid: 3896846d43a4d8a73a4639e4be1fc3bc, type: 2}
+  landingStripMaterial: {fileID: 2100000, guid: 0f7645e0c2d6fe32190eb765efec8456, type: 2}
   visibleAreaMarkerMaterial: {fileID: 2100000, guid: 1a18bab593071e1f497073ecd677d11a, type: 2}
   levelHeight: 80
   activationDistance: 8
