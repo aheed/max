@@ -185,10 +185,10 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdateRightSideExpanded()
     {
-        var dotsDisplayStyle = rightSideExpanded ? DisplayStyle.None : DisplayStyle.Flex;
+        //var dotsDisplayStyle = rightSideExpanded ? DisplayStyle.None : DisplayStyle.Flex;
         var expansionDisplayStyle = rightSideExpanded ? DisplayStyle.Flex : DisplayStyle.None;
 
-        dotsElem.style.display = dotsDisplayStyle;
+        //dotsElem.style.display = dotsDisplayStyle;
         foreach (var item in expandedRightSide)
         {
             item.style.display = expansionDisplayStyle;
@@ -201,7 +201,7 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.target != dotsElem)
         return;
 
-        rightSideExpanded = true;
+        rightSideExpanded = !rightSideExpanded;
         UpdateRightSideExpanded();
     }
 
