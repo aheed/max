@@ -75,7 +75,6 @@ public class SceneController : MonoBehaviour
     public float levelHeight = 80f;
     public float activationDistance = 8f;
     public float deactivationDistance = 8f;
-    public float minRestartWaitSeconds = 1.0f;
     public float fuelRateLow = 0.6f;
     public float fuelRateHigh = 0.9f;
     public float refuelRate = 4.1f;
@@ -124,7 +123,6 @@ public class SceneController : MonoBehaviour
     GameState gameState;
     List<GameObjectCollection4> pendingActivation = new();
     List<GameObjectCollection4> activeObjects = new();
-    float restartCoolDownSeconds = 0f;
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
     float enemyPlaneCooldown = 0f;
@@ -825,6 +823,8 @@ public class SceneController : MonoBehaviour
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
+        var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
+        controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
     }
 
@@ -939,7 +939,6 @@ public class SceneController : MonoBehaviour
         if (gameState == null)
         {
             gameState = GameState.GetInstance();
-            gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
             gameState.Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequested);
             gameState.Subscribe(GameEvent.START, OnGameStart);
             gameState.Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
@@ -1232,10 +1231,7 @@ public class SceneController : MonoBehaviour
         else if (stateContents.gameStatus == GameStatus.DEAD || 
                  stateContents.gameStatus == GameStatus.FINISHED)
         {
-            if (restartCoolDownSeconds > 0f)
-            {
-                restartCoolDownSeconds -= Time.deltaTime;
-            }
+            gameState.UpdateRestartTimer(Time.deltaTime);
         }
 
         if (!(stateContents.gameStatus == GameStatus.FINISHED ||
@@ -1258,23 +1254,11 @@ public class SceneController : MonoBehaviour
         refobject.transform.position += delta;
     }
 
-    void OnGameStatusChanged()
-    {
-        var gameStatus = gameState.GetStateContents().gameStatus;
-        Debug.Log($"New State: {gameStatus}");
-        if(gameStatus == GameStatus.DEAD ||
-           gameStatus == GameStatus.FINISHED)
-        {
-            gameState.SetSpeed(0f);
-            restartCoolDownSeconds = minRestartWaitSeconds;
-        }
-    }
-
     void OnRestartRequested()
     {
-        if (restartCoolDownSeconds > 0f)
+        if (!gameState.IsRestartAllowed())
         {
-            //Debug.Log("Too early to restart");
+            Debug.Log("Restart not allowed");
             return;
         }
 

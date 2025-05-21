@@ -8,6 +8,7 @@ public enum GameEvent
 {
     START,
     RESTART_REQUESTED,
+    RESTART_TIMER_EXPIRED,
     SPEED_CHANGED,
     ALT_CHANGED,
     DAMAGE_SUSTAINED,
@@ -56,9 +57,9 @@ public class BombLandedEventArgs
 
 public class GameStateContents
 {
-    public static Vector2[] windDirections = new Vector2[] {new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(-1f, 1f), new Vector2(-1f, 0f)};
+    public static Vector2[] windDirections = new Vector2[] { new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(-1f, 1f), new Vector2(-1f, 0f) };
 
-    public float speed = 0f;    
+    public float speed = 0f;
     public GameStatus gameStatus = GameStatus.ACCELERATING;
     public float altitude = 0f;
     public float floorAltitude = 0f;
@@ -67,7 +68,7 @@ public class GameStateContents
     public int score = 0;
     public bool approachingLanding = false;
     public bool wind = false;
-    public bool[] damages = new bool[] { false, false, false, false};
+    public bool[] damages = new bool[] { false, false, false, false };
     public Vector2 windDirection = new Vector2(0f, 0f);
     public int targetsHit;
     public int targetsHitMin;
@@ -77,6 +78,7 @@ public class GameStateContents
     public float maxAltitudeDiffForPlaneCollision;
     public bool bossDefeated;
     public GameObject boss;
+    public float restartCoolDownSeconds = 0f;
 }
 
 public class GameState : MonoBehaviour
@@ -102,6 +104,7 @@ public class GameState : MonoBehaviour
     public static string landingAlert = "L";
     public static string windAlert = "W";
     public static string enemyPlaneAlert = "P";
+    public static float minRestartWaitSeconds = 2.0f;
     public int maxBombs = 30;
     public float maxFuel = 100f;
     public float startFuelQuotient = 0.90f;
@@ -152,6 +155,14 @@ public class GameState : MonoBehaviour
         }
 
         gameStateContents.gameStatus = gameStatus;
+        Debug.Log($"New State: {gameStatus}");
+
+        if (gameStatus == GameStatus.DEAD ||
+           gameStatus == GameStatus.FINISHED)
+        {
+            SetSpeed(0f);
+            gameStateContents.restartCoolDownSeconds = minRestartWaitSeconds;
+        }
 
         pubSub.Publish(GameEvent.GAME_STATUS_CHANGED);
     }
@@ -319,14 +330,15 @@ public class GameState : MonoBehaviour
         gameStateContents.bombs = maxBombs;
         gameStateContents.score = 0;
         gameStateContents.wind = false;
-        gameStateContents.damages = new bool[] { false, false, false, false};
+        gameStateContents.damages = new bool[] { false, false, false, false };
         gameStateContents.targetsHit = 0;
         gameStateContents.targetsHitMin = 0;
         gameStateContents.latestLevelPrereq = null;
         gameStateContents.enemyHQs = null;
-        gameStateContents.enemyPlaneAltitudes = new();        
+        gameStateContents.enemyPlaneAltitudes = new();
         gameStateContents.bossDefeated = false;
         gameStateContents.boss = null;
+        gameStateContents.restartCoolDownSeconds = 0f;
     }
 
     public bool AnyEnemyPlaneAtCollisionAltitude()
@@ -338,6 +350,26 @@ public class GameState : MonoBehaviour
     public bool AnyEnemyPlanes()
     {
         return gameStateContents.enemyPlaneAltitudes.Any();
+    }
+
+    public void UpdateRestartTimer(float deltaTime)
+    {
+        if (gameStateContents.restartCoolDownSeconds > 0f)
+        {
+            gameStateContents.restartCoolDownSeconds -= deltaTime;
+            if (gameStateContents.restartCoolDownSeconds <= 0f)
+            {
+                gameStateContents.restartCoolDownSeconds = 0f;
+                ReportEvent(GameEvent.RESTART_TIMER_EXPIRED);
+            }
+        }
+    }
+
+    public bool IsRestartAllowed()
+    {
+        return (gameStateContents.gameStatus == GameStatus.DEAD ||
+                gameStateContents.gameStatus == GameStatus.FINISHED) &&
+                gameStateContents.restartCoolDownSeconds <= 0f;
     }
 
     // Start is called before the first frame update

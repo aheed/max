@@ -29,7 +29,7 @@ public class ButtonBarDocument : MonoBehaviour
     bool fullScreen = false; //expected state, could change any time
     bool rightSideExpanded = false;
     List<VisualElement> expandedRightSide = new();
-    
+
     public VisualElement GetFullScreenTapHintElem()
     {
         return fullScreenTapHintElem;
@@ -71,7 +71,7 @@ public class ButtonBarDocument : MonoBehaviour
         expandedRightSide.Add(pilotElem);
         //expandedRightSide.Add(helpElem);
         expandedRightSide.Add(homeElem);
-        
+
 
         UpdateAll();
     }
@@ -92,13 +92,13 @@ public class ButtonBarDocument : MonoBehaviour
     }
 
     void UpdateFullScreenButton()
-    {        
+    {
         var newTexture = Screen.fullScreen ? exitFullScreenTexture : fullScreenTexture;
         fullScreenElem.style.backgroundImage = new StyleBackground(newTexture);
     }
 
     void CheckFullScreenButton()
-    {        
+    {
         if (fullScreen != Screen.fullScreen)
         {
             UpdateFullScreenButton();
@@ -109,13 +109,13 @@ public class ButtonBarDocument : MonoBehaviour
     void UpdateMuteButton()
     {
         var newTexture = Settings.GetMute() ? volumeMuteTexture : volumeUpTexture;
-        muteElem.style.backgroundImage = new StyleBackground(newTexture);        
+        muteElem.style.backgroundImage = new StyleBackground(newTexture);
     }
 
     void UpdatePilotButton()
     {
         var newTexture = Settings.GetPilotControl() ? pilotControlTexture : normalControlTexture;
-        pilotElem.style.backgroundImage = new StyleBackground(newTexture);        
+        pilotElem.style.backgroundImage = new StyleBackground(newTexture);
     }
 
     void Update()
@@ -127,8 +127,8 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("TV sim toggle clicked");
         if (evt.target != tvElem)
-        return;
-        
+            return;
+
         gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         UpdateTvSimButton();
     }
@@ -138,7 +138,7 @@ public class ButtonBarDocument : MonoBehaviour
         Debug.Log("Fullscreen toggle clicked");
         // Only perform this action at the target, not in a parent
         if (evt.target != fullScreenElem)
-        return;
+            return;
 
         Screen.fullScreen = !Screen.fullScreen;
         //UpdateFullScreenButton();
@@ -148,10 +148,10 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Mute clicked");
         if (evt.target != muteElem)
-        return;
-        
+            return;
+
         Settings.SetMute(!Settings.GetMute());
-        
+
         //AudioListener.pause = !AudioListener.pause;
         UpdateMuteButton();
     }
@@ -160,10 +160,10 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Pilot clicked");
         if (evt.target != pilotElem)
-        return;
-        
+            return;
+
         Settings.SetPilotControl(!Settings.GetPilotControl());
-        
+
         UpdatePilotButton();
     }
 
@@ -171,8 +171,8 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Help clicked");
         if (evt.target != helpElem)
-        return;
-        
+            return;
+
         FindAnyObjectByType<UserGuide>(FindObjectsInactive.Include).gameObject.SetActive(true);
     }
 
@@ -181,7 +181,7 @@ public class ButtonBarDocument : MonoBehaviour
         Debug.Log("Home clicked");
         if (evt.target != homeElem)
             return;
-        
+
         SceneManager.LoadScene("mainMenuScene");
     }
 
@@ -204,7 +204,7 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Dots clicked");
         if (evt.target != dotsElem)
-        return;
+            return;
 
         rightSideExpanded = !rightSideExpanded;
         UpdateRightSideExpanded();
@@ -214,7 +214,7 @@ public class ButtonBarDocument : MonoBehaviour
     {
         Debug.Log("Background clicked");
         if (evt.target != buttonBarUIElem)
-        return;
+            return;
 
         rightSideExpanded = false;
         UpdateRightSideExpanded();

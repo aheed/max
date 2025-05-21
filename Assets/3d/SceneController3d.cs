@@ -33,7 +33,6 @@ public class SceneController3d : MonoBehaviour
     public float cellLength = 80f / LevelContents.fullGridHeight;
     public float activationDistance = 8f;
     public float deactivationDistance = 8f;
-    public float minRestartWaitSeconds = 1.0f;
     public float fuelRateLow = 0.6f;
     public float fuelRateHigh = 0.9f;
     public float refuelRate = 4.1f;
@@ -75,8 +74,7 @@ public class SceneController3d : MonoBehaviour
     public SceneBuilder sceneBuilder;
     GameState gameState;
     List<GameObjectCollection4> pendingActivation = new();
-    List<GameObjectCollection4> activeObjects = new();
-    float restartCoolDownSeconds = 0f;
+    List<GameObjectCollection4> activeObjects = new();    
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
     float enemyPlaneCooldown = 0f;
@@ -181,7 +179,7 @@ public class SceneController3d : MonoBehaviour
 
     void StartNewGame()
     {
-        LevelType firstLevelType = LevelSelection.startLevelOverride ? 
+        LevelType firstLevelType = LevelSelection.startLevelOverride ?
             LevelSelection.startLevel : startLevelType;
         levelWidth = cellLength * LevelContents.gridWidth;
         lastLevelStartZ = 0f;
@@ -225,27 +223,27 @@ public class SceneController3d : MonoBehaviour
             stateContents.boss = null;
         }
         gameState.Reset();
-        stateContents.latestLevelPrereq = new LevelPrerequisite 
-            {
-                levelType = firstLevelType,
-                riverLeftOfAirstrip=true,
-                enemyHQsBombed = new List<bool> {false, false, false},
-                boss = firstLevelType == LevelType.ROBOT_BOSS ||
+        stateContents.latestLevelPrereq = new LevelPrerequisite
+        {
+            levelType = firstLevelType,
+            riverLeftOfAirstrip = true,
+            enemyHQsBombed = new List<bool> { false, false, false },
+            boss = firstLevelType == LevelType.ROBOT_BOSS ||
                        firstLevelType == LevelType.RED_BARON_BOSS ||
                        firstLevelType == LevelType.INTRO,
-                missionComplete = false,
-                firstLevel = true,
-                enemyAircraft = firstLevelType != LevelType.INTRO,
-                wind = firstLevelType != LevelType.INTRO,
-            };
+            missionComplete = false,
+            firstLevel = true,
+            enemyAircraft = firstLevelType != LevelType.INTRO,
+            wind = firstLevelType != LevelType.INTRO,
+        };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
-        gameState.ReportEvent(GameEvent.START);
-        var controlDocument = FindAnyObjectByType<ControlDocument>();
+        var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
+        gameState.ReportEvent(GameEvent.START);
     }
 
     void Start()
@@ -257,7 +255,6 @@ public class SceneController3d : MonoBehaviour
         
         GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
-        GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
@@ -679,10 +676,7 @@ public class SceneController3d : MonoBehaviour
         else if (stateContents.gameStatus == GameStatus.DEAD || 
                  stateContents.gameStatus == GameStatus.FINISHED)
         {
-            if (restartCoolDownSeconds > 0f)
-            {
-                restartCoolDownSeconds -= Time.deltaTime;
-            }
+            gameState.UpdateRestartTimer(Time.deltaTime);
         }
 
         if (!(stateContents.gameStatus == GameStatus.FINISHED ||
@@ -752,19 +746,6 @@ public class SceneController3d : MonoBehaviour
         SpawnBossShadow(BossShadowVariant.BSH3);
     }
 
-    private void OnGameStatusChangedCallback() =>
-        OnGameStatusChangedInternal(GameState.GetInstance().GetStateContents().gameStatus);
-    
-    private void OnGameStatusChangedInternal(GameStatus gameStatus)
-    {
-        Debug.Log($"New State: {gameStatus}");
-        if(gameStatus == GameStatus.DEAD ||
-           gameStatus == GameStatus.FINISHED)
-        {
-            gameState.SetSpeed(0f);
-            restartCoolDownSeconds = minRestartWaitSeconds;
-        }
-    }
     private void OnStartCallback()
     {
         gameState.SetSpeed(0f);
@@ -773,7 +754,7 @@ public class SceneController3d : MonoBehaviour
 
     private void OnRestartRequestCallback()
     {
-        if (restartCoolDownSeconds > 0f)
+        if (!gameState.IsRestartAllowed())
         {
             Debug.Log("Too early to restart");
             return;
