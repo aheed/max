@@ -14,6 +14,8 @@ public class ButtonBarDocument : MonoBehaviour
     public Texture2D volumeUpTexture;
     public Texture2D normalControlTexture;
     public Texture2D pilotControlTexture;
+    public Texture2D normalDotsTexture;
+    public Texture2D invertedDotsTexture;
     VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
@@ -193,6 +195,9 @@ public class ButtonBarDocument : MonoBehaviour
         {
             item.style.display = expansionDisplayStyle;
         }
+
+        var newTexture = rightSideExpanded ? invertedDotsTexture : normalDotsTexture;
+        dotsElem.style.backgroundImage = new StyleBackground(newTexture);
     }
 
     void OnDotsClicked(ClickEvent evt)
