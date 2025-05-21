@@ -275,18 +275,10 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
 
         ///////////////////
         bool fireTouch = false;
-        //for (int i = 0; i < Input.touchCount; i++)
-        //var touches = TouchAction.ReadValue<Vector2>();
-        //foreach (var theTouch in touches)
         foreach (var theTouch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
-        {
-            //Touch theTouch;
-            //theTouch = Input.GetTouch(i);
-
-            //Debug.Log($"Touch {theTouch.fingerId} {theTouch}");
-
-            if (theTouch.screenPosition.x < (Screen.width / 2))
-                //&& theTouch.fingerId != moveFingerId)
+        {       
+            if (theTouch.screenPosition.x < (Screen.width / 4) && 
+                theTouch.screenPosition.y < (Screen.height / 2))
             {
                 fireTouch = true;
                 //Debug.Log($"Touch Fire at {theTouch.position}");

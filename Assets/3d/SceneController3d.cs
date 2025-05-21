@@ -241,9 +241,8 @@ public class SceneController3d : MonoBehaviour
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
-        var controlDocument = FindAnyObjectByType<ControlDocument>();
+        var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
-        controlDocument.gameObject.SetActive(true); // TEMP!!!!!!!!!!!!!!!!!!!!!!!
         gameState.ReportEvent(GameEvent.START);
     }
 

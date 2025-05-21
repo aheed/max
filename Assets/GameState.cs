@@ -104,7 +104,7 @@ public class GameState : MonoBehaviour
     public static string landingAlert = "L";
     public static string windAlert = "W";
     public static string enemyPlaneAlert = "P";
-    public static float minRestartWaitSeconds = 1.0f;
+    public static float minRestartWaitSeconds = 2.0f;
     public int maxBombs = 30;
     public float maxFuel = 100f;
     public float startFuelQuotient = 0.90f;

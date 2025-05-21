@@ -823,6 +823,8 @@ public class SceneController : MonoBehaviour
         CreateLevel();
         PreventRelanding();
         stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
+        var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
+        controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
     }
 
