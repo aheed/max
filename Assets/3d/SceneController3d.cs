@@ -256,7 +256,6 @@ public class SceneController3d : MonoBehaviour
         
         GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
-        //GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
@@ -748,19 +747,6 @@ public class SceneController3d : MonoBehaviour
         SpawnBossShadow(BossShadowVariant.BSH3);
     }
 
-    /*private void OnGameStatusChangedCallback() =>
-        OnGameStatusChangedInternal(GameState.GetInstance().GetStateContents().gameStatus);
-    
-    private void OnGameStatusChangedInternal(GameStatus gameStatus)
-    {
-        Debug.Log($"New State: {gameStatus}");
-        if(gameStatus == GameStatus.DEAD ||
-           gameStatus == GameStatus.FINISHED)
-        {
-            gameState.SetSpeed(0f);
-            restartCoolDownSeconds = minRestartWaitSeconds;
-        }
-    }*/
     private void OnStartCallback()
     {
         gameState.SetSpeed(0f);

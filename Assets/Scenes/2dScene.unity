@@ -3370,6 +3370,8 @@ MonoBehaviour:
   volumeUpTexture: {fileID: 2800000, guid: b4cecad57b0bda0be93aea78ba73c1cb, type: 3}
   normalControlTexture: {fileID: 2800000, guid: 48e7c0f06174d7192aeac6f4be70d816, type: 3}
   pilotControlTexture: {fileID: 2800000, guid: 8d3923ca2c653d560a2cda3e01085874, type: 3}
+  normalDotsTexture: {fileID: 2800000, guid: 559f0a7b59c147bc7bc6b72aa8b48f28, type: 3}
+  invertedDotsTexture: {fileID: 2800000, guid: 2be9a53aba0265ecfab272e67e296700, type: 3}
 --- !u!1 &763321429
 GameObject:
   m_ObjectHideFlags: 0
