@@ -17,6 +17,7 @@ enum IntroControllerStage
     LANDING,
     LANDING_APPROACH,
     FINISHED,
+    FINISHED_OK,
     CRASHED
 }
 
@@ -186,6 +187,10 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.FINISHED:
                 DisplayText("Congratulations! You have completed your training mission. You are on your own now!");
+                dialogDocument.ShowOkButton();
+                break;
+            case IntroControllerStage.FINISHED_OK:
+                dialogDocument.HideDialog();
                 break;
             case IntroControllerStage.CRASHED:
                 DisplayText("Try again\n\nTap Fire button to restart");
