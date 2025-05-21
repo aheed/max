@@ -23,13 +23,13 @@ public class DialogDocument : MonoBehaviour
     public void ShowDialog()
     {
         dialogUIElem.style.visibility = Visibility.Visible;
-        Debug.Log("Dialog shown");
+        //Debug.Log("Dialog shown");
     }
 
     public void HideDialog()
     {
         dialogUIElem.style.visibility = Visibility.Hidden;
-        Debug.Log("Dialog hidden");
+        //Debug.Log("Dialog hidden");
     }
 
     public void ShowOkButton()

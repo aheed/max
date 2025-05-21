@@ -1061,7 +1061,6 @@ MonoBehaviour:
   cellLength: 0.26666668
   activationDistance: 8
   deactivationDistance: 8
-  minRestartWaitSeconds: 1
   fuelRateLow: 0.6
   fuelRateHigh: 0.9
   refuelRate: 20
@@ -22330,6 +22329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b4f2ca59c339701b326b25bedf09bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireTexture: {fileID: 2800000, guid: 7ccc857b377342b239dcddac8b2ec6b6, type: 3}
+  startGameTexture: {fileID: 2800000, guid: f4d13bed9655bb15589151944a0be37b, type: 3}
 --- !u!43 &1754879380
 Mesh:
   m_ObjectHideFlags: 0
