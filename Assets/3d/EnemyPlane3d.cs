@@ -96,7 +96,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
             lastCrashed = crashed;
             transform.GetChild(2).gameObject.SetActive(crashed);
         }
-        GetController().SetAppearance(moveX, !crashed);
+        GetController().SetAppearance(moveX, 0, !crashed);
     }
 
     // Start is called before the first frame update

@@ -68,8 +68,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         return controller;
     }
 
-    void SetAppearance(float moveX, bool alive) {
-        GetController().SetAppearance(moveX, alive);
+    void SetAppearance(float moveX, float moveY, bool alive) {
+        GetController().SetAppearance(moveX, moveY, alive);
         if (alive != lastAlive)
         {
             lastAlive = alive;
@@ -242,11 +242,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         tmpLocalPosition.z = offsetZ;   
         transform.localPosition = tmpLocalPosition;        
 
-        if (apparentMove.x != lastApparentMove.x &&
+        if (//apparentMove.x != lastApparentMove.x &&
             stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
-            SetAppearance(apparentMove.x, true);
+            SetAppearance(apparentMove.x, apparentMove.y, true);
             lastApparentMove = apparentMove;
         }
     }
@@ -470,7 +470,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         var gameStatus = GameState.GetInstance().GetStateContents().gameStatus;
         if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
-            SetAppearance(0, false);
+            SetAppearance(0, 0, false);
             if (gameStatus == GameStatus.DEAD)
             {
                 gameState.ReportEvent(GameEvent.BIG_BANG);
@@ -481,7 +481,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public void OnStart() {
         GetController().normalWingMaterial = normalWingMaterial;
         lastAlive = false;
-        SetAppearance(0, true);
+        SetAppearance(0, 0, true);
         Vector3 tmpLocalPosition = transform.localPosition;
         if (tmpLocalPosition.y < landingAltitude) 
         {

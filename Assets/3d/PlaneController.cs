@@ -8,8 +8,14 @@ public class PlaneController : MonoBehaviour
     public GameObject planeModel;
     public float correctionRate = 20f;
     public float maxRotation = 30f;
+    public float maxPitch = 20f;
+    public float maxYaw = 35f;
     public float rollDurationSec = 0.89f;
     bool alive = false;
+    float targetXRotation;
+    float currentXRotation;
+    float targetYRotation;
+    float currentYRotation;
     float targetZRotation;
     float currentZRotation;
     float currentRollZRotation;
@@ -48,25 +54,40 @@ public class PlaneController : MonoBehaviour
         currentRollDurationSec = 0;
     }
 
-    public void SetAppearance(float moveX, bool alive)
+    public void SetAppearance(float moveX, float moveY, bool alive)
     {
         //Debug.Log($"SetAppearance moveX={moveX} alive={alive} oncoming={oncoming}");
-        
-        if (!alive)
+
+        if (alive)
         {
-            //planeModel.transform.rotation = Quaternion.Euler(0, yRotation, 90);
-        }
-        else if (moveX > 0)
-        {
-            targetZRotation = -maxRotation;
-        }
-        else if (moveX < 0)
-        {
-            targetZRotation = maxRotation;
-        }
-        else
-        {
-            targetZRotation = 0;
+            if (moveX > 0)
+            {
+                targetZRotation = -maxRotation;
+                targetYRotation = maxYaw;
+            }
+            else if (moveX < 0)
+            {
+                targetZRotation = maxRotation;
+                targetYRotation = -maxYaw;
+            }
+            else
+            {
+                targetZRotation = 0;
+                targetYRotation = 0;
+            }
+
+            if (moveY > 0)
+            {
+                targetXRotation = maxPitch;
+            }
+            else if (moveY < 0)
+            {
+                targetXRotation = -maxPitch;
+            }
+            else
+            {
+                targetXRotation = 0;
+            }
         }
 
         if (this.alive != alive)
@@ -78,7 +99,7 @@ public class PlaneController : MonoBehaviour
                 renderer.material = currentWingMaterial;
             }
 
-            var currentFuselageMaterial = alive ? normalFuselageMaterial : crashedWingMaterial; 
+            var currentFuselageMaterial = alive ? normalFuselageMaterial : crashedWingMaterial;
             foreach (var renderer in GetFuselageRenderers())
             {
                 renderer.material = currentFuselageMaterial;
@@ -108,6 +129,8 @@ public class PlaneController : MonoBehaviour
         }
 
         currentZRotation += ((targetZRotation + currentRollZRotation) - currentZRotation) * correctionRate * Time.deltaTime;
-        planeModel.transform.localRotation = Quaternion.Euler(0, yRotation, currentZRotation);
+        currentXRotation += (targetXRotation - currentXRotation) * correctionRate * Time.deltaTime;
+        currentYRotation += (targetYRotation - currentYRotation) * correctionRate * Time.deltaTime;
+        planeModel.transform.localRotation = Quaternion.Euler(currentXRotation, yRotation + currentYRotation, currentZRotation);
     }
 }
