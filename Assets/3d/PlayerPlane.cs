@@ -117,7 +117,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             return;
         }
 
-        Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
+        Instantiate(bulletPrefab, transform.position, controller.planeModel.transform.rotation, refObject);
         bulletCooldown = bulletIntervalSeconds;
         gameState.ReportEvent(GameEvent.BULLET_FIRED);
     }

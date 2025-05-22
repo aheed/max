@@ -11,8 +11,8 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        velocity = new Vector3(0, 0, speed);
-        //Debug.Log($"Bullet spawned at {transform.position}");
+        velocity = transform.forward * speed;
+        //Debug.Log($"Bullet spawned at {transform.position} with velocity {velocity}");
     }
 
     // Update is called once per frame
