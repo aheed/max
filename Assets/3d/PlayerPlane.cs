@@ -242,8 +242,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         tmpLocalPosition.z = offsetZ;   
         transform.localPosition = tmpLocalPosition;        
 
-        if (//apparentMove.x != lastApparentMove.x &&
-            stateContents.gameStatus != GameStatus.DEAD &&
+        if (stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
         {
             SetAppearance(apparentMove.x, apparentMove.y, true);
