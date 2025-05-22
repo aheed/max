@@ -78,6 +78,10 @@ public class ControlDocument : MonoBehaviour
     private void StartGame()
     {
         //Debug.Log("ControlDocument.StartGame");
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
 
         gameStateContents = GameState.GetInstance().GetStateContents();
         var uiDocument = GetComponent<UIDocument>();
