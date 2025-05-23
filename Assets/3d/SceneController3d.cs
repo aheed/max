@@ -237,7 +237,7 @@ public class SceneController3d : MonoBehaviour
             missionComplete = false,
             firstLevel = true,
             enemyAircraft = firstLevelType != LevelType.INTRO,
-            wind = firstLevelType != LevelType.INTRO ||
+            wind = firstLevelType != LevelType.INTRO &&
                 firstLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
         };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
@@ -440,13 +440,14 @@ public class SceneController3d : MonoBehaviour
 
         return new LevelPrerequisite {
             levelType = newLevelType,
-            riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+            riverLeftOfAirstrip = latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed,
             boss = ShallCreateNewBoss(newLevelType, latestLevelType),
             missionComplete = IsMissionComplete(newLevelType, gameState.GetStateContents().bossDefeated, reachedTargetLimit),
             firstLevel = false,
             enemyAircraft = newLevelType != LevelType.INTRO,
-            wind = newLevelType != LevelType.INTRO,
+            wind = newLevelType != LevelType.INTRO
+              && newLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
         };
     }
 

@@ -468,7 +468,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         Instantiate(bombPrefab, transform.position, Quaternion.identity, refObject);
         bombCooldown = bombIntervalSeconds;
-        gameState.IncrementBombs(-1);
+        //gameState.IncrementBombs(-1); //TEMP!! removed
         gameState.ReportEvent(GameEvent.BOMB_DROPPED);
     }
 

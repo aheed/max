@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7529052918177180199}
   - component: {fileID: 1091819120777579920}
   - component: {fileID: 2923066822306956910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1182,7 +1182,7 @@ GameObject:
   - component: {fileID: 59091568424784610}
   - component: {fileID: 7129354137142741900}
   - component: {fileID: 8969126580137208618}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BouncingBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1244,3 +1244,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c22e38e32bb47e29df2643c0c48f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedZ: 3

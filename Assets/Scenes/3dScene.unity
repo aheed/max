@@ -1061,7 +1061,7 @@ MonoBehaviour:
   cellLength: 0.26666668
   activationDistance: 8
   deactivationDistance: 8
-  fuelRateLow: 0.6
+  fuelRateLow: 0
   fuelRateHigh: 0.9
   refuelRate: 20
   fuelFullTankMargin: 0.01
@@ -35760,7 +35760,7 @@ PrefabInstance:
       objectReference: {fileID: 1422127047}
     - target: {fileID: 1120511839169745567, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
       propertyPath: m_VersionIndex
-      value: 1455
+      value: 1458
       objectReference: {fileID: 0}
     - target: {fileID: 5346826323117149177, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
       propertyPath: m_Mesh
