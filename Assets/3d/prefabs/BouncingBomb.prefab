@@ -1245,3 +1245,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedZ: 3
+  endAltitude: -1
+  minYSpeed: 0.00001
