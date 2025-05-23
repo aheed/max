@@ -216,7 +216,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
-  bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
+  bombPrefab: {fileID: 8503241040667400508, guid: 47ee586052bf1170c84a287d675f0f8e, type: 3}
 --- !u!54 &6480590837714050916
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -84,8 +84,9 @@ public class SceneController3d : MonoBehaviour
     List<float> roadNearEdgesZ;
     List<SceneRiverSegment> riverSegments;
     GameObject balloonParent;
+    float debugAcceleration = 0.4f;
     ///    
-    
+
     GameObject GetLevel() => levels[currentLevelIndex];
 
     void RotateLevels()
@@ -247,12 +248,12 @@ public class SceneController3d : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
         //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
         UserGuide.SetOpenState(false);
         Settings.Update();
 
-        
+
         GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
@@ -266,12 +267,13 @@ public class SceneController3d : MonoBehaviour
         GameState.boatBlinkMaterial = new Material(boatTargetMaterial);
         GameState.planeBlinkMaterial = new Material(planeTargetMaterial);
         GameState.targetBlinkMaterial = new Material(targetMaterial);
-        targetBlinker = new TargetMaterialBlinker(new [] {
+        targetBlinker = new TargetMaterialBlinker(new[] {
             GameState.planeBlinkMaterial,
             GameState.carBlinkMaterial,
             GameState.boatBlinkMaterial,
             GameState.targetBlinkMaterial});
         StartNewGame();
+        debugAcceleration = gameState.acceleration;
     }
 
     bool IsOverRoad(Vector3 position)
@@ -743,7 +745,18 @@ public class SceneController3d : MonoBehaviour
 
     private void OnDebugCallback3()
     {
-        SpawnBossShadow(BossShadowVariant.BSH3);
+        // Toggle speed 
+
+        if (gameState.GetStateContents().speed == 0f)
+        {
+            gameState.SetSpeed(gameState.maxSpeed);
+            gameState.acceleration = debugAcceleration;
+        }
+        else
+        {
+            gameState.SetSpeed(0f);
+            gameState.acceleration = 0f;
+        }
     }
 
     private void OnStartCallback()
