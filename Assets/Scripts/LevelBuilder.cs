@@ -23,6 +23,7 @@ public enum CellContent
     VEHICLE2,
     ENEMY_HANGAR,
     SEARCH_LIGHT,
+    DAM,
     BALLOON = 1 << 6,
     LAND_MASK = 0x3F,
     AIR_MASK = 0xC0
@@ -37,6 +38,7 @@ public enum LevelType
     ROBOT_BOSS,
     RED_BARON_BOSS,
     INTRO,
+    DAM
 }
 
 public enum BossType
@@ -187,10 +189,11 @@ public class LevelBuilder
 
     public static bool PossibleVipTargets(LevelType levelType)
     {
-        return levelType != LevelType.CITY && 
+        return levelType != LevelType.CITY &&
             levelType != LevelType.BALLOONS &&
             levelType != LevelType.ROBOT_BOSS &&
-            levelType != LevelType.RED_BARON_BOSS;
+            levelType != LevelType.RED_BARON_BOSS &&
+            levelType != LevelType.DAM;
     }
 
     public bool TrueByProbability(float probability)
@@ -231,11 +234,15 @@ public class LevelBuilder
             (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
              levelPrerequisite.levelType != LevelType.INTRO);
 
-        var clearSpaceHeight = 
-            levelPrerequisite.levelType == LevelType.INTRO ?
+        var clearSpaceHeight =
+            levelPrerequisite.levelType == LevelType.INTRO
+            || levelPrerequisite.levelType == LevelType.DAM //TEMP!!!!
+            ?
                 ret.gridHeight : landingStripHeight;
 
-        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
+        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO
+            || levelPrerequisite.levelType == LevelType.DAM //TEMP!!!!
+        )
         {
             var lsllcX = midX - (landingStripWidth / 2);
             for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
@@ -665,6 +672,11 @@ public class LevelBuilder
                     }
                 }
             }
+        }
+
+        if (levelType == LevelType.DAM)
+        {
+            ret.cells[midX , 40] = CellContent.DAM;
         }
 
         var randomFlakGuns = levelType != LevelType.INTRO;

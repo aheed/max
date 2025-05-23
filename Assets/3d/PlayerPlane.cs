@@ -15,7 +15,7 @@ using UnityEngine.UI;
 public class PlayerPlane : MonoBehaviour, IPlaneObservable
 {
     public Material normalWingMaterial;
-    public Transform refObject;    
+    public Transform refObject;
     public float glideDescentRate = 0.3f;
     public float deadDescentRate = 1.5f;
     public float collidedDescentRate = 1.2f;
@@ -25,10 +25,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public float damagePeriodSec = 2.0f;
     public float offsetDecreaseRate = 0.3f;
     public float bulletIntervalSeconds = 0.1f;
-    public  float bombIntervalSeconds = 0.5f;    
+    public float bombIntervalSeconds = 0.5f;
     public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
-    public float collidedMoveInterval = 0.03f;    
+    public float collidedMoveInterval = 0.03f;
     public InputAction MoveAction;
     public InputAction FireAction;
     public InputAction DebugFlackAction;
@@ -37,7 +37,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction2;
     public InputAction DebugAuxAction3;
     public GameObject bulletPrefab;
-    public GameObject bombPrefab;    
+    public GameObject bombPrefab;
     private Vector2 touchStartPosition, touchEndPosition;
     private float maxMove = 1.0f;
     private float minMove = 4.0f;
@@ -45,7 +45,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     PlaneController controller;
 
     // state
-    GameState gameState;    
+    GameState gameState;
     Vector2 move;
     Vector2 lastMove;
     Vector2 lastApparentMove;
@@ -55,6 +55,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     float collidedCooldown = 0f;
     Vector2 lastCollidedMove;
     float offsetZ = 0;
+    float debugOverrideOffsetZ = 0; //TEMP
+    float debugOverrideOffsetZIncrement = 0.03f; //TEMP
     bool bombDamage = false;
     bool gunDamage = false;
     bool lastAlive = false;
@@ -68,7 +70,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         return controller;
     }
 
-    void SetAppearance(float moveX, float moveY, bool alive) {
+    void SetAppearance(float moveX, float moveY, bool alive)
+    {
         GetController().SetAppearance(moveX, moveY, alive);
         if (alive != lastAlive)
         {
@@ -91,6 +94,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.START, OnStart);
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
         OnStart();
         Reset();
     }
@@ -111,7 +116,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                 return;
         }
 
-        if (bulletCooldown > 0 || 
+        if (bulletCooldown > 0 ||
             (gameState.GotDamage(DamageIndex.G) && gunDamage))
         {
             return;
@@ -134,7 +139,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             apparentMove.x = 0f;
         }
 
-        switch(stateContents.gameStatus)
+        switch (stateContents.gameStatus)
         {
             case GameStatus.FINISHED:
             case GameStatus.DEAD:
@@ -154,7 +159,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             case GameStatus.REFUELLING:
             case GameStatus.LOADING_BOMBS:
             case GameStatus.REPAIRING:
-                apparentMove.y = 0;                
+                apparentMove.y = 0;
                 break;
             case GameStatus.OUT_OF_FUEL:
                 forcedDescent = glideDescentRate;
@@ -173,13 +178,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             default:
                 break;
         }
-        
 
-        
+
+
         Vector3 tmpLocalPosition = transform.localPosition;
         var deltaOffsetZ = 0f;
         var speedFactor = gameState.GotDamage(DamageIndex.M) ? speedDamageFactor : 1.0f;
-        var significantWind = stateContents.wind && 
+        var significantWind = stateContents.wind &&
             (stateContents.gameStatus == GameStatus.FLYING ||
              stateContents.gameStatus == GameStatus.OUT_OF_FUEL ||
              stateContents.gameStatus == GameStatus.KILLED_BY_FLACK);
@@ -195,14 +200,14 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             deltaOffsetZ = moveY;
         }
-        
+
         if (GetAltitude() > landingAltitude &&
             deltaOffsetZ == 0f &&
             offsetZ > 0)
         {
             deltaOffsetZ = -offsetDecreaseRate * Time.deltaTime;
         }
-        var tmpOffsetZ = offsetZ + deltaOffsetZ;        
+        var tmpOffsetZ = offsetZ + deltaOffsetZ;
 
         tmpLocalPosition.y += -forcedDescent * Time.deltaTime +
             (significantWind ? stateContents.windDirection.y * GameState.windSpeed * Time.deltaTime : 0f);
@@ -211,7 +216,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             tmpLocalPosition.y = stateContents.floorAltitude;
         }
-        
+
         if (tmpLocalPosition.y > gameState.maxAltitude)
         {
             tmpLocalPosition.y = gameState.maxAltitude;
@@ -238,9 +243,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             gameState.SetAltitude(tmpLocalPosition.y);
         }
+        
         offsetZ = tmpOffsetZ;
-        tmpLocalPosition.z = offsetZ;   
-        transform.localPosition = tmpLocalPosition;        
+        //tmpLocalPosition.z = debugOverrideOffsetZ != 0f ? debugOverrideOffsetZ += 0.01f : offsetZ; //TEMP
+        tmpLocalPosition.z = offsetZ + debugOverrideOffsetZ; //TEMP
+        transform.localPosition = tmpLocalPosition;
 
         if (stateContents.gameStatus != GameStatus.DEAD &&
             stateContents.gameStatus != GameStatus.KILLED_BY_FLACK)
@@ -279,7 +286,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
     // Update is called once per frame
     void Update()
-    {        
+    {
         GameStateContents stateContents = gameState.GetStateContents();
 
         move = MoveAction.ReadValue<Vector2>();
@@ -291,7 +298,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         bool fireTouch = false;
         foreach (var theTouch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
         {
-            if (theTouch.screenPosition.x > (Screen.width / 4) || 
+            if (theTouch.screenPosition.x > (Screen.width / 4) ||
                 theTouch.screenPosition.y > (Screen.height / 2))
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
@@ -308,18 +315,18 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                     float x3 = x2;
                     float y3 = y2;
 
-                    if (x3 != 0f && Mathf.Abs(y3/x3) < directionFactor)
+                    if (x3 != 0f && Mathf.Abs(y3 / x3) < directionFactor)
                     {
                         y3 = 0f;
                     }
 
-                    if (y3 != 0f && Mathf.Abs(x3/y3) < directionFactor)
+                    if (y3 != 0f && Mathf.Abs(x3 / y3) < directionFactor)
                     {
                         x3 = 0f;
                     }
 
-                    move.x = x3 == 0f? 0f : x3 > 0f ? maxMove : -maxMove;
-                    move.y = y3 == 0f? 0f : y3 > 0f ? -maxMove : maxMove;
+                    move.x = x3 == 0f ? 0f : x3 > 0f ? maxMove : -maxMove;
+                    move.y = y3 == 0f ? 0f : y3 > 0f ? -maxMove : maxMove;
 
                     //Debug.Log($"Got Move {x},{y} {x2},{y2} {x3},{y3} {move.x},{move.y}");
                 }
@@ -328,12 +335,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
                     touchStartPosition = theTouch.screenPosition;
                 }
             }
-            else {
+            else
+            {
                 fireTouch = true;
                 //Debug.Log($"Touch Fire at {theTouch.position}");
             }
         }
-        
+
         if (fireTouch || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
@@ -355,21 +363,21 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         if (DebugAuxAction1.WasPressedThisFrame())
         {
-            controller.Roll(true);
+            //controller.Roll(true);
             gameState.ReportEvent(GameEvent.DEBUG_ACTION1);
             //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
         if (DebugAuxAction2.WasPressedThisFrame())
         {
-            controller.Roll(false);
+            //controller.Roll(false);
             gameState.ReportEvent(GameEvent.DEBUG_ACTION2);
         }
         if (DebugAuxAction3.WasPressedThisFrame())
         {
             gameState.ReportEvent(GameEvent.DEBUG_ACTION3);
         }
-        
+
         bulletCooldown -= Time.deltaTime;
         bombCooldown -= Time.deltaTime;
         damageCooldown -= Time.deltaTime;
@@ -411,7 +419,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public bool IsAlive() => gameState != null && gameState.GetStateContents().gameStatus != GameStatus.DEAD;
 
     public void Reset()
-    { 
+    {
         move = Vector2.zero;
         lastMove = Vector2.zero;
         lastApparentMove = Vector2.zero;
@@ -450,8 +458,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             default:
                 return;
         }
-    
-        if (bombCooldown > 0 || 
+
+        if (bombCooldown > 0 ||
             gameState.GetStateContents().bombs <= 0 ||
             (gameState.GotDamage(DamageIndex.B) && bombDamage))
         {
@@ -467,7 +475,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public void OnGameStatusChanged()
     {
         var gameStatus = GameState.GetInstance().GetStateContents().gameStatus;
-        if(gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
+        if (gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
             SetAppearance(0, 0, false);
             if (gameStatus == GameStatus.DEAD)
@@ -477,12 +485,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
     }
 
-    public void OnStart() {
+    public void OnStart()
+    {
         GetController().normalWingMaterial = normalWingMaterial;
         lastAlive = false;
         SetAppearance(0, 0, true);
         Vector3 tmpLocalPosition = transform.localPosition;
-        if (tmpLocalPosition.y < landingAltitude) 
+        if (tmpLocalPosition.y < landingAltitude)
         {
             tmpLocalPosition.y = landingAltitude;
         }
@@ -515,19 +524,34 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         if (col.gameObject.name.StartsWith("House") ||
             col.gameObject.name.StartsWith("Tree") ||
             col.gameObject.name.StartsWith("Bridge") ||
-            col.gameObject.name.StartsWith("Boat") || 
+            col.gameObject.name.StartsWith("Boat") ||
             col.gameObject.name.StartsWith("Billboard"))
         {
             Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
             gameState.SetStatus(GameStatus.DEAD);
-            return; 
+            return;
         }
 
         if (col.gameObject.name.StartsWith("Boss"))
         {
             Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
             gameState.SetStatus(GameStatus.KILLED_BY_FLACK);
-            return; 
+            return;
         }
     }
+
+    private void OnDebugCallback1()
+    {
+        Debug.Log("IntroController.OnDebugAction1");
+        //transform.position += new Vector3(0f, 0f, 1f);
+        debugOverrideOffsetZ += debugOverrideOffsetZIncrement;
+    }
+
+    private void OnDebugCallback2()
+    {
+        Debug.Log("IntroController.OnDebugAction2");
+        //transform.position -= new Vector3(0f, 0f, 0.05f);
+        debugOverrideOffsetZ -= debugOverrideOffsetZIncrement;
+    }
+    
 }

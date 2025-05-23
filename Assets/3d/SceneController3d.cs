@@ -149,6 +149,7 @@ public class SceneController3d : MonoBehaviour
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
+            case LevelType.DAM:
                 return GameState.GetInstance().GetTargetsHit();
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
@@ -171,6 +172,7 @@ public class SceneController3d : MonoBehaviour
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
+            case LevelType.DAM:
                 return 1;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
@@ -235,7 +237,8 @@ public class SceneController3d : MonoBehaviour
             missionComplete = false,
             firstLevel = true,
             enemyAircraft = firstLevelType != LevelType.INTRO,
-            wind = firstLevelType != LevelType.INTRO,
+            wind = firstLevelType != LevelType.INTRO ||
+                firstLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
         };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -726,6 +729,7 @@ public class SceneController3d : MonoBehaviour
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
+            case LevelType.DAM:
                 break;
             default:
                 Debug.LogError($"Invalid level type {gameState.GetStateContents().latestLevelPrereq.levelType}");

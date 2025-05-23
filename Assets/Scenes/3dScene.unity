@@ -1083,7 +1083,7 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
-  startLevelType: 0
+  startLevelType: 7
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -21003,6 +21003,7 @@ MonoBehaviour:
   robotBossPrefab: {fileID: -4716222135628229251, guid: 8160017e60fb1b264872e87f1c4d935c, type: 3}
   redBaronBossPrefab: {fileID: 93079018367311720, guid: ef7f5e7ded26e690aa35205b1e79061c, type: 3}
   introControllerPrefab: {fileID: 7335008102571623040, guid: 54448248bacaf7a55911b9f56af46fbb, type: 3}
+  damPrefab: {fileID: 367338661191137972, guid: 4c8a7670a95847aeb82546b2bb100d57, type: 3}
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
   groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: 54c26c8f9c6246c019b8b7f00e8f3a84, type: 2}
