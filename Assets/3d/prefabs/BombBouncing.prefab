@@ -1182,8 +1182,9 @@ GameObject:
   - component: {fileID: 59091568424784610}
   - component: {fileID: 7129354137142741900}
   - component: {fileID: 8969126580137208618}
+  - component: {fileID: 3544039347434196883}
   m_Layer: 6
-  m_Name: BouncingBomb
+  m_Name: BombBouncing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1244,6 +1245,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c22e38e32bb47e29df2643c0c48f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bombSplashPrefab: {fileID: 570102419175462864, guid: 8e4e19659e4e8293998321b81f5be191, type: 3}
   speedZ: 3
   endAltitude: -1
   minYSpeed: 0.00001
+  minBounceSpeed: 0.1
+--- !u!65 &3544039347434196883
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8503241040667400508}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.1, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
