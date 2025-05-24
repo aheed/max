@@ -34,6 +34,7 @@ public class SceneBuilder : MonoBehaviour
     public BossRobot robotBossPrefab;
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
+    public ManagedObject damPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -63,6 +64,7 @@ public class SceneBuilder : MonoBehaviour
     private ObjectManager enemyHangarManager;
     private ObjectManager carManager;
     private ObjectManager searchLightManager;
+    private ObjectManager damManager;
     private GameObject managedObjectsParent;
 
     public void Init()
@@ -71,7 +73,7 @@ public class SceneBuilder : MonoBehaviour
         {
             Destroy(managedObjectsParent);
         }
-        
+
         managedObjectsParent = new GameObject("managedObjects");
         flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
@@ -84,6 +86,7 @@ public class SceneBuilder : MonoBehaviour
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        damManager = new ObjectManager(damPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
     }
 
 
@@ -678,7 +681,7 @@ public class SceneBuilder : MonoBehaviour
                     case CellContent.VEHICLE1:
                         selectedManager = vehicle1Manager;
                         break;
-                    
+
                     case CellContent.VEHICLE2:
                         selectedManager = vehicle2Manager;
                         break;
@@ -690,6 +693,10 @@ public class SceneBuilder : MonoBehaviour
                     case CellContent.SEARCH_LIGHT:
                         selectedManager = searchLightManager;
                         altitude = gameState.searchLightAltitude;
+                        break;
+                    case CellContent.DAM:
+                        selectedManager = damManager;
+                        //altitude = gameState.riverAltitude;
                         break;
                 }
 
