@@ -1247,9 +1247,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombSplashPrefab: {fileID: 570102419175462864, guid: 8e4e19659e4e8293998321b81f5be191, type: 3}
   speedZ: 3
-  endAltitude: -1
+  endAltitude: -3
   minYSpeed: 0.00001
   minBounceSpeed: 0.1
+  minBounceAltitude: 0.2
 --- !u!65 &3544039347434196883
 BoxCollider:
   m_ObjectHideFlags: 0

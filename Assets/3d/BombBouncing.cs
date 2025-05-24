@@ -5,9 +5,11 @@ public class BombBouncing : MonoBehaviour
 {
     public GameObject bombSplashPrefab;
     public float speedZ = 3.0f;
-    public float endAltitude = -1f; // The altitude at which the bomb will destroy itself
+    public float endAltitude = -3f; // The altitude at which the bomb will destroy itself
     public float minYSpeed = 0.001f; // Sink, not bounce at this vertical speed
     public float minBounceSpeed = 0.1f;
+    public float minBounceAltitude = 0.2f;
+    float minBounceAltitudeAbsolute;
     Rigidbody rb;
     bool hasBounced = false;
     bool stoppedBouncing = false;
@@ -18,7 +20,8 @@ public class BombBouncing : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.linearVelocity = new Vector3(0, 0, speedZ);
         //rb.transform.localPosition += new Vector3(0, -0.2f, 0);
-        impactAltitude = 0f; 
+        impactAltitude = 0f;
+        minBounceAltitudeAbsolute = GameState.GetInstance().riverAltitude + minBounceAltitude;
     }
 
     void Update()
@@ -49,7 +52,9 @@ public class BombBouncing : MonoBehaviour
 
     bool ShouldStopBouncing()
     {
-        return hasBounced && rb.linearVelocity.magnitude < minBounceSpeed;
+        return hasBounced &&
+            rb.linearVelocity.magnitude < minBounceSpeed &&
+            transform.position.y < minBounceAltitudeAbsolute;
     }
 
     void OnCollisionEnter(Collision collision)
