@@ -544,14 +544,16 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         Debug.Log("IntroController.OnDebugAction1");
         //transform.position += new Vector3(0f, 0f, 1f);
-        debugOverrideOffsetZ += debugOverrideOffsetZIncrement;
+        //debugOverrideOffsetZ += debugOverrideOffsetZIncrement;
+        transform.parent.position += new Vector3(0f, 0f, 0.05f);
     }
 
     private void OnDebugCallback2()
     {
         Debug.Log("IntroController.OnDebugAction2");
         //transform.position -= new Vector3(0f, 0f, 0.05f);
-        debugOverrideOffsetZ -= debugOverrideOffsetZIncrement;
+        //debugOverrideOffsetZ -= debugOverrideOffsetZIncrement;
+        transform.parent.position -= new Vector3(0f, 0f, 0.05f);
     }
     
 }

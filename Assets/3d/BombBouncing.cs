@@ -8,6 +8,7 @@ public class BombBouncing : MonoBehaviour
     public float endAltitude = -3f; // The altitude at which the bomb will destroy itself
     public float minYSpeed = 0.001f; // Sink, not bounce at this vertical speed
     public float minBounceSpeed = 0.1f;
+    public float maxImpactSpeed = 2.0f; // If the impact speed is greater than this, destroy the bomb
     public float minBounceAltitude = 0.2f;
     float minBounceAltitudeAbsolute;
     Rigidbody rb;
@@ -66,6 +67,14 @@ public class BombBouncing : MonoBehaviour
         {
             Debug.Log($"BombBouncing collided with {collision.gameObject.name} at velocity {rb.linearVelocity}");
             Splash();
+            if (Math.Abs(rb.linearVelocity.y) > maxImpactSpeed)
+            {
+                // Too hard impact, destroy the bomb
+                Debug.Log($"BombBouncing destroyed at {transform.position} due to hard impact");
+                GameState.GetInstance().ReportEvent(GameEvent.SMALL_BANG);
+                GameState.GetInstance().ReportEvent(GameEvent.SMALL_DETONATION);
+                Destroy(gameObject);
+            }
         }
     }
 }
