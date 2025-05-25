@@ -11,6 +11,7 @@ public class BombBouncing : MonoBehaviour
     public float maxImpactSpeed = 2.0f; // If the impact speed is greater than this, destroy the bomb
     public float minBounceAltitude = 0.2f;
     float minBounceAltitudeAbsolute;
+    float endAltitudeAbsolute;
     Rigidbody rb;
     bool hasBounced = false;
     bool stoppedBouncing = false;
@@ -23,18 +24,19 @@ public class BombBouncing : MonoBehaviour
         //rb.transform.localPosition += new Vector3(0, -0.2f, 0);
         impactAltitude = 0f;
         minBounceAltitudeAbsolute = GameState.GetInstance().riverAltitude + minBounceAltitude;
+        endAltitudeAbsolute = GameState.GetInstance().riverAltitude + endAltitude;
     }
 
     void Update()
     {
-        if (transform.position.y < endAltitude)
+        if (transform.position.y < endAltitudeAbsolute)
         {
             Debug.Log($"BombBouncing destroyed at {transform.position}");
             Destroy(gameObject);
         }
         else if (!hasBounced && transform.position.y < impactAltitude)
         {
-            impactAltitude = endAltitude - 1f; // Don't get here again
+            impactAltitude = endAltitudeAbsolute - 1f; // Don't get here again
             GameState.GetInstance().BombLanded(gameObject, null); // May not actually have landed
         }
         else if (!stoppedBouncing && ShouldStopBouncing())
@@ -48,7 +50,9 @@ public class BombBouncing : MonoBehaviour
 
     void Splash()
     {
-        Instantiate(bombSplashPrefab, transform.position, Quaternion.identity, transform.parent);
+        Vector3 splashPosition = transform.position;
+        splashPosition.y = GameState.GetInstance().riverAltitude + 0.01f; // Ensure the splash is above the river altitude
+        Instantiate(bombSplashPrefab, splashPosition, Quaternion.identity, transform.parent);
     }
 
     bool ShouldStopBouncing()
@@ -60,12 +64,12 @@ public class BombBouncing : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"BombBouncing collided with {collision.gameObject.name}");
+        //Debug.Log($"BombBouncing collided with {collision.gameObject.name}");
         hasBounced = true;
 
         if (collision.gameObject.name.StartsWith("DamWater"))
         {
-            Debug.Log($"BombBouncing collided with {collision.gameObject.name} at velocity {rb.linearVelocity}");
+            Debug.Log($"BombBouncing collided at {transform.position} at velocity {rb.linearVelocity}");
             Splash();
             if (Math.Abs(rb.linearVelocity.y) > maxImpactSpeed)
             {

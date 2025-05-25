@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class DamTarget : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if (!collision.gameObject.name.StartsWith("Bomb"))
+        Debug.Log($"********* 3D Dam Target Hit!!!!!!!!!!!!!!! with {collider.gameObject.name}");
+        if (!collider.gameObject.name.StartsWith("Bomb"))
         {
             return;
         }

@@ -139,7 +139,7 @@ public class SceneBuilder : MonoBehaviour
     float GetRiverLeftEdgeX(float z, List<SceneRiverSegment> riverSegments)
     {
         var segment = riverSegments.FirstOrDefault(s =>  z < s.maxZ);
-        if (segment == null || segment.minZ >= z)
+        if (segment == null || segment.minZ > z)
         {
             Debug.LogError($"No river segment found for z={z}");
             return 0;
@@ -596,12 +596,23 @@ public class SceneBuilder : MonoBehaviour
                 );
             }
         }
+        
+        foreach (var dam in levelContents.dams)
+        {
+            var damZ = sceneInput.levelTransform.position.z + dam * cellHeight;
+            var damX = GetRiverLeftEdgeX(damZ, ret.riverSegments) + riverWidth / 2;
+            var damPosition = new Vector3(damX,
+                gameState.riverAltitude - 0.01f, // tiny altitude offset to avoid z-fighting
+                damZ);
 
+            var damGameObject = Instantiate(damPrefab, sceneInput.levelTransform);
+            damGameObject.transform.position = damPosition;
+        }
         
         // Houses
         foreach (var houseSpec in levelContents.houses)
         {
-            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);            
+            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
             var house = InterfaceHelper.GetInterface<House4>(houseGameObject);
 
             /*

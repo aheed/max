@@ -124,6 +124,7 @@ public class LevelContents
     public int roadLowerLeftCornerX;
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
+    public IEnumerable<int> dams = new List<int>();
     public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells = new CellContent[gridWidth, fullGridHeight];
     public HousePosition hangar;
@@ -141,7 +142,8 @@ public class LevelBuilder
     public static readonly int minSpaceBetweenRoads = 10;
     public static readonly float roadProbability = 0.1f;
     public static readonly int roadHeight = 2;
-    static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
+    public static readonly int nofDams = 3;
+    static readonly float[] riverSlopes = new float[] { -0.5f, -0.5f, 0f, 1f, 1f };
     static readonly float[] roadSlopes = new float[] {-1f, 0f, 1f};
     public static int minDistanceRiverAirstrip = 80;
     public static int maxNormalDistanceRiverMidLevelLeft = 18;
@@ -281,7 +283,8 @@ public class LevelBuilder
         if (levelType == LevelType.NORMAL ||
             levelType == LevelType.BALLOONS ||
             levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS)
+            levelType == LevelType.RED_BARON_BOSS ||
+            levelType == LevelType.DAM)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -573,7 +576,8 @@ public class LevelBuilder
         if (levelType == LevelType.ROAD ||
             levelType == LevelType.NORMAL ||
             levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS)
+            levelType == LevelType.RED_BARON_BOSS ||
+            levelType == LevelType.DAM)
         {
             var houses = new List<HouseSpec>();
             for (var y = 0; y < ret.gridHeight; y++)
@@ -676,7 +680,22 @@ public class LevelBuilder
 
         if (levelType == LevelType.DAM)
         {
-            ret.cells[midX , 40] = CellContent.DAM;
+            ret.cells[midX, 40] = CellContent.DAM; // TEMP dam at fixed position
+
+            var damApproachLength = approachLength; // todo: use a separate variable for dam approach length
+            var yStart = damApproachLength;
+            var yEnd = ret.gridHeight - damApproachLength;
+
+            var damDistance = (yEnd - yStart) / (nofDams + 1);
+            var yOffset = yStart + damDistance;
+
+            var damList = new List<int>();
+            for (var i = 0; i < nofDams; i++)
+            {
+                damList.Add(yOffset);
+                yOffset += damDistance;
+            }
+            ret.dams = damList;
         }
 
         var randomFlakGuns = levelType != LevelType.INTRO;

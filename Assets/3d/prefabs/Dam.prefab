@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 529257383043115020}
   - component: {fileID: 6154496528563402848}
   - component: {fileID: 2188580308468968949}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DamTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -408,7 +408,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -445,7 +445,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5253849389341191937}
-  m_Material: {fileID: 13400000, guid: 4c83a791c61cffee697a3a8bd7c8b695, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -453,7 +453,7 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
