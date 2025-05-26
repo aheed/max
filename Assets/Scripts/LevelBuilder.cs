@@ -124,7 +124,7 @@ public class LevelContents
     public int roadLowerLeftCornerX;
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
-    public IEnumerable<int> dams = new List<int>();
+    public int[] dams;
     public IEnumerable<int> enemyAirstrips = new List<int>();
     public CellContent[,] cells;
     public HousePosition hangar;
@@ -705,7 +705,7 @@ public class LevelBuilder
                 damList.Add(yOffset);
                 yOffset += damDistance;
             }
-            ret.dams = damList;
+            ret.dams = damList.ToArray();
         }
 
         var randomFlakGuns = levelType != LevelType.INTRO;

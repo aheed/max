@@ -36,6 +36,8 @@ public class SceneBuilder : MonoBehaviour
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
     public Dam damPrefab;
+    public GameObject powerLinePrefab;
+    public GameObject powerPostPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -44,6 +46,7 @@ public class SceneBuilder : MonoBehaviour
     public int leftTrim = 2;
     public int rightTrim = 5;
     public float roadAltitude = 0.002f;
+    public float powerLineAltitude = 2.5f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.001f;
     public float parkedPlaneAltitude = 0.15f;
@@ -527,6 +530,22 @@ public class SceneBuilder : MonoBehaviour
         ret.roadNearEdgesZ = new();
         foreach (var road in levelContents.roads)
         {
+            if (levelContents.dams?.Count() > 0)
+            {
+                // Power lines instead of roads
+
+                var powerLineSegmentLength = 5f; // check mesh bounds instead?
+                var powerPostHeight = 2.5f; // check mesh bounds instead?
+                for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
+                {
+                    var powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
+                    powerLineGameObject.transform.localPosition = new Vector3(x + (powerLineSegmentLength / 2), powerLineAltitude, road * cellHeight);
+                    var powerPostGameObject = Instantiate(powerPostPrefab, sceneInput.levelTransform);
+                    powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), road * cellHeight);
+                }
+                continue;
+            }
+            
             //var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var roadGameObject = new GameObject("road");
             roadGameObject.transform.parent = sceneInput.levelTransform;
