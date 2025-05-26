@@ -7,6 +7,7 @@ public class SceneBuilder : MonoBehaviour
 {
     public float carProbability = 0.5f;
     public float carOffsetX = -5f;
+    public float damScale = 3.5f;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public FriendlyLandingStrip landingStripPrefab;
@@ -34,7 +35,7 @@ public class SceneBuilder : MonoBehaviour
     public BossRobot robotBossPrefab;
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
-    public ManagedObject damPrefab;
+    public Dam damPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -596,7 +597,7 @@ public class SceneBuilder : MonoBehaviour
                 );
             }
         }
-        
+
         foreach (var dam in levelContents.dams)
         {
             var damZ = sceneInput.levelTransform.position.z + dam * cellHeight;
@@ -607,6 +608,20 @@ public class SceneBuilder : MonoBehaviour
 
             var damGameObject = Instantiate(damPrefab, sceneInput.levelTransform);
             damGameObject.transform.position = damPosition;
+
+            foreach (var moveableObject in damGameObject.GetMoveableObjects())
+            {
+                // Set x position to match river edges
+                var moveableObjectZ = moveableObject.transform.position.z;
+                var moveableObjectX = GetRiverLeftEdgeX(moveableObjectZ, ret.riverSegments) + riverWidth / 2;
+                moveableObject.transform.position = new Vector3(moveableObjectX, moveableObject.transform.position.y, moveableObjectZ);
+
+                // Rescale x to at least cover river width
+                moveableObject.transform.localScale = new Vector3(
+                    damScale * moveableObject.transform.localScale.x,
+                    moveableObject.transform.localScale.y,
+                    moveableObject.transform.localScale.z);
+            }
         }
         
         // Houses

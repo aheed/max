@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class Dam : ManagedObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject[] GetMoveableObjects()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return new GameObject[] {
+            transform.GetChild(0).gameObject, // wall
+            transform.GetChild(1).gameObject, // net1
+            transform.GetChild(2).gameObject, // net2
+            transform.GetChild(3).gameObject, // target
+            transform.GetChild(4).gameObject // bouncy water
+        };
     }
 }
