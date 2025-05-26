@@ -690,8 +690,6 @@ public class LevelBuilder
 
         if (levelType == LevelType.DAM)
         {
-            ret.cells[midX, 40] = CellContent.DAM; // TEMP dam at fixed position
-
             var damApproachLength = approachLength; // todo: use a separate variable for dam approach length
             var yStart = damApproachLength;
             var yEnd = ret.gridHeight - damApproachLength;

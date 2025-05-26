@@ -55,8 +55,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     float collidedCooldown = 0f;
     Vector2 lastCollidedMove;
     float offsetZ = 0;
-    float debugOverrideOffsetZ = 0; //TEMP
-    float debugOverrideOffsetZIncrement = 0.03f; //TEMP
     bool bombDamage = false;
     bool gunDamage = false;
     bool lastAlive = false;
@@ -245,8 +243,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
         
         offsetZ = tmpOffsetZ;
-        //tmpLocalPosition.z = debugOverrideOffsetZ != 0f ? debugOverrideOffsetZ += 0.01f : offsetZ; //TEMP
-        tmpLocalPosition.z = offsetZ + debugOverrideOffsetZ; //TEMP
         transform.localPosition = tmpLocalPosition;
 
         if (stateContents.gameStatus != GameStatus.DEAD &&
@@ -525,7 +521,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             col.gameObject.name.StartsWith("Tree") ||
             col.gameObject.name.StartsWith("Bridge") ||
             col.gameObject.name.StartsWith("Boat") ||
-            col.gameObject.name.StartsWith("Billboard"))
+            col.gameObject.name.StartsWith("Billboard") ||
+            col.gameObject.name.StartsWith("Power") ||
+            col.gameObject.name.StartsWith("Dam"))
         {
             Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
             gameState.SetStatus(GameStatus.DEAD);
@@ -543,16 +541,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private void OnDebugCallback1()
     {
         Debug.Log("IntroController.OnDebugAction1");
-        //transform.position += new Vector3(0f, 0f, 1f);
-        //debugOverrideOffsetZ += debugOverrideOffsetZIncrement;
         transform.parent.position += new Vector3(0f, 0f, 0.05f);
     }
 
     private void OnDebugCallback2()
     {
         Debug.Log("IntroController.OnDebugAction2");
-        //transform.position -= new Vector3(0f, 0f, 0.05f);
-        //debugOverrideOffsetZ -= debugOverrideOffsetZIncrement;
         transform.parent.position -= new Vector3(0f, 0f, 0.05f);
     }
     

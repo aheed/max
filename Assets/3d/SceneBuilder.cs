@@ -47,6 +47,7 @@ public class SceneBuilder : MonoBehaviour
     public int rightTrim = 5;
     public float roadAltitude = 0.002f;
     public float powerLineAltitude = 2.5f;
+    public float powerLineDistanceZ = 0.1f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.001f;
     public float parkedPlaneAltitude = 0.15f;
@@ -68,7 +69,6 @@ public class SceneBuilder : MonoBehaviour
     private ObjectManager enemyHangarManager;
     private ObjectManager carManager;
     private ObjectManager searchLightManager;
-    private ObjectManager damManager;
     private GameObject managedObjectsParent;
 
     public void Init()
@@ -90,7 +90,6 @@ public class SceneBuilder : MonoBehaviour
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
-        damManager = new ObjectManager(damPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
     }
 
 
@@ -538,8 +537,12 @@ public class SceneBuilder : MonoBehaviour
                 var powerPostHeight = 2.5f; // check mesh bounds instead?
                 for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
                 {
+                    var powerX = x + (powerLineSegmentLength / 2);
+                    var powerZ = road * cellHeight;
                     var powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
-                    powerLineGameObject.transform.localPosition = new Vector3(x + (powerLineSegmentLength / 2), powerLineAltitude, road * cellHeight);
+                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
+                    powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
+                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
                     var powerPostGameObject = Instantiate(powerPostPrefab, sceneInput.levelTransform);
                     powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), road * cellHeight);
                 }
@@ -738,10 +741,6 @@ public class SceneBuilder : MonoBehaviour
                     case CellContent.SEARCH_LIGHT:
                         selectedManager = searchLightManager;
                         altitude = gameState.searchLightAltitude;
-                        break;
-                    case CellContent.DAM:
-                        selectedManager = damManager;
-                        //altitude = gameState.riverAltitude;
                         break;
                 }
 

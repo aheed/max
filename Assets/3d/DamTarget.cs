@@ -10,6 +10,8 @@ public class DamTarget : MonoBehaviour
             return;
         }
 
+        var meshCollider = GetComponentInChildren<MeshCollider>();
+        meshCollider.enabled = false;
         var gameState = GameState.GetInstance();
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
