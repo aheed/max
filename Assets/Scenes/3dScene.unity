@@ -20976,6 +20976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carProbability: 0.5
   carOffsetX: 3
+  damScale: 3.5
   riverSectionPrefab: {fileID: 0}
   roadPrefab: {fileID: 0}
   landingStripPrefab: {fileID: 7521342511423359227, guid: ab4df0b7fb75471f2a38669aa1495fdd, type: 3}
