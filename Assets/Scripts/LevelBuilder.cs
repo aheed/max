@@ -126,7 +126,7 @@ public class LevelContents
     public IEnumerable<int> roads = new List<int>();
     public IEnumerable<int> dams = new List<int>();
     public IEnumerable<int> enemyAirstrips = new List<int>();
-    public CellContent[,] cells = new CellContent[gridWidth, fullGridHeight];
+    public CellContent[,] cells;
     public HousePosition hangar;
     public City city;
     public bool vipTargets;
@@ -148,6 +148,8 @@ public class LevelBuilder
     public static int minDistanceRiverAirstrip = 80;
     public static int maxNormalDistanceRiverMidLevelLeft = 18;
     public static int maxNormalDistanceRiverMidLevelRight = 9;
+    public static int maxNormalDistanceRiverMidLevelLeftSmall = 4;
+    public static int maxNormalDistanceRiverMidLevelRightSmall = 4;
     public static int riverWidth = 12;
     public static int roadWidth = 2;
     public static int maxRiverSegmentHeight = 7;
@@ -221,10 +223,15 @@ public class LevelBuilder
         {
             ret.gridHeight = LevelContents.shortGridHeight;
         }
+        else if (levelPrerequisite.levelType == LevelType.DAM)
+        {
+            ret.gridHeight = (LevelContents.fullGridHeight * 3) / 2;
+        }
         if (ret.gridHeight % 2 != 0)
         {
             ret.gridHeight--;
         }
+        ret.cells = new CellContent[LevelContents.gridWidth, ret.gridHeight];        
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);
@@ -238,13 +245,10 @@ public class LevelBuilder
 
         var clearSpaceHeight =
             levelPrerequisite.levelType == LevelType.INTRO
-            || levelPrerequisite.levelType == LevelType.DAM //TEMP!!!!
             ?
                 ret.gridHeight : landingStripHeight;
 
-        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO
-            || levelPrerequisite.levelType == LevelType.DAM //TEMP!!!!
-        )
+        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
         {
             var lsllcX = midX - (landingStripWidth / 2);
             for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
@@ -314,6 +318,12 @@ public class LevelBuilder
                 bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 bool takingOff = y < approachLength;
                 var midRiverOffset = midRiverX - midX;
+                var maxDiffLeft = levelType == LevelType.DAM ? 
+                    maxNormalDistanceRiverMidLevelLeftSmall : 
+                    maxNormalDistanceRiverMidLevelLeft;
+                var maxDiffRight = levelType == LevelType.DAM ?
+                    maxNormalDistanceRiverMidLevelRightSmall :
+                    maxNormalDistanceRiverMidLevelRight;
                 if (approaching)
                 {
                     // Airstrip approaching. River must not bend toward next airstrip location.
@@ -334,7 +344,7 @@ public class LevelBuilder
                     {
                         if (finalApproaching)
                         {
-                            minSlopeIndex = riverSlopes.Length-1;
+                            minSlopeIndex = riverSlopes.Length - 1;
                             maxSlopeIndexExclusive = riverSlopes.Length;
                         }
                         else
@@ -343,7 +353,7 @@ public class LevelBuilder
                             maxSlopeIndexExclusive += 1;
                         }
                     }
-                    
+
                 }
                 else if (takingOff)
                 {
@@ -361,12 +371,12 @@ public class LevelBuilder
                 }
                 else
                 {
-                    if (midRiverOffset > maxNormalDistanceRiverMidLevelRight)
+                    if (midRiverOffset > maxDiffRight)
                     {
                         // River too far to the right
                         maxSlopeIndexExclusive -= 2;
                     }
-                    else if (midRiverOffset < -maxNormalDistanceRiverMidLevelLeft)
+                    else if (midRiverOffset < -maxDiffLeft)
                     {
                         // River too far to the left
                         minSlopeIndex += 2;
