@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class SceneController3d : MonoBehaviour
 {
@@ -55,6 +56,8 @@ public class SceneController3d : MonoBehaviour
     public bool asyncLevelBuild = false;
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
+    public float dayLightIntensity = 1.1f;
+    public float nightLightIntensity = 0.5f;
     public LevelType startLevelType = LevelType.NORMAL;
     TargetMaterialBlinker targetBlinker;    
 
@@ -119,7 +122,7 @@ public class SceneController3d : MonoBehaviour
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
-        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs})
+        .Select(goc => new GameObjectCollection4 { zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs })
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
@@ -134,6 +137,10 @@ public class SceneController3d : MonoBehaviour
         riverVerts = sceneOutput.riverVerts;
         roadNearEdgesZ.AddRange(sceneOutput.roadNearEdgesZ);
         riverSegments.AddRange(sceneOutput.riverSegments);
+        var mainLight = GetMainLight();
+        mainLight.intensity = GameState.GetInstance().IsNightTime() ? nightLightIntensity : dayLightIntensity;
+        //mainLight.color = Settings.GetMainLightColor();
+        gameState.ReportEvent(GameEvent.VIEW_MODE_CHANGED);
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
@@ -239,6 +246,7 @@ public class SceneController3d : MonoBehaviour
             enemyAircraft = firstLevelType != LevelType.INTRO,
             wind = firstLevelType != LevelType.INTRO &&
                 firstLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
+            nightTime = IsNightTimeLevel(firstLevelType)
         };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
@@ -248,6 +256,22 @@ public class SceneController3d : MonoBehaviour
         var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
+    }
+
+    bool IsNightTimeLevel(LevelType levelType)
+    {
+        return levelType == LevelType.DAM;
+    }   
+
+    Light GetMainLight()
+    {
+        GameObject lightObject = GameObject.Find("Main Directional Light");
+        if (lightObject == null)
+        {
+            return null;
+        }
+
+        return lightObject.GetComponent<Light>();
     }
 
     void Start()
@@ -438,7 +462,8 @@ public class SceneController3d : MonoBehaviour
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
             new List<bool> {false, false, false};
 
-        return new LevelPrerequisite {
+        return new LevelPrerequisite
+        {
             levelType = newLevelType,
             riverLeftOfAirstrip = latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed,
@@ -448,6 +473,7 @@ public class SceneController3d : MonoBehaviour
             enemyAircraft = newLevelType != LevelType.INTRO,
             wind = newLevelType != LevelType.INTRO
               && newLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
+            nightTime = IsNightTimeLevel(newLevelType)
         };
     }
 

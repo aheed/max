@@ -108,6 +108,7 @@ public class LevelPrerequisite
     public bool firstLevel;
     public bool enemyAircraft;
     public bool wind;
+    public bool nightTime;
 }
 
 public class LevelContents
@@ -704,6 +705,10 @@ public class LevelBuilder
                 yOffset += damDistance;
             }
             ret.dams = damList.ToArray();
+        }
+        else
+        {
+            ret.dams = new int[0];
         }
 
         var randomFlakGuns = levelType != LevelType.INTRO;

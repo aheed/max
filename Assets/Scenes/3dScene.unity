@@ -1083,6 +1083,8 @@ MonoBehaviour:
   asyncLevelBuild: 0
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
+  dayLightIntensity: 1.1
+  nightLightIntensity: 0.5
   startLevelType: 7
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
@@ -1134,6 +1136,8 @@ MonoBehaviour:
   postExposurelifeSpanSec: 0.3
   hueShift: -100
   maxPostExposure: 2
+  nightSaturation: -30
+  tvSaturation: -17
 --- !u!114 &108618692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1707,7 +1711,7 @@ GameObject:
   - component: {fileID: 203844588}
   - component: {fileID: 203844587}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Main Directional Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21016,6 +21020,7 @@ MonoBehaviour:
   rightTrim: 5
   roadAltitude: 0.01
   powerLineAltitude: 1.5
+  powerLineDistanceZ: 0.15
   carAltitude: 0.01
   parkedPlaneAltitude: 0.15
   parllelRoadSideWidth: 0.1
