@@ -1084,7 +1084,9 @@ MonoBehaviour:
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
   dayLightIntensity: 1.1
-  nightLightIntensity: 0.5
+  nightLightIntensity: 0.9
+  nightLightColor: {r: 0.78431374, g: 0.6862745, b: 1, a: 1}
+  dayLightColor: {r: 1, g: 1, b: 1, a: 1}
   startLevelType: 7
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748

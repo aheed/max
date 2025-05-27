@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class SceneController3d : MonoBehaviour
 {
@@ -58,6 +57,10 @@ public class SceneController3d : MonoBehaviour
     public float visibleAreaMarkerHeight = 3f;
     public float dayLightIntensity = 1.1f;
     public float nightLightIntensity = 0.5f;
+    public Color nightLightColor = new Color(0.5f, 0.3f, 0.95f, 1f);
+    public Color dayLightColor = new Color(1f, 1f, 1f, 1f);
+    public Color nightAmbientColor = new Color(0.1f, 0.1f, 0.1f, 1f);
+    public Color dayAmbientColor = new Color(0.3f, 0.3f, 0.3f, 1f);
     public LevelType startLevelType = LevelType.NORMAL;
     TargetMaterialBlinker targetBlinker;    
 
@@ -138,8 +141,20 @@ public class SceneController3d : MonoBehaviour
         roadNearEdgesZ.AddRange(sceneOutput.roadNearEdgesZ);
         riverSegments.AddRange(sceneOutput.riverSegments);
         var mainLight = GetMainLight();
-        mainLight.intensity = GameState.GetInstance().IsNightTime() ? nightLightIntensity : dayLightIntensity;
-        //mainLight.color = Settings.GetMainLightColor();
+        if (GameState.GetInstance().IsNightTime())
+        {
+            mainLight.intensity = nightLightIntensity;
+            mainLight.color = nightLightColor;
+            RenderSettings.ambientLight = nightAmbientColor;
+        }
+        else
+        {
+            mainLight.intensity = dayLightIntensity;
+            mainLight.color = dayLightColor;
+            RenderSettings.ambientLight = dayAmbientColor;
+        }
+        Debug.Log($"AmbientIntensity={RenderSettings.ambientIntensity} color={RenderSettings.ambientLight} " +
+            $"MainLightIntensity={mainLight.intensity} color={mainLight.color}");
         gameState.ReportEvent(GameEvent.VIEW_MODE_CHANGED);
     }
 
