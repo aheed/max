@@ -23,6 +23,7 @@ public enum CellContent
     VEHICLE2,
     ENEMY_HANGAR,
     SEARCH_LIGHT,
+    DAM,
     BALLOON = 1 << 6,
     LAND_MASK = 0x3F,
     AIR_MASK = 0xC0
@@ -37,6 +38,7 @@ public enum LevelType
     ROBOT_BOSS,
     RED_BARON_BOSS,
     INTRO,
+    DAM
 }
 
 public enum BossType
@@ -106,6 +108,7 @@ public class LevelPrerequisite
     public bool firstLevel;
     public bool enemyAircraft;
     public bool wind;
+    public bool nightTime;
 }
 
 public class LevelContents
@@ -122,8 +125,9 @@ public class LevelContents
     public int roadLowerLeftCornerX;
     public bool riverEndsLeftOfAirstrip;
     public IEnumerable<int> roads = new List<int>();
+    public int[] dams;
     public IEnumerable<int> enemyAirstrips = new List<int>();
-    public CellContent[,] cells = new CellContent[gridWidth, fullGridHeight];
+    public CellContent[,] cells;
     public HousePosition hangar;
     public City city;
     public bool vipTargets;
@@ -139,11 +143,14 @@ public class LevelBuilder
     public static readonly int minSpaceBetweenRoads = 10;
     public static readonly float roadProbability = 0.1f;
     public static readonly int roadHeight = 2;
-    static readonly float[] riverSlopes = new float[] {-0.5f, -0.5f, 0f, 1f, 1f};
+    public static readonly int nofDams = 3;
+    static readonly float[] riverSlopes = new float[] { -0.5f, -0.5f, 0f, 1f, 1f };
     static readonly float[] roadSlopes = new float[] {-1f, 0f, 1f};
     public static int minDistanceRiverAirstrip = 80;
     public static int maxNormalDistanceRiverMidLevelLeft = 18;
     public static int maxNormalDistanceRiverMidLevelRight = 9;
+    public static int maxNormalDistanceRiverMidLevelLeftSmall = 4;
+    public static int maxNormalDistanceRiverMidLevelRightSmall = 4;
     public static int riverWidth = 12;
     public static int roadWidth = 2;
     public static int maxRiverSegmentHeight = 7;
@@ -187,10 +194,11 @@ public class LevelBuilder
 
     public static bool PossibleVipTargets(LevelType levelType)
     {
-        return levelType != LevelType.CITY && 
+        return levelType != LevelType.CITY &&
             levelType != LevelType.BALLOONS &&
             levelType != LevelType.ROBOT_BOSS &&
-            levelType != LevelType.RED_BARON_BOSS;
+            levelType != LevelType.RED_BARON_BOSS &&
+            levelType != LevelType.DAM;
     }
 
     public bool TrueByProbability(float probability)
@@ -216,10 +224,15 @@ public class LevelBuilder
         {
             ret.gridHeight = LevelContents.shortGridHeight;
         }
+        else if (levelPrerequisite.levelType == LevelType.DAM)
+        {
+            ret.gridHeight = (LevelContents.fullGridHeight * 3) / 2;
+        }
         if (ret.gridHeight % 2 != 0)
         {
             ret.gridHeight--;
         }
+        ret.cells = new CellContent[LevelContents.gridWidth, ret.gridHeight];        
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);
@@ -231,8 +244,9 @@ public class LevelBuilder
             (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
              levelPrerequisite.levelType != LevelType.INTRO);
 
-        var clearSpaceHeight = 
-            levelPrerequisite.levelType == LevelType.INTRO ?
+        var clearSpaceHeight =
+            levelPrerequisite.levelType == LevelType.INTRO
+            ?
                 ret.gridHeight : landingStripHeight;
 
         if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
@@ -274,7 +288,8 @@ public class LevelBuilder
         if (levelType == LevelType.NORMAL ||
             levelType == LevelType.BALLOONS ||
             levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS)
+            levelType == LevelType.RED_BARON_BOSS ||
+            levelType == LevelType.DAM)
         {
             // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
@@ -304,6 +319,12 @@ public class LevelBuilder
                 bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 bool takingOff = y < approachLength;
                 var midRiverOffset = midRiverX - midX;
+                var maxDiffLeft = levelType == LevelType.DAM ? 
+                    maxNormalDistanceRiverMidLevelLeftSmall : 
+                    maxNormalDistanceRiverMidLevelLeft;
+                var maxDiffRight = levelType == LevelType.DAM ?
+                    maxNormalDistanceRiverMidLevelRightSmall :
+                    maxNormalDistanceRiverMidLevelRight;
                 if (approaching)
                 {
                     // Airstrip approaching. River must not bend toward next airstrip location.
@@ -324,7 +345,7 @@ public class LevelBuilder
                     {
                         if (finalApproaching)
                         {
-                            minSlopeIndex = riverSlopes.Length-1;
+                            minSlopeIndex = riverSlopes.Length - 1;
                             maxSlopeIndexExclusive = riverSlopes.Length;
                         }
                         else
@@ -333,7 +354,7 @@ public class LevelBuilder
                             maxSlopeIndexExclusive += 1;
                         }
                     }
-                    
+
                 }
                 else if (takingOff)
                 {
@@ -351,12 +372,12 @@ public class LevelBuilder
                 }
                 else
                 {
-                    if (midRiverOffset > maxNormalDistanceRiverMidLevelRight)
+                    if (midRiverOffset > maxDiffRight)
                     {
                         // River too far to the right
                         maxSlopeIndexExclusive -= 2;
                     }
-                    else if (midRiverOffset < -maxNormalDistanceRiverMidLevelLeft)
+                    else if (midRiverOffset < -maxDiffLeft)
                     {
                         // River too far to the left
                         minSlopeIndex += 2;
@@ -566,7 +587,8 @@ public class LevelBuilder
         if (levelType == LevelType.ROAD ||
             levelType == LevelType.NORMAL ||
             levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS)
+            levelType == LevelType.RED_BARON_BOSS ||
+            levelType == LevelType.DAM)
         {
             var houses = new List<HouseSpec>();
             for (var y = 0; y < ret.gridHeight; y++)
@@ -665,6 +687,28 @@ public class LevelBuilder
                     }
                 }
             }
+        }
+
+        if (levelType == LevelType.DAM)
+        {
+            var damApproachLength = approachLength; // todo: use a separate variable for dam approach length
+            var yStart = damApproachLength;
+            var yEnd = ret.gridHeight - damApproachLength;
+
+            var damDistance = (yEnd - yStart) / (nofDams + 1);
+            var yOffset = yStart + damDistance;
+
+            var damList = new List<int>();
+            for (var i = 0; i < nofDams; i++)
+            {
+                damList.Add(yOffset);
+                yOffset += damDistance;
+            }
+            ret.dams = damList.ToArray();
+        }
+        else
+        {
+            ret.dams = new int[0];
         }
 
         var randomFlakGuns = levelType != LevelType.INTRO;

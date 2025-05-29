@@ -147,6 +147,11 @@ public class GameState : MonoBehaviour
         return singletonInstance;
     }
 
+    public bool IsNightTime()
+    {
+        return gameStateContents.latestLevelPrereq?.nightTime ?? false;
+    }
+
     public void SetStatus(GameStatus gameStatus)
     {
         if (gameStatus == gameStateContents.gameStatus)

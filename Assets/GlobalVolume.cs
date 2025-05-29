@@ -10,6 +10,8 @@ public class GlobalVolume : MonoBehaviour
     public float postExposurelifeSpanSec = 0.2f;
     public float hueShift = -100f;
     public float maxPostExposure = 2.5f;
+    public float nightSaturation = -30f;
+    public float tvSaturation = -17f;
     float currentHueShift = 0f;
     float currentPostExposure = 0f;
     float hueShiftTimeToLiveSec;
@@ -34,6 +36,7 @@ public class GlobalVolume : MonoBehaviour
         GameState gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, UpdateViewMode);
         gameState.Subscribe(GameEvent.SMALL_DETONATION, OnSmallDetonation);
+        UpdateViewMode();
     }
 
     // Update is called once per frame
@@ -76,7 +79,8 @@ public class GlobalVolume : MonoBehaviour
             filmGrain.active = false;
             bloom.active = false;
             vignette.active = false;
-            colorAdjustments.saturation.overrideState = false;
+            colorAdjustments.saturation.overrideState = GameState.GetInstance().IsNightTime();
+            colorAdjustments.saturation.SetValue(new FloatParameter(nightSaturation, true));
         }
         else if (viewMode == ViewMode.TV_SIM)
         {
@@ -86,6 +90,8 @@ public class GlobalVolume : MonoBehaviour
             bloom.active = true;
             vignette.active = true;
             colorAdjustments.saturation.overrideState = true;
+            var possibleNightSaturation = GameState.GetInstance().IsNightTime() ? nightSaturation : 0f;
+            colorAdjustments.saturation.SetValue(new FloatParameter(tvSaturation + possibleNightSaturation, true));
         }
     }
 

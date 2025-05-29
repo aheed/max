@@ -83,7 +83,8 @@ public class Boat3d2 : ManagedObject, IVip
 
         if (col.name.StartsWith("riverbank") ||
             col.name.StartsWith("Bridge") ||
-            col.name.StartsWith("Boat"))
+            col.name.StartsWith("Boat") ||
+            col.name.StartsWith("Dam"))
         {
             alive = false;
         }
