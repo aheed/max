@@ -70,6 +70,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
     }
 
+    public void SetAltitudeLights(bool on)
+    {
+        var lights = transform.GetChild(0).GetChild(1).gameObject;
+        lights.SetActive(on);
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -467,6 +474,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         if (gameStatus == GameStatus.DEAD || gameStatus == GameStatus.KILLED_BY_FLACK)
         {
             SetAppearance(0, 0, false);
+            SetAltitudeLights(false);
             if (gameStatus == GameStatus.DEAD)
             {
                 gameState.ReportEvent(GameEvent.BIG_BANG);

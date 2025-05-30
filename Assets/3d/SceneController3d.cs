@@ -146,13 +146,16 @@ public class SceneController3d : MonoBehaviour
             mainLight.intensity = nightLightIntensity;
             mainLight.color = nightLightColor;
             RenderSettings.ambientLight = nightAmbientColor;
+            maxPlane.SetAltitudeLights(true);
         }
         else
         {
             mainLight.intensity = dayLightIntensity;
             mainLight.color = dayLightColor;
             RenderSettings.ambientLight = dayAmbientColor;
+            maxPlane.SetAltitudeLights(false);
         }
+        
         Debug.Log($"AmbientIntensity={RenderSettings.ambientIntensity} color={RenderSettings.ambientLight} " +
             $"MainLightIntensity={mainLight.intensity} color={mainLight.color}");
         gameState.ReportEvent(GameEvent.VIEW_MODE_CHANGED);
