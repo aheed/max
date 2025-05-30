@@ -1,16 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.UI;
-
-
 
 public class PlayerPlane : MonoBehaviour, IPlaneObservable
 {
@@ -38,6 +29,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction3;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;
+    public GameObject lightArcPrefab;
     private Vector2 touchStartPosition, touchEndPosition;
     private float maxMove = 1.0f;
     private float minMove = 4.0f;
@@ -94,6 +86,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         OnStart();
         Reset();
     }
@@ -241,7 +234,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             gameState.SetAltitude(tmpLocalPosition.y);
         }
-        
+
         offsetZ = tmpOffsetZ;
         transform.localPosition = tmpLocalPosition;
 
@@ -260,7 +253,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         gameState.SetRandomDamage(true);
     }
 
-    void HandleCollision(Collider2D col)
+    /*void HandleCollision(Collider2D col)
     {
         var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
         //Debug.Log($"========== {col.name} {collObjName}");
@@ -278,7 +271,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
 
         //no collision
-    }
+    }*/
 
     // Update is called once per frame
     void Update()
@@ -432,7 +425,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         transform.localPosition = tmpPos;
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    /*void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name.StartsWith("flack_expl"))
         {
@@ -442,7 +435,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             HandleCollision(col);
         }
-    }
+    }*/
 
     void DropBomb()
     {
@@ -527,6 +520,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             Debug.Log($"Crash !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
             gameState.SetStatus(GameStatus.DEAD);
+            if (col.gameObject.name.StartsWith("PowerWire"))
+            {
+                Instantiate(lightArcPrefab, transform.position, Quaternion.identity, refObject);
+            }
             return;
         }
 
@@ -540,14 +537,20 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
     private void OnDebugCallback1()
     {
-        Debug.Log("IntroController.OnDebugAction1");
+        Debug.Log("PlayerPlane.OnDebugAction1");
         transform.parent.position += new Vector3(0f, 0f, 0.05f);
     }
 
     private void OnDebugCallback2()
     {
-        Debug.Log("IntroController.OnDebugAction2");
+        Debug.Log("PlayerPlane.OnDebugAction2");
         transform.parent.position -= new Vector3(0f, 0f, 0.05f);
+    }
+
+    private void OnDebugCallback3()
+    {
+        Debug.Log("PlayerPlane.OnDebugAction3");
+        Instantiate(lightArcPrefab, transform.position, Quaternion.identity, refObject);
     }
     
 }
