@@ -168,13 +168,17 @@ public class SceneController3d : MonoBehaviour
             case LevelType.NORMAL:
             case LevelType.ROAD:
             case LevelType.BALLOONS:
+            case LevelType.DAM:
+                if (AllEnemyHQsBombed())
+                {
+                    return gameState.GetStateContents().targetsHit;
+                }
                 return 0;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
-            case LevelType.DAM:
                 return GameState.GetInstance().GetTargetsHit();
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
@@ -197,8 +201,9 @@ public class SceneController3d : MonoBehaviour
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
-            case LevelType.DAM:
                 return 1;
+            case LevelType.DAM:
+                return 3;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -261,7 +266,8 @@ public class SceneController3d : MonoBehaviour
                        firstLevelType == LevelType.INTRO,
             missionComplete = false,
             firstLevel = true,
-            enemyAircraft = firstLevelType != LevelType.INTRO,
+            enemyAircraft = firstLevelType != LevelType.INTRO
+                && firstLevelType != LevelType.DAM, //TEMP!! Keep enemy aircraft off while testing dam level
             wind = firstLevelType != LevelType.INTRO &&
                 firstLevelType != LevelType.DAM, //TEMP!! Keep wind off while testing dam level
             nightTime = IsNightTimeLevel(firstLevelType)
@@ -497,6 +503,13 @@ public class SceneController3d : MonoBehaviour
 
     bool AllEnemyHQsBombed()
     {
+        var stateContents = gameState.GetStateContents();
+        if (stateContents.latestLevelPrereq.levelType == LevelType.DAM)
+        {
+            // include dams in enemy HQs
+            return stateContents.targetsHit >= stateContents.targetsHitMin;
+        }
+
         var enemyHQs = gameState.GetStateContents().enemyHQs;
         return enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed());
     }
@@ -661,7 +674,7 @@ public class SceneController3d : MonoBehaviour
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;                
+                var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;
                 var bossDefeated = (latestLevelType == LevelType.ROBOT_BOSS ||
                                     latestLevelType == LevelType.RED_BARON_BOSS ||
                                     latestLevelType == LevelType.INTRO) &&
