@@ -1,11 +1,6 @@
 using UnityEngine;
 using System.Linq;
 
-public enum AramamentType
-{
-    STANDARD,
-    BOUNCING_BOMBS,
-};
 
 public static class LevelHelper
 {
@@ -176,10 +171,20 @@ public static class LevelHelper
         return levelType != LevelType.INTRO
               && levelType != LevelType.DAM; //TEMP!! Keep enemy aircraft off while testing dam level
     }
-    
+
     public static bool NightTime(LevelType levelType)
     {
         return levelType == LevelType.DAM;
+    }
+    
+    public static ArmamentType GetArmamentType(LevelType levelType)
+    {
+        if (levelType == LevelType.DAM)
+        {
+            return ArmamentType.BOUNCING_BOMBS;
+        }
+
+        return ArmamentType.STANDARD;
     }
 }
 

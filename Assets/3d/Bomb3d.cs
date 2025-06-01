@@ -6,6 +6,7 @@ public class Bomb3d : MonoBehaviour
     public float maxCollisionAltitude = 0.2f;
     GameState gameState;
     float impactAltitude;
+    float forwardSpeed;
 
     GameState GetGameState() 
     {
@@ -24,6 +25,7 @@ public class Bomb3d : MonoBehaviour
     void Start()
     {
         impactAltitude = GetImpactAltitude();
+        forwardSpeed = GetGameState().GetStateContents().speed;        
     }
 
     void Impact()
@@ -40,7 +42,9 @@ public class Bomb3d : MonoBehaviour
     {
         var tmpPos = transform.localPosition;
         var deltaVertical = -verticalSpeed * Time.deltaTime;
+        var deltaForward = forwardSpeed * Time.deltaTime;
         tmpPos.y += deltaVertical;
+        tmpPos.z += deltaForward;
         transform.localPosition = tmpPos;
 
         if (tmpPos.y < impactAltitude)

@@ -155,6 +155,7 @@ public class SceneController3d : MonoBehaviour
             RenderSettings.ambientLight = dayAmbientColor;
             maxPlane.SetAltitudeLights(false);
         }
+        maxPlane.SetArmaments(LevelHelper.GetArmamentType(gameState.GetStateContents().latestLevelPrereq.levelType));
         
         Debug.Log($"AmbientIntensity={RenderSettings.ambientIntensity} color={RenderSettings.ambientLight} " +
             $"MainLightIntensity={mainLight.intensity} color={mainLight.color}");
