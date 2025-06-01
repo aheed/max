@@ -101,7 +101,6 @@ public class LevelPrerequisite
 {
     public LevelType levelType;
     public bool riverLeftOfAirstrip;
-
     public IEnumerable<bool> enemyHQsBombed; // Relevant for LevelType.CITY
     public bool boss;
     public bool missionComplete;
@@ -192,14 +191,7 @@ public class LevelBuilder
     private static int maxRandom = 65535;
     private System.Random _rnd = new Random();
 
-    public static bool PossibleVipTargets(LevelType levelType)
-    {
-        return levelType != LevelType.CITY &&
-            levelType != LevelType.BALLOONS &&
-            levelType != LevelType.ROBOT_BOSS &&
-            levelType != LevelType.RED_BARON_BOSS &&
-            levelType != LevelType.DAM;
-    }
+    
 
     public bool TrueByProbability(float probability)
     {
@@ -217,39 +209,23 @@ public class LevelBuilder
     {
         var ret = new LevelContents();
         var midX = LevelContents.gridWidth / 2;
-        ret.gridHeight = LevelContents.fullGridHeight;
-        if ((levelPrerequisite.levelType == LevelType.RED_BARON_BOSS && 
-            !levelPrerequisite.firstLevel) ||
-            levelPrerequisite.levelType == LevelType.INTRO)
-        {
-            ret.gridHeight = LevelContents.shortGridHeight;
-        }
-        else if (levelPrerequisite.levelType == LevelType.DAM)
-        {
-            ret.gridHeight = (LevelContents.fullGridHeight * 3) / 2;
-        }
-        if (ret.gridHeight % 2 != 0)
-        {
-            ret.gridHeight--;
-        }
+        ret.gridHeight = LevelHelper.GetLevelHeight(levelPrerequisite.levelType, levelPrerequisite.firstLevel);
         ret.cells = new CellContent[LevelContents.gridWidth, ret.gridHeight];        
         var approachLength = (int)(LevelContents.fullGridHeight * approachQuotient);
         var cityApproachLength = (int)(LevelContents.fullGridHeight * outsideCityQuotient);
         var finalApproachLength = (int)(LevelContents.fullGridHeight * finalApproachQuotient);
+        LevelType levelType = levelPrerequisite.levelType;
 
-        ret.vipTargets = PossibleVipTargets(levelPrerequisite.levelType);
+        ret.vipTargets = LevelHelper.PossibleVipTargets(levelType);
 
-        ret.landingStrip = levelPrerequisite.firstLevel ||
-            levelPrerequisite.missionComplete ||
-            (levelPrerequisite.levelType != LevelType.RED_BARON_BOSS &&
-             levelPrerequisite.levelType != LevelType.INTRO);
+        ret.landingStrip = LevelHelper.LandingStrip(levelType, levelPrerequisite.firstLevel, levelPrerequisite.missionComplete);
 
-        var clearSpaceHeight =
-            levelPrerequisite.levelType == LevelType.INTRO
-            ?
-                ret.gridHeight : landingStripHeight;
+        var clearSpaceAtCentre = LevelHelper.ClearSpaceAtCentre(levelType);
+        var clearSpaceHeight = clearSpaceAtCentre ? 
+            ret.gridHeight : landingStripHeight;
 
-        if (ret.landingStrip || levelPrerequisite.levelType == LevelType.INTRO)
+        ret.airstripInfo = LevelHelper.GetAirStripInfo(levelType, levelPrerequisite.firstLevel);
+        if (ret.landingStrip || clearSpaceAtCentre)
         {
             var lsllcX = midX - (landingStripWidth / 2);
             for (var x = lsllcX; x <= lsllcX + landingStripWidth; x++)
@@ -258,13 +234,6 @@ public class LevelBuilder
                 {
                     ret.cells[x, y] = CellContent.LANDING_STRIP;
                 }
-            }
-
-            if (levelPrerequisite.levelType == LevelType.INTRO)
-            {
-                ret.airstripInfo = levelPrerequisite.firstLevel ? 
-                    AirStripRepository.introLevelStartAirStrip : 
-                    AirStripRepository.introLevelEndAirStrip;
             }
         }
 
@@ -281,17 +250,11 @@ public class LevelBuilder
             }
         }
 
-        LevelType levelType = levelPrerequisite.levelType;
         var riverLeftOfAirstrip = levelPrerequisite.riverLeftOfAirstrip;
         ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip; // May be overridden below
         
-        if (levelType == LevelType.NORMAL ||
-            levelType == LevelType.BALLOONS ||
-            levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS ||
-            levelType == LevelType.DAM)
+        if (LevelHelper.River(levelType))
         {
-            // River
             var directionMultiplier = riverLeftOfAirstrip ? -1 : 1;
             int riverLowerLeftCornerXStart = midX + directionMultiplier * minDistanceRiverAirstrip - (riverWidth / 2);
             int riverLowerLeftCornerX = riverLowerLeftCornerXStart;
@@ -319,10 +282,10 @@ public class LevelBuilder
                 bool finalApproaching = yDistanceToEnd < finalApproachLength;
                 bool takingOff = y < approachLength;
                 var midRiverOffset = midRiverX - midX;
-                var maxDiffLeft = levelType == LevelType.DAM ? 
+                var maxDiffLeft = LevelHelper.RiverNearCentre(levelType) ? 
                     maxNormalDistanceRiverMidLevelLeftSmall : 
                     maxNormalDistanceRiverMidLevelLeft;
-                var maxDiffRight = levelType == LevelType.DAM ?
+                var maxDiffRight = LevelHelper.RiverNearCentre(levelType) ?
                     maxNormalDistanceRiverMidLevelRightSmall :
                     maxNormalDistanceRiverMidLevelRight;
                 if (approaching)
@@ -452,11 +415,10 @@ public class LevelBuilder
             ret.roads = roads;
         }
 
-        if (levelType == LevelType.ROAD || levelType == LevelType.CITY)
+        if (LevelHelper.RoadAlongFlightPath(levelType))
         {
             ret.riverEndsLeftOfAirstrip = riverLeftOfAirstrip;
 
-            // Road along flight path
             var directionMultiplier = riverLeftOfAirstrip ? 1 : -1;
             int roadLowerLeftCornerXStart = midX + directionMultiplier * minDistanceRiverAirstrip - (roadWidth / 2);
             int roadLowerLeftCornerX = roadLowerLeftCornerXStart;
@@ -502,9 +464,8 @@ public class LevelBuilder
 
                 var slopeX = (int)(slope * segmentHeight);
 
-                if (levelType == LevelType.ROAD  && !approaching && !takingOff)
+                if (LevelHelper.MidRoadStationaryVehicles(levelType) && !approaching && !takingOff)
                 {
-                    // Mid-road stationary vehicles
                     if (TrueByProbability(vehicle1Probability))
                     {
                         ret.cells[midRoadX, y] = CellContent.VEHICLE1;
@@ -540,9 +501,8 @@ public class LevelBuilder
                 ytmp = newY;
             }
 
-            if (levelType == LevelType.ROAD )
+            if (LevelHelper.EnemyAirstrips(levelType))
             {
-                // Enemy airstrips
                 var cooldown = 0;
                 List<int> strips = new List<int>();
                 for (var y = enemyAirstripMinDistance; y < (ret.gridHeight - enemyAirstripHeight - enemyAirstripMinDistance); y++)
@@ -584,18 +544,13 @@ public class LevelBuilder
             }
         }    
 
-        if (levelType == LevelType.ROAD ||
-            levelType == LevelType.NORMAL ||
-            levelType == LevelType.ROBOT_BOSS ||
-            levelType == LevelType.RED_BARON_BOSS ||
-            levelType == LevelType.DAM)
+        if (LevelHelper.Houses(levelType))
         {
             var houses = new List<HouseSpec>();
             for (var y = 0; y < ret.gridHeight; y++)
             {
                 for (var x = 0; x < LevelContents.gridWidth; x++)
                 {
-                    // Houses
                     if (TrueByProbability(houseProbability) && y > (landingStripHeight * 2))
                     {
                         //Debug.Log($"House please!");
@@ -618,7 +573,7 @@ public class LevelBuilder
                             var height = normalHouseHeight;
                             var depth = normalHouseDepth;
 
-                            if (levelType == LevelType.ROAD && x < midX)
+                            if (LevelHelper.VariableHouseSizes(levelType) && x < midX)
                             {
                                 width = _rnd.Next(minHouseWidth, maxHouseWidth+1);
                                 height = _rnd.Next(minHouseHeight, maxHouseHeight+1);
@@ -657,7 +612,7 @@ public class LevelBuilder
         }
 
 
-        if (levelType == LevelType.CITY)
+        if (LevelHelper.EnemyHQs(levelType))
         {
             var yStart = cityApproachLength;
             var yEnd = ret.gridHeight - cityApproachLength;
@@ -689,7 +644,7 @@ public class LevelBuilder
             }
         }
 
-        if (levelType == LevelType.DAM)
+        if (LevelHelper.Dams(levelType))
         {
             var damApproachLength = approachLength; // todo: use a separate variable for dam approach length
             var yStart = damApproachLength;
@@ -711,7 +666,6 @@ public class LevelBuilder
             ret.dams = new int[0];
         }
 
-        var randomFlakGuns = levelType != LevelType.INTRO;
         var bigHousesList = new List<HousePosition>();        
         for (var y = 0; y < ret.gridHeight; y++)
         {
@@ -761,7 +715,7 @@ public class LevelBuilder
                 }
 
                 // Flack guns
-                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && randomFlakGuns)
+                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && LevelHelper.RandomFlakGuns(levelType))
                 {
                     ret.cells[x, y] = CellContent.FLACK_GUN;
                 }
@@ -808,18 +762,7 @@ public class LevelBuilder
         ret.bossType = BossType.NONE;
         if (levelPrerequisite.boss)
         {
-            if (levelType == LevelType.ROBOT_BOSS)
-            {
-                ret.bossType = BossType.ROBOT;
-            }
-            else if (levelType == LevelType.RED_BARON_BOSS)
-            {
-                ret.bossType = BossType.RED_BARON;
-            }
-            else if (levelType == LevelType.INTRO)
-            {
-                ret.bossType = BossType.INTRO_CONTROLLER;
-            }
+            ret.bossType = LevelHelper.GetBossType(levelType);
         }
         
         return ret;

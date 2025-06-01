@@ -29,6 +29,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction3;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;
+    public GameObject bouncingBombPrefab;
     public GameObject lightArcPrefab;
     private Vector2 touchStartPosition, touchEndPosition;
     private float maxMove = 1.0f;
@@ -50,6 +51,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     bool bombDamage = false;
     bool gunDamage = false;
     bool lastAlive = false;
+    GameObject currentBombPrefab;
 
     PlaneController GetController()
     {
@@ -76,6 +78,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         lights.SetActive(on);
     }
 
+    public void SetArmaments(ArmamentType armamentType)
+    {
+        currentBombPrefab = armamentType == ArmamentType.STANDARD ? bombPrefab : bouncingBombPrefab;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -462,7 +468,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             return;
         }
 
-        Instantiate(bombPrefab, transform.position, Quaternion.identity);
+        Instantiate(currentBombPrefab, transform.position, Quaternion.identity);
         bombCooldown = bombIntervalSeconds;
         //gameState.IncrementBombs(-1); //TEMP!! removed
         gameState.ReportEvent(GameEvent.BOMB_DROPPED);

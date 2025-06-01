@@ -983,7 +983,7 @@ public class SceneController : MonoBehaviour
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
-            LevelBuilder.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
+            LevelHelper.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
         }
