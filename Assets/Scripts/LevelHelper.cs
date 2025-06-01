@@ -1,3 +1,5 @@
+using UnityEngine;
+using System.Linq;
 
 public enum AramamentType
 {
@@ -135,8 +137,49 @@ public static class LevelHelper
         {
             return BossType.INTRO_CONTROLLER;
         }
-        
+
         return BossType.NONE;
+    }
+
+    public static int GetTargetHitsMin(LevelPrerequisite levelPrereq)
+    {
+        switch (levelPrereq.levelType)
+        {
+            case LevelType.NORMAL:
+                return GameState.GetInstance().targetsHitMin1;
+            case LevelType.ROAD:
+                return GameState.GetInstance().targetsHitMin2;
+            case LevelType.CITY:
+                return levelPrereq.enemyHQsBombed.Count();
+            case LevelType.BALLOONS:
+                return 99;
+            case LevelType.ROBOT_BOSS:
+            case LevelType.RED_BARON_BOSS:
+            case LevelType.INTRO:
+                return 1;
+            case LevelType.DAM:
+                return 3;
+            default:
+                Debug.LogError($"invalid level type {levelPrereq.levelType}");
+                return 0;
+        }
+    }
+
+    public static bool Wind(LevelType levelType)
+    {
+        return levelType != LevelType.INTRO
+              && levelType != LevelType.DAM; //TEMP!! Keep wind off while testing dam level
+    }
+
+    public static bool EnemyAircraft(LevelType levelType)
+    {
+        return levelType != LevelType.INTRO
+              && levelType != LevelType.DAM; //TEMP!! Keep enemy aircraft off while testing dam level
+    }
+    
+    public static bool NightTime(LevelType levelType)
+    {
+        return levelType == LevelType.DAM;
     }
 }
 
