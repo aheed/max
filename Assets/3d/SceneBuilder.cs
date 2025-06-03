@@ -7,6 +7,7 @@ public class SceneBuilder : MonoBehaviour
 {
     public float carProbability = 0.5f;
     public float carOffsetX = -5f;
+    public float damScale = 3.5f;
     public GameObject riverSectionPrefab;
     public GameObject roadPrefab;
     public FriendlyLandingStrip landingStripPrefab;
@@ -34,6 +35,9 @@ public class SceneBuilder : MonoBehaviour
     public BossRobot robotBossPrefab;
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
+    public Dam damPrefab;
+    public GameObject powerLinePrefab;
+    public GameObject powerPostPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -42,6 +46,8 @@ public class SceneBuilder : MonoBehaviour
     public int leftTrim = 2;
     public int rightTrim = 5;
     public float roadAltitude = 0.002f;
+    public float powerLineAltitude = 2.5f;
+    public float powerLineDistanceZ = 0.1f;
     public float carAltitude = 0.05f;
     float airstripAltitude = 0.001f;
     public float parkedPlaneAltitude = 0.15f;
@@ -71,7 +77,7 @@ public class SceneBuilder : MonoBehaviour
         {
             Destroy(managedObjectsParent);
         }
-        
+
         managedObjectsParent = new GameObject("managedObjects");
         flakGunManager = new ObjectManager(flackGunPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
         tankManager = new ObjectManager(tankPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
@@ -136,7 +142,7 @@ public class SceneBuilder : MonoBehaviour
     float GetRiverLeftEdgeX(float z, List<SceneRiverSegment> riverSegments)
     {
         var segment = riverSegments.FirstOrDefault(s =>  z < s.maxZ);
-        if (segment == null || segment.minZ >= z)
+        if (segment == null || segment.minZ > z)
         {
             Debug.LogError($"No river segment found for z={z}");
             return 0;
@@ -462,6 +468,9 @@ public class SceneBuilder : MonoBehaviour
         rbMeshFilter.mesh = CreateQuadMesh(riverRightBankVerts.ToArray(), riverRightBankNormals.ToArray());
 
         // Add mesh colliders
+        ret.riverSectionGameObject.AddComponent<MeshCollider>();
+        groundLeftOfRiver.AddComponent<MeshCollider>();
+        groundRightOfRiver.AddComponent<MeshCollider>();
         riverLeftBank.AddComponent<MeshCollider>();
         riverRightBank.AddComponent<MeshCollider>();
 
@@ -523,6 +532,26 @@ public class SceneBuilder : MonoBehaviour
         ret.roadNearEdgesZ = new();
         foreach (var road in levelContents.roads)
         {
+            if (levelContents.dams?.Count() > 0)
+            {
+                // Power lines instead of roads
+
+                var powerLineSegmentLength = 5f; // check mesh bounds instead?
+                var powerPostHeight = 2.5f; // check mesh bounds instead?
+                for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
+                {
+                    var powerX = x + (powerLineSegmentLength / 2);
+                    var powerZ = road * cellHeight;
+                    var powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
+                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
+                    powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
+                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
+                    var powerPostGameObject = Instantiate(powerPostPrefab, sceneInput.levelTransform);
+                    powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), road * cellHeight);
+                }
+                continue;
+            }
+            
             //var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var roadGameObject = new GameObject("road");
             roadGameObject.transform.parent = sceneInput.levelTransform;
@@ -594,11 +623,36 @@ public class SceneBuilder : MonoBehaviour
             }
         }
 
+        foreach (var dam in levelContents.dams)
+        {
+            var damZ = sceneInput.levelTransform.position.z + dam * cellHeight;
+            var damX = GetRiverLeftEdgeX(damZ, ret.riverSegments) + riverWidth / 2;
+            var damPosition = new Vector3(damX,
+                gameState.riverAltitude - 0.01f, // tiny altitude offset to avoid z-fighting
+                damZ);
+
+            var damGameObject = Instantiate(damPrefab, sceneInput.levelTransform);
+            damGameObject.transform.position = damPosition;
+
+            foreach (var moveableObject in damGameObject.GetMoveableObjects())
+            {
+                // Set x position to match river edges
+                var moveableObjectZ = moveableObject.transform.position.z;
+                var moveableObjectX = GetRiverLeftEdgeX(moveableObjectZ, ret.riverSegments) + riverWidth / 2;
+                moveableObject.transform.position = new Vector3(moveableObjectX, moveableObject.transform.position.y, moveableObjectZ);
+
+                // Rescale x to at least cover river width
+                moveableObject.transform.localScale = new Vector3(
+                    damScale * moveableObject.transform.localScale.x,
+                    moveableObject.transform.localScale.y,
+                    moveableObject.transform.localScale.z);
+            }
+        }
         
         // Houses
         foreach (var houseSpec in levelContents.houses)
         {
-            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);            
+            var houseGameObject = Instantiate(housePrefab, sceneInput.levelTransform);
             var house = InterfaceHelper.GetInterface<House4>(houseGameObject);
 
             /*
@@ -678,7 +732,7 @@ public class SceneBuilder : MonoBehaviour
                     case CellContent.VEHICLE1:
                         selectedManager = vehicle1Manager;
                         break;
-                    
+
                     case CellContent.VEHICLE2:
                         selectedManager = vehicle2Manager;
                         break;

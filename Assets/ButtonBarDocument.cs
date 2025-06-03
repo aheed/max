@@ -182,6 +182,7 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.target != homeElem)
             return;
 
+        LevelSelection.startLevelOverride = false;
         SceneManager.LoadScene("mainMenuScene");
     }
 

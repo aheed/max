@@ -55,6 +55,12 @@ public class SceneController3d : MonoBehaviour
     public bool asyncLevelBuild = false;
     public float visibleAreaMarkerWidth = 4f;
     public float visibleAreaMarkerHeight = 3f;
+    public float dayLightIntensity = 1.1f;
+    public float nightLightIntensity = 0.5f;
+    public Color nightLightColor = new Color(0.5f, 0.3f, 0.95f, 1f);
+    public Color dayLightColor = new Color(1f, 1f, 1f, 1f);
+    public Color nightAmbientColor = new Color(0.1f, 0.1f, 0.1f, 1f);
+    public Color dayAmbientColor = new Color(0.3f, 0.3f, 0.3f, 1f);
     public LevelType startLevelType = LevelType.NORMAL;
     TargetMaterialBlinker targetBlinker;    
 
@@ -84,8 +90,9 @@ public class SceneController3d : MonoBehaviour
     List<float> roadNearEdgesZ;
     List<SceneRiverSegment> riverSegments;
     GameObject balloonParent;
+    float debugAcceleration = 0.4f;
     ///    
-    
+
     GameObject GetLevel() => levels[currentLevelIndex];
 
     void RotateLevels()
@@ -118,7 +125,7 @@ public class SceneController3d : MonoBehaviour
         };
         var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
-        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs})
+        .Select(goc => new GameObjectCollection4 { zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs })
         .ToList();
         pendingActivation.AddRange(newGameObjects);
         gameState.GetStateContents().enemyHQs = sceneOutput.enemyHQs;
@@ -133,6 +140,25 @@ public class SceneController3d : MonoBehaviour
         riverVerts = sceneOutput.riverVerts;
         roadNearEdgesZ.AddRange(sceneOutput.roadNearEdgesZ);
         riverSegments.AddRange(sceneOutput.riverSegments);
+        var mainLight = GetMainLight();
+        if (GameState.GetInstance().IsNightTime())
+        {
+            mainLight.intensity = nightLightIntensity;
+            mainLight.color = nightLightColor;
+            RenderSettings.ambientLight = nightAmbientColor;
+        }
+        else
+        {
+            mainLight.intensity = dayLightIntensity;
+            mainLight.color = dayLightColor;
+            RenderSettings.ambientLight = dayAmbientColor;
+        }
+        maxPlane.SetAltitudeLights(LevelHelper.AltitudeLights(gameState.GetStateContents().latestLevelPrereq.levelType));
+        maxPlane.SetArmaments(LevelHelper.GetArmamentType(gameState.GetStateContents().latestLevelPrereq.levelType));
+        
+        Debug.Log($"AmbientIntensity={RenderSettings.ambientIntensity} color={RenderSettings.ambientLight} " +
+            $"MainLightIntensity={mainLight.intensity} color={mainLight.color}");
+        gameState.ReportEvent(GameEvent.VIEW_MODE_CHANGED);
     }
 
     int GetTargetHitsAtStartOfLevel(LevelPrerequisite levelPrereq)
@@ -142,6 +168,11 @@ public class SceneController3d : MonoBehaviour
             case LevelType.NORMAL:
             case LevelType.ROAD:
             case LevelType.BALLOONS:
+            case LevelType.DAM:
+                if (AllEnemyHQsBombed())
+                {
+                    return gameState.GetStateContents().targetsHit;
+                }
                 return 0;
             case LevelType.CITY:
                 return levelPrereq.enemyHQsBombed.Where(hq => hq).Count();
@@ -149,28 +180,6 @@ public class SceneController3d : MonoBehaviour
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
                 return GameState.GetInstance().GetTargetsHit();
-            default:
-                Debug.LogError($"invalid level type {levelPrereq.levelType}");
-                return 0;
-        }
-    }
-
-    int GetTargetHitsMin(LevelPrerequisite levelPrereq)
-    {
-        switch (levelPrereq.levelType)
-        {
-            case LevelType.NORMAL:
-                return gameState.targetsHitMin1;
-            case LevelType.ROAD:
-                return gameState.targetsHitMin2;
-            case LevelType.CITY:
-                return levelPrereq.enemyHQsBombed.Count();
-            case LevelType.BALLOONS:
-                return 99;
-            case LevelType.ROBOT_BOSS:
-            case LevelType.RED_BARON_BOSS:
-            case LevelType.INTRO:
-                return 1;
             default:
                 Debug.LogError($"invalid level type {levelPrereq.levelType}");
                 return 0;
@@ -228,31 +237,41 @@ public class SceneController3d : MonoBehaviour
             levelType = firstLevelType,
             riverLeftOfAirstrip = true,
             enemyHQsBombed = new List<bool> { false, false, false },
-            boss = firstLevelType == LevelType.ROBOT_BOSS ||
-                       firstLevelType == LevelType.RED_BARON_BOSS ||
-                       firstLevelType == LevelType.INTRO,
+            boss = LevelHelper.GetBossType(firstLevelType) != BossType.NONE,
             missionComplete = false,
             firstLevel = true,
-            enemyAircraft = firstLevelType != LevelType.INTRO,
-            wind = firstLevelType != LevelType.INTRO,
+            enemyAircraft = LevelHelper.EnemyAircraft(firstLevelType),
+            wind = LevelHelper.Wind(firstLevelType),
+            nightTime = LevelHelper.NightTime(firstLevelType)
         };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         sceneBuilder.Init();
         CreateLevel();
         PreventRelanding();
-        stateContents.targetsHitMin = GetTargetHitsMin(stateContents.latestLevelPrereq);
+        stateContents.targetsHitMin = LevelHelper.GetTargetHitsMin(stateContents.latestLevelPrereq);
         var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
     }
 
+    Light GetMainLight()
+    {
+        GameObject lightObject = GameObject.Find("Main Directional Light");
+        if (lightObject == null)
+        {
+            return null;
+        }
+
+        return lightObject.GetComponent<Light>();
+    }
+
     void Start()
-    {   
+    {
         //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
         UserGuide.SetOpenState(false);
         Settings.Update();
 
-        
+
         GameState.GetInstance().Subscribe(GameEvent.START, OnStartCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_REQUESTED, OnRestartRequestCallback);
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
@@ -266,12 +285,13 @@ public class SceneController3d : MonoBehaviour
         GameState.boatBlinkMaterial = new Material(boatTargetMaterial);
         GameState.planeBlinkMaterial = new Material(planeTargetMaterial);
         GameState.targetBlinkMaterial = new Material(targetMaterial);
-        targetBlinker = new TargetMaterialBlinker(new [] {
+        targetBlinker = new TargetMaterialBlinker(new[] {
             GameState.planeBlinkMaterial,
             GameState.carBlinkMaterial,
             GameState.boatBlinkMaterial,
             GameState.targetBlinkMaterial});
         StartNewGame();
+        debugAcceleration = gameState.acceleration;
     }
 
     bool IsOverRoad(Vector3 position)
@@ -381,7 +401,7 @@ public class SceneController3d : MonoBehaviour
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
-            LevelBuilder.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
+            LevelHelper.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
         }
@@ -391,16 +411,13 @@ public class SceneController3d : MonoBehaviour
 
     bool ShallCreateNewBoss(LevelType newLevelType, LevelType oldLevelType)
     {
-        return (newLevelType == LevelType.ROBOT_BOSS ||
-                newLevelType == LevelType.RED_BARON_BOSS ||
-                newLevelType == LevelType.INTRO)
-           && oldLevelType != newLevelType;
+        return LevelHelper.GetBossType(newLevelType) != BossType.NONE &&
+           oldLevelType != newLevelType;
     }
 
     bool IsMissionComplete(LevelType newLevelType, bool bossDefeated, bool reachedTargetLimit)
     {
-        return (newLevelType == LevelType.RED_BARON_BOSS && bossDefeated) ||
-            (newLevelType == LevelType.INTRO && bossDefeated) ||
+        return (LevelHelper.GetBossType(newLevelType) != BossType.NONE && bossDefeated) ||
             reachedTargetLimit;
     }
 
@@ -433,20 +450,29 @@ public class SceneController3d : MonoBehaviour
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
             new List<bool> {false, false, false};
 
-        return new LevelPrerequisite {
+        return new LevelPrerequisite
+        {
             levelType = newLevelType,
-            riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+            riverLeftOfAirstrip = latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed,
             boss = ShallCreateNewBoss(newLevelType, latestLevelType),
             missionComplete = IsMissionComplete(newLevelType, gameState.GetStateContents().bossDefeated, reachedTargetLimit),
             firstLevel = false,
-            enemyAircraft = newLevelType != LevelType.INTRO,
-            wind = newLevelType != LevelType.INTRO,
+            enemyAircraft = LevelHelper.EnemyAircraft(newLevelType),
+            wind = LevelHelper.Wind(newLevelType),
+            nightTime = LevelHelper.NightTime(newLevelType)
         };
     }
 
     bool AllEnemyHQsBombed()
     {
+        var stateContents = gameState.GetStateContents();
+        if (stateContents.latestLevelPrereq.levelType == LevelType.DAM)
+        {
+            // include dams in enemy HQs
+            return stateContents.targetsHit >= stateContents.targetsHitMin;
+        }
+
         var enemyHQs = gameState.GetStateContents().enemyHQs;
         return enemyHQs != null && enemyHQs.Count > 0 && enemyHQs.All(hq => hq.IsBombed());
     }
@@ -469,7 +495,7 @@ public class SceneController3d : MonoBehaviour
                 CreateLevel();
                 gameState.SetTargetsHit(
                     GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
-                    GetTargetHitsMin(stateContents.latestLevelPrereq));
+                    LevelHelper.GetTargetHitsMin(stateContents.latestLevelPrereq));
             }
             else 
             {
@@ -479,7 +505,7 @@ public class SceneController3d : MonoBehaviour
                     stateContents.latestLevelPrereq = GetNewLevelPrereq();
                     gameState.SetTargetsHit(
                         GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
-                        GetTargetHitsMin(stateContents.latestLevelPrereq));
+                        LevelHelper.GetTargetHitsMin(stateContents.latestLevelPrereq));
                     newLevelTask = new LevelBuilder().BuildAsync(stateContents.latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }
@@ -611,10 +637,8 @@ public class SceneController3d : MonoBehaviour
             if (newSpeed < 0f)
             {
                 newSpeed = 0f;
-                var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;                
-                var bossDefeated = (latestLevelType == LevelType.ROBOT_BOSS ||
-                                    latestLevelType == LevelType.RED_BARON_BOSS ||
-                                    latestLevelType == LevelType.INTRO) &&
+                var latestLevelType = gameState.GetStateContents().latestLevelPrereq.levelType;
+                var bossDefeated = LevelHelper.GetBossType(latestLevelType) != BossType.NONE &&
                     gameState.GetStateContents().bossDefeated;
                 gameState.SetStatus(bossDefeated || AllEnemyHQsBombed() ? GameStatus.FINISHED : GameStatus.REFUELLING);
             }
@@ -724,6 +748,7 @@ public class SceneController3d : MonoBehaviour
             case LevelType.ROBOT_BOSS:
             case LevelType.RED_BARON_BOSS:
             case LevelType.INTRO:
+            case LevelType.DAM:
                 break;
             default:
                 Debug.LogError($"Invalid level type {gameState.GetStateContents().latestLevelPrereq.levelType}");
@@ -743,7 +768,18 @@ public class SceneController3d : MonoBehaviour
 
     private void OnDebugCallback3()
     {
-        SpawnBossShadow(BossShadowVariant.BSH3);
+        // Toggle speed 
+
+        if (gameState.GetStateContents().speed == 0f)
+        {
+            gameState.SetSpeed(gameState.maxSpeed);
+            gameState.acceleration = debugAcceleration;
+        }
+        else
+        {
+            gameState.SetSpeed(0f);
+            gameState.acceleration = 0f;
+        }
     }
 
     private void OnStartCallback()
