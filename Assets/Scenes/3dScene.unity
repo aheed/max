@@ -1061,7 +1061,7 @@ MonoBehaviour:
   cellLength: 0.26666668
   activationDistance: 8
   deactivationDistance: 8
-  fuelRateLow: 0
+  fuelRateLow: 0.6
   fuelRateHigh: 0.9
   refuelRate: 20
   fuelFullTankMargin: 0.01

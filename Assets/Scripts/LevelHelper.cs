@@ -162,17 +162,23 @@ public static class LevelHelper
 
     public static bool Wind(LevelType levelType)
     {
-        return levelType != LevelType.INTRO
-              && levelType != LevelType.DAM; //TEMP!! Keep wind off while testing dam level
+        return levelType != LevelType.INTRO;
     }
 
     public static bool EnemyAircraft(LevelType levelType)
     {
-        return levelType != LevelType.INTRO
-              && levelType != LevelType.DAM; //TEMP!! Keep enemy aircraft off while testing dam level
+        return levelType != LevelType.INTRO;
     }
 
     public static bool NightTime(LevelType levelType)
+    {
+        // Currently, no levels are set to night time.
+        // Dam buster level should be night time, but it is not well enough implemented yet.
+        return false;
+        //return levelType == LevelType.DAM;
+    }
+
+    public static bool AltitudeLights(LevelType levelType)
     {
         return levelType == LevelType.DAM;
     }
