@@ -165,6 +165,46 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Move
       m_Flags: 8
+    - m_Name: 2D Vector
+      m_Id: 4e4e28ff-3991-45e0-aa03-134bcb7e1c53
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: a941f448-0577-4192-9509-96aa789bb015
+      m_Path: <Joystick>/stick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 9e63efb1-a31a-46b3-9e5c-babb5ad77bee
+      m_Path: <Joystick>/stick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 76ea2968-2ae0-40e0-a744-138e9dd0fd4e
+      m_Path: <Joystick>/stick/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 0d2b50c9-a4e5-41b2-a7f2-32448a33cf35
+      m_Path: <Joystick>/stick/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
     m_Flags: 0
   FireAction:
     m_Name: Fire
@@ -182,15 +222,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Fire
       m_Flags: 0
-    m_Flags: 0
-  TouchAction:
-    m_Name: Touch
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e9959189-25f6-4b3f-a81c-94362525aee0
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
+    - m_Name: 
+      m_Id: c5526b57-d1c6-458d-a7b7-25b71ee29dd1
+      m_Path: <Joystick>/trigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire
+      m_Flags: 0
     m_Flags: 0
   DebugFlackAction:
     m_Name: Debug Flack
