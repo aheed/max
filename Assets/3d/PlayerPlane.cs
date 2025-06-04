@@ -52,7 +52,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     bool gunDamage = false;
     bool lastAlive = false;
     GameObject currentBombPrefab;
-    Joystick joystick;
     public float minStickXForZDiff = 0.1f;
 
     PlaneController GetController()
@@ -88,7 +87,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     // Start is called before the first frame update
     void Start()
     {
-        joystick = Joystick.current;
         MoveAction.Enable();
         FireAction.Enable();
         EnhancedTouchSupport.Enable();
@@ -275,15 +273,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         GameStateContents stateContents = gameState.GetStateContents();
 
-        move = MoveAction.ReadValue<Vector2>(); //keyboard input
-
-        if (move == Vector2.zero && joystick != null)
-        {
-            //joystick input
-            move.x = joystick.stick.x.ReadValue();
-            move.y = joystick.stick.y.ReadValue();
-        }
-
+        move = MoveAction.ReadValue<Vector2>();
         if (!Settings.GetPilotControl())
         {
             move.y = move.y * -1f;
