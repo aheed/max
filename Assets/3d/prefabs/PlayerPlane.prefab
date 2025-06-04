@@ -129,6 +129,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Fire
       m_Flags: 0
+    - m_Name: 
+      m_Id: 6c1834d4-eff3-4db4-9917-c37eb35a12b1
+      m_Path: <Joystick>/trigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire
+      m_Flags: 0
     m_Flags: 0
   DebugFlackAction:
     m_Name: Debug Flack
@@ -219,6 +227,7 @@ MonoBehaviour:
   bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
   bouncingBombPrefab: {fileID: 8503241040667400508, guid: 47ee586052bf1170c84a287d675f0f8e, type: 3}
   lightArcPrefab: {fileID: 3330864926588530414, guid: 81aa8198683d6ebb59dce00cb25cea38, type: 3}
+  minStickXForZDiff: 1
 --- !u!54 &6480590837714050916
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -60,34 +60,9 @@ public class PlaneController : MonoBehaviour
 
         if (alive)
         {
-            if (moveX > 0)
-            {
-                targetZRotation = -maxRotation;
-                targetYRotation = maxYaw;
-            }
-            else if (moveX < 0)
-            {
-                targetZRotation = maxRotation;
-                targetYRotation = -maxYaw;
-            }
-            else
-            {
-                targetZRotation = 0;
-                targetYRotation = 0;
-            }
-
-            if (moveY > 0)
-            {
-                targetXRotation = maxPitch;
-            }
-            else if (moveY < 0)
-            {
-                targetXRotation = -maxPitch;
-            }
-            else
-            {
-                targetXRotation = 0;
-            }
+            targetZRotation = moveX * -maxRotation;
+            targetYRotation = moveX * maxYaw;
+            targetXRotation = moveY * maxPitch;
         }
 
         if (this.alive != alive)

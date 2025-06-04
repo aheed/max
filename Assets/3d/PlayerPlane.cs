@@ -52,6 +52,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     bool gunDamage = false;
     bool lastAlive = false;
     GameObject currentBombPrefab;
+    Joystick joystick;
+    public float minStickXForZDiff = 0.1f;
 
     PlaneController GetController()
     {
@@ -86,6 +88,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     // Start is called before the first frame update
     void Start()
     {
+        joystick = Joystick.current;
         MoveAction.Enable();
         FireAction.Enable();
         EnhancedTouchSupport.Enable();
@@ -196,7 +199,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             (significantWind ? stateContents.windDirection.x * GameState.windSpeed * Time.deltaTime : 0f);
 
         var moveY = -apparentMove.y * GameState.verticalSpeed * speedFactor * Time.deltaTime;
-        if (apparentMove.x == 0f)
+
+        if (Math.Abs(apparentMove.x) <= minStickXForZDiff)
         {
             tmpLocalPosition.y += moveY;
         }
@@ -266,32 +270,20 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         gameState.SetRandomDamage(true);
     }
 
-    /*void HandleCollision(Collider2D col)
-    {
-        var collObjName = CollisionHelper.GetObjectWithOverlappingAltitude(this, col.gameObject);
-        //Debug.Log($"========== {col.name} {collObjName}");
-        if (collObjName.StartsWith("enemy"))
-        {
-            gameState.SetStatus(GameStatus.COLLIDED);
-        }
-        else if (collObjName.StartsWith("house") ||
-                 collObjName.StartsWith("tree") ||
-                 collObjName.StartsWith("bridge") ||
-                 collObjName.StartsWith("boat") ||
-                 collObjName.StartsWith("ExpHouse", true, CultureInfo.InvariantCulture))
-        {
-            gameState.SetStatus(GameStatus.DEAD);
-        }
-
-        //no collision
-    }*/
-
     // Update is called once per frame
     void Update()
     {
         GameStateContents stateContents = gameState.GetStateContents();
 
-        move = MoveAction.ReadValue<Vector2>();
+        move = MoveAction.ReadValue<Vector2>(); //keyboard input
+
+        if (move == Vector2.zero && joystick != null)
+        {
+            //joystick input
+            move.x = joystick.stick.x.ReadValue();
+            move.y = joystick.stick.y.ReadValue();
+        }
+
         if (!Settings.GetPilotControl())
         {
             move.y = move.y * -1f;
@@ -437,18 +429,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         tmpPos.y = GameState.GetInstance().minAltitude;
         transform.localPosition = tmpPos;
     }
-
-    /*void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.name.StartsWith("flack_expl"))
-        {
-            HandleFlackHit();
-        }
-        else
-        {
-            HandleCollision(col);
-        }
-    }*/
 
     void DropBomb()
     {
