@@ -49,7 +49,7 @@ public class SceneBuilder : MonoBehaviour
     public float powerLineAltitude = 2.5f;
     public float powerLineDistanceZ = 0.1f;
     public float carAltitude = 0.05f;
-    float airstripAltitude = 0.001f;
+    public float airstripAltitude = 0.011f;
     public float parkedPlaneAltitude = 0.15f;
     public float parllelRoadSideWidth = 0.1f;
     public float parallelRoadWidth = 0.9f;
