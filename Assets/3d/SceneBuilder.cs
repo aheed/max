@@ -45,8 +45,6 @@ public class SceneBuilder : MonoBehaviour
     public int leftTrim = 2;
     public int rightTrim = 5;
     public float roadAltitude = 0.002f;
-    public float powerLineAltitude = 2.5f;
-    public float powerLineDistanceZ = 0.1f;
     public float carAltitude = 0.05f;
     public float airstripAltitude = 0.011f;
     public float parkedPlaneAltitude = 0.15f;
@@ -531,54 +529,9 @@ public class SceneBuilder : MonoBehaviour
         
         // Roads
         ret.roadNearEdgesZ = new();
-        GameObject powerPostRow = null;
-        /*
-        if (levelContents.dams?.Count() > 0)
-        {
-            var powerLineSegmentLength = 5f; // check mesh bounds instead?
-            var powerPostHeight = 2.5f; // check mesh bounds instead?
-            powerPostRow = new GameObject("powerPostRow");
-            powerPostRow.transform.parent = sceneInput.levelTransform;
-            for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
-            {
-                var powerX = x + (powerLineSegmentLength / 2);
-                var powerZ = 0; // will be overridden by road z
-                var powerLineGameObject = Instantiate(powerLinePrefab, powerPostRow.transform);
-                powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
-                powerLineGameObject = Instantiate(powerLinePrefab, powerPostRow.transform);
-                powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
-                var powerPostGameObject = Instantiate(powerPostPrefab, powerPostRow.transform);
-                powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), powerZ);
-            }
-        }*/
         
         foreach (var road in levelContents.roads)
         {
-            //if (levelContents.dams?.Count() > 0)
-            if (powerPostRow != null)
-            {
-                // Power lines instead of roads
-                var powerZ = road * cellHeight;
-                var ppr = Instantiate(powerPostRow, sceneInput.levelTransform);
-                ppr.transform.localPosition = new Vector3(0, 0, powerZ);
-
-                /*var powerLineSegmentLength = 5f; // check mesh bounds instead?
-                var powerPostHeight = 2.5f; // check mesh bounds instead?
-                for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
-                {
-                    var powerX = x + (powerLineSegmentLength / 2);
-                    var powerZ = road * cellHeight;
-                    var powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
-                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
-                    powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
-                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
-                    var powerPostGameObject = Instantiate(powerPostPrefab, sceneInput.levelTransform);
-                    powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), road * cellHeight);
-                }*/
-                continue;
-            }
-
-            //var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var roadGameObject = new GameObject("road");
             roadGameObject.transform.parent = sceneInput.levelTransform;
             var lowerEdgeZ = road * cellHeight;

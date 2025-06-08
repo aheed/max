@@ -15,19 +15,29 @@ public class PowerLineChain : ManagedObject
         levelWidth = width;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {        
+    {
+        var lineOffsetX = (powerLineSegmentLength / 2) - (levelWidth / 2);
+        var postOffsetX = -(levelWidth / 2);
+
         for (float x = 0; x < levelWidth; x += powerLineSegmentLength)
         {
-            var powerX = x + (powerLineSegmentLength / 2) - (levelWidth / 2);
-            var powerZ = 0; // will be overridden by road z
-            var powerLineGameObject = Instantiate(powerLinePrefab, transform);
-            powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
-            powerLineGameObject = Instantiate(powerLinePrefab, transform);
-            powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
-            var powerPostGameObject = Instantiate(powerPostPrefab, transform);
-            powerPostGameObject.transform.localPosition = new Vector3(x - (levelWidth / 2), powerLineAltitude - (powerPostHeight / 2), powerZ);
+            var powerX = x + lineOffsetX;
+
+            var powerLineGameObject1 = Instantiate(
+                powerLinePrefab,
+                transform);
+            powerLineGameObject1.transform.localPosition = new Vector3(powerX, powerLineAltitude, -powerLineDistanceZ);
+
+            var powerLineGameObject2 = Instantiate(
+                powerLinePrefab,
+                transform);
+            powerLineGameObject2.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerLineDistanceZ);
+
+            var powerPostGameObject = Instantiate(
+                powerPostPrefab,
+                transform);
+            powerPostGameObject.transform.localPosition = new Vector3(x + postOffsetX, powerLineAltitude - (powerPostHeight / 2), 0);
         }        
     }
 }

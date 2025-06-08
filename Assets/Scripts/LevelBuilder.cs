@@ -142,7 +142,7 @@ public class LevelBuilder
     public static readonly int landingStripWidth = 6;
     public static readonly int minSpaceBetweenRoads = 10;
     public static readonly float roadProbability = 0.1f;
-    public static readonly int powerLineInterval = 16;
+    public static readonly int powerLineInterval = 20;
     public static readonly int roadHeight = 2;
     public static readonly int nofDams = 3;
     static readonly float[] riverSlopes = new float[] { -0.5f, -0.5f, 0f, 1f, 1f };
@@ -712,62 +712,65 @@ public class LevelBuilder
             if (LevelHelper.PowerLines(levelType))
             {
                 powerLineCooldown--;
-                if (powerLineCooldown <= 0 && y > landingStripHeight && y < (ret.gridHeight - landingStripHeight))
+                if (powerLineCooldown <= 0)
                 {
-                    // Power line
-                    ret.cells[midX, y] = CellContent.POWER_LINE;
                     powerLineCooldown = powerLineInterval;
-                    continue;
+                    if (y > landingStripHeight && y < (ret.gridHeight - landingStripHeight))
+                    {
+                        // Power line
+                        ret.cells[midX, y] = CellContent.POWER_LINE;
+                        continue;
+                    }
                 }
             }
 
             for (var x = 0; x < LevelContents.gridWidth; x++)
+            {
+                // Tanks
+                var localTankProbability = ret.cells[x, y] == CellContent.HOUSE_FRONT ? tankProbabilityAtHouse : tankProbability;
+                if (TrueByProbability(localTankProbability) && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
                 {
-                    // Tanks
-                    var localTankProbability = ret.cells[x, y] == CellContent.HOUSE_FRONT ? tankProbabilityAtHouse : tankProbability;
-                    if (TrueByProbability(localTankProbability) && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
-                    {
-                        ret.cells[x, y] = CellContent.TANK;
-                    }
-
-                    // Flack guns
-                    if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && LevelHelper.RandomFlakGuns(levelType))
-                    {
-                        ret.cells[x, y] = CellContent.FLACK_GUN;
-                    }
-
-                    // Trees
-                    if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
-                    {
-                        ret.cells[x, y] = CellContent.TREE1;
-                    }
-
-                    if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
-                    {
-                        ret.cells[x, y] = CellContent.TREE2;
-                    }
-
-                    // Boats
-                    if (TrueByProbability(boat1Probability) && ret.cells[x, y] == CellContent.WATER)
-                    {
-                        ret.cells[x, y] = CellContent.BOAT1;
-                    }
-
-                    if (levelType == LevelType.BALLOONS)
-                    {
-                        // Balloons
-                        var localBalloonProbability = ret.cells[x, y] == CellContent.WATER ? balloonOverWaterProbability : balloonOverLandProbability;
-                        if (TrueByProbability(localBalloonProbability))
-                        {
-                            ret.cells[x, y] |= CellContent.BALLOON;
-                        }
-                    }
-
-                    /*if (ret.cells[x, y] == CellContent.ROAD || ret.cells[x, y] == CellContent.WATER || ret.cells[x, y] == CellContent.LANDING_STRIP) //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    {
-                        ret.cells[x, y] = CellContent.TANK;
-                    }*/
+                    ret.cells[x, y] = CellContent.TANK;
                 }
+
+                // Flack guns
+                if (TrueByProbability(flackGunProbability) && ret.cells[x, y] == CellContent.GRASS && y > landingStripHeight && LevelHelper.RandomFlakGuns(levelType))
+                {
+                    ret.cells[x, y] = CellContent.FLACK_GUN;
+                }
+
+                // Trees
+                if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
+                {
+                    ret.cells[x, y] = CellContent.TREE1;
+                }
+
+                if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
+                {
+                    ret.cells[x, y] = CellContent.TREE2;
+                }
+
+                // Boats
+                if (TrueByProbability(boat1Probability) && ret.cells[x, y] == CellContent.WATER)
+                {
+                    ret.cells[x, y] = CellContent.BOAT1;
+                }
+
+                if (levelType == LevelType.BALLOONS)
+                {
+                    // Balloons
+                    var localBalloonProbability = ret.cells[x, y] == CellContent.WATER ? balloonOverWaterProbability : balloonOverLandProbability;
+                    if (TrueByProbability(localBalloonProbability))
+                    {
+                        ret.cells[x, y] |= CellContent.BALLOON;
+                    }
+                }
+
+                /*if (ret.cells[x, y] == CellContent.ROAD || ret.cells[x, y] == CellContent.WATER || ret.cells[x, y] == CellContent.LANDING_STRIP) //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                {
+                    ret.cells[x, y] = CellContent.TANK;
+                }*/
+            }
         }
 
         if (ret.city != null)
