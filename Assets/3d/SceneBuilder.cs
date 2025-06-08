@@ -88,7 +88,7 @@ public class SceneBuilder : MonoBehaviour
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
-        powerLineManager = new ObjectManager(powerLineChangeManagedObjectPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        powerLineManager = new ObjectManager(powerLineChangeManagedObjectPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
     }
 
 
