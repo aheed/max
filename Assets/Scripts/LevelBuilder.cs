@@ -24,6 +24,7 @@ public enum CellContent
     ENEMY_HANGAR,
     SEARCH_LIGHT,
     DAM,
+    POWER_LINE,
     BALLOON = 1 << 6,
     LAND_MASK = 0x3F,
     AIR_MASK = 0xC0
@@ -141,6 +142,7 @@ public class LevelBuilder
     public static readonly int landingStripWidth = 6;
     public static readonly int minSpaceBetweenRoads = 10;
     public static readonly float roadProbability = 0.1f;
+    public static readonly int powerLineInterval = 20;
     public static readonly int roadHeight = 2;
     public static readonly int nofDams = 3;
     static readonly float[] riverSlopes = new float[] { -0.5f, -0.5f, 0f, 1f, 1f };
@@ -387,29 +389,30 @@ public class LevelBuilder
                 ytmp = newY;
             }
         
-
-
             // Roads across
             var cooldown = 0;
             List<int> roads = new List<int>();
-            for (var y = landingStripHeight + cooldown; y < (ret.gridHeight - roadHeight - cooldown); y++)
+            if (LevelHelper.RoadsAcrossFlightPath(levelType))
             {
-                if (cooldown <= 0 && TrueByProbability(roadProbability))
+                for (var y = landingStripHeight + cooldown; y < (ret.gridHeight - roadHeight - cooldown); y++)
                 {
-                    roads.Add(y);
-                    for (var x = 0; x < LevelContents.gridWidth; x++)
+                    if (cooldown <= 0 && TrueByProbability(roadProbability))
                     {
-                        for (var i = 0; i < roadHeight; i++)
+                        roads.Add(y);
+                        for (var x = 0; x < LevelContents.gridWidth; x++)
                         {
-                            //Debug.Log($"{x} {y} {i} {roadHeight}");
-                            ret.cells[x, y+i] = CellContent.ROAD;
+                            for (var i = 0; i < roadHeight; i++)
+                            {
+                                //Debug.Log($"{x} {y} {i} {roadHeight}");
+                                ret.cells[x, y + i] = CellContent.ROAD;
+                            }
                         }
+                        cooldown = minSpaceBetweenRoads;
                     }
-                    cooldown = minSpaceBetweenRoads;
-                }
-                if (cooldown > 0)
-                {
-                    cooldown--;
+                    if (cooldown > 0)
+                    {
+                        cooldown--;
+                    }
                 }
             }
             ret.roads = roads;
@@ -666,11 +669,12 @@ public class LevelBuilder
             ret.dams = new int[0];
         }
 
-        var bigHousesList = new List<HousePosition>();        
+        var bigHousesList = new List<HousePosition>();
+        var powerLineCooldown = _rnd.Next(0, powerLineInterval);
         for (var y = 0; y < ret.gridHeight; y++)
         {
             var yDistanceToEnd = ret.gridHeight - y;
-            var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;            
+            var inCity = levelType == LevelType.CITY && y > cityApproachLength && yDistanceToEnd > cityApproachLength;
             if (inCity)
             {
                 var flakX = 0;
@@ -693,8 +697,8 @@ public class LevelBuilder
                 {
                     if (y % 4 == 3)
                     {
-                        bigHousesList.Add(new HousePosition {x = midX - bigHouseRoadDistance, y = y});
-                        bigHousesList.Add(new HousePosition {x = midX + bigHouseRoadDistance, y = y});
+                        bigHousesList.Add(new HousePosition { x = midX - bigHouseRoadDistance, y = y });
+                        bigHousesList.Add(new HousePosition { x = midX + bigHouseRoadDistance, y = y });
                     }
                 }
 
@@ -705,8 +709,23 @@ public class LevelBuilder
                 continue;
             }
 
+            if (LevelHelper.PowerLines(levelType))
+            {
+                powerLineCooldown--;
+                if (powerLineCooldown <= 0)
+                {
+                    powerLineCooldown = powerLineInterval;
+                    if (y > landingStripHeight && y < (ret.gridHeight - landingStripHeight))
+                    {
+                        // Power line
+                        ret.cells[midX, y] = CellContent.POWER_LINE;
+                        continue;
+                    }
+                }
+            }
+
             for (var x = 0; x < LevelContents.gridWidth; x++)
-            {   
+            {
                 // Tanks
                 var localTankProbability = ret.cells[x, y] == CellContent.HOUSE_FRONT ? tankProbabilityAtHouse : tankProbability;
                 if (TrueByProbability(localTankProbability) && (ret.cells[x, y] == CellContent.GRASS || ret.cells[x, y] == CellContent.HOUSE_FRONT) && y > landingStripHeight)
@@ -725,7 +744,7 @@ public class LevelBuilder
                 {
                     ret.cells[x, y] = CellContent.TREE1;
                 }
-                
+
                 if (TrueByProbability(treeProbability) && ret.cells[x, y] == CellContent.GRASS)
                 {
                     ret.cells[x, y] = CellContent.TREE2;
@@ -750,7 +769,7 @@ public class LevelBuilder
                 /*if (ret.cells[x, y] == CellContent.ROAD || ret.cells[x, y] == CellContent.WATER || ret.cells[x, y] == CellContent.LANDING_STRIP) //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 {
                     ret.cells[x, y] = CellContent.TANK;
-                }*/               
+                }*/
             }
         }
 

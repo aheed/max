@@ -21009,6 +21009,7 @@ MonoBehaviour:
   bridgePrefab: {fileID: 7238803995979680964, guid: c2ed317b22ddede37b06d13ed2847864, type: 3}
   carPrefab: {fileID: 3150033924233586620, guid: e681f57b8d6033f9ab5f52a28d922a28, type: 3}
   searchLightPrefab: {fileID: 8996614041428087430, guid: 2a26c90ca20b0c6db92f57317c8557e9, type: 3}
+  powerLineChangeManagedObjectPrefab: {fileID: -8990349916232476135, guid: 720da1f02a41c8ed29ec1456dff2efb4, type: 3}
   airstripEndPrefab: {fileID: 0}
   hangarPrefab: {fileID: 6794356900591465683, guid: 67cc3812cbd31929fa58cb7cd98b3faa, type: 3}
   enemyHqPrefab: {fileID: 3387814505127676548, guid: 0a4870682343bd5abb1215ebb4324043, type: 3}
@@ -21017,8 +21018,6 @@ MonoBehaviour:
   redBaronBossPrefab: {fileID: 93079018367311720, guid: ef7f5e7ded26e690aa35205b1e79061c, type: 3}
   introControllerPrefab: {fileID: 7335008102571623040, guid: 54448248bacaf7a55911b9f56af46fbb, type: 3}
   damPrefab: {fileID: 367338661191137972, guid: 4c8a7670a95847aeb82546b2bb100d57, type: 3}
-  powerLinePrefab: {fileID: 275747870939369791, guid: bc636bb062e4cf0228ea5b440d67ee32, type: 3}
-  powerPostPrefab: {fileID: 6390092510404647292, guid: 6ae2c8fed9e6b971cb0c10e5565fe84b, type: 3}
   riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
   groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: 54c26c8f9c6246c019b8b7f00e8f3a84, type: 2}

@@ -69,9 +69,19 @@ public static class LevelHelper
             levelType == LevelType.DAM;
     }
 
+    public static bool RoadsAcrossFlightPath(LevelType levelType)
+    {
+        return levelType != LevelType.DAM && River(levelType);
+    }
+
     public static bool RoadAlongFlightPath(LevelType levelType)
     {
         return levelType == LevelType.ROAD || levelType == LevelType.CITY;
+    }
+
+    public static bool PowerLines(LevelType levelType)
+    {
+        return levelType == LevelType.DAM;
     }
 
     public static bool EnemyAirstrips(LevelType levelType)

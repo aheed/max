@@ -28,6 +28,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject bridgePrefab;
     public ManagedObject carPrefab;
     public ManagedObject searchLightPrefab;
+    public ManagedObject powerLineChangeManagedObjectPrefab;
     public GameObject airstripEndPrefab;
     public ManagedObject hangarPrefab;
     public EnemyHQ3d enemyHqPrefab;
@@ -36,8 +37,6 @@ public class SceneBuilder : MonoBehaviour
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
     public Dam damPrefab;
-    public GameObject powerLinePrefab;
-    public GameObject powerPostPrefab;
     public Material riverMaterial;
     public Material groundMaterial;
     public Material riverBankMaterial;
@@ -46,8 +45,6 @@ public class SceneBuilder : MonoBehaviour
     public int leftTrim = 2;
     public int rightTrim = 5;
     public float roadAltitude = 0.002f;
-    public float powerLineAltitude = 2.5f;
-    public float powerLineDistanceZ = 0.1f;
     public float carAltitude = 0.05f;
     public float airstripAltitude = 0.011f;
     public float parkedPlaneAltitude = 0.15f;
@@ -69,6 +66,7 @@ public class SceneBuilder : MonoBehaviour
     private ObjectManager enemyHangarManager;
     private ObjectManager carManager;
     private ObjectManager searchLightManager;
+    private ObjectManager powerLineManager;
     private GameObject managedObjectsParent;
 
     public void Init()
@@ -90,6 +88,7 @@ public class SceneBuilder : MonoBehaviour
         enemyHangarManager = new ObjectManager(enemyHangarPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         carManager = new ObjectManager(carPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
         searchLightManager = new ObjectManager(searchLightPrefab, managedObjectsParent.transform, ObjectManager.PoolType.None);
+        powerLineManager = new ObjectManager(powerLineChangeManagedObjectPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
     }
 
 
@@ -159,7 +158,7 @@ public class SceneBuilder : MonoBehaviour
     public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
     {
         GameState gameState = GameState.GetInstance();
-
+        PowerLineChain.SetLevelWidth(sceneInput.levelWidth);
         float cellWidth = sceneInput.levelWidth / LevelContents.gridWidth;
         float cellHeight = sceneInput.levelHeight / levelContents.gridHeight;
         var midX = LevelContents.gridWidth / 2;
@@ -530,34 +529,14 @@ public class SceneBuilder : MonoBehaviour
         
         // Roads
         ret.roadNearEdgesZ = new();
+        
         foreach (var road in levelContents.roads)
         {
-            if (levelContents.dams?.Count() > 0)
-            {
-                // Power lines instead of roads
-
-                var powerLineSegmentLength = 5f; // check mesh bounds instead?
-                var powerPostHeight = 2.5f; // check mesh bounds instead?
-                for (float x = 0; x < sceneInput.levelWidth; x += powerLineSegmentLength)
-                {
-                    var powerX = x + (powerLineSegmentLength / 2);
-                    var powerZ = road * cellHeight;
-                    var powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
-                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ - powerLineDistanceZ);
-                    powerLineGameObject = Instantiate(powerLinePrefab, sceneInput.levelTransform);
-                    powerLineGameObject.transform.localPosition = new Vector3(powerX, powerLineAltitude, powerZ + powerLineDistanceZ);
-                    var powerPostGameObject = Instantiate(powerPostPrefab, sceneInput.levelTransform);
-                    powerPostGameObject.transform.localPosition = new Vector3(x, powerLineAltitude - (powerPostHeight / 2), road * cellHeight);
-                }
-                continue;
-            }
-            
-            //var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var roadGameObject = new GameObject("road");
             roadGameObject.transform.parent = sceneInput.levelTransform;
             var lowerEdgeZ = road * cellHeight;
             roadGameObject.transform.localPosition = new Vector3(0f, roadAltitude, lowerEdgeZ);
-            
+
             ret.roadNearEdgesZ.Add(roadGameObject.transform.position.z);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
@@ -574,16 +553,16 @@ public class SceneBuilder : MonoBehaviour
                 new Vector3(roadWidth, 0, sceneInput.roadHeight)
             };
 
-            var roadMesh = CreateQuadMesh(roadVerts, new Vector3[] {Vector3.up});
+            var roadMesh = CreateQuadMesh(roadVerts, new Vector3[] { Vector3.up });
             meshFilter.mesh = roadMesh;
 
-            
+
             // Bridge
             var bridgeZ = roadGameObject.transform.position.z + (sceneInput.roadHeight / 2);
             var bridgeX = GetRiverLeftEdgeX(bridgeZ, ret.riverSegments) + riverWidth / 2;
             var bridgePosition = new Vector3(bridgeX, roadAltitude, bridgeZ);
 
-            var bridgeGameObject = Instantiate(bridgePrefab, bridgePosition, Quaternion.identity, sceneInput.levelTransform);            
+            var bridgeGameObject = Instantiate(bridgePrefab, bridgePosition, Quaternion.identity, sceneInput.levelTransform);
 
             // scale
             var roadSectionQuadTransform = bridgeGameObject.transform.GetChild(0);
@@ -603,15 +582,15 @@ public class SceneBuilder : MonoBehaviour
                 {
                     vip.SetVip();
                 }
-            }            
+            }
 
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] {null}).Select(_ => 
+                gameObjectCollections[road].objectRefs = gameObjectCollections[road].objectRefs.Concat((new GameObject[] { null }).Select(_ =>
                     {
                         var carRef = carManager.Get();
-                        var carLocalTransform = new Vector3(carOffsetX, carAltitude,lowerEdgeZ + (sceneInput.roadHeight / 2));
+                        var carLocalTransform = new Vector3(carOffsetX, carAltitude, lowerEdgeZ + (sceneInput.roadHeight / 2));
                         carRef.managedObject.transform.localPosition = carLocalTransform + parentPositionOffset;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < sceneInput.vipProbability)
                         {
@@ -744,6 +723,10 @@ public class SceneBuilder : MonoBehaviour
                     case CellContent.SEARCH_LIGHT:
                         selectedManager = searchLightManager;
                         altitude = gameState.searchLightAltitude;
+                        break;
+
+                    case CellContent.POWER_LINE:
+                        selectedManager = powerLineManager;
                         break;
                 }
 
