@@ -184,8 +184,8 @@ public static class LevelHelper
     {
         // Currently, no levels are set to night time.
         // Dam buster level should be night time, but it is not well enough implemented yet.
-        return false;
-        //return levelType == LevelType.DAM;
+        //return false;
+        return levelType == LevelType.DAM;
     }
 
     public static bool AltitudeLights(LevelType levelType)

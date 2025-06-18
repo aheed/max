@@ -1089,7 +1089,7 @@ MonoBehaviour:
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
   nightAmbientColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   dayAmbientColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
-  startLevelType: 0
+  startLevelType: 7
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
@@ -21026,8 +21026,6 @@ MonoBehaviour:
   leftTrim: 2
   rightTrim: 5
   roadAltitude: 0.015
-  powerLineAltitude: 1.5
-  powerLineDistanceZ: 0.15
   carAltitude: 0.02
   airstripAltitude: 0.011
   parkedPlaneAltitude: 0.15

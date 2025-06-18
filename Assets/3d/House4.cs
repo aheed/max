@@ -24,6 +24,10 @@ public class House4 : MonoBehaviour, IVip
         var eastWall = alive.GetChild(0).gameObject;
         var westWall = alive.GetChild(1).gameObject;
         var southWall = alive.GetChild(2).gameObject;
+        var night = alive.GetChild(4);
+        var nightEastWall = night.GetChild(0).gameObject;
+        var nightWestWall = night.GetChild(1).gameObject;
+        var nightSouthWall = night.GetChild(2).gameObject;
         
         inner.transform.localScale = newSize * sizeFactor;
 
@@ -39,6 +43,27 @@ public class House4 : MonoBehaviour, IVip
         var newSouthMaterial = new Material(southRenderer.sharedMaterial);
         newSouthMaterial.mainTextureScale = new Vector2(newSize.x, newSize.y);
         southRenderer.material = newSouthMaterial;
+
+        if (GameState.GetInstance().IsNightTime())
+        {
+            var nightEastRenderer = nightEastWall.GetComponent<MeshRenderer>();
+            var newNightEastMaterial = new Material(nightEastRenderer.sharedMaterial);
+            newNightEastMaterial.mainTextureScale = new Vector2(newSize.y, newSize.z);
+            nightEastRenderer.material = newNightEastMaterial;
+
+            var nightWestRenderer = nightWestWall.GetComponent<MeshRenderer>();
+            nightWestRenderer.material = newNightEastMaterial;
+
+            var nightSouthRenderer = nightSouthWall.GetComponent<MeshRenderer>();
+            var newNightSouthMaterial = new Material(nightSouthRenderer.sharedMaterial);
+            newNightSouthMaterial.mainTextureScale = new Vector2(newSize.x, newSize.y);
+            nightSouthRenderer.material = newNightSouthMaterial;
+            night.gameObject.SetActive(true);
+        }
+        else
+        {
+            night.gameObject.SetActive(false);
+        }
 
         if (randomColor)
         {
