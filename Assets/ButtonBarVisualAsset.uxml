@@ -15,4 +15,5 @@
             <ui:VisualElement name="HomeButton" class="bar-button" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&quot;project://database/Assets/UI%20Toolkit/home.png?fileID=2800000&amp;guid=260a05ff95dda7fbbbf2f2e10c395abb&amp;type=3#home&quot;); width: auto; height: auto; max-width: 100%; max-height: 15%; min-width: 100%; min-height: 15%; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; -unity-background-scale-mode: scale-to-fit;" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Label name="DebugLabel" style="position: absolute; left: 20%;" />
 </ui:UXML>
