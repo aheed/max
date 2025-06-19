@@ -6,15 +6,17 @@ public class House4 : MonoBehaviour, IVip
     public GameObject targetPrefab;
     public GameObject explosionPrefab;
     public float sizeFactor = 0.3f;
+    public static readonly float saturationFactor = 0.3f;
     Vector3 size;
 
     GameObject target = null;
 
     Color[] randomColors = new Color[] {
-        new Color(0.98f, 0.8f, 0.5f),
-        new Color(0.9f, 0.1f, 0.9f),
-        new Color(0.9f, 0.2f, 0.2f),
-        new Color(0.9f, 0.9f, 0.9f),
+        Color.Lerp(new Color(0.98f, 0.8f, 0.5f), Color.gray, saturationFactor),
+        Color.Lerp(new Color(0.9f, 0.1f, 0.9f), Color.gray, saturationFactor),
+        Color.Lerp(new Color(0.9f, 0.2f, 0.2f), Color.gray, saturationFactor),
+        Color.Lerp(new Color(0.9f, 0.9f, 0.9f), Color.gray, saturationFactor),
+        new Color(0.9f, 0.9f, 0.1f),
     };
 
     public void SetAppearance(Vector3 newSize, bool randomColor)
@@ -28,7 +30,7 @@ public class House4 : MonoBehaviour, IVip
         var nightEastWall = night.GetChild(0).gameObject;
         var nightWestWall = night.GetChild(1).gameObject;
         var nightSouthWall = night.GetChild(2).gameObject;
-        
+
         inner.transform.localScale = newSize * sizeFactor;
 
         var eastRenderer = eastWall.GetComponent<MeshRenderer>();
