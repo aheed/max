@@ -255,6 +255,14 @@ public class ButtonBarDocument : MonoBehaviour
             }
             var currentJoystick = UnityEngine.InputSystem.Joystick.current;
             controllersString += $"\n\ncurrent: {currentJoystick?.displayName} - {currentJoystick?.name}\n";
+
+            controllersString += "\n\nDevices:\n";
+            foreach (var device in UnityEngine.InputSystem.InputSystem.devices)
+            {
+                controllersString += $"{device.displayName} - {device.name}\n";
+                controllersString += $"  description: {device.description}\n";
+                controllersString += $"  type: {device.description.deviceClass}\n";
+            }
         }
 
         debugElem.text = controllersString;
