@@ -37,8 +37,10 @@ public class SceneBuilder : MonoBehaviour
     public GameObject redBaronBossPrefab;
     public GameObject introControllerPrefab;
     public Dam damPrefab;
-    public Material riverMaterial;
-    public Material groundMaterial;
+    public Material riverDayMaterial;
+    public Material groundDayMaterial;
+    public Material riverNightMaterial;
+    public Material groundNightMaterial;
     public Material riverBankMaterial;
     public Material roadMaterial;
     public Material landingStripMaterial;
@@ -155,7 +157,7 @@ public class SceneBuilder : MonoBehaviour
     }
     
     // Create game objects    
-    public SceneOutput PopulateScene(LevelContents levelContents, SceneInput sceneInput)
+    public SceneOutput PopulateScene(LevelPrerequisite levelPrereq, LevelContents levelContents, SceneInput sceneInput)
     {
         GameState gameState = GameState.GetInstance();
         PowerLineChain.SetLevelWidth(sceneInput.levelWidth);
@@ -336,6 +338,14 @@ public class SceneBuilder : MonoBehaviour
         riverRightBank.transform.localPosition = riverLeftBankLocalTransform;
 
         // River MeshRenderers
+        Material riverMaterial = riverDayMaterial;
+        Material groundMaterial = groundDayMaterial;
+        if (levelPrereq.nightTime)
+        {
+            riverMaterial = riverNightMaterial;
+            groundMaterial = groundNightMaterial;
+        }
+
         var rsMeshFilter = ret.riverSectionGameObject.AddComponent<MeshFilter>();
         var rsMeshRenderer = ret.riverSectionGameObject.AddComponent<MeshRenderer>();
         rsMeshRenderer.material = riverMaterial;

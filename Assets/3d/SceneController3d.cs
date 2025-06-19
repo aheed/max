@@ -123,7 +123,7 @@ public class SceneController3d : MonoBehaviour
             referenceObjectTransform = refobject.transform,
             playerPlaneObject = maxPlane.gameObject
         };
-        var sceneOutput = sceneBuilder.PopulateScene(latestLevel, sceneInput);
+        var sceneOutput = sceneBuilder.PopulateScene(gameState.GetStateContents().latestLevelPrereq, latestLevel, sceneInput);
         var newGameObjects = sceneOutput.gameObjects
         .Select(goc => new GameObjectCollection4 { zCoord = goc.zCoord + lastLevelStartZ, objectRefs = goc.objectRefs })
         .ToList();
@@ -768,6 +768,7 @@ public class SceneController3d : MonoBehaviour
 
     private void OnDebugCallback3()
     {
+        /*
         // Toggle speed 
 
         if (gameState.GetStateContents().speed == 0f)
@@ -779,7 +780,7 @@ public class SceneController3d : MonoBehaviour
         {
             gameState.SetSpeed(0f);
             gameState.acceleration = 0f;
-        }
+        } */
     }
 
     private void OnStartCallback()
