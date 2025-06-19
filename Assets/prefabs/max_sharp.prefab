@@ -205,6 +205,126 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Move
       m_Flags: 8
+    - m_Name: 2D Vector
+      m_Id: f9c8de28-2089-4193-98d3-4a35863bf3d0
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 05d19cce-08a0-4d9a-b9dc-37473e02b742
+      m_Path: <Gamepad>/leftStick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: eb9062a1-6cf6-4c2e-bec5-6f5956960079
+      m_Path: <Gamepad>/leftStick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 60cbc81d-2847-4e67-8900-506d4b359e5b
+      m_Path: <Gamepad>/leftStick/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 8c1e426e-c543-43d0-9587-f9c0454805ac
+      m_Path: <Gamepad>/leftStick/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: 2D Vector
+      m_Id: 3e681b68-c26a-4fde-a520-47e875bdecca
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 7602264d-1e3e-4c82-8e00-9cfe10b9858c
+      m_Path: <Gamepad>/rightStick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 864c1700-20e4-481f-8666-76c5f71effd3
+      m_Path: <Gamepad>/rightStick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 3eda5201-7011-4bbb-b24c-1f098819431a
+      m_Path: <Gamepad>/rightStick/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: f7a3f009-c110-4623-ba9b-5545d98d5c73
+      m_Path: <Gamepad>/rightStick/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: 2D Vector
+      m_Id: 27ce5836-83d8-4046-97cd-9d5b309f5d47
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 4076997c-b743-41ad-8fc4-18c34160016e
+      m_Path: <Gamepad>/dpad/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 15e4929e-1156-44eb-9707-baaa431138e6
+      m_Path: <Gamepad>/dpad/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: a62fb3dc-7ee3-4a29-82d9-dd1345e6e54b
+      m_Path: <Gamepad>/dpad/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: e9231ff1-18fc-4b26-b344-d758f0cc8fad
+      m_Path: <Gamepad>/dpad/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move
+      m_Flags: 8
     m_Flags: 0
   FireAction:
     m_Name: Fire
@@ -225,6 +345,14 @@ MonoBehaviour:
     - m_Name: 
       m_Id: c5526b57-d1c6-458d-a7b7-25b71ee29dd1
       m_Path: <Joystick>/trigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: cad49217-6948-4fcf-84e1-2784c2ae19e6
+      m_Path: '*/{PrimaryTrigger}'
       m_Interactions: 
       m_Processors: 
       m_Groups: 
