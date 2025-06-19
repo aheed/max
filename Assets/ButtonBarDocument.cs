@@ -259,8 +259,8 @@ public class ButtonBarDocument : MonoBehaviour
             controllersString += "\n\nDevices:\n";
             foreach (var device in UnityEngine.InputSystem.InputSystem.devices)
             {
-                controllersString += $"{device.displayName} - {device.name}\n";
-                controllersString += $"  description: {device.description}\n";
+                //controllersString += $"{device.displayName}";
+                controllersString += $"{device.description}  ";
                 controllersString += $"  type: {device.description.deviceClass}\n";
             }
         }
