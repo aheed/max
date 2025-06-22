@@ -18,7 +18,9 @@ public class SceneController3d : MonoBehaviour
     public Material targetMaterial;
     public Material planeTargetMaterial;
     public Material carTargetMaterial;
-    public Material boatTargetMaterial;    
+    public Material boatTargetMaterial;
+    public Material daySkyboxMaterial;
+    public Material nightSkyboxMaterial;
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
@@ -148,12 +150,14 @@ public class SceneController3d : MonoBehaviour
             mainLight.intensity = nightLightIntensity;
             mainLight.color = nightLightColor;
             RenderSettings.ambientLight = nightAmbientColor;
+            RenderSettings.skybox = nightSkyboxMaterial;
         }
         else
         {
             mainLight.intensity = dayLightIntensity;
             mainLight.color = dayLightColor;
             RenderSettings.ambientLight = dayAmbientColor;
+            RenderSettings.skybox = daySkyboxMaterial;
         }
         maxPlane.SetAltitudeLights(LevelHelper.AltitudeLights(gameState.GetStateContents().latestLevelPrereq.levelType));
         maxPlane.SetArmaments(LevelHelper.GetArmamentType(gameState.GetStateContents().latestLevelPrereq.levelType));
