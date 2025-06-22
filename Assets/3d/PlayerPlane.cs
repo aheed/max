@@ -534,7 +534,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private void OnDebugCallback3()
     {
         Debug.Log("PlayerPlane.OnDebugAction3");
-        Instantiate(lightArcPrefab, transform.position, Quaternion.identity, refObject);
+        //Instantiate(lightArcPrefab, transform.position, Quaternion.identity, refObject);
+        gameState.ReportEvent(GameEvent.SMALL_DETONATION);
     }
     
 }

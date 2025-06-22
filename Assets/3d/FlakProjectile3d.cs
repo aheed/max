@@ -3,6 +3,7 @@ using UnityEngine;
 public class FlakProjectile3d : MonoBehaviour
 {
     public GameObject flackExplosionPrefab;
+    public GameObject flackExplosionNightPrefab;
     public static readonly float lifeSpanSec = 2.0f;
     public float inaccuracy = 0.1f;
     public float forwardAimOffset = 0.1f;
@@ -41,7 +42,8 @@ public class FlakProjectile3d : MonoBehaviour
         timeToLiveSec -= Time.deltaTime;
         if (timeToLiveSec < 0f)
         {
-            Instantiate(flackExplosionPrefab, transform.position, Quaternion.identity);
+            var explosionPrefab = GameState.GetInstance().IsNightTime() ? flackExplosionNightPrefab : flackExplosionPrefab;
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

@@ -1084,10 +1084,10 @@ MonoBehaviour:
   visibleAreaMarkerWidth: 4
   visibleAreaMarkerHeight: 3
   dayLightIntensity: 1.1
-  nightLightIntensity: 0.9
-  nightLightColor: {r: 0.78431374, g: 0.6862745, b: 1, a: 1}
+  nightLightIntensity: 0.7
+  nightLightColor: {r: 0.52705145, g: 0.4753471, b: 0.9245283, a: 1}
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
-  nightAmbientColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+  nightAmbientColor: {r: 0.16207145, g: 0.08575116, b: 0.38679248, a: 1}
   dayAmbientColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
   startLevelType: 0
   sceneBuilder: {fileID: 1636314946}
@@ -1140,7 +1140,7 @@ MonoBehaviour:
   postExposurelifeSpanSec: 0.3
   hueShift: -100
   maxPostExposure: 2
-  nightSaturation: -30
+  nightSaturation: 0
   tvSaturation: -17
 --- !u!114 &108618692
 MonoBehaviour:
@@ -21018,16 +21018,16 @@ MonoBehaviour:
   redBaronBossPrefab: {fileID: 93079018367311720, guid: ef7f5e7ded26e690aa35205b1e79061c, type: 3}
   introControllerPrefab: {fileID: 7335008102571623040, guid: 54448248bacaf7a55911b9f56af46fbb, type: 3}
   damPrefab: {fileID: 367338661191137972, guid: 4c8a7670a95847aeb82546b2bb100d57, type: 3}
-  riverMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
-  groundMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
+  riverDayMaterial: {fileID: 2100000, guid: 8d64f9591c23e641d8a9c0d6026e2b11, type: 2}
+  groundDayMaterial: {fileID: 2100000, guid: 0689955b5d0fcf4479d95cd305519d6d, type: 2}
+  riverNightMaterial: {fileID: 2100000, guid: b65b99aedc4840da2a460363e52e12e9, type: 2}
+  groundNightMaterial: {fileID: 2100000, guid: a65aaadc0e3fde6d2b9d75dc81891427, type: 2}
   riverBankMaterial: {fileID: 2100000, guid: 54c26c8f9c6246c019b8b7f00e8f3a84, type: 2}
   roadMaterial: {fileID: 2100000, guid: 87992205aaa6103d8b192cd702fd68a2, type: 2}
   landingStripMaterial: {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
   leftTrim: 2
   rightTrim: 5
   roadAltitude: 0.015
-  powerLineAltitude: 1.5
-  powerLineDistanceZ: 0.15
   carAltitude: 0.02
   airstripAltitude: 0.011
   parkedPlaneAltitude: 0.15
@@ -35690,7 +35690,7 @@ PrefabInstance:
       objectReference: {fileID: 213357215}
     - target: {fileID: 7615501311391811077, guid: 0baf565c56e630fbc99106bf753f27a3, type: 3}
       propertyPath: m_VersionIndex
-      value: 794
+      value: 800
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
