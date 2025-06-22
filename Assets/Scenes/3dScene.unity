@@ -1089,7 +1089,7 @@ MonoBehaviour:
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
   nightAmbientColor: {r: 0.16207145, g: 0.08575116, b: 0.38679248, a: 1}
   dayAmbientColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
-  startLevelType: 7
+  startLevelType: 0
   sceneBuilder: {fileID: 1636314946}
 --- !u!4 &91756748
 Transform:
