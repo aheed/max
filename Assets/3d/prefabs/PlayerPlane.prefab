@@ -255,6 +255,87 @@ MonoBehaviour:
       m_Action: Debug Aux Action 3
       m_Flags: 0
     m_Flags: 0
+  ViewDirectionAction:
+    m_Name: View Direction
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 56ade4aa-8c76-40b7-9e5b-cdcd3d4862ed
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: 48399fb7-d839-44fb-8d10-516ce34cab43
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 160b212b-8c86-43a0-a331-ab81f0308ecf
+      m_Path: <Linux::LiteStarPcFlightSimulator>/Hat/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: up
+      m_Id: 167a44f9-2aa9-46fe-9663-58ac5af8b8e8
+      m_Path: <Keyboard>/i
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 9cd7d3b3-5bee-490b-a670-60e1092fcb9a
+      m_Path: <Linux::LiteStarPcFlightSimulator>/Hat/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 880f5a3d-ee4a-4dc8-bebd-a072ce69764b
+      m_Path: <Keyboard>/k
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 6eaa42df-f7c1-414d-a15f-40db13543cd6
+      m_Path: <Linux::LiteStarPcFlightSimulator>/Hat/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 19654225-e70b-410c-863b-59418342d895
+      m_Path: <Keyboard>/j
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 311cd4f9-4614-426d-a405-6e3a625304f3
+      m_Path: <Linux::LiteStarPcFlightSimulator>/Hat/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    - m_Name: right
+      m_Id: d314dd24-f389-440a-846b-05b4141da385
+      m_Path: <Keyboard>/l
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: View Direction
+      m_Flags: 8
+    m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
   bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
   bouncingBombPrefab: {fileID: 8503241040667400508, guid: 47ee586052bf1170c84a287d675f0f8e, type: 3}

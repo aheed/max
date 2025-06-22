@@ -27,6 +27,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction1;
     public InputAction DebugAuxAction2;
     public InputAction DebugAuxAction3;
+    public InputAction ViewDirectionAction;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;
     public GameObject bouncingBombPrefab;
@@ -95,6 +96,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         DebugAuxAction1.Enable();
         DebugAuxAction2.Enable();
         DebugAuxAction3.Enable();
+        ViewDirectionAction.Enable();
+        ViewDirectionAction.performed += OnViewDirectionPerformed;
         gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.START, OnStart);
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
@@ -103,6 +106,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         OnStart();
         Reset();
+    }
+
+    private void OnViewDirectionPerformed(InputAction.CallbackContext ctx)
+    {
+        var viewDirection = ctx.ReadValue<Vector2>();
+        Debug.Log($"View direction: {viewDirection}");
     }
 
     void FireBullet(GameStatus gameStatus)
