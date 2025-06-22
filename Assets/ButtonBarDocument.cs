@@ -25,10 +25,12 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement helpElem;
     VisualElement homeElem;
     VisualElement fullScreenTapHintElem;
+    Label debugElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
     bool rightSideExpanded = false;
     List<VisualElement> expandedRightSide = new();
+    bool debugDisplayed = false;
 
     public VisualElement GetFullScreenTapHintElem()
     {
@@ -67,6 +69,8 @@ public class ButtonBarDocument : MonoBehaviour
         dotsElem = uiDocument.rootVisualElement.Q<VisualElement>("DotsButton");
         dotsElem.RegisterCallback<ClickEvent>(OnDotsClicked);
 
+        debugElem = uiDocument.rootVisualElement.Q<Label>("DebugLabel");
+
         expandedRightSide.Add(muteElem);
         expandedRightSide.Add(pilotElem);
         //expandedRightSide.Add(helpElem);
@@ -74,6 +78,8 @@ public class ButtonBarDocument : MonoBehaviour
 
 
         UpdateAll();
+
+        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
     }
 
     void UpdateAll()
@@ -219,5 +225,46 @@ public class ButtonBarDocument : MonoBehaviour
 
         rightSideExpanded = false;
         UpdateRightSideExpanded();
+    }
+
+    private void OnDebugCallback1()
+    {
+        debugDisplayed = !debugDisplayed;
+        var controllersString = "";
+
+        if (debugDisplayed)
+        {
+            controllersString = "Gamepads:\n";
+            foreach (var controller in UnityEngine.InputSystem.Gamepad.all)
+            {
+                controllersString += $"{controller.displayName} - {controller.name}\n";
+                controllersString += $"  Left Stick: {controller.leftStick.ReadValue()}\n";
+                controllersString += $"  Right Stick: {controller.rightStick.ReadValue()}\n";
+                controllersString += $"  Current Left Trigger: {controller.leftTrigger.ReadValue()}\n";
+                controllersString += $"  Current Right Trigger: {controller.rightTrigger.ReadValue()}\n";
+            }
+            var currentGamepad = UnityEngine.InputSystem.Gamepad.current;
+            controllersString += $"\ncurrent: {currentGamepad?.displayName} - {currentGamepad?.name}\n";
+
+            controllersString += "\n\nJoysticks:\n";
+            foreach (var controller in UnityEngine.InputSystem.Joystick.all)
+            {
+                controllersString += $"{controller.displayName} - {controller.name}\n";
+                controllersString += $"  Stick: {controller.stick.ReadValue()}\n";
+                controllersString += $"  Current Trigger: {controller.trigger.ReadValue()}\n";
+            }
+            var currentJoystick = UnityEngine.InputSystem.Joystick.current;
+            controllersString += $"\n\ncurrent: {currentJoystick?.displayName} - {currentJoystick?.name}\n";
+
+            controllersString += "\n\nDevices:\n";
+            foreach (var device in UnityEngine.InputSystem.InputSystem.devices)
+            {
+                //controllersString += $"{device.displayName}";
+                controllersString += $"{device.description}  ";
+                controllersString += $"  type: {device.description.deviceClass}\n";
+            }
+        }
+
+        debugElem.text = controllersString;
     }
 }
