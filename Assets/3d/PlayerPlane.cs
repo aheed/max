@@ -55,6 +55,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     bool lastAlive = false;
     GameObject currentBombPrefab;
     public float minStickXForZDiff = 0.1f;
+    public float downViewAngleDegrees = 45f;
+    Camera onboardCamera;
+    bool immortalMode = false;
 
     PlaneController GetController()
     {
@@ -404,6 +407,29 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         {
             lastViewDirection = viewDirection;
             Debug.Log($"View direction: {viewDirection}");
+
+            if (onboardCamera == null)
+            {
+                onboardCamera = GetComponentInChildren<Camera>();
+            }
+
+            var xRotation = 0f;
+            var yRotation = viewDirection.x * 90f;
+            if (viewDirection.y != 0f)
+            {
+                xRotation = downViewAngleDegrees;
+            }
+
+            if (viewDirection.y > 0f)
+            {
+                //xRotation = 180f - downViewAngleDegrees;
+                yRotation = 180f - yRotation;
+            }
+
+            onboardCamera.transform.localRotation = Quaternion.Euler(
+                xRotation,
+                yRotation,
+                0f);
         }
         
     }
@@ -509,6 +535,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         //Debug.Log($"Plane collision !!!!!!!!!!!!!!!  with {col.gameObject.name}");
 
+        if (immortalMode)
+        {
+            return;
+        }
+
         if (col.gameObject.name.StartsWith("ground") ||
             col.gameObject.name.StartsWith("riversection"))
         {
@@ -555,7 +586,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private void OnDebugCallback1()
     {
         Debug.Log("PlayerPlane.OnDebugAction1");
-        transform.parent.position += new Vector3(0f, 0f, 0.05f);
+        //transform.parent.position += new Vector3(0f, 0f, 0.05f);
+        immortalMode = !immortalMode;
+        Debug.Log($"Immortal mode: {immortalMode}");
     }
 
     private void OnDebugCallback2()
