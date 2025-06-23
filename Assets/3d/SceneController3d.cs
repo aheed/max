@@ -18,7 +18,9 @@ public class SceneController3d : MonoBehaviour
     public Material targetMaterial;
     public Material planeTargetMaterial;
     public Material carTargetMaterial;
-    public Material boatTargetMaterial;    
+    public Material boatTargetMaterial;
+    public Material daySkyboxMaterial;
+    public Material nightSkyboxMaterial;
     public float width = 1;
     public float height = 1;
     public float riverSectionHeight = 20f;
@@ -91,6 +93,8 @@ public class SceneController3d : MonoBehaviour
     List<SceneRiverSegment> riverSegments;
     GameObject balloonParent;
     float debugAcceleration = 0.4f;
+    List<Camera> cameras = new();
+    int cameraIndex = 0;
     ///    
 
     GameObject GetLevel() => levels[currentLevelIndex];
@@ -146,12 +150,14 @@ public class SceneController3d : MonoBehaviour
             mainLight.intensity = nightLightIntensity;
             mainLight.color = nightLightColor;
             RenderSettings.ambientLight = nightAmbientColor;
+            RenderSettings.skybox = nightSkyboxMaterial;
         }
         else
         {
             mainLight.intensity = dayLightIntensity;
             mainLight.color = dayLightColor;
             RenderSettings.ambientLight = dayAmbientColor;
+            RenderSettings.skybox = daySkyboxMaterial;
         }
         maxPlane.SetAltitudeLights(LevelHelper.AltitudeLights(gameState.GetStateContents().latestLevelPrereq.levelType));
         maxPlane.SetArmaments(LevelHelper.GetArmamentType(gameState.GetStateContents().latestLevelPrereq.levelType));
@@ -204,6 +210,11 @@ public class SceneController3d : MonoBehaviour
             maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
             maxPlane.refObject = refobject.transform;
             gameState.SetPlaneHeights(maxPlane.GetHeight(), maxPlane.GetHeight());
+            var cockpitCamera = maxPlane.GetComponentInChildren<Camera>();
+            if (cockpitCamera != null)
+            {
+                cameras.Add(cockpitCamera);
+            }
         }
         maxPlane.transform.localPosition = Vector3.zero;
         maxPlane.Reset();
@@ -290,6 +301,8 @@ public class SceneController3d : MonoBehaviour
             GameState.carBlinkMaterial,
             GameState.boatBlinkMaterial,
             GameState.targetBlinkMaterial});
+        var mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        cameras.Add(mainCamera);
         StartNewGame();
         debugAcceleration = gameState.acceleration;
     }
@@ -725,6 +738,22 @@ public class SceneController3d : MonoBehaviour
         refobject.transform.position += delta;
         gameState.playerPosition = maxPlane.gameObject.transform.position;
     }
+    
+    private void CycleCameras()
+    {
+        if (cameras.Count == 0)
+        {
+            return;
+        }
+
+        cameraIndex = (cameraIndex + 1) % cameras.Count;
+        Debug.Log($"Switching to camera {cameraIndex} of {cameras.Count}");
+        foreach (var camera in cameras)
+        {
+            camera.enabled = false;
+        }
+        cameras[cameraIndex].enabled = true;
+    }
 
     private void OnTargetHitCallback()
     {
@@ -733,7 +762,7 @@ public class SceneController3d : MonoBehaviour
             return;
         }
 
-        switch(gameState.GetStateContents().latestLevelPrereq.levelType)
+        switch (gameState.GetStateContents().latestLevelPrereq.levelType)
         {
             case LevelType.NORMAL:
                 SpawnBossShadow(BossShadowVariant.BSH1);
@@ -768,6 +797,8 @@ public class SceneController3d : MonoBehaviour
 
     private void OnDebugCallback3()
     {
+        CycleCameras();
+
         /*
         // Toggle speed 
 
