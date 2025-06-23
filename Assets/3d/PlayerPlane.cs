@@ -37,6 +37,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private float minMove = 4.0f;
     private float directionFactor = 0.6f; //tan(pi/8) ~ 0.41
     PlaneController controller;
+    Vector2 lastViewDirection = Vector2.zero;
 
     // state
     GameState gameState;
@@ -282,7 +283,17 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         GameStateContents stateContents = gameState.GetStateContents();
 
-        move = MoveAction.ReadValue<Vector2>();
+        move = Input.GetAxis("Horizontal") * Vector2.right +
+               Input.GetAxis("Vertical") * Vector2.up;
+        if (move == Vector2.zero)
+        {
+            move = MoveAction.ReadValue<Vector2>();
+        }
+        /*else
+        {
+            Debug.Log($"Move from Input Manager: {move.x}, {move.y}");
+        }*/
+
         if (!Settings.GetPilotControl())
         {
             move.y = move.y * -1f;
@@ -335,7 +346,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             }
         }
 
-        if (fireTouch || FireAction.IsPressed())
+        if (fireTouch || Input.GetButton("Fire1") || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
@@ -386,6 +397,15 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             lastMove = move;
         }
         HandleMove(move);
+
+        var viewDirection = Input.GetAxis("Debug Horizontal") * Vector2.right +
+                            Input.GetAxis("Debug Vertical") * Vector2.up;
+        if (viewDirection != lastViewDirection)
+        {
+            lastViewDirection = viewDirection;
+            Debug.Log($"View direction: {viewDirection}");
+        }
+        
     }
 
     public Vector2 GetPosition()
@@ -451,6 +471,10 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         bombCooldown = bombIntervalSeconds;
         gameState.IncrementBombs(-1);
         gameState.ReportEvent(GameEvent.BOMB_DROPPED);
+        if (Input.GetButton("Fire1"))
+        {
+            Debug.Log("Dropping bomb with Input Manager Fire1 button");
+        }
     }
 
     public void OnGameStatusChanged()
@@ -537,7 +561,9 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private void OnDebugCallback2()
     {
         Debug.Log("PlayerPlane.OnDebugAction2");
-        transform.parent.position -= new Vector3(0f, 0f, 0.05f);
+        //transform.parent.position -= new Vector3(0f, 0f, 0.05f);
+        float horizontalInput = Input.GetAxis("Horizontal");
+        Debug.Log($"Horizontal Input: {horizontalInput} Vertical Input: {Input.GetAxis("Vertical")}");
     }
 
     private void OnDebugCallback3()
