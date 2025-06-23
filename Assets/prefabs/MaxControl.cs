@@ -37,6 +37,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction;
+    public float joystickDeadZone = 0.2f;
     Rigidbody2D rigidbody2d;
     Vector2 move;
     Vector2 lastMove;
@@ -267,8 +268,34 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     {        
         GameStateContents stateContents = gameState.GetStateContents();
 
-        move = Input.GetAxis("Horizontal") * Vector2.right +
-               Input.GetAxis("Vertical") * Vector2.up;
+        var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (move.x < -joystickDeadZone)
+        {
+            move.x = -1f;
+        }
+        else if (move.x > joystickDeadZone)
+        {
+            move.x = 1f;
+        }
+        else
+        {
+            move.x = 0f;
+        }
+
+        if (move.y < -joystickDeadZone)
+        {
+            move.y = -1f;
+        }
+        else if (move.y > joystickDeadZone)
+        {
+            move.y = 1f;
+        }
+        else
+        {
+            move.y = 0f;
+        }
+
         if (move == Vector2.zero)
         {
             move = MoveAction.ReadValue<Vector2>();
