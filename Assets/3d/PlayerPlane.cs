@@ -273,7 +273,13 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         GameStateContents stateContents = gameState.GetStateContents();
 
-        move = MoveAction.ReadValue<Vector2>();
+        move = Input.GetAxis("Horizontal") * Vector2.right +
+               Input.GetAxis("Vertical") * Vector2.up;
+        if (move == Vector2.zero)
+        {
+            move = MoveAction.ReadValue<Vector2>();
+        }
+
         if (!Settings.GetPilotControl())
         {
             move.y = move.y * -1f;
@@ -326,7 +332,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             }
         }
 
-        if (fireTouch || FireAction.IsPressed())
+        if (fireTouch || Input.GetButton("Fire1") || FireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)

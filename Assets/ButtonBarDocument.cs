@@ -263,6 +263,11 @@ public class ButtonBarDocument : MonoBehaviour
                 controllersString += $"{device.description}  ";
                 controllersString += $"  type: {device.description.deviceClass}\n";
             }
+
+            // Use Input Manager to get the current input devices
+            controllersString += "\n\nUnityEngine.Input (Legacy):\n";
+            controllersString += $"  Joystick Names: {string.Join(", ", Input.GetJoystickNames())}\n";
+
         }
 
         debugElem.text = controllersString;
