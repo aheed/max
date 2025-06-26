@@ -214,6 +214,8 @@ public class SceneController3d : MonoBehaviour
             if (cockpitCamera != null)
             {
                 cameras.Add(cockpitCamera);
+                gameState.GetStateContents().cameraButtonVisible = true;
+                gameState.ReportEvent(GameEvent.CAMERA_ADDED);
             }
         }
         maxPlane.transform.localPosition = Vector3.zero;

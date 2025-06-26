@@ -33,6 +33,7 @@ public enum GameEvent
     DEBUG_ACTION3,
     BULLET_FIRED,
     BOMB_DROPPED,
+    CAMERA_ADDED,
     CAMERA_CHANGE_REQUESTED,
     CAMERA_CHANGED
 }
@@ -81,6 +82,7 @@ public class GameStateContents
     public bool bossDefeated;
     public GameObject boss;
     public float restartCoolDownSeconds = 0f;
+    public bool cameraButtonVisible = false;
 }
 
 public class GameState : MonoBehaviour

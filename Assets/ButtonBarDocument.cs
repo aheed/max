@@ -84,6 +84,7 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateAll();
 
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        GameState.GetInstance().Subscribe(GameEvent.CAMERA_ADDED, OnCameraAddedCallback);
     }
 
     void UpdateAll()
@@ -93,6 +94,7 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateMuteButton();
         UpdatePilotButton();
         UpdateRightSideExpanded();
+        UpdateCameraButton();
     }
 
     void UpdateTvSimButton()
@@ -126,6 +128,14 @@ public class ButtonBarDocument : MonoBehaviour
     {
         var newTexture = Settings.GetPilotControl() ? pilotControlTexture : normalControlTexture;
         pilotElem.style.backgroundImage = new StyleBackground(newTexture);
+    }
+
+    void UpdateCameraButton()
+    {
+        if (CameraSwapElem == null)
+            return;
+
+        CameraSwapElem.style.display = GameState.GetInstance().GetStateContents().cameraButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     void Update()
@@ -238,6 +248,12 @@ public class ButtonBarDocument : MonoBehaviour
 
         rightSideExpanded = false;
         UpdateRightSideExpanded();
+    }
+
+    void OnCameraAddedCallback()
+    {
+        Debug.Log("Camera added callback triggered mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+        UpdateCameraButton();
     }
 
     private void OnDebugCallback1()
