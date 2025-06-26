@@ -19,6 +19,7 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
+    VisualElement CameraSwapElem;
     VisualElement dotsElem;
     VisualElement muteElem;
     VisualElement pilotElem;
@@ -51,6 +52,9 @@ public class ButtonBarDocument : MonoBehaviour
 
         fullScreenElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenButton");
         fullScreenElem.RegisterCallback<PointerDownEvent>(OnFullScreenClicked);
+
+        CameraSwapElem = uiDocument.rootVisualElement.Q<VisualElement>("CameraButton");
+        CameraSwapElem.RegisterCallback<ClickEvent>(OnCameraSwapClicked);
 
         fullScreenTapHintElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenTapHint");
 
@@ -148,6 +152,15 @@ public class ButtonBarDocument : MonoBehaviour
 
         Screen.fullScreen = !Screen.fullScreen;
         //UpdateFullScreenButton();
+    }
+
+    void OnCameraSwapClicked(ClickEvent evt)
+    {
+        Debug.Log("Camera swap clicked");
+        if (evt.target != CameraSwapElem)
+            return;
+
+        gameState.ReportEvent(GameEvent.CAMERA_CHANGE_REQUESTED);
     }
 
     void OnMuteClicked(ClickEvent evt)

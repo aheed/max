@@ -290,6 +290,7 @@ public class SceneController3d : MonoBehaviour
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
+        GameState.GetInstance().Subscribe(GameEvent.CAMERA_CHANGE_REQUESTED, CycleCameras);
 
         // Make copies of materials to avoid changing the .mat files
         GameState.carBlinkMaterial = new Material(carTargetMaterial);

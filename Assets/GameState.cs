@@ -33,6 +33,7 @@ public enum GameEvent
     DEBUG_ACTION3,
     BULLET_FIRED,
     BOMB_DROPPED,
+    CAMERA_CHANGE_REQUESTED,
     CAMERA_CHANGED
 }
 
