@@ -738,7 +738,7 @@ public class SceneController3d : MonoBehaviour
         refobject.transform.position += delta;
         gameState.playerPosition = maxPlane.gameObject.transform.position;
     }
-    
+
     private void CycleCameras()
     {
         if (cameras.Count == 0)
@@ -753,6 +753,7 @@ public class SceneController3d : MonoBehaviour
             camera.enabled = false;
         }
         cameras[cameraIndex].enabled = true;
+        gameState.ReportEvent(GameEvent.CAMERA_CHANGED);
     }
 
     private void OnTargetHitCallback()

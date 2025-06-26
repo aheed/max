@@ -24,9 +24,14 @@ public class HealthBar : MonoBehaviour
         healthBarImage.fillAmount = relativeHealth;
     }
 
-    void Start()
+    void UpdateCamera()
     {
         cam = Camera.main;
+    }
+
+    void Start()
+    {
+        UpdateCamera();
         inner = transform.GetChild(0).gameObject;
         images = inner.transform.GetChild(0).GetChild(0).gameObject;
         healthBarImage = images.transform.GetChild(1).GetComponent<UnityEngine.UI.Image>();
@@ -40,6 +45,8 @@ public class HealthBar : MonoBehaviour
         images.SetActive(isVisible);
 
         SetHealth(1, 1);
+
+        GameState.GetInstance().Subscribe(GameEvent.CAMERA_CHANGED, UpdateCamera);
     }
 
     void Update()
