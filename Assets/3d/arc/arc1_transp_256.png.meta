@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 69239333b22c2dde399f5d44d38a34b9
+guid: 851b68c99dba66ad59e28f2b409e364b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3339634767698054237
-    second: arc4_transp_exp_0
+      213: -4173889922456067596
+    second: arc1_transp_exp_256_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -77,7 +77,7 @@ TextureImporter:
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: arc4_transp_exp_0
+      name: arc1_transp_exp_256_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 759
-        height: 512
+        width: 256
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3a330d77fdb37a1d0800000000000000
-      internalID: -3339634767698054237
+      spriteID: 4f16c60da3d5316c0800000000000000
+      internalID: -4173889922456067596
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      arc4_transp_exp_0: -3339634767698054237
+      arc1_transp_exp_256_0: -4173889922456067596
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
