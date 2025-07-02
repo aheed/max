@@ -49,6 +49,9 @@ MonoBehaviour:
   Bsh1SpeedX: 2
   Bsh1CrossDistanceZ: -12
   Bsh1Scale: 0.04
+  Bsh2SpeedZ: 0.8
+  Bsh2Scale: 0.1
+  Bsh2OffsetX: -2
   maxDistanceZ: 20
   speedX: 0.6
   speedZ: 2.5
@@ -81,7 +84,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_LocalScale: {x: 25, y: 11, z: 25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1757135524295892567}
@@ -117,7 +120,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 506da605366c3266787eca3dfab5c250, type: 2}
+  - {fileID: 2100000, guid: 329659e599c9fcf428bff7d8da4a4a07, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
