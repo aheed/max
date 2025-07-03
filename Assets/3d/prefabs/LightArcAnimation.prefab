@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9f6a65a0dbba374faba925e088015d8b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5a7256c9d100e90bfa12c186a18793e3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,9 +101,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: 9f6a65a0dbba374faba925e088015d8b, type: 3}
-  - {fileID: 21300000, guid: 5080b070a156c4e63a5a154f17ab014e, type: 3}
-  - {fileID: 21300000, guid: 6ddc40bb91b0d66ba88dc6fc4e03ecea, type: 3}
-  - {fileID: 21300000, guid: 69239333b22c2dde399f5d44d38a34b9, type: 3}
-  timeToChangeSpriteSec: 0.1
+  - {fileID: 21300000, guid: 851b68c99dba66ad59e28f2b409e364b, type: 3}
+  - {fileID: 21300000, guid: 77c049e875ebcdfd3a16e2d6e9534c27, type: 3}
+  - {fileID: 21300000, guid: 5087d1c57db59066c8d0438719faf0b2, type: 3}
+  - {fileID: 21300000, guid: 5a7256c9d100e90bfa12c186a18793e3, type: 3}
+  timeToChangeSpriteSec: 1
   randomSprite: 0

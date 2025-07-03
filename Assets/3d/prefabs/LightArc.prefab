@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfd94196497b3531bc579cecd3c52d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeSpanSec: 0.3
+  lifeSpanSec: 0.4
 --- !u!82 &6552603391939736038
 AudioSource:
   m_ObjectHideFlags: 0
@@ -280,15 +280,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8443984431964080511, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8443984431964080511, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8443984431964080511, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8443984431964080511, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -330,9 +330,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8443984431964080511, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8530402765764973980, guid: 117fc8fa1562c53deb47ac0872873ac5, type: 3}
       propertyPath: timeToChangeSpriteSec
-      value: 0.05
+      value: 0.075
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
