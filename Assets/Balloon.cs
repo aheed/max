@@ -9,6 +9,7 @@ public class Balloon : ManagedObject, IPositionObservable
     public GameObject popPrefab;
     private SpriteRenderer spriteR;
     private ManagedObject shadow = null;
+    static readonly int points = 10;
 
     private float startParentAltitude;
 
@@ -33,6 +34,8 @@ public class Balloon : ManagedObject, IPositionObservable
         Vector3 localPosition = transform.localPosition;
         localPosition.y += GameState.GetInstance().maxAltitude * 10;
         transform.localPosition = localPosition;
+
+        GameState.GetInstance().AddScore(points);
 
         Release();
     }

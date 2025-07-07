@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHangar : ManagedObject
 {
     public FlipBook bombed;
+    static readonly int points = 50;
 
     void OnTriggerEnter2D(Collider2D col)
     {        
@@ -21,6 +22,6 @@ public class EnemyHangar : ManagedObject
         gameState.ReportEvent(GameEvent.SMALL_DETONATION);
         gameState.ReportEvent(GameEvent.MEDIUM_BANG);
 
-        // Todo: report destroyed enemy hangar for scoring
+        gameState.AddScore(points);
     }
 }

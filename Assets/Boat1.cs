@@ -8,6 +8,7 @@ public class Boat1 : ManagedObject, IPositionObservable
     public GameObject sunkBoatPrefab;
     GameState gameState;
     int health = maxHealth;
+    static readonly int points = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +34,7 @@ public class Boat1 : ManagedObject, IPositionObservable
         var parent = transform.parent;
         Instantiate(sunkBoatPrefab, transform.position, Quaternion.identity, parent);
         Release();
-
-        // Todo: report destroyed boat for scoring
+        gameState.AddScore(points);
     }
 
     void HandleCollision(Collider2D col)

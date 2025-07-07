@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using NUnit.Framework;
 using UnityEngine;
 
 public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
@@ -8,6 +9,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
     public Target targetPrefab;
     public float targetOffset = 0.1f;
     Target target;
+    static readonly int points = 50;
 
     public void SetVip()
     {
@@ -26,6 +28,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
     {   
         if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
         {
+            var pointsScored = IsVip() ? points * 2 : points;
             if (target != null)
             {
                 Destroy(target.gameObject);
@@ -33,7 +36,7 @@ public class bridge : MonoBehaviour, IPositionObservable, IVip, ITrigger2D
                 GameState.GetInstance().TargetHit();
             }
 
-            //todo: report road or bridge hit for scoring
+            GameState.GetInstance().AddScore(pointsScored);
         }
     }
 

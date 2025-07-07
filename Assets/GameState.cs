@@ -349,10 +349,16 @@ public class GameState : MonoBehaviour
         gameStateContents.boss = null;
         gameStateContents.restartCoolDownSeconds = 0f;
     }
+    
+    public void AddScore(int score)
+    {
+        gameStateContents.score += score;
+        ReportEvent(GameEvent.SCORE_CHANGED);
+    }
 
     public bool AnyEnemyPlaneAtCollisionAltitude()
     {
-        return gameStateContents.enemyPlaneAltitudes.Values.Any(alt => 
+        return gameStateContents.enemyPlaneAltitudes.Values.Any(alt =>
             Math.Abs(alt - gameStateContents.altitude) < gameStateContents.maxAltitudeDiffForPlaneCollision);
     }
 

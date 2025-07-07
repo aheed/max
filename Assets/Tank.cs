@@ -7,6 +7,7 @@ public class Tank : ManagedObject, IPositionObservable
     public Sprite normalSprite;
     public Sprite shotSprite;
     private bool shot = false;
+    static readonly int points = 10;
 
     void HandleCollision(Collider2D col)
     {
@@ -20,8 +21,7 @@ public class Tank : ManagedObject, IPositionObservable
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
-
-            // Todo: report destroyed tank for scoring
+            gameState.AddScore(points);
         }
     }
 
@@ -31,6 +31,7 @@ public class Tank : ManagedObject, IPositionObservable
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             GameState.GetInstance().BombLanded(bomb, gameObject);
+            GameState.GetInstance().AddScore(points);
             return;
         }
 

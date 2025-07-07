@@ -5,6 +5,7 @@ using UnityEngine;
 public class car_l2_1 : ManagedObject, IPositionObservable
 {
     public Sprite shotSprite;
+    static readonly int points = 10;
 
     void HandleCollision(Collider2D col)
     {
@@ -14,8 +15,7 @@ public class car_l2_1 : ManagedObject, IPositionObservable
             var spriteR = gameObject.GetComponent<SpriteRenderer>();
             spriteR.sprite = shotSprite;
             gameObject.GetComponent<Collider2D>().enabled = false;
-
-            // Todo: report destroyed vehicle for scoring
+            GameState.GetInstance().AddScore(points);
         }
     }
 
@@ -25,6 +25,7 @@ public class car_l2_1 : ManagedObject, IPositionObservable
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             GameState.GetInstance().BombLanded(bomb, gameObject);
+            GameState.GetInstance().AddScore(points);
             return;
         }
 

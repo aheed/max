@@ -19,19 +19,20 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
     Target target;
     
     public float q = 0.16f; // size quantum
+    static readonly int points = 50;
 
     public void SetSize(int width, int height, int depth)
     {
         float halfDepth = depth * q / 2;
 
-        float xOffset = - width * q / 2;
-        float yOffset = - halfDepth / 2;
+        float xOffset = -width * q / 2;
+        float yOffset = -halfDepth / 2;
 
         float frontw = width * q;
         float fronth = height * q;
         float frontX = xOffset + width * q / 2;
         float frontY = yOffset + height * q / 2;
-        
+
         float roofw = width * q + halfDepth;
         float roofh = halfDepth;
         float roofx = xOffset + roofw / 2;
@@ -59,10 +60,10 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         tl_mask.transform.localScale = mask_scale;
         tr_mask.transform.localScale = mask_scale;
         lr_mask.transform.localScale = mask_scale;
-        tr_side_mask.transform.localScale = mask_scale;        
+        tr_side_mask.transform.localScale = mask_scale;
 
         float half_mask_width = depth * q / 2;
-        
+
         float tl_x = xOffset + half_mask_width;
         float tl_y = yOffset + half_mask_width + fronth;
         tl_mask.transform.localPosition = new Vector2(tl_x, tl_y);
@@ -93,10 +94,10 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
 
         x += frontw;
         colliderPoints[3] = new Vector2(x, y);
-        
+
         y -= fronth;
         colliderPoints[4] = new Vector2(x, y);
-        
+
         x -= roofh;
         y -= roofh;
         colliderPoints[5] = new Vector2(x, y);
@@ -151,18 +152,22 @@ public class ExpHouse : MonoBehaviour, IPositionObservable, IVip
         side.Activate();
         roof.Activate();
 
+        var pointsScored = points;
+
         var gameState = GameState.GetInstance();
         if (target != null)
         {
             Destroy(target.gameObject);
             target = null;
             gameState.TargetHit();
+            pointsScored *= 2; // double points for hitting a target
         }
 
         var bomb = col.gameObject.GetComponent<Bomb>();
         var tmp = new GameObject("tmp"); // Pass a throwaway game object to indicate something was hit
         tmp.transform.position = bomb.transform.position;
         gameState.BombLanded(bomb, tmp);
+        gameState.AddScore(pointsScored);
     }
 
     public Vector2 GetPosition() => transform.position;

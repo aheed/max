@@ -33,6 +33,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
     bool crashed =  false;
     VipBlinker vipBlinker;
     GameState gameState;
+    static readonly int points = 100;
 
     public void SetSpeed(float speed)
     {
@@ -198,13 +199,13 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
         {
             // mid air collision
         }
-        else 
+        else
         {
             return; //no collision
         }
 
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {collObjName}");
-        if(IsVip())
+        if (IsVip())
         {
             gameState.TargetHit();
         }
@@ -220,6 +221,7 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
             collider.enabled = false;
         }
         gameState.ReportEvent(GameEvent.BIG_BANG);
+        gameState.AddScore(IsVip() ? 2 * points: points);
     }
 
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LandingStrip : MonoBehaviour
 {
+    static readonly int points = 10;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,6 @@ public class LandingStrip : MonoBehaviour
         var tmp = new GameObject("tmp"); // Pass a throwaway game object to indicate something was hit
         tmp.transform.position = bomb.transform.position;
         GameState.GetInstance().BombLanded(bomb, tmp);
-
-        // To do: Report bombed enemy airstrip for scoring
+        GameState.GetInstance().AddScore(points);
     }
 }
