@@ -236,14 +236,15 @@ public class DashUIDocument : MonoBehaviour
         {
             topRowInner.style.display = DisplayStyle.None;
             rankOuter.style.display = DisplayStyle.Flex;
-            var rank = gameStateContents.gameStatus == GameStatus.FINISHED ?
-                "Blue Max class 1" :
-                "Kamikaze trainee class 4";
+            var rank = RankHelper.GetRankDescription(
+                gameStateContents.gameStatus == GameStatus.FINISHED,
+                gameStateContents.score);
             rankLabel.text = $"Rank: {rank}";
             if (gameStateContents.gameStatus == GameStatus.FINISHED)
             {
                 audioSource.PlayOneShot(rulebritanniaClip);
             }
+            //RankHelper.TestRanks();
         }
         else
         {
