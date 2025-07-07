@@ -10,6 +10,7 @@ public class Boat3d2 : ManagedObject, IVip
     Vector3 velocity;
     bool alive = true;
     bool isVip = false;
+    static readonly int points = 50;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,6 +53,7 @@ public class Boat3d2 : ManagedObject, IVip
     {
         Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
         alive = false;
+        GameState.GetInstance().AddScore(points);
     }
 
     void OnTriggerEnter(Collider col)

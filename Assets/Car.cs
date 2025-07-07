@@ -12,6 +12,7 @@ public class Car : ManagedObject, IVip
     GameState gameState;
     float speed;
     VipBlinker vipBlinker;
+    static readonly int points = 10;
 
 
     public void SetVip()
@@ -33,23 +34,30 @@ public class Car : ManagedObject, IVip
         vipBlinker?.Update(Time.deltaTime);
     }
 
+    int GetPoints()
+    {
+        return IsVip() ? points * 2 : points;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name.StartsWith("bomb") ||
             col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            gameState.BombLanded(bomb, gameObject);
-            if(IsVip())
+            if (IsVip())
             {
                 gameState.TargetHit();
             }
+            gameState.AddScore(GetPoints());
+            gameState.BombLanded(bomb, gameObject);
         }
     }
 
     // Override
     public override void Deactivate()
     {
+        vipBlinker = null;
         gameObject.SetActive(false);
     }
 

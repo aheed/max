@@ -3,6 +3,7 @@ using UnityEngine;
 public class Hangar3d : ManagedObject
 {
     private bool alive = true;
+    static readonly int points = 50;
 
     void SetAlive(bool isAlive)
     {
@@ -12,9 +13,9 @@ public class Hangar3d : ManagedObject
     }
 
     void OnTriggerEnter(Collider col)
-    {        
+    {
         Debug.Log($"Hangar Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
-        
+
         if (!col.gameObject.name.StartsWith("Bomb"))
         {
             return;
@@ -22,6 +23,7 @@ public class Hangar3d : ManagedObject
 
         GameState.GetInstance().BombLanded(col.gameObject, new GameObject());
         SetAlive(false);
+        GameState.GetInstance().AddScore(points);
     }
 
     public override void Reactivate()

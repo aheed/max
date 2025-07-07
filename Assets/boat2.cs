@@ -10,6 +10,7 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
     GameState gameState;
     Vector3 velocity;
     VipBlinker vipBlinker;
+    static readonly int points = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,11 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
         Release();
     }
 
+    int GetPoints()
+    {
+        return IsVip() ? points * 2 : points;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name.StartsWith("bomb"))
@@ -64,6 +70,7 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
                 gameState.TargetHit();
             }
             Sink();
+            gameState.AddScore(GetPoints());
             return;
         }
 
@@ -85,6 +92,7 @@ public class boat2 : ManagedObject, IPositionObservable, IVip
             {
                 gameState.TargetHit();
             }
+            gameState.AddScore(GetPoints());
             Sink();
         }
     }

@@ -11,6 +11,7 @@ public class FlackGun : ManagedObject, IPositionObservable
     float timeToShoot = -1.0f;
     private SpriteRenderer spriteR;
     private bool alive = true;
+    static readonly int points = 10;
 
     void RestartShotClock()
     {
@@ -30,8 +31,7 @@ public class FlackGun : ManagedObject, IPositionObservable
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
-
-            // Todo: report destroyed flack gun for scoring
+            gameState.AddScore(points);
 
             spriteR.sprite = shotSprite;
             if (gameObject.TryGetComponent<Collider2D>(out var collider))
@@ -50,6 +50,7 @@ public class FlackGun : ManagedObject, IPositionObservable
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
             GameState.GetInstance().BombLanded(bomb, gameObject);
+            GameState.GetInstance().AddScore(points);
             return;
         }
 

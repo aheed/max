@@ -29,6 +29,7 @@ public class EnemyPlane3d : MonoBehaviour, IVip
     bool isVip = false;
     IEnemyPlaneNavigator navigator;
     bool isDestructible = true;
+    static readonly int points = 100;
 
     GameObject GetModel()
     {
@@ -208,10 +209,9 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         {
             return;
         }
-        
+
         if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
-            // Todo: report the victory
         }
         else if (col.name.StartsWith("player", true, CultureInfo.InvariantCulture))
         {
@@ -221,15 +221,17 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         {
             Destroy(col.gameObject);
         }
-        else 
+        else
         {
             return; //no collision
         }
 
         Debug.Log($"Enemy plane down!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hit by {col.gameObject.name}");
-        if(IsVip())
+        var pointsScored = points;
+        if (IsVip())
         {
             GameState.GetInstance().TargetHit();
+            pointsScored *= 2;
         }
         crashed = true;
         Deregister();
@@ -237,12 +239,13 @@ public class EnemyPlane3d : MonoBehaviour, IVip
         crashExplosionsLeft = crashExplosions;
 
         SetAppearance(0);
-        
+
         var collider = gameObject.GetComponent<BoxCollider>();
         if (collider != null)
         {
             collider.enabled = false;
         }
         GameState.GetInstance().ReportEvent(GameEvent.BIG_BANG);
+        GameState.GetInstance().AddScore(pointsScored);
     }    
 }

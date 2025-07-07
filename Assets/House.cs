@@ -8,6 +8,7 @@ public class House : MonoBehaviour, IPositionObservable, IVip
     public Target targetPrefab;
     public float targetOffset;
     Target target;
+    static readonly int points = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,7 @@ public class House : MonoBehaviour, IPositionObservable, IVip
         var parent = gameObject.transform.parent;
         var bombed_house = Instantiate(bombedPrefab, transform.position, Quaternion.identity, parent);
         bombed_house.Activate();
+        GameState.GetInstance().AddScore(points);
     }
 
     public Vector2 GetPosition() => transform.position;

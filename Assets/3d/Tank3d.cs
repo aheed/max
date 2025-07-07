@@ -4,6 +4,7 @@ using UnityEngine;
 public class Tank3d : ManagedObject
 {
     private bool demolished = false;
+    static readonly int points = 10;
 
     GameObject GetHealthyModel()
     {
@@ -32,6 +33,7 @@ public class Tank3d : ManagedObject
         {
             collider.enabled = false;
         }
+        GameState.GetInstance().AddScore(points);
     }
 
     void OnTriggerEnter(Collider col)
@@ -40,8 +42,6 @@ public class Tank3d : ManagedObject
         {
             Demolish();
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
-
-            // Todo: report destroyed tank for scoring
         }
         else if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
@@ -49,8 +49,6 @@ public class Tank3d : ManagedObject
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
-
-            // Todo: report destroyed tank for scoring
         }
     }
 

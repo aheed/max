@@ -860,7 +860,7 @@ public class SceneController3d : MonoBehaviour
             if (IsOverRoad(bomb.transform.position))
             {
                 prefab = mushroomCloudPrefab;
-                //todo: report road or bridge hit for scoring
+                gameState.AddScore(10);
             }
             Vector3 craterPosition = bomb.transform.position;
             craterPosition.y = craterAltitude;

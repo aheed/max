@@ -7,6 +7,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable, IEnemyHQ
     public Sprite bombedSprite;
     private SpriteRenderer spriteR;
     private bool bombed = false;
+    static readonly int points = 250;
 
     public void SetBombed()
     {
@@ -14,7 +15,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable, IEnemyHQ
         {
             spriteR = gameObject.GetComponent<SpriteRenderer>();
         }
-        
+
         spriteR.sprite = bombedSprite;
         var collider = gameObject.GetComponent<Collider2D>();
         if (collider != null)
@@ -45,6 +46,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable, IEnemyHQ
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
         gameState.TargetHit();
+        gameState.AddScore(points);
     }
 
     public Vector2 GetPosition() => transform.position;
