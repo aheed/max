@@ -47,7 +47,7 @@ public class BossRedBaron : MonoBehaviour
     PidController positionControllerY;
     PidController angleControllerX;
     PidController angleControllerY;
-    
+    static readonly int points = 10000;
 
     void ResetMoveCooldownX()
     {
@@ -231,6 +231,7 @@ public class BossRedBaron : MonoBehaviour
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
         gameState.ReportBossDefeated();
+        gameState.AddScore(points);
 
         Explode();
     }

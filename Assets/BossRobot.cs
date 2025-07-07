@@ -40,6 +40,7 @@ public class BossRobot : MonoBehaviour
     public float defeatedLifeSpanSec = 1.5f;
     public float hitEffectLifeSpanSec = 0.5f;
     public float hitEffectOffsetZ = 0.26f;
+    static readonly int points = 10000;
 
     GameObject refObject;
     BossRobotStage stage = BossRobotStage.APPROACHING;
@@ -264,7 +265,8 @@ public class BossRobot : MonoBehaviour
         //Debug.Log("Boss Robot is defeated!");
 
         var gameState = GameState.GetInstance();
-        gameState.ReportBossDefeated();        
+        gameState.ReportBossDefeated();
+        gameState.AddScore(points);
 
         currentMoveSpeed = moveSpeedDefeated;
         ResetMoveCooldown();
