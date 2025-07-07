@@ -193,7 +193,6 @@ public class EnemyPlane : MonoBehaviour, IPlaneObservable, IVip
 
         if (collObjName.StartsWith("bullet"))
         {
-            // Todo: report the victory
         }
         else if (collObjName.StartsWith("max"))
         {

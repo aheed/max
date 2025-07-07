@@ -8,6 +8,7 @@ public class Car3d : ManagedObject, IVip
     GameState gameState;
     float speed;
     bool isVip = false;
+    static readonly int points = 10;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,14 +56,14 @@ public class Car3d : ManagedObject, IVip
     public bool IsVip()
     {
         return isVip;
-    }    
+    }
 
     void OnTriggerEnter(Collider col)
     {
         GameObject bombGameObject = null;
         if (col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
         {
-            
+
         }
         else if (col.name.StartsWith("bomb", true, CultureInfo.InvariantCulture))
         {
@@ -74,9 +75,12 @@ public class Car3d : ManagedObject, IVip
         }
 
         gameState.BombLanded(bombGameObject, gameObject);
-        if(IsVip())
+        var pointsScored = points;
+        if (IsVip())
         {
             gameState.TargetHit();
+            pointsScored *= 2;
         }
+        gameState.AddScore(pointsScored);
     }
 }

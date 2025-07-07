@@ -6,10 +6,12 @@ public class Boat3d1 : ManagedObject
     static readonly int maxHealth = 3;
     public GameObject sunkBoatPrefab;
     int health = maxHealth;
+    static readonly int points = 50;
 
     void Sink()
     {
         Instantiate(sunkBoatPrefab, transform.position, transform.rotation);
+        GameState.GetInstance().AddScore(points);
     }
 
     void OnTriggerEnter(Collider col)

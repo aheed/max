@@ -8,6 +8,7 @@ public class House4 : MonoBehaviour, IVip
     public float sizeFactor = 0.3f;
     public static readonly float saturationFactor = 0.3f;
     Vector3 size;
+    static readonly int points = 50;
 
     GameObject target = null;
 
@@ -96,19 +97,21 @@ public class House4 : MonoBehaviour, IVip
     }
 
     void OnTriggerEnter(Collider col)
-    {        
+    {
         //Debug.Log($"House Hit!!!!!!!!!!!!!!!  collided with {col.gameObject.name}");
-        
+
         if (!col.gameObject.name.StartsWith("Bomb"))
         {
             return;
         }
 
+        var pointsScored = points;
         if (IsVip())
         {
             GameState.GetInstance().TargetHit();
             Destroy(target);
             target = null;
+            pointsScored *= 2;
         }
 
         GameState.GetInstance().BombLanded(col.gameObject, new GameObject());
@@ -124,5 +127,6 @@ public class House4 : MonoBehaviour, IVip
             collider.enabled = false;
         }
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        GameState.GetInstance().AddScore(pointsScored);
     }
 }

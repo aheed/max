@@ -13,6 +13,7 @@ public class Flakgun3d : ManagedObject
     float timeToShoot = -1.0f;
     private bool alive = true;
     private bool demolished = false;
+    static readonly int points = 10;
 
 
     void RestartShotClock()
@@ -46,8 +47,7 @@ public class Flakgun3d : ManagedObject
         {
             Demolish();
             GameState.GetInstance().BombLanded(col.gameObject, gameObject);
-
-            // Todo: report destroyed flak gun for scoring
+            GameState.GetInstance().AddScore(points);
         }
         else if (col.name.StartsWith("bullet", true, CultureInfo.InvariantCulture))
         {
@@ -55,8 +55,7 @@ public class Flakgun3d : ManagedObject
             var gameState = GameState.GetInstance();
             gameState.ReportEvent(GameEvent.SMALL_DETONATION);
             gameState.ReportEvent(GameEvent.SMALL_BANG);
-
-            // Todo: report destroyed flak gun for scoring
+            GameState.GetInstance().AddScore(points);
         }
     }
 

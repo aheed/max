@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyHQ3d : MonoBehaviour, IEnemyHQ
 {
     private bool bombed = false;
+    static readonly int points = 250;
 
     public void SetBombed()
     {
@@ -36,5 +37,6 @@ public class EnemyHQ3d : MonoBehaviour, IEnemyHQ
         gameState.ReportEvent(GameEvent.BIG_DETONATION);
         gameState.ReportEvent(GameEvent.BIG_BANG);
         gameState.TargetHit();
+        gameState.AddScore(points);
     }
 }

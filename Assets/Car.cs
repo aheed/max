@@ -45,12 +45,12 @@ public class Car : ManagedObject, IVip
             col.name.StartsWith("mushroom", true, CultureInfo.InvariantCulture))
         {
             var bomb = col.gameObject.GetComponent<Bomb>();
-            gameState.BombLanded(bomb, gameObject);
             if (IsVip())
             {
                 gameState.TargetHit();
             }
             gameState.AddScore(GetPoints());
+            gameState.BombLanded(bomb, gameObject);
         }
     }
 
