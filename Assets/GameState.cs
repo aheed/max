@@ -83,6 +83,8 @@ public class GameStateContents
     public GameObject boss;
     public float restartCoolDownSeconds = 0f;
     public bool cameraButtonVisible = false;
+    public bool homeButtonVisible = true;
+    public bool pauseButtonVisible = true;
 }
 
 public class GameState : MonoBehaviour
@@ -120,6 +122,16 @@ public class GameState : MonoBehaviour
     public Vector3 playerPosition;
     private EventPubSubNoArg pubSub = new();
     private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
+
+    public void SetPause(bool paused)
+    {
+        Time.timeScale = paused ? 0f : 1f;
+    }
+
+    public bool IsPaused()
+    {
+        return Time.timeScale == 0f;
+    }
 
     public void SetPlaneHeights(float playerPlaneHeight, float enemyPlaneHeight)
     {

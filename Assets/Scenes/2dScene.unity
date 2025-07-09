@@ -2443,6 +2443,8 @@ MonoBehaviour:
   postExposurelifeSpanSec: 0.3
   hueShift: -100
   maxPostExposure: 2
+  nightSaturation: -30
+  tvSaturation: -17
 --- !u!1 &629293301
 GameObject:
   m_ObjectHideFlags: 0
@@ -3372,6 +3374,8 @@ MonoBehaviour:
   pilotControlTexture: {fileID: 2800000, guid: 8d3923ca2c653d560a2cda3e01085874, type: 3}
   normalDotsTexture: {fileID: 2800000, guid: 559f0a7b59c147bc7bc6b72aa8b48f28, type: 3}
   invertedDotsTexture: {fileID: 2800000, guid: 2be9a53aba0265ecfab272e67e296700, type: 3}
+  pauseTexture: {fileID: 2800000, guid: 432f8110424f628bba8a5f5b635ccf81, type: 3}
+  playTexture: {fileID: 2800000, guid: f4d13bed9655bb15589151944a0be37b, type: 3}
 --- !u!1 &763321429
 GameObject:
   m_ObjectHideFlags: 0

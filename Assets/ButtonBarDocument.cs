@@ -16,6 +16,8 @@ public class ButtonBarDocument : MonoBehaviour
     public Texture2D pilotControlTexture;
     public Texture2D normalDotsTexture;
     public Texture2D invertedDotsTexture;
+    public Texture2D pauseTexture;
+    public Texture2D playTexture;
     VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
@@ -25,12 +27,13 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement pilotElem;
     VisualElement helpElem;
     VisualElement homeElem;
+    VisualElement pauseElem;
+    VisualElement expandedGroupElem;
     VisualElement fullScreenTapHintElem;
     Label debugElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
     bool rightSideExpanded = false;
-    List<VisualElement> expandedRightSide = new();
     bool debugDisplayed = false;
 
     public VisualElement GetFullScreenTapHintElem()
@@ -73,13 +76,12 @@ public class ButtonBarDocument : MonoBehaviour
         dotsElem = uiDocument.rootVisualElement.Q<VisualElement>("DotsButton");
         dotsElem.RegisterCallback<ClickEvent>(OnDotsClicked);
 
+        pauseElem = uiDocument.rootVisualElement.Q<VisualElement>("PauseButton");
+        pauseElem.RegisterCallback<ClickEvent>(OnPauseClicked);
+
+        expandedGroupElem = uiDocument.rootVisualElement.Q<VisualElement>("ExpandedGroup");
+
         debugElem = uiDocument.rootVisualElement.Q<Label>("DebugLabel");
-
-        expandedRightSide.Add(muteElem);
-        expandedRightSide.Add(pilotElem);
-        //expandedRightSide.Add(helpElem);
-        expandedRightSide.Add(homeElem);
-
 
         UpdateAll();
 
@@ -95,6 +97,27 @@ public class ButtonBarDocument : MonoBehaviour
         UpdatePilotButton();
         UpdateRightSideExpanded();
         UpdateCameraButton();
+        UpdateHomeButton();
+        UpdatePauseButton();
+    }
+
+    void UpdatePauseButton()
+    {
+        if (pauseElem == null)
+            return;
+
+        pauseElem.style.display = gameState.GetStateContents().pauseButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
+
+        var newTexture = gameState.IsPaused() ? playTexture : pauseTexture;
+        pauseElem.style.backgroundImage = new StyleBackground(newTexture);
+    }
+
+    void UpdateHomeButton()
+    {
+        if (homeElem == null)
+            return;
+
+        homeElem.style.display = gameState.GetStateContents().homeButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     void UpdateTvSimButton()
@@ -217,17 +240,22 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdateRightSideExpanded()
     {
-        //var dotsDisplayStyle = rightSideExpanded ? DisplayStyle.None : DisplayStyle.Flex;
         var expansionDisplayStyle = rightSideExpanded ? DisplayStyle.Flex : DisplayStyle.None;
-
-        //dotsElem.style.display = dotsDisplayStyle;
-        foreach (var item in expandedRightSide)
-        {
-            item.style.display = expansionDisplayStyle;
-        }
+        expandedGroupElem.style.display = expansionDisplayStyle;
 
         var newTexture = rightSideExpanded ? invertedDotsTexture : normalDotsTexture;
         dotsElem.style.backgroundImage = new StyleBackground(newTexture);
+    }
+
+    void OnPauseClicked(ClickEvent evt)
+    {
+        Debug.Log("Pause clicked");
+        if (evt.target != pauseElem)
+            return;
+
+        gameState.SetPause(!gameState.IsPaused());
+
+        UpdatePauseButton();
     }
 
     void OnDotsClicked(ClickEvent evt)
