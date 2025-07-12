@@ -7,18 +7,17 @@ public class WelcomePlane : MonoBehaviour
     public float rollSpeed = 0.5f;
     public float offsetY = 0.2f;
     GameObject inner;
-    //float currentOffsetY;
 
     void Start()
     {
         inner = transform.GetChild(0).gameObject;
-        inner.transform.localPosition = new Vector3(0f, offsetY, 0f);
+        Respawn();
     }
 
     void Respawn()
     {
         var tmpPos = inner.transform.localPosition;
-        tmpPos.y = tmpPos.y < 0 ? offsetY : -offsetY;
+        tmpPos.y = tmpPos.y <= 0 ? offsetY : -offsetY;
         tmpPos.x = -maxOffsetX;
         inner.transform.localPosition = tmpPos;
     }
@@ -33,7 +32,7 @@ public class WelcomePlane : MonoBehaviour
 
         inner.transform.Rotate(0,
             0,
-            rollSpeed * Time.deltaTime
+            -rollSpeed * Time.deltaTime
         );
 
         if (inner.transform.localPosition.x > maxOffsetX)
