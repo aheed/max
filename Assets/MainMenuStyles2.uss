@@ -2,8 +2,8 @@
 }
 
 .scrolled-level-button {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-left-color: rgba(200, 200, 200, 0.78);
     border-right-color: rgba(200, 200, 200, 0.78);
     border-top-color: rgba(200, 200, 200, 0.78);
@@ -58,8 +58,8 @@
 }
 
 .selected-mission-button {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     border-top-width: 10px;
     border-right-width: 10px;
     border-bottom-width: 10px;
