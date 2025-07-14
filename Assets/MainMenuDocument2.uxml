@@ -1,23 +1,30 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/MainMenuStyles2.uss?fileID=7433441132597879392&amp;guid=b1c0dbb7fab02f627bd41fee53205e69&amp;type=3#MainMenuStyles2" />
-    <engine:VisualElement name="Outer" style="flex-grow: 1; justify-content: flex-start; align-content: center; align-items: center;">
-        <engine:Label text="Mission" name="MissionLabel" style="-unity-text-align: upper-center; font-size: 70px; color: rgba(200, 200, 0, 0.78);" />
-        <engine:VisualElement name="TopRow" class="menu-border" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 25%; min-height: 25%; max-height: 25%; width: 96%;">
-            <engine:ScrollView name="ScrollView" horizontal-scroller-visibility="AlwaysVisible" vertical-scroller-visibility="Hidden" mode="Horizontal" style="width: 98%; height: 95%; justify-content: center; align-content: center; align-self: center; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(200, 200, 0, 0.78); border-right-color: rgba(200, 200, 0, 0.78); border-top-color: rgba(200, 200, 0, 0.78); border-bottom-color: rgba(200, 200, 0, 0.78);">
+    <engine:VisualElement name="Outer" style="flex-grow: 1; justify-content: flex-start; align-content: center; align-items: center; font-size: 24px; color: rgba(200, 200, 0, 0.78);">
+        <engine:Label text="Choose a mission" name="MissionLabel" style="-unity-text-align: upper-center; font-size: 40px; color: rgba(200, 200, 0, 0.78);" />
+        <engine:VisualElement name="TopRow" class="menu-border" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 30%; min-height: 25%; max-height: 25%; width: 96%;">
+            <engine:Button text="&lt;" name="LeftScroll" class="scroll-side-button" />
+            <engine:ScrollView name="ScrollView" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" mode="Horizontal" style="width: 98%; height: 95%; justify-content: center; align-content: center; align-self: center;">
                 <engine:VisualElement name="Levels" style="flex-grow: 1; flex-direction: row; align-self: center; height: 90%; align-items: center; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgba(200, 200, 0, 0.78); border-right-color: rgba(200, 200, 0, 0.78); border-top-color: rgba(200, 200, 0, 0.78); border-bottom-color: rgba(200, 200, 0, 0.78); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
                     <engine:Button text="Intro" name="Intro" class="scrolled-level-button" style="font-size: 40px;" />
-                    <engine:Button text="1" name="Level1" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level2" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level3" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level4" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
-                    <engine:Button text="2" name="Level5" class="scrolled-level-button" />
+                    <engine:Button text="1" name="Level1" display-tooltip-when-elided="false" triple-click-selects-line="false" double-click-selects-word="false" class="scrolled-level-button" />
+                    <engine:Button text="2" name="Level2" class="scrolled-level-button selected-mission-button" />
+                    <engine:Button text="3" name="Level3" class="scrolled-level-button" />
+                    <engine:Button text="4&#10;" name="Level4" class="scrolled-level-button" />
+                    <engine:Button text="5" name="Level5" class="scrolled-level-button" />
+                    <engine:Button text="6" name="Level6" class="scrolled-level-button" />
+                    <engine:Button text="7" name="Level7" class="scrolled-level-button" />
+                    <engine:Button text="8" name="Level8" class="scrolled-level-button" />
+                    <engine:Button text="9" name="Level9" class="scrolled-level-button" />
+                    <engine:Button text="10" name="Level10" class="scrolled-level-button" />
                 </engine:VisualElement>
             </engine:ScrollView>
+            <engine:Button text="&gt;" name="RightScroll" class="scroll-side-button" />
         </engine:VisualElement>
+        <engine:VisualElement name="DetailsArea" style="flex-grow: 1; width: 80%; height: 50%; min-height: 20%; max-height: 50%; min-width: 60%;">
+            <engine:Label text="Title" name="Title" style="white-space: normal; -unity-text-align: upper-center; font-size: 48px; -unity-font-style: bold; margin-top: 24px; margin-right: 12px; margin-bottom: 12px; margin-left: 12px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            <engine:Label text="This would typically be a longer description of the level. Should include some humor and references to 1980s stuff and whatnot." name="Description" style="white-space: normal; font-size: 40px;" />
+        </engine:VisualElement>
+        <engine:Button text="Play!" name="PlayButton" class="scrolled-level-button menu-border" style="width: 260px; height: 140px; color: rgb(200, 200, 0);" />
     </engine:VisualElement>
 </engine:UXML>

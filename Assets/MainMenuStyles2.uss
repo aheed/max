@@ -4,10 +4,10 @@
 .scrolled-level-button {
     width: 120px;
     height: 120px;
-    border-left-color: rgba(200, 200, 0, 0.78);
-    border-right-color: rgba(200, 200, 0, 0.78);
-    border-top-color: rgba(200, 200, 0, 0.78);
-    border-bottom-color: rgba(200, 200, 0, 0.78);
+    border-left-color: rgba(200, 200, 200, 0.78);
+    border-right-color: rgba(200, 200, 200, 0.78);
+    border-top-color: rgba(200, 200, 200, 0.78);
+    border-bottom-color: rgba(200, 200, 200, 0.78);
     border-top-width: 5px;
     border-right-width: 5px;
     border-bottom-width: 5px;
@@ -26,7 +26,7 @@
     padding-left: 2px;
     background-color: rgba(0, 0, 0, 0.78);
     font-size: 70px;
-    color: rgba(200, 200, 0, 0.78);
+    color: rgba(200, 200, 200, 0.78);
     -unity-font-style: bold;
 }
 
@@ -43,4 +43,31 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+.scroll-side-button {
+    color: rgba(200, 200, 200, 0.78);
+    background-color: rgba(188, 188, 188, 0);
+    font-size: 75px;
+    -unity-font-style: bold;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    -unity-font-definition: url("project://database/Library/unity%20default%20resources?fileID=10102&guid=0000000000000000e000000000000000&type=0#LegacyRuntime");
+}
+
+.selected-mission-button {
+    width: 150px;
+    height: 150px;
+    border-top-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    border-left-color: rgb(200, 200, 0);
+    border-right-color: rgb(200, 200, 0);
+    border-top-color: rgb(200, 200, 0);
+    border-bottom-color: rgb(200, 200, 0);
+    color: rgb(200, 200, 0);
+    font-size: 100px;
 }
