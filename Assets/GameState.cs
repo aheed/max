@@ -33,7 +33,9 @@ public enum GameEvent
     DEBUG_ACTION3,
     BULLET_FIRED,
     BOMB_DROPPED,
-    CAMERA_ADDED,
+    CAMERA_BUTTON_UPDATED,
+    HOME_BUTTON_UPDATED,
+    PAUSE_BUTTON_UPDATED,
     CAMERA_CHANGE_REQUESTED,
     CAMERA_CHANGED
 }
@@ -83,8 +85,8 @@ public class GameStateContents
     public GameObject boss;
     public float restartCoolDownSeconds = 0f;
     public bool cameraButtonVisible = false;
-    public bool homeButtonVisible = true;
-    public bool pauseButtonVisible = true;
+    public bool homeButtonVisible = false;
+    public bool pauseButtonVisible = false;
 }
 
 public class GameState : MonoBehaviour
@@ -126,6 +128,7 @@ public class GameState : MonoBehaviour
     public void SetPause(bool paused)
     {
         Time.timeScale = paused ? 0f : 1f;
+        ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
     }
 
     public bool IsPaused()

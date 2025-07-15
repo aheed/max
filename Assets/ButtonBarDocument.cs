@@ -86,7 +86,9 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateAll();
 
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
-        GameState.GetInstance().Subscribe(GameEvent.CAMERA_ADDED, OnCameraAddedCallback);
+        GameState.GetInstance().Subscribe(GameEvent.CAMERA_BUTTON_UPDATED, UpdateCameraButton);
+        GameState.GetInstance().Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
+        GameState.GetInstance().Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
     }
 
     void UpdateAll()
@@ -254,8 +256,6 @@ public class ButtonBarDocument : MonoBehaviour
             return;
 
         gameState.SetPause(!gameState.IsPaused());
-
-        UpdatePauseButton();
     }
 
     void OnDotsClicked(ClickEvent evt)
@@ -276,12 +276,6 @@ public class ButtonBarDocument : MonoBehaviour
 
         rightSideExpanded = false;
         UpdateRightSideExpanded();
-    }
-
-    void OnCameraAddedCallback()
-    {
-        Debug.Log("Camera added callback triggered mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-        UpdateCameraButton();
     }
 
     private void OnDebugCallback1()

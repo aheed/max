@@ -775,7 +775,7 @@ public class SceneController : MonoBehaviour
 
     void StartNewGame()
     {
-        LevelType firstLevelType = LevelSelection.startLevelOverride ? 
+        LevelType firstLevelType = LevelSelection.startLevelOverride ?
             LevelSelection.startLevel : startLevelType;
         levelWidth = (levelHeight * LevelContents.gridWidth) / LevelContents.fullGridHeight;
         level = -1;
@@ -788,11 +788,16 @@ public class SceneController : MonoBehaviour
         if (maxPlane == null)
         {
             maxPlane = Instantiate(maxPlanePrefab, refobject.transform);
-            maxPlane.refObject = refobject.transform;            
+            maxPlane.refObject = refobject.transform;
             AddPlaneShadow(maxPlane.transform);
             gameState.SetPlaneHeights(maxPlane.GetHeight(), Altitudes.enemyPlaneHeight);
         }
         maxPlane.transform.localPosition = Vector3.zero;
+
+        gameState.GetStateContents().homeButtonVisible = true;
+        gameState.ReportEvent(GameEvent.HOME_BUTTON_UPDATED);
+        gameState.GetStateContents().pauseButtonVisible = true;
+        gameState.ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
 
         if (levels != null)
         {
@@ -809,15 +814,15 @@ public class SceneController : MonoBehaviour
         pendingActivation.Clear();
         activeObjects.Clear();
         roadLowerEdgesY = new();
-        newLevelTask = null;        
+        newLevelTask = null;
         var stateContents = gameState.GetStateContents();
         gameState.Reset();
-        stateContents.latestLevelPrereq = new LevelPrerequisite 
-            {
-                levelType = firstLevelType,
-                riverLeftOfAirstrip=true,
-                enemyHQsBombed = new List<bool> {false, false, false}
-            };
+        stateContents.latestLevelPrereq = new LevelPrerequisite
+        {
+            levelType = firstLevelType,
+            riverLeftOfAirstrip = true,
+            enemyHQsBombed = new List<bool> { false, false, false }
+        };
         latestLevel = new LevelBuilder().Build(stateContents.latestLevelPrereq);
         InitSceneBuilder();
         CreateLevel();
@@ -826,6 +831,7 @@ public class SceneController : MonoBehaviour
         var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
+        gameState.SetPause(false);
     }
 
     void Start()

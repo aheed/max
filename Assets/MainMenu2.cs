@@ -69,6 +69,7 @@ public class MainMenu2 : MonoBehaviour
         }
 
         selectedMissionIndex = Settings.GetSelectedMission();
+        GameState.GetInstance().SetPause(false);
     }
 
     void Update()
