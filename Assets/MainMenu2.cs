@@ -21,7 +21,7 @@ public class MainMenu2 : MonoBehaviour
     Label descriptionLabel;
     ScrollView missionsScrollView;
     VisualElement missionsElement;
-    int selectedMissionIndex = 6; //0;   TEMP
+    int selectedMissionIndex = 0;
     static readonly int initialUpdates = 3; // Number of initial updates to ensure UI is ready
     static readonly string selectedClassName = "selected-mission-button";
     int updatesToWait = initialUpdates;
@@ -67,6 +67,8 @@ public class MainMenu2 : MonoBehaviour
         {
             Debug.LogWarning($"Expected {missions.Length} mission buttons, found {missionsElement.childCount}.");
         }
+
+        selectedMissionIndex = Settings.GetSelectedMission();
     }
 
     void Update()
@@ -119,6 +121,7 @@ public class MainMenu2 : MonoBehaviour
         if (evt.target is Button button)
         {
             selectedMissionIndex = missionIndex;
+            Settings.SetSelectedMission(selectedMissionIndex);
             Debug.Log($"Mission button {missionIndex} clicked: {button.text}");
             UpdateMissionDetails();
         }
