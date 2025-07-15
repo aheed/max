@@ -13,10 +13,6 @@
                     <engine:Button text="4&#10;" name="Level4" class="scrolled-level-button" />
                     <engine:Button text="5" name="Level5" class="scrolled-level-button" />
                     <engine:Button text="6" name="Level6" class="scrolled-level-button" />
-                    <engine:Button text="7" name="Level7" class="scrolled-level-button" />
-                    <engine:Button text="8" name="Level8" class="scrolled-level-button" />
-                    <engine:Button text="9" name="Level9" class="scrolled-level-button" />
-                    <engine:Button text="10" name="Level10" class="scrolled-level-button" />
                 </engine:VisualElement>
             </engine:ScrollView>
             <engine:Button text="&gt;" name="RightScroll" class="scroll-side-button" />

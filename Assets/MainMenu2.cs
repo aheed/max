@@ -1,18 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Mission
 {
+    public static readonly string TwoDSceneName = "2DScene";
+    public static readonly string ThreeDSceneName = "3DScene";
     public string Title { get; set; }
     public string Description { get; set; }
-    //public string SceneName { get; set; }
-
-    /*public Mission(string title, string description, string sceneName)
-    {
-        Title = title;
-        Description = description;
-        //SceneName = sceneName;
-    }*/
+    public LevelType LevelType { get; set; }
+    public string SceneName { get; set; }
 }
 
 public class MainMenu2 : MonoBehaviour
@@ -31,15 +28,13 @@ public class MainMenu2 : MonoBehaviour
 
     Mission[] missions = new Mission[]
     {
-        new Mission { Title = "Intro", Description = "This is the introduction mission." },
-        new Mission { Title = "Mission 1", Description = "This is the first mission." },
-        new Mission { Title = "Mission 2", Description = "This is the second mission." },
-        new Mission { Title = "Mission 3", Description = "This is the third mission." },
-        new Mission { Title = "Mission 4", Description = "This is the fourth mission." },
-        new Mission { Title = "Mission 5", Description = "This is the fifth mission." },
-        new Mission { Title = "Mission 6", Description = "This is the sixth mission." },
-        new Mission { Title = "Mission 7", Description = "This is the seventh mission." },
-        new Mission { Title = "Mission 8", Description = "This is the eighth mission." },
+        new Mission { Title = "Intro", Description = "This is the introduction mission.", LevelType = LevelType.INTRO, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "2D Classic", Description = "This is the first mission.", LevelType = LevelType.NORMAL, SceneName = Mission.TwoDSceneName },
+        new Mission { Title = "2D Balloons", Description = "This is the second mission.", LevelType = LevelType.BALLOONS, SceneName = Mission.TwoDSceneName },
+        new Mission { Title = "3D Classic", Description = "This is the third mission.", LevelType = LevelType.NORMAL, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "3D Boss Level", Description = "This is the fourth mission.", LevelType = LevelType.ROBOT_BOSS, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "Red Baron", Description = "This is the fifth mission. First person view recommended.", LevelType = LevelType.RED_BARON_BOSS, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "Dam Busters", Description = "This is the sixth mission. Night mission.", LevelType = LevelType.DAM, SceneName = Mission.ThreeDSceneName },
     };
 
     void Start()
@@ -97,7 +92,7 @@ public class MainMenu2 : MonoBehaviour
         }
 
         var selectedMission = missions[selectedMissionIndex];
-        titleLabel.text = $"Mission {selectedMissionIndex + 1} Title: {selectedMission.Title}";
+        titleLabel.text = selectedMission.Title;
         descriptionLabel.text = $"This is a description for mission {selectedMissionIndex + 1}: {selectedMission.Description}";
 
         for (int i = 0; i < missionsElement.childCount; i++)
@@ -151,10 +146,11 @@ public class MainMenu2 : MonoBehaviour
     {
         if (evt.target is Button button && button.name == "PlayButton")
         {
-            Debug.Log($"Play button clicked according to button name. Time to start mission {selectedMissionIndex}");
+            Debug.Log($"Play button clicked. Time to start mission {selectedMissionIndex}");
+            var selectedMission = missions[selectedMissionIndex];
+            LevelSelection.startLevelOverride = true;
+            LevelSelection.startLevel = selectedMission.LevelType;
+            SceneManager.LoadScene(selectedMission.SceneName);
         }
-        Debug.Log("Play button clicked");
-        // Implement play logic here, e.g., load the selected level
-        // SceneManager.LoadScene("SelectedLevelScene");
     }
 }
