@@ -28,13 +28,13 @@ public class MainMenu2 : MonoBehaviour
 
     Mission[] missions = new Mission[]
     {
-        new Mission { Title = "Intro", Description = "This is the introduction mission.", LevelType = LevelType.INTRO, SceneName = Mission.ThreeDSceneName },
-        new Mission { Title = "2D Classic", Description = "This is the first mission.", LevelType = LevelType.NORMAL, SceneName = Mission.TwoDSceneName },
-        new Mission { Title = "2D Balloons", Description = "This is the second mission.", LevelType = LevelType.BALLOONS, SceneName = Mission.TwoDSceneName },
-        new Mission { Title = "3D Classic", Description = "This is the third mission.", LevelType = LevelType.NORMAL, SceneName = Mission.ThreeDSceneName },
-        new Mission { Title = "3D Boss Level", Description = "This is the fourth mission.", LevelType = LevelType.ROBOT_BOSS, SceneName = Mission.ThreeDSceneName },
-        new Mission { Title = "Red Baron", Description = "This is the fifth mission. First person view recommended.", LevelType = LevelType.RED_BARON_BOSS, SceneName = Mission.ThreeDSceneName },
-        new Mission { Title = "Dam Busters", Description = "This is the sixth mission. Night mission.", LevelType = LevelType.DAM, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "Intro", Description = "Let's get you airborne!", LevelType = LevelType.INTRO, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "2D Classic", Description = "Triple stage mission. 1983 looks better than ever.", LevelType = LevelType.NORMAL, SceneName = Mission.TwoDSceneName },
+        new Mission { Title = "2D Balloons", Description = "How many red balloons go by? You guessed it.", LevelType = LevelType.BALLOONS, SceneName = Mission.TwoDSceneName },
+        new Mission { Title = "3D Classic", Description = "Triple stage mission objective again. 3 dimensions. Still 2 wings.", LevelType = LevelType.NORMAL, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "3D Boss Level", Description = "Guest boss appearance. Remember how to defeat this villain?", LevelType = LevelType.ROBOT_BOSS, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "Red Baron", Description = "How long did you think you could fly a Sopwith Camel without running into this enemy? First person view recommended.", LevelType = LevelType.RED_BARON_BOSS, SceneName = Mission.ThreeDSceneName },
+        new Mission { Title = "Dam Busters", Description = "Night mission. Bouncier bombs. Based on a true story. Loosely.", LevelType = LevelType.DAM, SceneName = Mission.ThreeDSceneName },
     };
 
     void Start()
@@ -69,6 +69,7 @@ public class MainMenu2 : MonoBehaviour
         }
 
         selectedMissionIndex = Settings.GetSelectedMission();
+        Settings.Update();
         GameState.GetInstance().SetPause(false);
     }
 
@@ -96,7 +97,7 @@ public class MainMenu2 : MonoBehaviour
 
         var selectedMission = missions[selectedMissionIndex];
         titleLabel.text = selectedMission.Title;
-        descriptionLabel.text = $"This is a description for mission {selectedMissionIndex + 1}: {selectedMission.Description}";
+        descriptionLabel.text = selectedMission.Description;
 
         for (int i = 0; i < missionsElement.childCount; i++)
         {
