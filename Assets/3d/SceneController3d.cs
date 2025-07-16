@@ -225,6 +225,8 @@ public class SceneController3d : MonoBehaviour
         gameState.ReportEvent(GameEvent.HOME_BUTTON_UPDATED);
         gameState.GetStateContents().pauseButtonVisible = true;
         gameState.ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
+        gameState.GetStateContents().tvSimButtonVisible = true;
+        gameState.ReportEvent(GameEvent.TV_SIM_BUTTON_UPDATED);
 
         if (levels != null)
         {

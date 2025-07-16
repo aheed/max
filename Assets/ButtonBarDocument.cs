@@ -89,6 +89,7 @@ public class ButtonBarDocument : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.CAMERA_BUTTON_UPDATED, UpdateCameraButton);
         GameState.GetInstance().Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
         GameState.GetInstance().Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
+        GameState.GetInstance().Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
     }
 
     void UpdateAll()
@@ -124,6 +125,11 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdateTvSimButton()
     {
+        if (tvElem == null)
+            return;
+
+        tvElem.style.display = gameState.GetStateContents().tvSimButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
+
         var newTexture = gameState.viewMode == ViewMode.NORMAL ? crtTexture : flatscreenTexture;
         tvElem.style.backgroundImage = new StyleBackground(newTexture);
     }
