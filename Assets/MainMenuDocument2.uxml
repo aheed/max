@@ -1,8 +1,9 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/MainMenuStyles2.uss?fileID=7433441132597879392&amp;guid=b1c0dbb7fab02f627bd41fee53205e69&amp;type=3#MainMenuStyles2" />
     <engine:VisualElement name="Outer" style="flex-grow: 1; justify-content: flex-start; align-content: center; align-items: center; font-size: 24px; color: rgba(200, 200, 0, 0.78);">
-        <engine:Label text="Choose a mission" name="MissionLabel" style="-unity-text-align: upper-center; font-size: 40px; color: rgba(200, 200, 0, 0.78);" />
-        <engine:VisualElement name="TopRow" class="menu-border" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 30%; min-height: 25%; max-height: 25%; width: 65%;">
+        <engine:VisualElement name="Logo" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Toolkit/propspin6_trans2.png?fileID=2800000&amp;guid=064d3602b7a6b30e8934233ed0689b12&amp;type=3#propspin6_trans2&quot;); height: 10%; min-width: 60%; -unity-background-scale-mode: scale-to-fit; margin-top: 1%; margin-right: 1%; margin-bottom: 2%; margin-left: 1%;" />
+        <engine:Label text="Choose a mission" name="MissionLabel" style="-unity-text-align: upper-center; font-size: 40px; color: rgba(200, 200, 0, 0.78); display: none; -unity-background-scale-mode: scale-to-fit; background-size: contain;" />
+        <engine:VisualElement name="TopRow" class="menu-border" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 13%; min-height: 1%; max-height: 12%; width: 65%;">
             <engine:Button text="&lt;" name="LeftScroll" class="scroll-side-button" />
             <engine:ScrollView name="ScrollView" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" mode="Horizontal" style="width: 98%; height: 95%; justify-content: center; align-content: center; align-self: center;">
                 <engine:VisualElement name="Missions" style="flex-grow: 1; flex-direction: row; align-self: center; height: 90%; align-items: center; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgba(200, 200, 0, 0.78); border-right-color: rgba(200, 200, 0, 0.78); border-top-color: rgba(200, 200, 0, 0.78); border-bottom-color: rgba(200, 200, 0, 0.78); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;">
@@ -18,7 +19,7 @@
             <engine:Button text="&gt;" name="RightScroll" class="scroll-side-button" />
         </engine:VisualElement>
         <engine:VisualElement name="DetailsArea" style="flex-grow: 1; width: 80%; height: 50%; min-height: 20%; max-height: 50%; min-width: 60%;">
-            <engine:Label text="Title" name="Title" style="white-space: normal; -unity-text-align: upper-center; font-size: 64px; -unity-font-style: bold; margin-top: 24px; margin-right: 12px; margin-bottom: 12px; margin-left: 12px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+            <engine:Label text="Title" name="Title" style="white-space: normal; -unity-text-align: upper-center; font-size: 64px; -unity-font-style: bold; margin-top: 8px; margin-right: 8px; margin-bottom: 8px; margin-left: 8px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
             <engine:Label text="This would typically be a longer description of the level. Should include some humor and references to 1980s stuff and whatnot." name="Description" style="white-space: normal; font-size: 40px;" />
         </engine:VisualElement>
         <engine:Button text="Play!" name="PlayButton" class="scrolled-level-button menu-border" style="width: 260px; height: 140px; color: rgb(200, 200, 0);" />
