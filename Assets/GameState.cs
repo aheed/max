@@ -37,6 +37,7 @@ public enum GameEvent
     HOME_BUTTON_UPDATED,
     PAUSE_BUTTON_UPDATED,
     TV_SIM_BUTTON_UPDATED,
+    SPACER_BUTTONS_UPDATED,
     CAMERA_CHANGE_REQUESTED,
     CAMERA_CHANGED
 }
@@ -89,6 +90,7 @@ public class GameStateContents
     public bool homeButtonVisible = false;
     public bool pauseButtonVisible = false;
     public bool tvSimButtonVisible = false;
+    public bool spacerButtonsVisible = false;
 }
 
 public class GameState : MonoBehaviour

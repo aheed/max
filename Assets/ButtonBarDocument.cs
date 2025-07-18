@@ -30,6 +30,8 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement pauseElem;
     VisualElement expandedGroupElem;
     VisualElement fullScreenTapHintElem;
+    VisualElement spacerButtonLeftElem;
+    VisualElement spacerButtonRightElem;
     Label debugElem;
     GameState gameState;
     bool fullScreen = false; //expected state, could change any time
@@ -83,6 +85,9 @@ public class ButtonBarDocument : MonoBehaviour
 
         debugElem = uiDocument.rootVisualElement.Q<Label>("DebugLabel");
 
+        spacerButtonLeftElem = uiDocument.rootVisualElement.Q<VisualElement>("SpacerButtonLeft");
+        spacerButtonRightElem = uiDocument.rootVisualElement.Q<VisualElement>("SpacerButtonRight");
+
         UpdateAll();
 
         GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
@@ -90,6 +95,7 @@ public class ButtonBarDocument : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
         GameState.GetInstance().Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
         GameState.GetInstance().Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
+        GameState.GetInstance().Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
     }
 
     void UpdateAll()
@@ -102,6 +108,17 @@ public class ButtonBarDocument : MonoBehaviour
         UpdateCameraButton();
         UpdateHomeButton();
         UpdatePauseButton();
+        UpdateSpacerButtons();
+    }
+
+    void UpdateSpacerButtons()
+    {
+        if (spacerButtonLeftElem == null || spacerButtonRightElem == null)
+            return;
+
+        var stateContents = gameState.GetStateContents();
+        spacerButtonLeftElem.style.display = stateContents.spacerButtonsVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        spacerButtonRightElem.style.display = stateContents.spacerButtonsVisible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     void UpdatePauseButton()

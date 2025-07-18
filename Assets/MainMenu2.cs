@@ -73,6 +73,8 @@ public class MainMenu2 : MonoBehaviour
         Settings.Update();
         GameState.GetInstance().SetPause(false);
         EnhancedTouchSupport.Enable();
+        GameState.GetInstance().GetStateContents().spacerButtonsVisible = true;
+        GameState.GetInstance().ReportEvent(GameEvent.SPACER_BUTTONS_UPDATED);
     }
 
     void Update()
