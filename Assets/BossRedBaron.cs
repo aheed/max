@@ -22,6 +22,7 @@ public class BossRedBaron : MonoBehaviour
     public float loopOffsetZ = 0.5f;
     public float offsetMaxX = 2.5f;
     public float offsetMaxY = 1.5f;
+    public float offsetMinY = -1.5f;
     public float yawFactor = 10f;
     public float healthBarOffsetY = 1f;
     public int maxHealth = 10;
@@ -61,7 +62,7 @@ public class BossRedBaron : MonoBehaviour
 
     void ResetMoveCooldownY()
     {
-        var targetY = Random.Range(-offsetMaxY, offsetMaxY);
+        var targetY = Random.Range(offsetMinY, offsetMaxY);
         positionControllerY.SetTarget(targetY);
         moveCooldownY = Random.Range(moveDelayMinSec, moveDelayMaxSec);
     }
@@ -92,9 +93,9 @@ public class BossRedBaron : MonoBehaviour
     void Start()
     {
         var startX = transform.localPosition.x - midPosition.x;
-        kineticSystemX = new KineticSystem(0.5f, 1f, 10f, startX);
+        kineticSystemX = new KineticSystem(0.5f, 1f, 10f, startX, 100f, -100f);
         var startY = transform.localPosition.y - midPosition.y;
-        kineticSystemY = new KineticSystem(0.5f, 1f, 10f, startY);
+        kineticSystemY = new KineticSystem(0.5f, 1f, 10f, startY, 100f, offsetMinY - 0.1f);
         positionControllerX = new PidController(2.5f, 0f, 1.2f, (float)System.Math.PI / 4f);
         positionControllerY = new PidController(0.5f, 0f, 0.5f, (float)System.Math.PI / 4f);
         angleControllerX = new PidController(350f, 0f, 15f, 100f);

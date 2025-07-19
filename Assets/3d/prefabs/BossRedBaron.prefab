@@ -56,7 +56,8 @@ MonoBehaviour:
   loopOffsetY: 0.5
   loopOffsetZ: 1.5
   offsetMaxX: 3.5
-  offsetMaxY: 0.5
+  offsetMaxY: 1.1
+  offsetMinY: -0.5
   yawFactor: 3.5
   healthBarOffsetY: 1
   maxHealth: 25

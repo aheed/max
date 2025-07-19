@@ -6,12 +6,13 @@ public class KineticSystem
     const float maxAngleRad = (float)Math.PI / 2.0f; // 90 degrees
     const float maxAngularVelocityRadPerSec = 1000f;
     const float maxSpeedMetersPerSec = 1000f;
-    const float maxPositionMeters = 100f;
 
     // Params
     float inertiaKgm2;
     float massKg;
     float sideForceFactor = 0.1f;
+    float maxPositionMeters;
+    float minPositionMeters;
 
     // State
     public float AngleRad { get; private set; }
@@ -46,13 +47,15 @@ public class KineticSystem
     }
 
     // Constructor
-    public KineticSystem(float inertiaKgm2, float mass, float sideForceFactor, float startPositionMeters)
+    public KineticSystem(float inertiaKgm2, float mass, float sideForceFactor, float startPositionMeters, float maxPositionMeters, float minPositionMeters)
     {
         this.inertiaKgm2 = inertiaKgm2;
         this.massKg = mass;
         this.sideForceFactor = sideForceFactor;
         Reset();
         this.PositionMeters = startPositionMeters;
+        this.maxPositionMeters = maxPositionMeters;
+        this.minPositionMeters = minPositionMeters;
     }
 
     public void SimulateByTorque(float deltaTSec, float torqueNm)
@@ -107,12 +110,18 @@ public class KineticSystem
         PositionMeters += VelocityMetersPerSecond * deltaTSec;
         // Clamp position
         if (PositionMeters > maxPositionMeters)
+        {
             PositionMeters = maxPositionMeters;
-        else if (PositionMeters < -maxPositionMeters)
-            PositionMeters = -maxPositionMeters;
+            VelocityMetersPerSecond = 0f;
+        }
+        else if (PositionMeters < minPositionMeters)
+        {
+            PositionMeters = minPositionMeters;
+            VelocityMetersPerSecond = 0f;
+        }
 
         // Update extreme values
-        if (AngleRad < MinAngleMeasuredRad) MinAngleMeasuredRad = AngleRad;
+            if (AngleRad < MinAngleMeasuredRad) MinAngleMeasuredRad = AngleRad;
         if (AngleRad > MaxAngleMeasuredRad) MaxAngleMeasuredRad = AngleRad;
         if (PositionMeters < MinPositionMeasuredMeters) MinPositionMeasuredMeters = PositionMeters;
         if (PositionMeters > MaxPositionMeasuredMeters) MaxPositionMeasuredMeters = PositionMeters;
