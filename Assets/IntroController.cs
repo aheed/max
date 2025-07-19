@@ -187,6 +187,7 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.FINISHED:
                 DisplayText("Congratulations! You have completed your training mission. You are on your own now!");
+                Settings.SetSelectedMission(Settings.GetSelectedMission() + 1);
                 dialogDocument.ShowOkButton();
                 break;
             case IntroControllerStage.FINISHED_OK:

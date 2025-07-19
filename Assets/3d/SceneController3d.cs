@@ -215,11 +215,18 @@ public class SceneController3d : MonoBehaviour
             {
                 cameras.Add(cockpitCamera);
                 gameState.GetStateContents().cameraButtonVisible = true;
-                gameState.ReportEvent(GameEvent.CAMERA_ADDED);
+                gameState.ReportEvent(GameEvent.CAMERA_BUTTON_UPDATED);
             }
         }
         maxPlane.transform.localPosition = Vector3.zero;
         maxPlane.Reset();
+
+        gameState.GetStateContents().homeButtonVisible = true;
+        gameState.ReportEvent(GameEvent.HOME_BUTTON_UPDATED);
+        gameState.GetStateContents().pauseButtonVisible = true;
+        gameState.ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
+        gameState.GetStateContents().tvSimButtonVisible = true;
+        gameState.ReportEvent(GameEvent.TV_SIM_BUTTON_UPDATED);
 
         if (levels != null)
         {
@@ -265,6 +272,7 @@ public class SceneController3d : MonoBehaviour
         var controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
         controlDocument.gameObject.SetActive(Globals.touchScreenDetected);
         gameState.ReportEvent(GameEvent.START);
+        gameState.SetPause(false);
     }
 
     Light GetMainLight()
