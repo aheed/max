@@ -110,8 +110,8 @@ public class GameState : MonoBehaviour
     public float safeTakeoffSpeedQuotient = 0.8f;
     public float acceleration = 0.4f;
     public ViewMode viewMode = ViewMode.NORMAL;
-    public static float horizontalSpeed = 4.0f;
-    public static float verticalSpeed = 2.5f;
+    public static float horizontalSpeed = 5.0f;
+    public static float verticalSpeed = 3f;
     public static float windSpeed = 0.2f;
     public static string landingAlert = "L";
     public static string windAlert = "W";
