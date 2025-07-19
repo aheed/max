@@ -12,6 +12,8 @@ public class GlobalVolume : MonoBehaviour
     public float maxPostExposure = 2.5f;
     public float nightSaturation = -30f;
     public float tvSaturation = -17f;
+    public float tvBloomIntensity = 2f;
+    public float nightBloomIntensity = 8f;
     float currentHueShift = 0f;
     float currentPostExposure = 0f;
     float hueShiftTimeToLiveSec;
@@ -77,7 +79,17 @@ public class GlobalVolume : MonoBehaviour
             lensDistortion.active = false;
             chromaticAberration.active = false;
             filmGrain.active = false;
-            bloom.active = false;
+            if (GameState.GetInstance().IsNightTime())
+            {
+                bloom.active = true;
+                bloom.threshold.overrideState = true;
+                bloom.intensity.overrideState = true;
+                bloom.intensity.SetValue(new FloatParameter(nightBloomIntensity, true));
+            }
+            else
+            {
+                bloom.active = false;
+            }
             vignette.active = false;
             colorAdjustments.saturation.overrideState = GameState.GetInstance().IsNightTime();
             colorAdjustments.saturation.SetValue(new FloatParameter(nightSaturation, true));
@@ -88,6 +100,9 @@ public class GlobalVolume : MonoBehaviour
             chromaticAberration.active = true;
             filmGrain.active = true;
             bloom.active = true;
+            bloom.threshold.overrideState = false;
+            bloom.intensity.overrideState = true;
+            bloom.intensity.SetValue(new FloatParameter(tvBloomIntensity, true));
             vignette.active = true;
             colorAdjustments.saturation.overrideState = true;
             var possibleNightSaturation = GameState.GetInstance().IsNightTime() ? nightSaturation : 0f;
