@@ -1,13 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.UI;
 
 public class MaxControl : MonoBehaviour, IPlaneObservable
 {
@@ -32,8 +27,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     Vector2 lastCollidedMove;
     bool bombDamage = false;
     bool gunDamage = false;
-    /*public InputAction MoveAction;
-    public InputAction FireAction;*/
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction;
@@ -60,8 +53,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     // Start is called before the first frame update
     void Start()
     {
-        /*MoveAction.Enable();
-        FireAction.Enable();*/
         EnhancedTouchSupport.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
@@ -295,11 +286,6 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
         {
             move.y = 0f;
         }
-
-        /*if (move == Vector2.zero)
-        {
-            move = MoveAction.ReadValue<Vector2>();
-        }*/
 
         if (!Settings.GetPilotControl())
         {

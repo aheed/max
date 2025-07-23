@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-//using UnityEngine.InputSystem.EnhancedTouch;
 
 public class PlayerPlane : MonoBehaviour, IPlaneObservable
 {
@@ -20,8 +19,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
     public float collidedMoveInterval = 0.03f;
-    /*public InputAction MoveAction;
-    public InputAction FireAction;*/
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction1;
@@ -87,8 +84,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     // Start is called before the first frame update
     void Start()
     {
-        /*MoveAction.Enable();
-        FireAction.Enable();*/
         UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
@@ -275,10 +270,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
 
         move = Input.GetAxis("Horizontal") * Vector2.right +
                Input.GetAxis("Vertical") * Vector2.up;
-        /*if (move == Vector2.zero)
-        {
-            move = MoveAction.ReadValue<Vector2>();
-        }*/
 
         if (!Settings.GetPilotControl())
         {
