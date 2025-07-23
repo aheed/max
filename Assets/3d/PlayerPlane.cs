@@ -332,7 +332,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             }
         }
 
-        if (fireTouch || Input.GetButton("Fire1") /*|| FireAction.IsPressed()*/)
+        if (fireTouch || Input.GetButton("Fire1") || Input.GetButton("Fire2") || Input.GetButton("Fire3") || Input.GetButton("Fire4"))
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
