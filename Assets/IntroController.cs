@@ -118,6 +118,7 @@ public class IntroController : MonoBehaviour
     {
         var targetPlanePosition = transform.parent.position;
         targetPlanePosition.y = GameState.GetInstance().maxAltitude / 3;
+        targetPlanePosition.z = -1f; // behind the player to avoid immediate collision
         targetPlane = Instantiate(targetPlanePrefab, targetPlanePosition, Quaternion.identity);
         targetPlane.refObject = transform.parent;
         targetPlaneNavigator = new IntroLevelEnemyPlaneNavigator(targetPlane);
