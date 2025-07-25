@@ -77,16 +77,12 @@ public class IntroController : MonoBehaviour
     {
         Debug.Log("IntroController.Start");
         controlDocument = FindAnyObjectByType<ControlDocument>(FindObjectsInactive.Include);
-        controlDocument.gameObject.SetActive(true);
         dialogDocument = FindAnyObjectByType<DialogDocument>();
         dialogDocument.SetOkButtonCallback(OnOkButtonClicked);
         var buttonBarDocument = FindAnyObjectByType<ButtonBarDocument>();
         var fullScreenTapHintElem = buttonBarDocument.GetFullScreenTapHintElem();
         controlDocument.SetFullScreenTapHintElement(fullScreenTapHintElem);
-        fullScreen = Screen.fullScreen;
-        
-        ResetHints();
-        callbacks = new CallbackSpec[] 
+        callbacks = new CallbackSpec[]
         {
             new() { gameEvent = GameEvent.GAME_STATUS_CHANGED, action = OnGameStatusChangedCallback },
             new() { gameEvent = GameEvent.DEBUG_ACTION2, action = OnDebugAction2 },
@@ -97,6 +93,7 @@ public class IntroController : MonoBehaviour
             new() { gameEvent = GameEvent.LANDING_CHANGED, action = OnLandingChangedCallback }
         };
         RegisterCallbacks();
+        GameStartUpdate();
     }
 
     void Update()
@@ -145,17 +142,27 @@ public class IntroController : MonoBehaviour
                 DisplayText("Welcome!");
                 break;
             case IntroControllerStage.TAKE_OFF:
-                DisplayText("Swipe up to take off");
-                controlDocument.SetUpSwipeHintVisible(true);
+                if (Globals.touchScreenDetected)
+                {
+                    DisplayText("Swipe up to take off");
+                    controlDocument.SetUpSwipeHintVisible(true);
+                }
+                else
+                {
+                    var pilot = Settings.GetPilotControl();
+                    var displayText = $"Keyboard: {(pilot ? "Down" : "Up")} key to take off\n\nJoystick/gamepad support\n\nUp/Down configurable";
+                    DisplayText(displayText);
+                }
                 break;
             case IntroControllerStage.FIRE_DEMO:
-                controlDocument.SetFireHintVisible(true);
-                DisplayText("Tap to fire your machine gun");
+                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
+                var fireInstruction = Globals.touchScreenDetected ? string.Empty : "\n\nKeyboard: Space bar";
+                DisplayText($"Fire your machine gun {fireInstruction}");
                 break;
             case IntroControllerStage.BOMB_DEMO:
-                controlDocument.SetFireHintVisible(true);
-                controlDocument.SetDownSwipeHintVisible(true);
-                DisplayText("Drop a bomb by swiping down while firing");
+                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
+                controlDocument.SetDownSwipeHintVisible(Globals.touchScreenDetected);
+                DisplayText("Drop a bomb by descending while firing");
                 break;
             case IntroControllerStage.FULL_SCREEN:
                 DisplayText("This game is best viewed in full screen mode and in landscape orientation");
@@ -171,7 +178,7 @@ public class IntroController : MonoBehaviour
                 DisplayText("Shoot the enemy plane");
                 break;
             case IntroControllerStage.ENEMY_RIGHT_ALTITUDE:
-                DisplayText("Blue dashboard indicates presence of an enemy plane at your altitude. Take him out!");
+                DisplayText("Blue dashboard indicates enemy plane at your altitude. Take him out!");
                 break;
             case IntroControllerStage.BOMB_BUILDING:
                 //todo: add a building
@@ -183,7 +190,7 @@ public class IntroController : MonoBehaviour
                 CheckLandingApproach();
                 break;
             case IntroControllerStage.LANDING_APPROACH:
-                DisplayText("\"L\" on the dashboard means you are approaching a friendly airstrip\n\n\"P\" = Enemy plane alert\n\"W\" = Wind alert");
+                DisplayText("\"L\" = Approaching airstrip\n\"P\" = Enemy plane alert\n\"W\" = Wind alert");
                 break;
             case IntroControllerStage.FINISHED:
                 DisplayText("Congratulations! You have completed your training mission. You are on your own now!");
@@ -194,8 +201,8 @@ public class IntroController : MonoBehaviour
                 dialogDocument.HideDialog();
                 break;
             case IntroControllerStage.CRASHED:
-                DisplayText("Try again\n\nTap Fire button to restart");
-                controlDocument.SetFireHintVisible(true);
+                DisplayText("Try again!\n\nFire button to restart");
+                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
                 break;
         }
     }
@@ -203,6 +210,14 @@ public class IntroController : MonoBehaviour
     public void OnGameStatusChangedCallback()
     {
         OnGameStatusChanged(GameState.GetInstance().GetStateContents().gameStatus);
+    }
+    
+    void GameStartUpdate()
+    {
+        controlDocument.gameObject.SetActive(true);
+        controlDocument.SetFireButtonVisible(Globals.touchScreenDetected);
+        fullScreen = Screen.fullScreen;
+        ResetHints();
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)
@@ -213,13 +228,14 @@ public class IntroController : MonoBehaviour
         {
             AdvanceStage();
         }
-        else if (gameStatus == GameStatus.REFUELLING)
+        else if (gameStatus == GameStatus.REPAIRING)
         {
+            GameStartUpdate();
             stage = IntroControllerStage.PRE_START;
         }
         else if (gameStatus == GameStatus.DEAD)
         {
-            stage = IntroControllerStage.CRASHED-1;
+            stage = IntroControllerStage.CRASHED - 1;
             AdvanceStage();
         }
     }

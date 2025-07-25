@@ -14,7 +14,15 @@ public static class Settings
     static float audioVolume = 1f;
 
 
-    public static bool GetPilotControl() => PlayerPrefs.GetInt(controlPrefsKey) != 0;
+    public static bool GetPilotControl()
+    {
+        if (!PlayerPrefs.HasKey(controlPrefsKey))
+        {
+            PlayerPrefs.SetInt(controlPrefsKey, 1);
+        }
+        
+        return PlayerPrefs.GetInt(controlPrefsKey) != 0;
+    }
     public static void SetPilotControl(bool pilot) => PlayerPrefs.SetInt(controlPrefsKey, pilot ? 1 : 0);
 
     public static int GetSelectedMission() => PlayerPrefs.GetInt(selectedMissionPrefsKey, 0);

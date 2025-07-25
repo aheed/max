@@ -21,6 +21,7 @@ public class ControlDocument : MonoBehaviour
     bool upSwipeHintVisible = false;
     bool downSwipeHintVisible = false;
     bool fullscreenTapHintVisible = false;
+    bool fireButtonVisible = true;
     private Coroutine hintCoroutine;
 
     public void SetFullScreenTapHintElement(VisualElement tapHintElem)
@@ -48,9 +49,14 @@ public class ControlDocument : MonoBehaviour
         downSwipeHintVisible = visible;
     }
 
+    public void SetFireButtonVisible(bool visible)
+    {
+        fireButtonVisible = visible;        
+        UpdateFireButton();
+    }
+
     void Start()
     {
-        //Debug.Log("ControlDocument.Start");
         GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.RESTART_TIMER_EXPIRED, OnGameStatusChangedCallback);
         GameState.GetInstance().Subscribe(GameEvent.START, OnGameStartCallback);
@@ -60,8 +66,12 @@ public class ControlDocument : MonoBehaviour
 
     void UpdateFireButton()
     {
-        var newTexture = GameState.GetInstance().IsRestartAllowed() ? startGameTexture : fireTexture;
-        fireElem.style.backgroundImage = new StyleBackground(newTexture);
+        if (fireElem != null)
+        {
+            var newTexture = GameState.GetInstance().IsRestartAllowed() ? startGameTexture : fireTexture;
+            fireElem.style.backgroundImage = new StyleBackground(newTexture);
+            fireElem.style.display = fireButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
     }
 
     private void OnGameStatusChangedCallback()
@@ -77,7 +87,6 @@ public class ControlDocument : MonoBehaviour
 
     private void StartGame()
     {
-        //Debug.Log("ControlDocument.StartGame");
         if (!gameObject.activeSelf)
         {
             return;
@@ -95,6 +104,7 @@ public class ControlDocument : MonoBehaviour
         SetUpSwipeHintVisible(false);
         SetDownSwipeHintVisible(false);
         SetFullScreenTapHintVisible(false);
+        UpdateFireButton();
 
         if (hintCoroutine != null)
         {
@@ -102,6 +112,12 @@ public class ControlDocument : MonoBehaviour
             hintCoroutine = null;
         }
         hintCoroutine = StartCoroutine(HintCoroutine());
+    }
+
+    void OnEnable()
+    {
+        //Debug.Log("ControlDocument.OnEnable");
+        StartGame(); // Apparently needed to reinitialize UI elements references
     }
 
     IEnumerator HintCoroutine() {
