@@ -64,112 +64,6 @@ MonoBehaviour:
   bombIntervalSeconds: 0.5
   minSafeTurnAltitude: 0.1
   collidedMoveInterval: 0.03
-  MoveAction:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 8b476a1b-e191-4042-8f2a-7f1eea060cc1
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 2D Vector
-      m_Id: 42159cfd-e232-419f-80c1-8021962dedb1
-      m_Path: 2DVector(mode=2)
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 4
-    - m_Name: up
-      m_Id: 3de67226-42af-4ffb-b0e2-eee86687b498
-      m_Path: <Keyboard>/upArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: up
-      m_Id: 90000dce-9c71-488d-af17-ec2bd5e855c1
-      m_Path: <Joystick>/stick/up
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 2b63c4b0-3159-4bd6-bb24-33bb3d6ce2f5
-      m_Path: <Keyboard>/downArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 7a7a7b9d-9de5-4c3a-9eba-0e6a29e9030f
-      m_Path: <Joystick>/stick/down
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: left
-      m_Id: 8b0fc931-7347-4399-802c-ce84bf5ddec4
-      m_Path: <Keyboard>/leftArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: left
-      m_Id: a3cad344-26a7-4a86-9da8-df193f616956
-      m_Path: <Joystick>/stick/left
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: right
-      m_Id: 370cfe4a-3a87-457e-ba22-a256967f1dbd
-      m_Path: <Keyboard>/rightArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    - m_Name: right
-      m_Id: 36ce661e-c2c2-4655-84a6-687df72deafd
-      m_Path: <Joystick>/stick/right
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Move
-      m_Flags: 8
-    m_Flags: 0
-  FireAction:
-    m_Name: Fire
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: bc052d5a-170a-434b-874e-37e3187cf8bb
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 3e9fdf83-a5c8-4858-bdcb-32dbf225a86e
-      m_Path: <Keyboard>/space
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Fire
-      m_Flags: 0
-    - m_Name: 
-      m_Id: 6c1834d4-eff3-4db4-9917-c37eb35a12b1
-      m_Path: <Joystick>/trigger
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Fire
-      m_Flags: 0
-    m_Flags: 0
   DebugFlackAction:
     m_Name: Debug Flack
     m_Type: 0
@@ -1047,6 +941,10 @@ PrefabInstance:
       propertyPath: planeModel
       value: 
       objectReference: {fileID: 3390212629534458764}
+    - target: {fileID: 1402172117471903272, guid: aebdc1f01a754d30b8a033027608785e, type: 3}
+      propertyPath: correctionRate
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3984893480684078811, guid: aebdc1f01a754d30b8a033027608785e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
