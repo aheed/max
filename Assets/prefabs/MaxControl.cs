@@ -109,7 +109,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
             case GameStatus.ACCELERATING:
                 if (move.y < 0f && stateContents.speed < gameState.GetSafeTakeoffSpeed())
                 {
-                    gameState.SetStatus(GameStatus.DEAD);
+                    apparentMove.y = 0; // no takeoff at low speed
                 }
                 break;
             case GameStatus.DECELERATING:
@@ -136,7 +136,10 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
                 break;
         }
         
-
+        if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
+        {
+            apparentMove.x = 0f; // no turns at low altitude
+        }
         
         Vector3 tmpLocalPosition = transform.localPosition;
         var deltaOffsetY = 0f;
@@ -220,12 +223,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
             }
             spriteR.sprite = newSprite;
             lastApparentMove = apparentMove;
-        }
-
-        if (apparentMove.x != 0f && GetAltitude() < minSafeTurnAltitude)
-        {
-            gameState.SetStatus(GameStatus.DEAD);
-        }
+        }        
     }
 
     void HandleFlackHit()
