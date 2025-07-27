@@ -39,6 +39,7 @@ public enum GameEvent
     TV_SIM_BUTTON_UPDATED,
     SPACER_BUTTONS_UPDATED,
     CAMERA_CHANGE_REQUESTED,
+    DEBUG_INFO_VISIBILITY_UPDATED,
     CAMERA_CHANGED
 }
 
@@ -91,6 +92,7 @@ public class GameStateContents
     public bool pauseButtonVisible = false;
     public bool tvSimButtonVisible = false;
     public bool spacerButtonsVisible = false;
+    public bool debugInfoVisible = false;
 }
 
 public class GameState : MonoBehaviour
@@ -154,6 +156,12 @@ public class GameState : MonoBehaviour
     public void Unsubscribe(GameEvent gameEvent, Action callback)
     {
         pubSub.Unsubscribe(gameEvent, callback);
+    }
+
+    public void SetDebugInfoVisible(bool visible)
+    {
+        gameStateContents.debugInfoVisible = visible;
+        ReportEvent(GameEvent.DEBUG_INFO_VISIBILITY_UPDATED);
     }
 
     public void SubscribeToBombLandedEvent(Action<BombLandedEventArgs> callback)
