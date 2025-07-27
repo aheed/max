@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/DashStyles.uss?fileID=7433441132597879392&amp;guid=d4618f90febdc76ab8640cb07d277316&amp;type=3#DashStyles" />
     <ui:VisualElement name="DashBaseOuter" style="flex-grow: 1; justify-content: flex-end;">
         <ui:VisualElement name="DashBase" style="flex-grow: 0; background-color: rgb(0, 0, 0); min-width: auto; min-height: auto; height: 10%; align-self: auto; width: 100%; color: rgb(255, 255, 255); bottom: auto; -unity-font-style: bold; font-size: 36px; justify-content: flex-start;">
             <ui:VisualElement name="TopRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%; justify-content: flex-start; display: flex; font-size: 34px; height: 50%;">
@@ -8,10 +9,10 @@
                     <ui:Label tabindex="-1" text="         " parse-escape-sequences="true" display-tooltip-when-elided="true" name="AlertPlaceholderTop" style="width: 50px;" />
                     <ui:Label tabindex="-1" text="FUEL" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FuelText" style="width: 140px; -unity-text-align: upper-right; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
                     <ui:Label tabindex="-1" text="999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fuel" style="width: 100px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
-                    <ui:Label tabindex="-1" text="F" parse-escape-sequences="true" display-tooltip-when-elided="true" name="F" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
-                    <ui:Label tabindex="-1" text="B" parse-escape-sequences="true" display-tooltip-when-elided="true" name="B" style="width: 5%; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;" />
-                    <ui:Label tabindex="-1" text="M" parse-escape-sequences="true" display-tooltip-when-elided="true" name="M" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
-                    <ui:Label tabindex="-1" text="G" parse-escape-sequences="true" display-tooltip-when-elided="true" name="G" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Label tabindex="-1" text="F" parse-escape-sequences="true" display-tooltip-when-elided="true" name="F" class="damage" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Label tabindex="-1" text="B" parse-escape-sequences="true" display-tooltip-when-elided="true" name="B" class="damage" style="width: 5%; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;" />
+                    <ui:Label tabindex="-1" text="M" parse-escape-sequences="true" display-tooltip-when-elided="true" name="M" class="damage" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Label tabindex="-1" text="G" parse-escape-sequences="true" display-tooltip-when-elided="true" name="G" class="damage" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="RankOuter" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                     <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Rank" style="display: flex; align-self: center; margin-left: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-direction: column; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
@@ -28,7 +29,9 @@
                 <ui:Label tabindex="-1" text="TARGETS" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TargetsText" style="margin-top: 0; margin-bottom: 0; padding-top: 0;" />
                 <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Targets" style="margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; margin-right: 30px;" />
             </ui:VisualElement>
-            <ui:Label tabindex="-1" text="W" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alert" style="font-size: 72px; position: absolute; top: auto; left: 240px; width: 6%; bottom: -6px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:Label tabindex="-1" text="W" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alert" class="alert" style="position: absolute; top: auto; left: 230px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:Label tabindex="-1" text="P" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PAlert" class="alert" style="position: absolute; top: auto; left: 270px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:Label tabindex="-1" text="L" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LAlert" class="alert" style="position: absolute; top: auto; left: 295px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
             <ui:Label tabindex="-1" text="fps" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FpsLabel" style="position: absolute; right: 16%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
             <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fps" style="position: absolute; right: 9%; margin-top: 0; margin-bottom: 0; padding-top: 0;" />
         </ui:VisualElement>

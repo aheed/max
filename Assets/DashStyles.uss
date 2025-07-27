@@ -1,0 +1,20 @@
+:root {
+}
+
+.alert {
+    font-size: 40px;
+    bottom: 5px;
+    color: rgb(200, 200, 0);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    border-bottom-left-radius: 1px;
+}
+
+.damage {
+    color: rgb(200, 200, 0);
+}

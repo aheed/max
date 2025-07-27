@@ -31,7 +31,9 @@ public class DashUIDocument : MonoBehaviour
     Label speedLabel;
     Label bombsLabel;
     Label scoreLabel;
-    Label alertLabel;
+    Label WAlertLabel;
+    Label PAlertLabel;
+    Label LAlertLabel;
     Label rankLabel;
     Label fpsLabel;
     Label targetsLabel;
@@ -70,7 +72,9 @@ public class DashUIDocument : MonoBehaviour
         speedLabel = uiDocument.rootVisualElement.Q<Label>("Speed");
         bombsLabel = uiDocument.rootVisualElement.Q<Label>("Bombs");
         scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
-        alertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
+        WAlertLabel = uiDocument.rootVisualElement.Q<Label>("Alert");
+        PAlertLabel = uiDocument.rootVisualElement.Q<Label>("PAlert");
+        LAlertLabel = uiDocument.rootVisualElement.Q<Label>("LAlert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
@@ -196,29 +200,15 @@ public class DashUIDocument : MonoBehaviour
     {
         if (gameStateContents.gameStatus != GameStatus.FLYING)
         {
-            alertLabel.text = "";
+            WAlertLabel.text = "";
+            PAlertLabel.text = "";
+            LAlertLabel.text = "";
             return;
         }
 
-        if (gameState.AnyEnemyPlanes())
-        {
-            alertLabel.text = "P";
-            return;
-        }
-
-        if (gameStateContents.approachingLanding)
-        {
-            alertLabel.text = "L";
-            return;
-        }
-
-        if (gameStateContents.wind)
-        {
-            alertLabel.text = "W";
-            return;
-        }
-
-        alertLabel.text = "";
+        PAlertLabel.text = gameState.AnyEnemyPlanes() ? "P" : "";
+        LAlertLabel.text = gameStateContents.approachingLanding ? "L" : "";
+        WAlertLabel.text = gameStateContents.wind ? "W" : "";
     }
 
     void UpdateDamage() 
