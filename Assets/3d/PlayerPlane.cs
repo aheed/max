@@ -526,7 +526,6 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     {
         Debug.Log("PlayerPlane.OnDebugAction2");
         //transform.parent.position -= new Vector3(0f, 0f, 0.05f);
-        gameState.SetDebugInfoVisible(!gameState.GetStateContents().debugInfoVisible);
     }
 
     private void OnDebugCallback3()
