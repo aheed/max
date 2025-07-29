@@ -305,9 +305,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
             else
             {
                 if ((theTouch.phase == UnityEngine.InputSystem.TouchPhase.Moved ||
-                     theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))// &&
-                                                                                 //theTouch.position.x > (Screen.width / 2) &&
-                                                                                 //theTouch.fingerId == moveFingerId)
+                     theTouch.phase == UnityEngine.InputSystem.TouchPhase.Ended))
                 {
                     touchEndPosition = theTouch.screenPosition;
 
