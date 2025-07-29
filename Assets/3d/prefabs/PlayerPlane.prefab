@@ -166,6 +166,152 @@ MonoBehaviour:
       m_Action: Camera Cycle
       m_Flags: 0
     m_Flags: 0
+  GamePadMoveAction:
+    m_Name: Game Pad Move
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 79304ceb-265e-4083-ab8c-fc7ae15855e8
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: cad4bb63-fe00-4cc1-9d44-f0aed3d8318f
+      m_Path: 2DVector(mode=2)
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: ca7bee13-87fe-4108-a004-84726394f30e
+      m_Path: <Gamepad>/leftStick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 3b1a714f-e235-41d7-b81b-1c1aa3abe32f
+      m_Path: <Gamepad>/leftStick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 082ed38b-75d9-4ae0-a37f-c8807292cc3d
+      m_Path: <Gamepad>/leftStick/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 6cb8f69d-b0c1-4d74-8d66-cd1d4ce613c3
+      m_Path: <Gamepad>/leftStick/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: 2D Vector
+      m_Id: be1f3468-5648-442d-a07d-6dcf6e2911c2
+      m_Path: 2DVector(mode=2)
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 10e0e9ff-8989-48f9-bb33-1117f3116063
+      m_Path: <Gamepad>/rightStick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: f0aad326-b7de-481e-a854-b0e7234e8bd2
+      m_Path: <Gamepad>/rightStick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: f84499ca-8834-4dd7-91d7-15f6d32c8fd6
+      m_Path: <Gamepad>/rightStick/left
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 707f25b2-bd93-4396-a12a-ca0869a724ba
+      m_Path: <Gamepad>/rightStick/right
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Move
+      m_Flags: 8
+    m_Flags: 0
+  GamePadFireAction:
+    m_Name: Game Pad Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 9e89a666-d01d-40f3-904d-dda8ae9081ce
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f4daa31c-7fb3-4ee3-b353-b491dc38cfbb
+      m_Path: <Gamepad>/dpad/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: ef16483a-218d-4e0d-a830-f3789e971d23
+      m_Path: <Gamepad>/buttonSouth
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: d044cf9d-a9de-437b-8dc5-3bfdd39b2f7e
+      m_Path: <Gamepad>/leftShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: ffafb374-e0e9-4e7c-b3ac-9bd9f1b364e5
+      m_Path: <Gamepad>/rightShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: e5f0dd2c-9ea8-429e-99c6-97375afba418
+      m_Path: <Gamepad>/leftTrigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    - m_Name: 
+      m_Id: bb4a35b7-a664-4544-acc7-e05ac0798791
+      m_Path: <Gamepad>/rightTrigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Game Pad Fire
+      m_Flags: 0
+    m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}
   bombPrefab: {fileID: 2775668953723375233, guid: e36b1392a6852f5a29544db20e5a62b0, type: 3}
   bouncingBombPrefab: {fileID: 8503241040667400508, guid: 47ee586052bf1170c84a287d675f0f8e, type: 3}

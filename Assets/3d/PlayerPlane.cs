@@ -25,6 +25,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction2;
     public InputAction DebugAuxAction3;
     public InputAction CameraCycleAction;
+    public InputAction GamePadMoveAction;
+    public InputAction GamePadFireAction;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;
     public GameObject bouncingBombPrefab;
@@ -92,6 +94,8 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         DebugAuxAction2.Enable();
         DebugAuxAction3.Enable();
         CameraCycleAction.Enable();
+        GamePadMoveAction.Enable();
+        GamePadFireAction.Enable();
         gameState = GameState.GetInstance();
         gameState.Subscribe(GameEvent.DEBUG_FLAK_ACTION, OnDebugFlakAction);
         gameState.Subscribe(GameEvent.DEBUG_REPAIR_ACTION, OnDebugRepairAction);
@@ -275,6 +279,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         move = Input.GetAxis("Horizontal") * Vector2.right +
                Input.GetAxis("Vertical") * Vector2.up;
 
+        if (move == Vector2.zero)
+        {
+            move = GamePadMoveAction.ReadValue<Vector2>();
+        }
+
         if (!Settings.GetPilotControl())
         {
             move.y = move.y * -1f;
@@ -327,7 +336,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             }
         }
 
-        if (fireTouch || Input.GetButton("Fire1") || Input.GetButton("Fire2") || Input.GetButton("Fire3") || Input.GetButton("Fire4"))
+        if (fireTouch || Input.GetButton("Fire") || GamePadFireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)

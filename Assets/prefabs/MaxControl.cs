@@ -29,7 +29,9 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     bool gunDamage = false;
     public InputAction DebugFlackAction;
     public InputAction DebugRepairAction;
+    public InputAction GamePadMoveAction;
     public InputAction DebugAuxAction;
+    public InputAction GamePadFireAction;
     public float joystickDeadZone = 0.2f;
     Rigidbody2D rigidbody2d;
     Vector2 move;
@@ -57,6 +59,8 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
         DebugFlackAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction.Enable();
+        GamePadMoveAction.Enable();
+        GamePadFireAction.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = GameState.GetInstance();
@@ -261,6 +265,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
 
         var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
+        if (move == Vector2.zero)
+        {
+            move = GamePadMoveAction.ReadValue<Vector2>();
+        }
+
         if (move.x < -joystickDeadZone)
         {
             move.x = -1f;
@@ -342,7 +351,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
         }
 
         //////////////////
-        if (fireTouch || Input.GetButton("Fire1") || Input.GetButton("Fire2") || Input.GetButton("Fire3") || Input.GetButton("Fire4"))
+        if (fireTouch || Input.GetButton("Fire") || GamePadFireAction.IsPressed())
         {
             FireBullet(stateContents.gameStatus);
             if (move.y > 0)
