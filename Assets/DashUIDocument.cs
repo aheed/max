@@ -36,6 +36,7 @@ public class DashUIDocument : MonoBehaviour
     Label LAlertLabel;
     Label rankLabel;
     Label fpsLabel;
+    Label fps;
     Label targetsLabel;
     VisualElement dashBase;
     VisualElement topRowInner;
@@ -76,7 +77,8 @@ public class DashUIDocument : MonoBehaviour
         PAlertLabel = uiDocument.rootVisualElement.Q<Label>("PAlert");
         LAlertLabel = uiDocument.rootVisualElement.Q<Label>("LAlert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
-        fpsLabel = uiDocument.rootVisualElement.Q<Label>("Fps");
+        fpsLabel = uiDocument.rootVisualElement.Q<Label>("FpsLabel");
+        fps = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
 
         gameState = GameState.GetInstance();
@@ -98,8 +100,22 @@ public class DashUIDocument : MonoBehaviour
         if (++displayCnt > 10)
         {
             displayCnt = 0;
-            fpsLabel.text = $"{fpsAvg:000}";
+            this.fps.text = $"{fpsAvg:000}";
             UpdateFuel();
+        }
+    }
+
+    void UpdateDebugVisibility()
+    {
+        if (gameStateContents.debugInfoVisible)
+        {
+            fpsLabel.style.display = DisplayStyle.Flex;
+            fps.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            fpsLabel.style.display = DisplayStyle.None;
+            fps.style.display = DisplayStyle.None;
         }
     }
 
@@ -258,6 +274,7 @@ public class DashUIDocument : MonoBehaviour
         UpdateBombs();
         UpdateDashColor();
         UpdateTargets();
+        UpdateDebugVisibility();
     }
 
     void UpdateFuel()
@@ -292,15 +309,18 @@ public class DashUIDocument : MonoBehaviour
         gameState.Subscribe(GameEvent.SCORE_CHANGED, UpdateScore);
         gameState.Subscribe(GameEvent.TARGETS_CHANGED, UpdateTargets);
         gameState.Subscribe(GameEvent.TARGET_HIT, UpdateTargets);
-        gameState.Subscribe(GameEvent.DAMAGE_SUSTAINED, () => {
+        gameState.Subscribe(GameEvent.DAMAGE_SUSTAINED, () =>
+        {
             audioSource.PlayOneShot(damageClip);
             UpdateDamage();
         });
-        gameState.Subscribe(GameEvent.DAMAGE_REPAIRED, () => {
+        gameState.Subscribe(GameEvent.DAMAGE_REPAIRED, () =>
+        {
             audioSource.PlayOneShot(bingClip);
             UpdateDamage();
         });
-        gameState.Subscribe(GameEvent.LANDING_CHANGED, () => {
+        gameState.Subscribe(GameEvent.LANDING_CHANGED, () =>
+        {
             if (gameStateContents.approachingLanding)
             {
                 audioSource.PlayOneShot(alertClip);
@@ -312,6 +332,7 @@ public class DashUIDocument : MonoBehaviour
         gameState.Subscribe(GameEvent.MEDIUM_BANG, () => audioSource.PlayOneShot(bangMediumClip));
         gameState.Subscribe(GameEvent.BIG_BANG, () => audioSource.PlayOneShot(bangBigClip));
         gameState.Subscribe(GameEvent.ENEMY_PLANE_STATUS_CHANGED, OnEnemyPlaneStatusChanged);
+        gameState.Subscribe(GameEvent.DEBUG_INFO_VISIBILITY_UPDATED, UpdateDebugVisibility);
     }    
 
     public void OnEnemyPlaneStatusChanged()

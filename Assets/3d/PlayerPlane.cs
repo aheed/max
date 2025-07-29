@@ -19,11 +19,12 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public float minSafeTurnAltitude = 0.2f;
     public static readonly float landingAltitude = 0.11f;
     public float collidedMoveInterval = 0.03f;
-    public InputAction DebugFlackAction;
+    public InputAction DebugFlakAction;
     public InputAction DebugRepairAction;
     public InputAction DebugAuxAction1;
     public InputAction DebugAuxAction2;
     public InputAction DebugAuxAction3;
+    public InputAction CameraCycleAction;
     public GameObject bulletPrefab;
     public GameObject bombPrefab;
     public GameObject bouncingBombPrefab;
@@ -85,17 +86,20 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     void Start()
     {
         UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
-        DebugFlackAction.Enable();
+        DebugFlakAction.Enable();
         DebugRepairAction.Enable();
         DebugAuxAction1.Enable();
         DebugAuxAction2.Enable();
         DebugAuxAction3.Enable();
+        CameraCycleAction.Enable();
         gameState = GameState.GetInstance();
+        gameState.Subscribe(GameEvent.DEBUG_FLAK_ACTION, OnDebugFlakAction);
+        gameState.Subscribe(GameEvent.DEBUG_REPAIR_ACTION, OnDebugRepairAction);
         gameState.Subscribe(GameEvent.START, OnStart);
         gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
+        gameState.Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        gameState.Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
+        gameState.Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         OnStart();
         Reset();
     }
@@ -332,31 +336,38 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             }
         }
 
-        if (DebugFlackAction.WasPressedThisFrame())
+        if (DebugFlakAction.WasPressedThisFrame())
         {
-            HandleFlackHit();
+            gameState.ReportDebugEvent(GameEvent.DEBUG_FLAK_ACTION);
         }
 
         if (DebugRepairAction.WasPressedThisFrame())
         {
-            gameState.SetRandomDamage(false);
+            gameState.ReportDebugEvent(GameEvent.DEBUG_REPAIR_ACTION);
         }
 
         if (DebugAuxAction1.WasPressedThisFrame())
         {
             //controller.Roll(true);
-            gameState.ReportEvent(GameEvent.DEBUG_ACTION1);
+            gameState.ReportDebugEvent(GameEvent.DEBUG_ACTION1);
             //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
         }
+
         if (DebugAuxAction2.WasPressedThisFrame())
         {
             //controller.Roll(false);
-            gameState.ReportEvent(GameEvent.DEBUG_ACTION2);
+            gameState.ReportDebugEvent(GameEvent.DEBUG_ACTION2);
         }
+
         if (DebugAuxAction3.WasPressedThisFrame())
         {
-            gameState.ReportEvent(GameEvent.DEBUG_ACTION3);
+            gameState.ReportDebugEvent(GameEvent.DEBUG_ACTION3);
+        }
+        
+        if (CameraCycleAction.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.CAMERA_CHANGE_REQUESTED);
         }
 
         bulletCooldown -= Time.deltaTime;
@@ -516,6 +527,16 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         }
     }
 
+    private void OnDebugFlakAction()
+    {
+        HandleFlackHit();
+    }
+
+    private void OnDebugRepairAction()
+    {
+        gameState.SetRandomDamage(false);
+    }
+
     private void OnDebugCallback1()
     {
         Debug.Log("PlayerPlane.OnDebugAction1");
@@ -525,7 +546,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     private void OnDebugCallback2()
     {
         Debug.Log("PlayerPlane.OnDebugAction2");
-        transform.parent.position -= new Vector3(0f, 0f, 0.05f);
+        //transform.parent.position -= new Vector3(0f, 0f, 0.05f);
     }
 
     private void OnDebugCallback3()

@@ -37,6 +37,7 @@ public class ButtonBarDocument : MonoBehaviour
     bool fullScreen = false; //expected state, could change any time
     bool rightSideExpanded = false;
     bool debugDisplayed = false;
+    int quickTapCount = 0;
 
     public VisualElement GetFullScreenTapHintElem()
     {
@@ -96,6 +97,8 @@ public class ButtonBarDocument : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
         GameState.GetInstance().Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
         GameState.GetInstance().Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
+
+        StartCoroutine(QuickTapCoroutine());
     }
 
     void UpdateAll()
@@ -188,6 +191,11 @@ public class ButtonBarDocument : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButtonDown("Mute"))
+        {
+            OnMuteCommand();
+        }
+
         CheckFullScreenButton();
     }
 
@@ -227,7 +235,18 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.target != muteElem)
             return;
 
+        OnMuteCommand();
+    }
+
+    void OnMuteCommand()
+    {
         Settings.SetMute(!Settings.GetMute());
+        quickTapCount++;
+        if (quickTapCount >= 5)
+        {
+            quickTapCount = 0;
+            gameState.SetDebugInfoVisible(!gameState.GetStateContents().debugInfoVisible);
+        }
 
         //AudioListener.pause = !AudioListener.pause;
         UpdateMuteButton();
@@ -345,5 +364,13 @@ public class ButtonBarDocument : MonoBehaviour
         }
 
         debugElem.text = controllersString;
+    }
+
+    IEnumerator QuickTapCoroutine() {
+        CustomYieldInstruction waitShort = new WaitForSecondsRealtime(1);
+        while (true) {            
+            yield return waitShort;
+            quickTapCount = 0;
+        }
     }
 }
