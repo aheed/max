@@ -298,7 +298,7 @@ public class SceneController3d : MonoBehaviour
         GameState.GetInstance().Subscribe(GameEvent.TARGET_HIT, OnTargetHitCallback);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION2, OnDebugCallback2);
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
+        //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
         GameState.GetInstance().Subscribe(GameEvent.CAMERA_CHANGE_REQUESTED, CycleCameras);
 

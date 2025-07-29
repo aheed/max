@@ -64,21 +64,21 @@ MonoBehaviour:
   bombIntervalSeconds: 0.5
   minSafeTurnAltitude: 0.1
   collidedMoveInterval: 0.03
-  DebugFlackAction:
-    m_Name: Debug Flack
+  DebugFlakAction:
+    m_Name: Debug Flak
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 41a11f7d-dacc-4a84-99a1-90712b42995a
+    m_Id: 2fd73920-338a-4b6e-955f-1497b8b373f3
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: 8dfdeffd-b00b-4d13-b0db-9ce690074b66
+      m_Id: 033c5b19-2149-4d88-aaa8-f879d53a4da6
       m_Path: <Keyboard>/f
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Debug Flack
+      m_Action: Debug Flak
       m_Flags: 0
     m_Flags: 0
   DebugRepairAction:
@@ -147,6 +147,23 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Debug Aux Action 3
+      m_Flags: 0
+    m_Flags: 0
+  CameraCycleAction:
+    m_Name: Camera Cycle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0cbd8021-f724-4f62-8e72-8454ccc39251
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cbf3c5e8-3f4f-4940-848a-4a00b415383b
+      m_Path: <Keyboard>/c
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Camera Cycle
       m_Flags: 0
     m_Flags: 0
   bulletPrefab: {fileID: 887360792356932122, guid: 3012d898d9ee7ca55989357751b071ca, type: 3}

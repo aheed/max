@@ -28,6 +28,8 @@ public enum GameEvent
     BOMB_LANDED,
     GAME_STATUS_CHANGED,
     ENEMY_PLANE_STATUS_CHANGED,
+    DEBUG_FLAK_ACTION,
+    DEBUG_REPAIR_ACTION,
     DEBUG_ACTION1,
     DEBUG_ACTION2,
     DEBUG_ACTION3,
@@ -263,6 +265,16 @@ public class GameState : MonoBehaviour
 
     public void ReportEvent(GameEvent gameEvent)
     {
+        pubSub.Publish(gameEvent);
+    }
+
+    public void ReportDebugEvent(GameEvent gameEvent)
+    {
+        if (!gameStateContents.debugInfoVisible)
+        {
+            return;
+        }
+
         pubSub.Publish(gameEvent);
     }
 
