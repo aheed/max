@@ -191,6 +191,11 @@ public class ButtonBarDocument : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButtonDown("Mute"))
+        {
+            OnMuteCommand();
+        }
+
         CheckFullScreenButton();
     }
 
@@ -230,6 +235,11 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.target != muteElem)
             return;
 
+        OnMuteCommand();
+    }
+
+    void OnMuteCommand()
+    {
         Settings.SetMute(!Settings.GetMute());
         quickTapCount++;
         if (quickTapCount >= 5)
