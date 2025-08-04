@@ -216,7 +216,8 @@ public class ButtonBarDocument : MonoBehaviour
         if (evt.target != fullScreenElem)
             return;
 
-        Screen.fullScreen = !Screen.fullScreen;
+        //Screen.fullScreen = !Screen.fullScreen;
+        ScreenHelper.SetFullScreen(!ScreenHelper.IsFullScreen());
         //UpdateFullScreenButton();
     }
 
