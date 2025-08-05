@@ -3987,6 +3987,8 @@ MonoBehaviour:
   maxFuelDisplayed: 200
   speedPitchMax: 0.5
   altitudePitchMax: 0.5
+  gaugeFgColorLow: {r: 0, g: 0.78431374, b: 0, a: 1}
+  gaugeFgColorHigh: {r: 0.78431374, g: 0, b: 0, a: 1}
   bingClip: {fileID: 8300000, guid: 48f43751dcae5c26899ddba23638404a, type: 3}
   damageClip: {fileID: 8300000, guid: 1c3fc002074535e80aa76b7ec056c4ed, type: 3}
   alertClip: {fileID: 8300000, guid: 4f44e28e0530e8f7db67b5180c88f874, type: 3}

@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/DashStyles.uss?fileID=7433441132597879392&amp;guid=d4618f90febdc76ab8640cb07d277316&amp;type=3#DashStyles" />
     <ui:VisualElement name="DashBaseOuter" style="flex-grow: 1; justify-content: flex-end;">
         <ui:VisualElement name="DashBase" style="flex-grow: 0; background-color: rgb(0, 0, 0); min-width: auto; min-height: auto; height: 10%; align-self: auto; width: 100%; color: rgb(255, 255, 255); bottom: auto; -unity-font-style: bold; font-size: 36px; justify-content: flex-start;">
-            <ui:VisualElement name="TopRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 80%; justify-content: flex-start; display: flex; font-size: 34px; height: 50%;">
+            <ui:VisualElement name="TopRow" style="flex-grow: 1; flex-direction: row; align-items: center; width: 96%; justify-content: flex-start; display: flex; font-size: 34px; height: 50%;">
                 <ui:VisualElement name="TopRowInner" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; display: flex;">
                     <ui:Label tabindex="-1" text="ALT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AltText" style="width: 130px; -unity-text-align: upper-right; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; margin-left: 20px;" />
                     <ui:Label tabindex="-1" text="99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alt" style="width: 100px; margin-top: 0; padding-bottom: 0; margin-bottom: 0; padding-top: 0;" />
@@ -13,6 +13,12 @@
                     <ui:Label tabindex="-1" text="B" parse-escape-sequences="true" display-tooltip-when-elided="true" name="B" class="damage" style="width: 5%; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;" />
                     <ui:Label tabindex="-1" text="M" parse-escape-sequences="true" display-tooltip-when-elided="true" name="M" class="damage" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
                     <ui:Label tabindex="-1" text="G" parse-escape-sequences="true" display-tooltip-when-elided="true" name="G" class="damage" style="width: 5%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Label tabindex="-1" text="999" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GunTemp" style="width: 100px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; display: none;" />
+                    <ui:Label tabindex="-1" text="TEMP" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TempText" style="-unity-text-align: upper-right; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; margin-left: 118px;" />
+                    <ui:VisualElement name="GunTempGauge" style="flex-grow: 1; width: 20%;">
+                        <ui:VisualElement name="GaugeBg" class="temp-gauge" style="flex-grow: 1; background-color: rgb(150, 150, 150);" />
+                        <ui:VisualElement name="GaugeFg" class="temp-gauge" style="flex-grow: 1; background-color: rgb(255, 0, 0); width: 50%;" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="RankOuter" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                     <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Rank" style="display: flex; align-self: center; margin-left: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-direction: column; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />

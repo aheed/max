@@ -10,6 +10,8 @@ public class DashUIDocument : MonoBehaviour
     public int maxFuelDisplayed = 200;
     public float speedPitchMax = 1f;
     public float altitudePitchMax = 1f;
+    public Color gaugeFgColorLow = Color.green;
+    public Color gaugeFgColorHigh = Color.red;
     
     public AudioClip bingClip;
     public AudioClip damageClip;
@@ -28,6 +30,7 @@ public class DashUIDocument : MonoBehaviour
     Label BLabel;
     Label MLabel;
     Label GLabel;
+    Label GunTempLabel;
     Label speedLabel;
     Label bombsLabel;
     Label scoreLabel;
@@ -41,6 +44,7 @@ public class DashUIDocument : MonoBehaviour
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
+    VisualElement gunTempGaugeFg;
 
     int lastDisplayedFuel;
     int lastDisplayedAltitude;
@@ -70,6 +74,7 @@ public class DashUIDocument : MonoBehaviour
         BLabel = uiDocument.rootVisualElement.Q<Label>("B");
         MLabel = uiDocument.rootVisualElement.Q<Label>("M");
         GLabel = uiDocument.rootVisualElement.Q<Label>("G");
+        GunTempLabel = uiDocument.rootVisualElement.Q<Label>("GunTemp");
         speedLabel = uiDocument.rootVisualElement.Q<Label>("Speed");
         bombsLabel = uiDocument.rootVisualElement.Q<Label>("Bombs");
         scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
@@ -80,6 +85,7 @@ public class DashUIDocument : MonoBehaviour
         fpsLabel = uiDocument.rootVisualElement.Q<Label>("FpsLabel");
         fps = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
+        gunTempGaugeFg = uiDocument.rootVisualElement.Q<VisualElement>("GaugeFg");
 
         gameState = GameState.GetInstance();
         gameStateContents = gameState.GetStateContents();
@@ -93,8 +99,8 @@ public class DashUIDocument : MonoBehaviour
     void Update()
     {
         var fps = 1f / Time.deltaTime;
-        fpsAvg = fpsAvg * (1-avgAlpha) + fps * avgAlpha;
-        
+        fpsAvg = fpsAvg * (1 - avgAlpha) + fps * avgAlpha;
+
         dashBlinker?.Update(Time.deltaTime);
 
         if (++displayCnt > 10)
@@ -102,6 +108,7 @@ public class DashUIDocument : MonoBehaviour
             displayCnt = 0;
             this.fps.text = $"{fpsAvg:000}";
             UpdateFuel();
+            UpdateGunTemperature();
         }
     }
 
@@ -285,6 +292,16 @@ public class DashUIDocument : MonoBehaviour
             lastDisplayedFuel = fuel;
             fuelLabel.text = $"{fuel:000}";
         }
+    }
+
+    void UpdateGunTemperature()
+    {
+        var temperature = gameState.bulletManager.Temperature;
+        GunTempLabel.text = $"{temperature:00}";
+        GunTempLabel.style.color = temperature >= BulletManager.maxTemperature ? Color.red : Color.white;
+
+        gunTempGaugeFg.style.width = new StyleLength(new Length(temperature / BulletManager.maxTemperature * 100, LengthUnit.Percent));
+        gunTempGaugeFg.style.backgroundColor = temperature >= BulletManager.maxTemperature * 0.8f ? gaugeFgColorHigh : gaugeFgColorLow;
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

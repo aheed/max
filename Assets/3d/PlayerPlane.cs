@@ -130,6 +130,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
             return;
         }
 
+        if (!gameState.bulletManager.TryFireBullet())
+        {
+            return;
+        }
+
         Instantiate(bulletPrefab, transform.position, controller.planeModel.transform.rotation, refObject);
         bulletCooldown = bulletIntervalSeconds;
         gameState.ReportEvent(GameEvent.BULLET_FIRED);
