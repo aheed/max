@@ -31,7 +31,6 @@ public class DashUIDocument : MonoBehaviour
     Label BLabel;
     Label MLabel;
     Label GLabel;
-    Label GunTempLabel;
     Label speedLabel;
     Label bombsLabel;
     Label scoreLabel;
@@ -74,7 +73,6 @@ public class DashUIDocument : MonoBehaviour
         BLabel = uiDocument.rootVisualElement.Q<Label>("B");
         MLabel = uiDocument.rootVisualElement.Q<Label>("M");
         GLabel = uiDocument.rootVisualElement.Q<Label>("G");
-        GunTempLabel = uiDocument.rootVisualElement.Q<Label>("GunTemp");
         speedLabel = uiDocument.rootVisualElement.Q<Label>("Speed");
         bombsLabel = uiDocument.rootVisualElement.Q<Label>("Bombs");
         scoreLabel = uiDocument.rootVisualElement.Q<Label>("Score");
@@ -294,9 +292,6 @@ public class DashUIDocument : MonoBehaviour
     void UpdateGunTemperature()
     {
         var temperature = gameState.bulletManager.Temperature;
-        GunTempLabel.text = $"{temperature:00}";
-        GunTempLabel.style.color = temperature >= BulletManager.maxTemperature ? Color.red : Color.white;
-
         gunTempGaugeFg.style.width = new StyleLength(new Length(temperature / BulletManager.maxTemperature * 100, LengthUnit.Percent));
         gunTempGaugeFg.style.backgroundColor = temperature >= BulletManager.maxTemperature * 0.6f ? 
             temperature >= BulletManager.maxTemperature ? gaugeFgColorHigh : gaugeFgColorMedium :
