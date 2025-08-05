@@ -10,6 +10,9 @@ public class DashUIDocument : MonoBehaviour
     public int maxFuelDisplayed = 200;
     public float speedPitchMax = 1f;
     public float altitudePitchMax = 1f;
+    public Color gaugeFgColorLow = Color.green;
+    public Color gaugeFgColorMedium = Color.yellow;
+    public Color gaugeFgColorHigh = Color.red;
     
     public AudioClip bingClip;
     public AudioClip damageClip;
@@ -35,12 +38,12 @@ public class DashUIDocument : MonoBehaviour
     Label PAlertLabel;
     Label LAlertLabel;
     Label rankLabel;
-    Label fpsLabel;
     Label fps;
     Label targetsLabel;
     VisualElement dashBase;
     VisualElement topRowInner;
     VisualElement rankOuter;
+    VisualElement gunTempGaugeFg;
 
     int lastDisplayedFuel;
     int lastDisplayedAltitude;
@@ -77,9 +80,9 @@ public class DashUIDocument : MonoBehaviour
         PAlertLabel = uiDocument.rootVisualElement.Q<Label>("PAlert");
         LAlertLabel = uiDocument.rootVisualElement.Q<Label>("LAlert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
-        fpsLabel = uiDocument.rootVisualElement.Q<Label>("FpsLabel");
         fps = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
+        gunTempGaugeFg = uiDocument.rootVisualElement.Q<VisualElement>("GaugeFg");
 
         gameState = GameState.GetInstance();
         gameStateContents = gameState.GetStateContents();
@@ -93,8 +96,8 @@ public class DashUIDocument : MonoBehaviour
     void Update()
     {
         var fps = 1f / Time.deltaTime;
-        fpsAvg = fpsAvg * (1-avgAlpha) + fps * avgAlpha;
-        
+        fpsAvg = fpsAvg * (1 - avgAlpha) + fps * avgAlpha;
+
         dashBlinker?.Update(Time.deltaTime);
 
         if (++displayCnt > 10)
@@ -102,6 +105,7 @@ public class DashUIDocument : MonoBehaviour
             displayCnt = 0;
             this.fps.text = $"{fpsAvg:000}";
             UpdateFuel();
+            UpdateGunTemperature();
         }
     }
 
@@ -109,12 +113,10 @@ public class DashUIDocument : MonoBehaviour
     {
         if (gameStateContents.debugInfoVisible)
         {
-            fpsLabel.style.display = DisplayStyle.Flex;
             fps.style.display = DisplayStyle.Flex;
         }
         else
         {
-            fpsLabel.style.display = DisplayStyle.None;
             fps.style.display = DisplayStyle.None;
         }
     }
@@ -285,6 +287,15 @@ public class DashUIDocument : MonoBehaviour
             lastDisplayedFuel = fuel;
             fuelLabel.text = $"{fuel:000}";
         }
+    }
+
+    void UpdateGunTemperature()
+    {
+        var temperature = gameState.bulletManager.Temperature;
+        gunTempGaugeFg.style.width = new StyleLength(new Length(temperature / BulletManager.maxTemperature * 100, LengthUnit.Percent));
+        gunTempGaugeFg.style.backgroundColor = temperature >= BulletManager.maxTemperature * 0.6f ? 
+            temperature >= BulletManager.maxTemperature ? gaugeFgColorHigh : gaugeFgColorMedium :
+                gaugeFgColorLow;
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)

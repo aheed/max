@@ -612,7 +612,7 @@ public class SceneController : MonoBehaviour
                     {
                         var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
-                        carRef.managedObject.transform.localPosition = carLocalTransform;
+                        carRef.managedObject.transform.localPosition = carLocalTransform + parentPositionOffset;
                         if (levelContents.vipTargets && UnityEngine.Random.Range(0f, 1.0f) < vipProbability)
                         {
                             InterfaceHelper.GetInterface<IVip>(carRef.managedObject.gameObject).SetVip();

@@ -132,6 +132,7 @@ public class GameState : MonoBehaviour
     public Vector3 playerPosition;
     private EventPubSubNoArg pubSub = new();
     private EventPubSub<BombLandedEventArgs> bombLandedPubSub = new();
+    public BulletManager bulletManager = new();
 
     public void SetPause(bool paused)
     {
@@ -149,7 +150,7 @@ public class GameState : MonoBehaviour
         gameStateContents.maxAltitudeDiffForPlaneCollision =
             (playerPlaneHeight + enemyPlaneHeight) / 2;
     }
-    
+
     public void Subscribe(GameEvent gameEvent, Action callback)
     {
         pubSub.Subscribe(gameEvent, callback);
@@ -303,7 +304,7 @@ public class GameState : MonoBehaviour
     public bool GotDamage(DamageIndex letter) => gameStateContents.damages[(int)letter];
 
     public void SetRandomDamage(bool damage)
-    {        
+    {
         var nofDamages = gameStateContents.damages.Length;
         var index = UnityEngine.Random.Range(0, nofDamages);
         var candidates = 0;
@@ -387,8 +388,9 @@ public class GameState : MonoBehaviour
         gameStateContents.bossDefeated = false;
         gameStateContents.boss = null;
         gameStateContents.restartCoolDownSeconds = 0f;
+        bulletManager.Reset();
     }
-    
+
     public void AddScore(int score)
     {
         gameStateContents.score += score;
@@ -429,6 +431,11 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+    }
+
+    void Update()
+    {
+        bulletManager.Update(Time.deltaTime);
     }
 }

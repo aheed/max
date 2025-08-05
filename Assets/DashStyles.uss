@@ -18,3 +18,10 @@
 .damage {
     color: rgb(200, 200, 0);
 }
+
+.temp-gauge {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    margin-top: 4px;
+}
