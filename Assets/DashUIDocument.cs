@@ -11,6 +11,7 @@ public class DashUIDocument : MonoBehaviour
     public float speedPitchMax = 1f;
     public float altitudePitchMax = 1f;
     public Color gaugeFgColorLow = Color.green;
+    public Color gaugeFgColorMedium = Color.yellow;
     public Color gaugeFgColorHigh = Color.red;
     
     public AudioClip bingClip;
@@ -297,7 +298,9 @@ public class DashUIDocument : MonoBehaviour
         GunTempLabel.style.color = temperature >= BulletManager.maxTemperature ? Color.red : Color.white;
 
         gunTempGaugeFg.style.width = new StyleLength(new Length(temperature / BulletManager.maxTemperature * 100, LengthUnit.Percent));
-        gunTempGaugeFg.style.backgroundColor = temperature >= BulletManager.maxTemperature * 0.8f ? gaugeFgColorHigh : gaugeFgColorLow;
+        gunTempGaugeFg.style.backgroundColor = temperature >= BulletManager.maxTemperature * 0.6f ? 
+            temperature >= BulletManager.maxTemperature ? gaugeFgColorHigh : gaugeFgColorMedium :
+                gaugeFgColorLow;
     }
 
     public void OnGameStatusChanged(GameStatus gameStatus)
