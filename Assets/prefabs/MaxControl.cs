@@ -93,6 +93,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
             return;
         }
 
+        if (!gameState.bulletManager.TryFireBullet())
+        {
+            return;
+        }
+
         Instantiate(bulletPrefab, transform.position, Quaternion.identity, refObject);
         bulletCooldown = bulletIntervalSeconds;
     }

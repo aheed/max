@@ -38,8 +38,8 @@
             <ui:Label tabindex="-1" text="W" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Alert" class="alert" style="position: absolute; top: auto; left: 230px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
             <ui:Label tabindex="-1" text="P" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PAlert" class="alert" style="position: absolute; top: auto; left: 270px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
             <ui:Label tabindex="-1" text="L" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LAlert" class="alert" style="position: absolute; top: auto; left: 295px; width: 6%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
-            <ui:Label tabindex="-1" text="fps" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FpsLabel" style="position: absolute; right: 16%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;" />
-            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fps" style="position: absolute; right: 9%; margin-top: 0; margin-bottom: 0; padding-top: 0;" />
+            <ui:Label tabindex="-1" text="fps" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FpsLabel" style="position: absolute; right: 11%; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; visibility: visible; display: none;" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Fps" style="position: absolute; right: 4%; margin-top: 0; margin-bottom: 0; padding-top: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

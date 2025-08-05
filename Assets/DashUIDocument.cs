@@ -38,7 +38,6 @@ public class DashUIDocument : MonoBehaviour
     Label PAlertLabel;
     Label LAlertLabel;
     Label rankLabel;
-    Label fpsLabel;
     Label fps;
     Label targetsLabel;
     VisualElement dashBase;
@@ -82,7 +81,6 @@ public class DashUIDocument : MonoBehaviour
         PAlertLabel = uiDocument.rootVisualElement.Q<Label>("PAlert");
         LAlertLabel = uiDocument.rootVisualElement.Q<Label>("LAlert");
         rankLabel = uiDocument.rootVisualElement.Q<Label>("Rank");
-        fpsLabel = uiDocument.rootVisualElement.Q<Label>("FpsLabel");
         fps = uiDocument.rootVisualElement.Q<Label>("Fps");
         targetsLabel = uiDocument.rootVisualElement.Q<Label>("Targets");
         gunTempGaugeFg = uiDocument.rootVisualElement.Q<VisualElement>("GaugeFg");
@@ -116,12 +114,10 @@ public class DashUIDocument : MonoBehaviour
     {
         if (gameStateContents.debugInfoVisible)
         {
-            fpsLabel.style.display = DisplayStyle.Flex;
             fps.style.display = DisplayStyle.Flex;
         }
         else
         {
-            fpsLabel.style.display = DisplayStyle.None;
             fps.style.display = DisplayStyle.None;
         }
     }
