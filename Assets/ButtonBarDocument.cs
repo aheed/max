@@ -91,12 +91,13 @@ public class ButtonBarDocument : MonoBehaviour
 
         UpdateAll();
 
-        GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
-        GameState.GetInstance().Subscribe(GameEvent.CAMERA_BUTTON_UPDATED, UpdateCameraButton);
-        GameState.GetInstance().Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
-        GameState.GetInstance().Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
-        GameState.GetInstance().Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
-        GameState.GetInstance().Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
+        gameState.Subscribe(GameEvent.DEBUG_ACTION1, OnDebugCallback1);
+        gameState.Subscribe(GameEvent.CAMERA_BUTTON_UPDATED, UpdateCameraButton);
+        gameState.Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
+        gameState.Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
+        gameState.Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
+        gameState.Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
+        gameState.Subscribe(GameEvent.TOUCH_SCREEN_DETECTED, UpdatePilotButton);
 
         StartCoroutine(QuickTapCoroutine());
     }
@@ -177,6 +178,8 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdatePilotButton()
     {
+        pilotElem.style.display = !Globals.IsTouchScreenDetected() ? DisplayStyle.Flex : DisplayStyle.None;
+
         var newTexture = Settings.GetPilotControl() ? pilotControlTexture : normalControlTexture;
         pilotElem.style.backgroundImage = new StyleBackground(newTexture);
     }

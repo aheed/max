@@ -143,7 +143,7 @@ public class IntroController : MonoBehaviour
                 DisplayText("Welcome!");
                 break;
             case IntroControllerStage.TAKE_OFF:
-                if (Globals.touchScreenDetected)
+                if (Globals.IsTouchScreenDetected())
                 {
                     DisplayText("Swipe up to take off");
                     controlDocument.SetUpSwipeHintVisible(true);
@@ -156,13 +156,13 @@ public class IntroController : MonoBehaviour
                 }
                 break;
             case IntroControllerStage.FIRE_DEMO:
-                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
-                var fireInstruction = Globals.touchScreenDetected ? string.Empty : "\n\nKeyboard: Space bar";
+                controlDocument.SetFireHintVisible(Globals.IsTouchScreenDetected());
+                var fireInstruction = Globals.IsTouchScreenDetected() ? string.Empty : "\n\nKeyboard: Space bar";
                 DisplayText($"Fire your machine gun {fireInstruction}");
                 break;
             case IntroControllerStage.BOMB_DEMO:
-                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
-                controlDocument.SetDownSwipeHintVisible(Globals.touchScreenDetected);
+                controlDocument.SetFireHintVisible(Globals.IsTouchScreenDetected());
+                controlDocument.SetDownSwipeHintVisible(Globals.IsTouchScreenDetected());
                 DisplayText("Drop a bomb by descending while firing");
                 break;
             case IntroControllerStage.FULL_SCREEN:
@@ -203,7 +203,7 @@ public class IntroController : MonoBehaviour
                 break;
             case IntroControllerStage.CRASHED:
                 DisplayText("Try again!\n\nFire button to restart");
-                controlDocument.SetFireHintVisible(Globals.touchScreenDetected);
+                controlDocument.SetFireHintVisible(Globals.IsTouchScreenDetected());
                 break;
         }
     }
@@ -216,7 +216,7 @@ public class IntroController : MonoBehaviour
     void GameStartUpdate()
     {
         controlDocument.gameObject.SetActive(true);
-        controlDocument.SetFireButtonVisible(Globals.touchScreenDetected);
+        controlDocument.SetFireButtonVisible(Globals.IsTouchScreenDetected());
         fullScreen = Screen.fullScreen;
         ResetHints();
     }

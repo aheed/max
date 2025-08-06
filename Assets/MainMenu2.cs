@@ -91,8 +91,7 @@ public class MainMenu2 : MonoBehaviour
 
         if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
         {
-            Globals.touchScreenDetected = true;
-            Debug.Log("Touch screen detected");
+            Globals.SetTouchScreenDetected();
         }
     }
 
