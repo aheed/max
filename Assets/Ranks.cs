@@ -21,15 +21,13 @@ public static class RankHelper
 
     public static string GetRankDescription(bool completedMission, int score)
     {
-        int rankIndex = 0;
-        while (rankIndex < ranks.Length - 1 && score > ranks[rankIndex].maxScore)
+        int minIndex = completedMission ? minCompletedRankIndex : 0;
+        int maxIndex = completedMission ? ranks.Length - 1 : minCompletedRankIndex - 1;
+
+        int rankIndex = minIndex;
+        while (rankIndex < maxIndex && score > ranks[rankIndex].maxScore)
         {
             rankIndex++;
-        }
-
-        if (rankIndex < minCompletedRankIndex && completedMission)
-        {
-            rankIndex = minCompletedRankIndex;
         }
 
         int low = rankIndex == 0 ? 0 : ranks[rankIndex - 1].maxScore;
@@ -53,16 +51,30 @@ public static class RankHelper
         ok &= rank == "Runway Sweeper class 4";
         rank = GetRankDescription(false, 4900);
         ok &= rank == "Air Cadet class 1";
+
         rank = GetRankDescription(false, 5010);
+        ok &= rank == "Air Cadet class 1";
+        rank = GetRankDescription(true, 5010);
         ok &= rank == "Flying Tiger class 4";
+
         rank = GetRankDescription(false, 7510);
+        ok &= rank == "Air Cadet class 1";
+        rank = GetRankDescription(true, 7510);
         ok &= rank == "Flying Tiger class 2";
+
         rank = GetRankDescription(true, 6790);
         ok &= rank == "Flying Tiger class 3";
+
         rank = GetRankDescription(false, 9900);
+        ok &= rank == "Air Cadet class 1";
+        rank = GetRankDescription(true, 9900);
         ok &= rank == "Flying Tiger class 1";
+
         rank = GetRankDescription(false, 11000);
+        ok &= rank == "Air Cadet class 1";
+        rank = GetRankDescription(true, 11000);
         ok &= rank == "Blue Max class 4";
+
         rank = GetRankDescription(true, 119900);
         ok &= rank == "Blue Max class 1";
         Debug.Log($"Rank Tests {ok}");

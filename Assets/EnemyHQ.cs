@@ -7,7 +7,7 @@ public class EnemyHQ : MonoBehaviour, IPositionObservable, IEnemyHQ
     public Sprite bombedSprite;
     private SpriteRenderer spriteR;
     private bool bombed = false;
-    static readonly int points = 250;
+    static readonly int points = 2000;
 
     public void SetBombed()
     {

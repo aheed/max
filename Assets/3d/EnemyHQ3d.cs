@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyHQ3d : MonoBehaviour, IEnemyHQ
 {
     private bool bombed = false;
-    static readonly int points = 250;
+    static readonly int points = 2000;
 
     public void SetBombed()
     {
