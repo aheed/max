@@ -711,7 +711,7 @@ MonoBehaviour:
     - line: '|     Android: 1'
     - line: '|   il2cppCompilerConfiguration: {}'
     - line: '|   il2cppCodeGeneration:'
-    - line: '|     WebGL: 1'
+    - line: '|     WebGL: 0'
     - line: '|   il2cppStacktraceInformation: {}'
     - line: '|   managedStrippingLevel:'
     - line: '|     EmbeddedLinux: 1'
