@@ -274,6 +274,23 @@ MonoBehaviour:
       m_Action: Game Pad Fire
       m_Flags: 0
     m_Flags: 0
+  TvSimToggleAction:
+    m_Name: Tv Sim Toggle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4bc989f0-bd8f-4078-9426-1d817b7291f5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 1372a354-6a8e-4264-b7d0-538a9ce19766
+      m_Path: <Keyboard>/t
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tv Sim Toggle
+      m_Flags: 0
+    m_Flags: 0
   joystickDeadZone: 0.2
   bulletPrefab: {fileID: 849167211019863190, guid: d0aa0bff4c12a047ca5bcc8bdcecaa54, type: 3}
   bombPrefab: {fileID: 2491784354435162974, guid: e47afaf0420b8b758a9245a7d5a64f81, type: 3}

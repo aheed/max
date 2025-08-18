@@ -166,6 +166,23 @@ MonoBehaviour:
       m_Action: Camera Cycle
       m_Flags: 0
     m_Flags: 0
+  TvSimToggleAction:
+    m_Name: Tv Sim Toggle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: fdfd2d6a-4757-44fd-878d-50c2b675a611
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d15fdbb9-b5ae-42dc-925f-9791a18ca802
+      m_Path: <Keyboard>/t
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tv Sim Toggle
+      m_Flags: 0
+    m_Flags: 0
   GamePadMoveAction:
     m_Name: Game Pad Move
     m_Type: 0

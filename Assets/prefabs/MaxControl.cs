@@ -32,6 +32,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
     public InputAction GamePadMoveAction;
     public InputAction DebugAuxAction;
     public InputAction GamePadFireAction;
+    public InputAction TvSimToggleAction;
     public float joystickDeadZone = 0.2f;
     Rigidbody2D rigidbody2d;
     Vector2 move;
@@ -61,6 +62,7 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
         DebugAuxAction.Enable();
         GamePadMoveAction.Enable();
         GamePadFireAction.Enable();
+        TvSimToggleAction.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
         spriteR = gameObject.GetComponent<SpriteRenderer>();
         gameState = GameState.GetInstance();
@@ -380,6 +382,11 @@ public class MaxControl : MonoBehaviour, IPlaneObservable
             //gameState.ReportEvent(GameEvent.BIG_DETONATION);
             //gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
             gameState.ReportDebugEvent(GameEvent.DEBUG_ACTION1);
+        }
+
+        if (TvSimToggleAction.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.TV_SIM_TOGGLE_REQUESTED);
         }
 
         bulletCooldown -= Time.deltaTime;

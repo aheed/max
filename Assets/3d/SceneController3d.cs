@@ -301,6 +301,7 @@ public class SceneController3d : MonoBehaviour
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
         GameState.GetInstance().Subscribe(GameEvent.CAMERA_CHANGE_REQUESTED, CycleCameras);
+        GameState.GetInstance().Subscribe(GameEvent.TV_SIM_TOGGLE_REQUESTED, ToggleTvSim);        
 
         // Make copies of materials to avoid changing the .mat files
         GameState.carBlinkMaterial = new Material(carTargetMaterial);
@@ -765,6 +766,11 @@ public class SceneController3d : MonoBehaviour
         }
         cameras[cameraIndex].enabled = true;
         gameState.ReportEvent(GameEvent.CAMERA_CHANGED);
+    }
+
+    private void ToggleTvSim()
+    {
+        gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
     }
 
     private void OnTargetHitCallback()

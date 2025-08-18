@@ -96,6 +96,7 @@ public class ButtonBarDocument : MonoBehaviour
         gameState.Subscribe(GameEvent.HOME_BUTTON_UPDATED, UpdateHomeButton);
         gameState.Subscribe(GameEvent.PAUSE_BUTTON_UPDATED, UpdatePauseButton);
         gameState.Subscribe(GameEvent.TV_SIM_BUTTON_UPDATED, UpdateTvSimButton);
+        gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, UpdateTvSimButton);
         gameState.Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
         gameState.Subscribe(GameEvent.TOUCH_SCREEN_DETECTED, UpdatePilotButton);
 

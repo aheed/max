@@ -25,6 +25,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
     public InputAction DebugAuxAction2;
     public InputAction DebugAuxAction3;
     public InputAction CameraCycleAction;
+    public InputAction TvSimToggleAction;
     public InputAction GamePadMoveAction;
     public InputAction GamePadFireAction;
     public GameObject bulletPrefab;
@@ -94,6 +95,7 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         DebugAuxAction2.Enable();
         DebugAuxAction3.Enable();
         CameraCycleAction.Enable();
+        TvSimToggleAction.Enable();
         GamePadMoveAction.Enable();
         GamePadFireAction.Enable();
         gameState = GameState.GetInstance();
@@ -382,6 +384,11 @@ public class PlayerPlane : MonoBehaviour, IPlaneObservable
         if (CameraCycleAction.WasPressedThisFrame())
         {
             gameState.ReportEvent(GameEvent.CAMERA_CHANGE_REQUESTED);
+        }
+
+        if (TvSimToggleAction.WasPressedThisFrame())
+        {
+            gameState.ReportEvent(GameEvent.TV_SIM_TOGGLE_REQUESTED);
         }
 
         bulletCooldown -= Time.deltaTime;

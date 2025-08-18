@@ -951,6 +951,7 @@ public class SceneController : MonoBehaviour
             gameState.Subscribe(GameEvent.START, OnGameStart);
             gameState.Subscribe(GameEvent.BIG_DETONATION, OnBigDetonation);
             gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, OnViewModeChanged);
+            gameState.Subscribe(GameEvent.TV_SIM_TOGGLE_REQUESTED, ToggleTvSim);
             gameState.SubscribeToBombLandedEvent(OnBombLandedCallback);
         }
         return gameState;
@@ -1296,6 +1297,11 @@ public class SceneController : MonoBehaviour
             maxCamera.OnViewModeChanged();
             tvSimDocumentObject.OnViewModeChanged();
         }
+    }
+
+    private void ToggleTvSim()
+    {
+        gameState.SetViewMode(gameState.viewMode == ViewMode.NORMAL ? ViewMode.TV_SIM : ViewMode.NORMAL);
     }
 
     void OnBombLandedCallback(BombLandedEventArgs args) =>
