@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CrazyGames;
 using UnityEngine;
 
 public enum GameEvent
@@ -138,6 +139,17 @@ public class GameState : MonoBehaviour
 
     public void SetPause(bool paused)
     {
+        if (CrazySDK.IsInitialized)
+        {
+            if (paused && !IsPaused())
+            {
+                CrazySDK.Game.GameplayStop();
+            }
+            else if (!paused && IsPaused())
+            {
+                CrazySDK.Game.GameplayStart();
+            }
+        }
         Time.timeScale = paused ? 0f : 1f;
         ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
     }

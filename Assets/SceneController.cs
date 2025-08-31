@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CrazyGames;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -69,7 +70,7 @@ public class SceneController : MonoBehaviour
     public Material roadMaterial;
     public Material landingStripMaterial;
     public Material visibleAreaMarkerMaterial;
-    public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
+    public static readonly float[] riverSlopes = new float[] { 0.5f, 0.5f, 1.0f, 2.0f, 2.0f };
     public static readonly int neutralRiverSlopeIndex = 2;
     float levelWidth;
     public float levelHeight = 80f;
@@ -130,11 +131,11 @@ public class SceneController : MonoBehaviour
     GameObject riverSectionGameObject;
     List<Vector2> riverVerts;
     List<float> roadLowerEdgesY;
-    public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f)};
+    public static readonly Color[] houseColors = new Color[] { Color.yellow, new Color(0.65f, 0.1f, 0f), new Color(0.65f, 0.57f, 0f) };
     TvSimDocument tvSimDocumentObject;
     BalloonManager balloonParent;
     ////
-    
+
     private ObjectManager flakGunManager;
     private ObjectManager tankManager;
     private ObjectManager tree1Manager;
@@ -156,7 +157,7 @@ public class SceneController : MonoBehaviour
         {
             Destroy(managedObjectsParent);
         }
-        
+
         if (balloonParent != null)
         {
             Destroy(balloonParent);
@@ -178,29 +179,29 @@ public class SceneController : MonoBehaviour
         balloonManager = new ObjectManager(balloonPrefab, balloonParent.transform, ObjectManager.PoolType.Stack);
         balloonShadowManager = new ObjectManager(balloonShadowPrefab, managedObjectsParent.transform, ObjectManager.PoolType.Stack);
     }
-    
+
     GameObject GetLevel() => levels[currentLevelIndex];
 
     void RotateLevels()
     {
-        currentLevelIndex = (currentLevelIndex + 1) % nofLevels; 
+        currentLevelIndex = (currentLevelIndex + 1) % nofLevels;
         var oldLevel = levels[currentLevelIndex];
         if (oldLevel != null)
         {
             Destroy(oldLevel);
         }
-        
+
         level++;
         var llcx = level * levelHeight * riverSlopes[neutralRiverSlopeIndex];
         var llcy = level * levelHeight;
         var newLevel = Instantiate(levelPrefab, new Vector3(llcx, llcy, 0f), Quaternion.identity);
         levels[currentLevelIndex] = newLevel;
-        lastLevelLowerEdgeY = llcy;        
+        lastLevelLowerEdgeY = llcy;
     }
 
 
     void AddPlaneShadow(Transform parent)
-    {        
+    {
         Instantiate(shadowControlPrefab, transform.position, Quaternion.identity, parent);
     }
 
@@ -211,7 +212,7 @@ public class SceneController : MonoBehaviour
         {
             throw new System.Exception("Length of param must a multiple of 4");
         }
-        
+
         var triangles = new List<int>();
         var normals = new List<Vector3>();
         var uvs = new List<Vector2>();
@@ -269,18 +270,18 @@ public class SceneController : MonoBehaviour
             var endSpriteHeight = topSpriteR.bounds.size.y;
 
             var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
-            
+
             var lsLocalTransform = new Vector3((LevelContents.gridWidth / 2) * cellWidth - (lsWidth / 2), 0f, -0.21f);
             lsGameObject.transform.localPosition = lsLocalTransform;
 
             lsLocalTransform.x += lsWidth / 2;
             lsLocalTransform.y += endSpriteHeight / 2;
-            lsBottomEnd.transform.localPosition = lsLocalTransform;        
-            
+            lsBottomEnd.transform.localPosition = lsLocalTransform;
+
             landingStripBottomY = lsGameObject.transform.position.y;
             landingStripTopY = landingStripBottomY + lsHeight;
             landingStripWidth = lsWidth;
-            
+
             var lsUpperCornerOffsetX = lsHeight * neutralSlope;
 
             lsLocalTransform.x += lsUpperCornerOffsetX - endSpriteHeight * neutralSlope;
@@ -313,8 +314,8 @@ public class SceneController : MonoBehaviour
         }
 
         // Enemy Airstrips
-        foreach(var enemyAirstrip in levelContents.enemyAirstrips)
-        {            
+        foreach (var enemyAirstrip in levelContents.enemyAirstrips)
+        {
             var lsWidth = LevelBuilder.landingStripWidth * cellWidth;
             var lsHeight = LevelBuilder.enemyAirstripHeight * cellHeight;
 
@@ -327,7 +328,7 @@ public class SceneController : MonoBehaviour
 
             var lsGameObject = Instantiate(landingStripPrefab, lvlTransform);
 
-            var stripOffsetY = enemyAirstrip * cellHeight;            
+            var stripOffsetY = enemyAirstrip * cellHeight;
             var stripOffsetX = stripOffsetY * neutralSlope;
             var lsLocalTransform = new Vector3(stripOffsetX + ((LevelContents.gridWidth / 2) - LevelBuilder.enemyAirstripXDistance) * cellWidth, stripOffsetY, -0.21f);
             lsGameObject.transform.localPosition = lsLocalTransform;
@@ -339,7 +340,7 @@ public class SceneController : MonoBehaviour
             lsLocalTransform.x += 2 * endSpriteHeight * neutralSlope;
             lsLocalTransform.y += 2 * endSpriteHeight;
             lsBottomEnd2.transform.localPosition = lsLocalTransform;
-            
+
             var lsUpperCornerOffsetX = lsHeight * neutralSlope;
 
             lsLocalTransform.x += lsUpperCornerOffsetX - 3 * endSpriteHeight * neutralSlope;
@@ -367,21 +368,21 @@ public class SceneController : MonoBehaviour
             var lrc = new Vector2(lslrcX, lslrcY);
             var ulc = new Vector2(lsulcX, lsulcY);
             var urc = new Vector2(lsurcX, lsurcY);
-            var lsVerts = new List<Vector2> {llc, lrc, ulc, urc};
+            var lsVerts = new List<Vector2> { llc, lrc, ulc, urc };
 
             var lsMesh = CreateQuadMesh(lsVerts);
             lsMeshFilter.mesh = lsMesh;
 
             PolygonCollider2D polygonCollider = lsGameObject.AddComponent<PolygonCollider2D>();
             polygonCollider.isTrigger = true;
-            polygonCollider.points = new Vector2[] {llc, lrc, urc, ulc};
+            polygonCollider.points = new Vector2[] { llc, lrc, urc, ulc };
 
             // parked planes
             var nofParkedPlanes = UnityEngine.Random.Range(1, 4);
             for (int i = 0; i < nofParkedPlanes; i++)
             {
                 var parkedPlane = Instantiate(parkedPlanePrefab, lsGameObject.transform);
-                var parkedPlaneY = lsllcY + (i+1) * lsHeight / (nofParkedPlanes+1);
+                var parkedPlaneY = lsllcY + (i + 1) * lsHeight / (nofParkedPlanes + 1);
                 var parkedPlaneX = parkedPlaneY * neutralSlope + lsWidth / 2;
                 var ppLocalTransform = new Vector3(parkedPlaneX, parkedPlaneY, -0.01f);
                 parkedPlane.transform.localPosition = ppLocalTransform;
@@ -465,7 +466,7 @@ public class SceneController : MonoBehaviour
         riverSectionGameObject.transform.localPosition = rsLocalTransform;
         var riverLeftBank = new GameObject("riverbank");
         riverLeftBank.transform.parent = lvlTransform;
-        var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z -0.01f);
+        var riverLeftBankLocalTransform = new Vector3(rsLocalTransform.x, rsLocalTransform.y, rsLocalTransform.z - 0.01f);
         riverLeftBank.transform.localPosition = riverLeftBankLocalTransform;
 
         // River MeshRenderers
@@ -479,13 +480,13 @@ public class SceneController : MonoBehaviour
         // River Meshes
         var y = 0f;
         float riverLowerLeftCornerX = 0f;
-        var riverWidth = LevelBuilder.riverWidth * cellWidth;        
+        var riverWidth = LevelBuilder.riverWidth * cellWidth;
 
-        riverVerts = levelContents.riverSegments.SelectMany(segment => 
+        riverVerts = levelContents.riverSegments.SelectMany(segment =>
         {
             var segmentHeight = segment.height * cellHeight;
             var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
-            
+
             var ret = new List<Vector2>
             {
                 new Vector2(riverLowerLeftCornerX, y),
@@ -498,11 +499,12 @@ public class SceneController : MonoBehaviour
             return ret;
         }).ToList();
 
-        var riverBankVerts = riverVerts.Select((vert, index) => {
+        var riverBankVerts = riverVerts.Select((vert, index) =>
+        {
             var x = index % 2 == 0 ? vert.x : vert.x - riverWidth + riverBankWidth;
             return new Vector2(x, vert.y);
         }).ToList();
-        
+
         var mesh = CreateQuadMesh(riverVerts);
         rsMeshFilter.mesh = mesh;
         var riverBankMesh = CreateQuadMesh(riverBankVerts);
@@ -531,11 +533,11 @@ public class SceneController : MonoBehaviour
         y = 0f;
         float prLowerLeftCornerX = 0f;
 
-        var paraRoadVerts = levelContents.roadSegments.SelectMany(segment => 
+        var paraRoadVerts = levelContents.roadSegments.SelectMany(segment =>
         {
             var segmentHeight = segment.height * cellHeight;
             var xOffset = segment.slope * segment.height * cellHeight + segmentHeight * neutralSlope;
-            
+
             var ret = new List<Vector2>
             {
                 new Vector2(prLowerLeftCornerX, y),
@@ -548,7 +550,8 @@ public class SceneController : MonoBehaviour
             return ret;
         }).ToList();
 
-        var paraRoadWideVerts = paraRoadVerts.Select((vert, index) => {
+        var paraRoadWideVerts = paraRoadVerts.Select((vert, index) =>
+        {
             var x = index % 2 == 0 ? vert.x - parllelRoadSideWidth : vert.x + parllelRoadSideWidth;
             return new Vector2(x, vert.y);
         }).ToList();
@@ -561,21 +564,22 @@ public class SceneController : MonoBehaviour
         GameObjectCollection4[] ret = new GameObjectCollection4[LevelContents.fullGridHeight];
         for (var ytmp = 0; ytmp < LevelContents.fullGridHeight; ytmp++)
         {
-            ret[ytmp] = new GameObjectCollection4 {
+            ret[ytmp] = new GameObjectCollection4
+            {
                 zCoord = ytmp * cellHeight, // level relative coordinate
                 objectRefs = new List<ManagedObjectReference>()
             };
-        }        
-        
+        }
+
         // Roads
         foreach (var road in levelContents.roads)
         {
             var roadGameObject = Instantiate(roadPrefab, lvlTransform);
             var lowerEdgeY = road * cellHeight;
-            
+
             var roadLeftEdgeX = road * cellHeight * neutralSlope;
             var roadLocalTransform = new Vector3(roadLeftEdgeX, lowerEdgeY, -0.21f);
-            roadGameObject.transform.localPosition = roadLocalTransform;            
+            roadGameObject.transform.localPosition = roadLocalTransform;
             roadLowerEdgesY.Add(roadGameObject.transform.position.y);
 
             var roadWidth = LevelContents.gridWidth * cellWidth;
@@ -604,11 +608,11 @@ public class SceneController : MonoBehaviour
             {
                 bridge.SetVip();
             }
-            
+
             // Car            
             if (UnityEngine.Random.Range(0f, 1.0f) < carProbability)
             {
-                ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] {0}).Select(_ => 
+                ret[road].objectRefs = ret[road].objectRefs.Concat((new int[] { 0 }).Select(_ =>
                     {
                         var carRef = carManager.Get();
                         var carLocalTransform = new Vector3(roadLeftEdgeX + carOffsetX, lowerEdgeY + (roadHeight / 2), -0.24f);
@@ -637,7 +641,7 @@ public class SceneController : MonoBehaviour
             {
                 house.SetVip();
             }
-        }        
+        }
 
         // Small items: Flack guns, trees, tanks
         for (var ytmpOuter = 0; ytmpOuter < LevelContents.fullGridHeight; ytmpOuter++)
@@ -675,7 +679,7 @@ public class SceneController : MonoBehaviour
                     case CellContent.VEHICLE1:
                         selectedManager = vehicle1Manager;
                         break;
-                    
+
                     case CellContent.VEHICLE2:
                         selectedManager = vehicle2Manager;
                         break;
@@ -695,7 +699,7 @@ public class SceneController : MonoBehaviour
                 {
                     var objRef = selectedManager.Get();
                     objRef.managedObject.transform.localPosition = itemLocalTransform + parentPositionOffset;
-                    
+
                     if (levelContents.vipTargets)
                     {
                         var possibleVip = InterfaceHelper.GetInterface<IVip>(objRef.managedObject.gameObject);
@@ -734,7 +738,7 @@ public class SceneController : MonoBehaviour
     {
         RotateLevels();
         var newGameObjects = PopulateScene(latestLevel)
-        .Select(goc => new GameObjectCollection4 {zCoord = goc.zCoord + lastLevelLowerEdgeY, objectRefs = goc.objectRefs})
+        .Select(goc => new GameObjectCollection4 { zCoord = goc.zCoord + lastLevelLowerEdgeY, objectRefs = goc.objectRefs })
         .ToList();
         pendingActivation.AddRange(newGameObjects);
     }
@@ -837,16 +841,20 @@ public class SceneController : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
+        if (CrazySDK.IsInitialized)
+        {
+            CrazySDK.Game.GameplayStart();
+        }
         var camObject = GameObject.Find("Main Camera");
         tvSimDocumentObject = FindAnyObjectByType<TvSimDocument>(FindObjectsInactive.Include);
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
 
         // visible area marker for debugging
         var vaGameObject = Instantiate(visibleAreaMarkerPrefab, camObject.transform);
-        var localPosition = new Vector3(-visibleAreaMarkerWidth/2, -visibleAreaMarkerHeight/2, 1f);
+        var localPosition = new Vector3(-visibleAreaMarkerWidth / 2, -visibleAreaMarkerHeight / 2, 1f);
         vaGameObject.transform.localPosition = localPosition;
-        
+
         var vaMeshFilter = vaGameObject.AddComponent<MeshFilter>();
         var vaMeshRenderer = vaGameObject.AddComponent<MeshRenderer>();
 
@@ -888,8 +896,8 @@ public class SceneController : MonoBehaviour
     bool IsOverLandingStrip(Vector2 position)
     {
         var offsetX = (position.y - refobject.transform.position.y) * riverSlopes[neutralRiverSlopeIndex];
-        return position.y > landingStripBottomY && 
-            position.y < landingStripTopY &&            
+        return position.y > landingStripBottomY &&
+            position.y < landingStripTopY &&
             Math.Abs((refobject.transform.position.x + offsetX - position.x)) < landingStripWidth / 2;
     }
 
@@ -897,7 +905,7 @@ public class SceneController : MonoBehaviour
     {
         // find segment
         var segmentIndex = 0;
-        var maxSegmentIndex = (int)Math.Floor ((double)(riverVerts.Count - 1) / 4);
+        var maxSegmentIndex = (int)Math.Floor((double)(riverVerts.Count - 1) / 4);
         while (segmentIndex <= maxSegmentIndex)
         {
             if ((riverVerts[segmentIndex * 4].y + yOffset) < yCoord &&
@@ -915,10 +923,10 @@ public class SceneController : MonoBehaviour
         }
 
         // interpolate river edges x
-        var ydiff = yCoord - (riverVerts[segmentIndex*4].y + yOffset);
-        var xdiff = ydiff * ((riverVerts[segmentIndex*4 + 2].x + xOffset) - (riverVerts[segmentIndex*4].x + xOffset)) / ((riverVerts[segmentIndex*4 + 2].y + yOffset) - (riverVerts[segmentIndex*4].y + yOffset));
+        var ydiff = yCoord - (riverVerts[segmentIndex * 4].y + yOffset);
+        var xdiff = ydiff * ((riverVerts[segmentIndex * 4 + 2].x + xOffset) - (riverVerts[segmentIndex * 4].x + xOffset)) / ((riverVerts[segmentIndex * 4 + 2].y + yOffset) - (riverVerts[segmentIndex * 4].y + yOffset));
 
-        return riverVerts[segmentIndex*4].x + xOffset + xdiff;
+        return riverVerts[segmentIndex * 4].x + xOffset + xdiff;
     }
 
 
@@ -942,7 +950,7 @@ public class SceneController : MonoBehaviour
         landingStripTopY = landingStripBottomY;
     }
 
-    GameState GetGameState() 
+    GameState GetGameState()
     {
         if (gameState == null)
         {
@@ -983,7 +991,7 @@ public class SceneController : MonoBehaviour
             startPos.y += -gameState.maxAltitude;
         }
 
-        
+
         startPos.z = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude);
         EnemyPlane enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
@@ -991,7 +999,7 @@ public class SceneController : MonoBehaviour
         var maxSpeed = oncoming ? enemyPlaneOncomingSpeedMax : enemyPlaneSpeedMax * gameState.maxSpeed;
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
-        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
+        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability &&
             LevelHelper.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
@@ -1026,10 +1034,11 @@ public class SceneController : MonoBehaviour
 
         var enemyHQsBombed = latestLevelType == LevelType.CITY ?
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
-            new List<bool> {false, false, false};
-        return new LevelPrerequisite {
+            new List<bool> { false, false, false };
+        return new LevelPrerequisite
+        {
             levelType = newLevelType,
-            riverLeftOfAirstrip=latestLevel.riverEndsLeftOfAirstrip,
+            riverLeftOfAirstrip = latestLevel.riverEndsLeftOfAirstrip,
             enemyHQsBombed = enemyHQsBombed
         };
     }
@@ -1052,7 +1061,7 @@ public class SceneController : MonoBehaviour
                     GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
                     GetTargetHitsMin(stateContents.latestLevelPrereq));
             }
-            else 
+            else
             {
                 if (newLevelTask == null)
                 {
@@ -1064,7 +1073,7 @@ public class SceneController : MonoBehaviour
                     newLevelTask = new LevelBuilder().BuildAsync(stateContents.latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }
-                else 
+                else
                 {
                     ++framesToBuildLevelDbg;
                     if (newLevelTask.IsCompleted)
@@ -1105,11 +1114,11 @@ public class SceneController : MonoBehaviour
         while (roadLowerEdgesY.Count > 0 && refobject.transform.position.y - deactivationDistance > roadLowerEdgesY.First())
         {
             roadLowerEdgesY.RemoveAt(0);
-        } 
+        }
 
         var distanceDiff = refobject.transform.position.y - lastLevelLowerEdgeY;
         gameState.SetApproachingLanding(
-            (distanceDiff > levelHeight * (1-LevelBuilder.finalApproachQuotient)) ||
+            (distanceDiff > levelHeight * (1 - LevelBuilder.finalApproachQuotient)) ||
             distanceDiff < 0);
 
         // Update game state
@@ -1186,7 +1195,7 @@ public class SceneController : MonoBehaviour
         }
         else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
-            
+
             if (stateContents.fuel < (gameState.maxFuel - fuelFullTankMargin))
             {
                 gameState.SetFuel(Math.Min(stateContents.fuel + refuelRate * Time.deltaTime, gameState.maxFuel));
@@ -1204,7 +1213,7 @@ public class SceneController : MonoBehaviour
                 if (bombLoadCooldownSec <= 0)
                 {
                     gameState.IncrementBombs(1);
-                    bombLoadCooldownSec = bombLoadTimeSec;    
+                    bombLoadCooldownSec = bombLoadTimeSec;
                 }
                 bombLoadCooldownSec -= Time.deltaTime;
             }
@@ -1225,7 +1234,7 @@ public class SceneController : MonoBehaviour
                 }
                 repairCooldownSec -= Time.deltaTime;
             }
-            else 
+            else
             {
                 if (stateContents.fuel < (gameState.maxFuel - fuelRefillMargin))
                 {
@@ -1237,7 +1246,7 @@ public class SceneController : MonoBehaviour
                 }
             }
         }
-        else if (stateContents.gameStatus == GameStatus.DEAD || 
+        else if (stateContents.gameStatus == GameStatus.DEAD ||
                  stateContents.gameStatus == GameStatus.FINISHED)
         {
             gameState.UpdateRestartTimer(Time.deltaTime);
@@ -1307,7 +1316,7 @@ public class SceneController : MonoBehaviour
     void OnBombLandedCallback(BombLandedEventArgs args) =>
         OnBombLandedCallbackInternal(args.bomb, args.hitObject);
 
-    void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject) 
+    void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject)
     {
         if (hitObject == null)
         {
@@ -1344,10 +1353,18 @@ public class SceneController : MonoBehaviour
                 Destroy(hitObject);
             }
         }
-    
+
         if (bomb != null)
         {
             Destroy(bomb);
+        }
+    }
+    
+    void OnDestroy()
+    {
+        if (CrazySDK.IsInitialized)
+        {
+            CrazySDK.Game.GameplayStop();
         }
     }
 }
