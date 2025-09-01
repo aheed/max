@@ -45,7 +45,9 @@ public enum GameEvent
     CAMERA_CHANGE_REQUESTED,
     TV_SIM_TOGGLE_REQUESTED,
     DEBUG_INFO_VISIBILITY_UPDATED,
-    CAMERA_CHANGED
+    CAMERA_CHANGED,
+    PAUSE_GAME,
+    UNPAUSE_GAME
 }
 
 public enum DamageIndex
@@ -143,11 +145,11 @@ public class GameState : MonoBehaviour
         {
             if (paused && !IsPaused())
             {
-                CrazySDK.Game.GameplayStop();
+                ReportEvent(GameEvent.PAUSE_GAME);
             }
             else if (!paused && IsPaused())
             {
-                CrazySDK.Game.GameplayStart();
+                ReportEvent(GameEvent.UNPAUSE_GAME);
             }
         }
         Time.timeScale = paused ? 0f : 1f;

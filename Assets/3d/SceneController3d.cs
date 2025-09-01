@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CrazyGames;
 using UnityEngine;
 
 public class SceneController3d : MonoBehaviour
@@ -289,10 +288,7 @@ public class SceneController3d : MonoBehaviour
 
     void Start()
     {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStart();
-        }
+
         
         //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
         UserGuide.SetOpenState(false);
@@ -910,14 +906,6 @@ public class SceneController3d : MonoBehaviour
         if (bomb != null)
         {
             Destroy(bomb.gameObject);
-        }
-    }
-    
-    void OnDestroy()
-    {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStop();
         }
     }
 }

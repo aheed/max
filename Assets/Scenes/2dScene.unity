@@ -8355,6 +8355,63 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &2001742639
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 34.93938
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 29.32707
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -49.7813
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 789306360935644932, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088291935405534127, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
+      propertyPath: m_Name
+      value: CrazyGamesController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6d3665097ddc3aecd8dd1c975cc1d969, type: 3}
 --- !u!1 &2054397210
 GameObject:
   m_ObjectHideFlags: 0
@@ -8803,3 +8860,4 @@ SceneRoots:
   - {fileID: 1570911667}
   - {fileID: 762468299}
   - {fileID: 807004049}
+  - {fileID: 2001742639}

@@ -1,12 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CrazyGames;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public enum GameStatus
 {
@@ -842,10 +838,6 @@ public class SceneController : MonoBehaviour
 
     void Start()
     {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStart();
-        }
         var camObject = GameObject.Find("Main Camera");
         tvSimDocumentObject = FindAnyObjectByType<TvSimDocument>(FindObjectsInactive.Include);
         maxCamera = InterfaceHelper.GetInterface<MaxCamera>(camObject);
@@ -1357,14 +1349,6 @@ public class SceneController : MonoBehaviour
         if (bomb != null)
         {
             Destroy(bomb);
-        }
-    }
-    
-    void OnDestroy()
-    {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStop();
         }
     }
 }
