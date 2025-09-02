@@ -41,10 +41,6 @@ public class MainMenu2 : MonoBehaviour
 
     void Start()
     {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStart();
-        }
         var uiDocument = GetComponent<UIDocument>();
         scrollLeftButton = uiDocument.rootVisualElement.Q<Button>("LeftScroll");
         scrollRightButton = uiDocument.rootVisualElement.Q<Button>("RightScroll");
@@ -170,14 +166,6 @@ public class MainMenu2 : MonoBehaviour
             LevelSelection.startLevelOverride = true;
             LevelSelection.startLevel = selectedMission.LevelType;
             SceneManager.LoadScene(selectedMission.SceneName);
-        }
-    }
-
-    void OnDestroy()
-    {
-        if (CrazySDK.IsInitialized)
-        {
-            CrazySDK.Game.GameplayStop();
         }
     }
 }

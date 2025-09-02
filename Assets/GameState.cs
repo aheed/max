@@ -41,6 +41,7 @@ public enum GameEvent
     PAUSE_BUTTON_UPDATED,
     TV_SIM_BUTTON_UPDATED,
     SPACER_BUTTONS_UPDATED,
+    FULLSCREEN_BUTTON_UPDATED,
     TOUCH_SCREEN_DETECTED,
     CAMERA_CHANGE_REQUESTED,
     TV_SIM_TOGGLE_REQUESTED,
@@ -99,6 +100,7 @@ public class GameStateContents
     public bool pauseButtonVisible = false;
     public bool tvSimButtonVisible = false;
     public bool spacerButtonsVisible = false;
+    public bool fullScreenButtonVisible = true;
     public bool debugInfoVisible = false;
 }
 

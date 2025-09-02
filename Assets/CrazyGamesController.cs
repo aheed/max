@@ -10,9 +10,12 @@ public class CrazyGamesController : MonoBehaviour
             return;
         }
 
-        GameState.GetInstance().Subscribe(GameEvent.PAUSE_GAME, CrazySDK.Game.GameplayStop);
-        GameState.GetInstance().Subscribe(GameEvent.UNPAUSE_GAME, CrazySDK.Game.GameplayStart);
-        GameState.GetInstance().Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+        var gameState = GameState.GetInstance();
+        gameState.Subscribe(GameEvent.PAUSE_GAME, CrazySDK.Game.GameplayStop);
+        gameState.Subscribe(GameEvent.UNPAUSE_GAME, CrazySDK.Game.GameplayStart);
+        gameState.Subscribe(GameEvent.GAME_STATUS_CHANGED, OnGameStatusChanged);
+        gameState.GetStateContents().fullScreenButtonVisible = false;
+        gameState.ReportEvent(GameEvent.FULLSCREEN_BUTTON_UPDATED);
         CrazySDK.Game.GameplayStart();
     }
 

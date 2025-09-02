@@ -99,6 +99,7 @@ public class ButtonBarDocument : MonoBehaviour
         gameState.Subscribe(GameEvent.VIEW_MODE_CHANGED, UpdateTvSimButton);
         gameState.Subscribe(GameEvent.SPACER_BUTTONS_UPDATED, UpdateSpacerButtons);
         gameState.Subscribe(GameEvent.TOUCH_SCREEN_DETECTED, UpdatePilotButton);
+        gameState.Subscribe(GameEvent.FULLSCREEN_BUTTON_UPDATED, UpdateFullScreenButton);
 
         StartCoroutine(QuickTapCoroutine());
     }
@@ -122,6 +123,7 @@ public class ButtonBarDocument : MonoBehaviour
             return;
 
         var stateContents = gameState.GetStateContents();
+        Debug.Log($"ButtonBarDocument.UpdateSpacerButtons: {stateContents.spacerButtonsVisible} {stateContents}");
         spacerButtonLeftElem.style.display = stateContents.spacerButtonsVisible ? DisplayStyle.Flex : DisplayStyle.None;
         spacerButtonRightElem.style.display = stateContents.spacerButtonsVisible ? DisplayStyle.Flex : DisplayStyle.None;
     }
@@ -158,8 +160,18 @@ public class ButtonBarDocument : MonoBehaviour
 
     void UpdateFullScreenButton()
     {
+        if (fullScreenElem == null)
+        {
+            Debug.LogWarning("ButtonBarDocument.UpdateFullScreenButton: fullScreenElem is null");
+            return;
+        }
+
+        Debug.Log($"ButtonBarDocument.UpdateFullScreenButton: {gameState.GetStateContents().fullScreenButtonVisible} {fullScreen} {Screen.fullScreen}");
+        
         var newTexture = Screen.fullScreen ? exitFullScreenTexture : fullScreenTexture;
         fullScreenElem.style.backgroundImage = new StyleBackground(newTexture);
+        fullScreenElem.style.display = gameState.GetStateContents().fullScreenButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        fullScreen = Screen.fullScreen;
     }
 
     void CheckFullScreenButton()
@@ -167,7 +179,6 @@ public class ButtonBarDocument : MonoBehaviour
         if (fullScreen != Screen.fullScreen)
         {
             UpdateFullScreenButton();
-            fullScreen = Screen.fullScreen;
         }
     }
 
