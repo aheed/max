@@ -21,6 +21,7 @@ public class ButtonBarDocument : MonoBehaviour
     VisualElement buttonBarUIElem;
     VisualElement tvElem;
     VisualElement fullScreenElem;
+    VisualElement fullScreenWrapperElem;
     VisualElement CameraSwapElem;
     VisualElement dotsElem;
     VisualElement muteElem;
@@ -58,6 +59,8 @@ public class ButtonBarDocument : MonoBehaviour
 
         fullScreenElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenButton");
         fullScreenElem.RegisterCallback<PointerDownEvent>(OnFullScreenClicked);
+
+        fullScreenWrapperElem = uiDocument.rootVisualElement.Q<VisualElement>("FullScreenButtonWrapper");
 
         CameraSwapElem = uiDocument.rootVisualElement.Q<VisualElement>("CameraButton");
         CameraSwapElem.RegisterCallback<ClickEvent>(OnCameraSwapClicked);
@@ -170,7 +173,7 @@ public class ButtonBarDocument : MonoBehaviour
         
         var newTexture = Screen.fullScreen ? exitFullScreenTexture : fullScreenTexture;
         fullScreenElem.style.backgroundImage = new StyleBackground(newTexture);
-        fullScreenElem.style.display = gameState.GetStateContents().fullScreenButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        fullScreenWrapperElem.style.display = gameState.GetStateContents().fullScreenButtonVisible ? DisplayStyle.Flex : DisplayStyle.None;
         fullScreen = Screen.fullScreen;
     }
 
