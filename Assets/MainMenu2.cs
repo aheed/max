@@ -1,3 +1,4 @@
+using CrazyGames;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.SceneManagement;

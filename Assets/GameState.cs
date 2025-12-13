@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CrazyGames;
 using UnityEngine;
 
 public enum GameEvent
@@ -40,11 +41,14 @@ public enum GameEvent
     PAUSE_BUTTON_UPDATED,
     TV_SIM_BUTTON_UPDATED,
     SPACER_BUTTONS_UPDATED,
+    FULLSCREEN_BUTTON_UPDATED,
     TOUCH_SCREEN_DETECTED,
     CAMERA_CHANGE_REQUESTED,
     TV_SIM_TOGGLE_REQUESTED,
     DEBUG_INFO_VISIBILITY_UPDATED,
-    CAMERA_CHANGED
+    CAMERA_CHANGED,
+    PAUSE_GAME,
+    UNPAUSE_GAME
 }
 
 public enum DamageIndex
@@ -96,6 +100,7 @@ public class GameStateContents
     public bool pauseButtonVisible = false;
     public bool tvSimButtonVisible = false;
     public bool spacerButtonsVisible = false;
+    public bool fullScreenButtonVisible = true;
     public bool debugInfoVisible = false;
 }
 
@@ -138,6 +143,17 @@ public class GameState : MonoBehaviour
 
     public void SetPause(bool paused)
     {
+        if (CrazySDK.IsInitialized)
+        {
+            if (paused && !IsPaused())
+            {
+                ReportEvent(GameEvent.PAUSE_GAME);
+            }
+            else if (!paused && IsPaused())
+            {
+                ReportEvent(GameEvent.UNPAUSE_GAME);
+            }
+        }
         Time.timeScale = paused ? 0f : 1f;
         ReportEvent(GameEvent.PAUSE_BUTTON_UPDATED);
     }

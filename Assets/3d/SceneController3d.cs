@@ -29,7 +29,7 @@ public class SceneController3d : MonoBehaviour
     public float minDistanceRiverAirstrip = 5.0f;
     public float maxDistanceRiverToAdjust = 2.0f;
     public float roadHeight = 0.4f;
-    public static readonly float[] riverSlopes = new float[] {0.5f, 0.5f, 1.0f, 2.0f, 2.0f};
+    public static readonly float[] riverSlopes = new float[] { 0.5f, 0.5f, 1.0f, 2.0f, 2.0f };
     public static readonly int neutralRiverSlopeIndex = 2;
     float levelWidth;
     public float cellLength = 80f / LevelContents.fullGridHeight;
@@ -49,8 +49,8 @@ public class SceneController3d : MonoBehaviour
     public float enemyPlaneIntervalSecMax = 15f;
     public float enemyPlaneIntervalSecMin = 5f;
     public float windIntervalSecMax = 10f;
-    public float windIntervalSecMin = 5f;    
-    public float vipProbability = 0.5f;    
+    public float windIntervalSecMin = 5f;
+    public float vipProbability = 0.5f;
     public float enemyPlaneOncomingProbability = 0.3f;
     public float windProbability = 0.6f;
     public float riverBankWidth = 0.1f;
@@ -64,7 +64,7 @@ public class SceneController3d : MonoBehaviour
     public Color nightAmbientColor = new Color(0.1f, 0.1f, 0.1f, 1f);
     public Color dayAmbientColor = new Color(0.3f, 0.3f, 0.3f, 1f);
     public LevelType startLevelType = LevelType.NORMAL;
-    TargetMaterialBlinker targetBlinker;    
+    TargetMaterialBlinker targetBlinker;
 
     //// Game status
     float prepTimeForNextLevelLength = 20f;
@@ -82,7 +82,7 @@ public class SceneController3d : MonoBehaviour
     public SceneBuilder sceneBuilder;
     GameState gameState;
     List<GameObjectCollection4> pendingActivation = new();
-    List<GameObjectCollection4> activeObjects = new();    
+    List<GameObjectCollection4> activeObjects = new();
     float bombLoadCooldownSec = 0f;
     float repairCooldownSec = 0f;
     float enemyPlaneCooldown = 0f;
@@ -101,15 +101,15 @@ public class SceneController3d : MonoBehaviour
 
     void RotateLevels()
     {
-        currentLevelIndex = (currentLevelIndex + 1) % nofLevels; 
+        currentLevelIndex = (currentLevelIndex + 1) % nofLevels;
         var oldLevel = levels[currentLevelIndex];
         if (oldLevel != null)
         {
             Destroy(oldLevel);
         }
-        
+
         var newLevel = Instantiate(new GameObject("level"), new Vector3(0f, 0f, lastLevelStartZ), Quaternion.identity);
-        levels[currentLevelIndex] = newLevel;        
+        levels[currentLevelIndex] = newLevel;
         balloonParent = Instantiate(balloonParentPrefab, newLevel.transform);
     }
 
@@ -161,7 +161,7 @@ public class SceneController3d : MonoBehaviour
         }
         maxPlane.SetAltitudeLights(LevelHelper.AltitudeLights(gameState.GetStateContents().latestLevelPrereq.levelType));
         maxPlane.SetArmaments(LevelHelper.GetArmamentType(gameState.GetStateContents().latestLevelPrereq.levelType));
-        
+
         Debug.Log($"AmbientIntensity={RenderSettings.ambientIntensity} color={RenderSettings.ambientLight} " +
             $"MainLightIntensity={mainLight.intensity} color={mainLight.color}");
         gameState.ReportEvent(GameEvent.VIEW_MODE_CHANGED);
@@ -288,6 +288,8 @@ public class SceneController3d : MonoBehaviour
 
     void Start()
     {
+
+        
         //UserGuide.SetOpenState(!Settings.UserGuideHasBeenDisplayed());
         UserGuide.SetOpenState(false);
         Settings.Update();
@@ -301,7 +303,7 @@ public class SceneController3d : MonoBehaviour
         //GameState.GetInstance().Subscribe(GameEvent.DEBUG_ACTION3, OnDebugCallback3);
         GameState.GetInstance().SubscribeToBombLandedEvent(OnBombLandedCallback);
         GameState.GetInstance().Subscribe(GameEvent.CAMERA_CHANGE_REQUESTED, CycleCameras);
-        GameState.GetInstance().Subscribe(GameEvent.TV_SIM_TOGGLE_REQUESTED, ToggleTvSim);        
+        GameState.GetInstance().Subscribe(GameEvent.TV_SIM_TOGGLE_REQUESTED, ToggleTvSim);
 
         // Make copies of materials to avoid changing the .mat files
         GameState.carBlinkMaterial = new Material(carTargetMaterial);
@@ -333,8 +335,8 @@ public class SceneController3d : MonoBehaviour
 
     bool IsOverLandingStrip(Vector3 position)
     {
-        return position.z > landingStripStartZ && 
-            position.z < landingStripEndZ &&            
+        return position.z > landingStripStartZ &&
+            position.z < landingStripEndZ &&
             Math.Abs((refobject.transform.position.x - position.x)) < landingStripWidth / 2;
     }
 
@@ -344,7 +346,7 @@ public class SceneController3d : MonoBehaviour
     {
         // find segment
         var segmentIndex = 0;
-        var maxSegmentIndex = (int)Math.Floor ((double)(riverVerts.Count - 1) / 4);
+        var maxSegmentIndex = (int)Math.Floor((double)(riverVerts.Count - 1) / 4);
         while (segmentIndex <= maxSegmentIndex)
         {
             if ((riverVerts[segmentIndex * 4].y + yOffset) < yCoord &&
@@ -362,20 +364,20 @@ public class SceneController3d : MonoBehaviour
         }
 
         // interpolate river edges x
-        var ydiff = yCoord - (riverVerts[segmentIndex*4].y + yOffset);
-        var xdiff = ydiff * ((riverVerts[segmentIndex*4 + 2].x + xOffset) - (riverVerts[segmentIndex*4].x + xOffset)) / ((riverVerts[segmentIndex*4 + 2].y + yOffset) - (riverVerts[segmentIndex*4].y + yOffset));
+        var ydiff = yCoord - (riverVerts[segmentIndex * 4].y + yOffset);
+        var xdiff = ydiff * ((riverVerts[segmentIndex * 4 + 2].x + xOffset) - (riverVerts[segmentIndex * 4].x + xOffset)) / ((riverVerts[segmentIndex * 4 + 2].y + yOffset) - (riverVerts[segmentIndex * 4].y + yOffset));
 
-        return riverVerts[segmentIndex*4].x + xOffset + xdiff;
+        return riverVerts[segmentIndex * 4].x + xOffset + xdiff;
     }
 
     bool IsOverRiver(Vector3 position)
     {
-        var segment = riverSegments.FirstOrDefault(s =>  position.z < s.maxZ);
+        var segment = riverSegments.FirstOrDefault(s => position.z < s.maxZ);
         if (segment == null || segment.minZ >= position.z)
         {
             return false;
         }
-        
+
         // interpolate river edges x
         var zdiff = position.z - segment.minZ;
         var xdiff = zdiff * (segment.ulcX - segment.llcX) / (segment.maxZ - segment.minZ);
@@ -406,7 +408,7 @@ public class SceneController3d : MonoBehaviour
     }
 
     void SpawnEnemyPlane()
-    {   
+    {
         if (!GameState.GetInstance().GetStateContents().latestLevelPrereq.enemyAircraft)
         {
             return;
@@ -418,14 +420,14 @@ public class SceneController3d : MonoBehaviour
         startPos.x += UnityEngine.Random.Range(-gameState.maxHorizPosition / 3, gameState.maxHorizPosition / 3);
         startPos.z += oncoming ? activationDistance : -deactivationDistance;
         startPos.y = UnityEngine.Random.Range(gameState.minSafeAltitude, gameState.maxAltitude * 0.8f);
-        
+
         EnemyPlane3d enemyPlane = Instantiate(enemyPlanePrefab, startPos, Quaternion.identity);
         enemyPlane.refObject = refobject.transform;
         var minSpeed = oncoming ? enemyPlaneOncomingSpeedMin : enemyPlaneSpeedMin * gameState.maxSpeed;
         var maxSpeed = oncoming ? enemyPlaneOncomingSpeedMax : enemyPlaneSpeedMax * gameState.maxSpeed;
 
         enemyPlane.SetSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
-        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability && 
+        if (UnityEngine.Random.Range(0f, 1.0f) < vipProbability &&
             LevelHelper.PossibleVipTargets(gameState.GetStateContents().latestLevelPrereq.levelType))
         {
             enemyPlane.SetVip();
@@ -461,7 +463,7 @@ public class SceneController3d : MonoBehaviour
             {
                 newLevelType = LevelType.ROAD;
             }
-            else if (latestLevelType == LevelType.ROAD) 
+            else if (latestLevelType == LevelType.ROAD)
             {
                 newLevelType = LevelType.CITY;
             }
@@ -473,7 +475,7 @@ public class SceneController3d : MonoBehaviour
 
         var enemyHQsBombed = latestLevelType == LevelType.CITY ?
             gameState.GetStateContents().enemyHQs.Select(hq => hq.IsBombed()) :
-            new List<bool> {false, false, false};
+            new List<bool> { false, false, false };
 
         return new LevelPrerequisite
         {
@@ -522,7 +524,7 @@ public class SceneController3d : MonoBehaviour
                     GetTargetHitsAtStartOfLevel(stateContents.latestLevelPrereq),
                     LevelHelper.GetTargetHitsMin(stateContents.latestLevelPrereq));
             }
-            else 
+            else
             {
                 if (newLevelTask == null)
                 {
@@ -534,7 +536,7 @@ public class SceneController3d : MonoBehaviour
                     newLevelTask = new LevelBuilder().BuildAsync(stateContents.latestLevelPrereq);
                     framesToBuildLevelDbg = 0;
                 }
-                else 
+                else
                 {
                     ++framesToBuildLevelDbg;
                     if (newLevelTask.IsCompleted)
@@ -581,7 +583,7 @@ public class SceneController3d : MonoBehaviour
         while (riverSegments.Count > 0 && refobject.transform.position.z - deactivationDistance > riverSegments.First().maxZ)
         {
             riverSegments.RemoveAt(0);
-        } 
+        }
 
         var distanceDiff = refobject.transform.position.z - lastLevelStartZ;
 
@@ -635,7 +637,7 @@ public class SceneController3d : MonoBehaviour
                     if (stateContents.latestLevelPrereq.wind)
                     {
                         stateContents.windDirection = GameStateContents.windDirections[UnityEngine.Random.Range(0, GameStateContents.windDirections.Length)];
-                        gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);    
+                        gameState.SetWind(UnityEngine.Random.Range(0f, 1f) < windProbability);
                     }
                     SetWindCooldown();
                     //Debug.Log($"New wind {stateContents.windDirection} {stateContents.wind}");
@@ -671,7 +673,7 @@ public class SceneController3d : MonoBehaviour
         }
         else if (stateContents.gameStatus == GameStatus.REFUELLING)
         {
-            
+
             if (stateContents.fuel < (gameState.maxFuel - fuelFullTankMargin))
             {
                 gameState.SetFuel(Math.Min(stateContents.fuel + refuelRate * Time.deltaTime, gameState.maxFuel));
@@ -689,7 +691,7 @@ public class SceneController3d : MonoBehaviour
                 if (bombLoadCooldownSec <= 0)
                 {
                     gameState.IncrementBombs(1);
-                    bombLoadCooldownSec = bombLoadTimeSec;    
+                    bombLoadCooldownSec = bombLoadTimeSec;
                 }
                 bombLoadCooldownSec -= Time.deltaTime;
             }
@@ -710,7 +712,7 @@ public class SceneController3d : MonoBehaviour
                 }
                 repairCooldownSec -= Time.deltaTime;
             }
-            else 
+            else
             {
                 if (stateContents.fuel < (gameState.maxFuel - fuelRefillMargin))
                 {
@@ -722,7 +724,7 @@ public class SceneController3d : MonoBehaviour
                 }
             }
         }
-        else if (stateContents.gameStatus == GameStatus.DEAD || 
+        else if (stateContents.gameStatus == GameStatus.DEAD ||
                  stateContents.gameStatus == GameStatus.FINISHED)
         {
             gameState.UpdateRestartTimer(Time.deltaTime);
@@ -852,12 +854,12 @@ public class SceneController3d : MonoBehaviour
 
     private void OnBombLandedCallback(BombLandedEventArgs args) =>
         OnBombLandedCallbackInternal(args.bomb, args.hitObject);
-    private void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject) 
+    private void OnBombLandedCallbackInternal(GameObject bomb, GameObject hitObject)
     {
         if (hitObject == null)
         {
             var prefab = bombCraterPrefab;
-            
+
             var craterAltitude = gameState.craterAltitude;
 
             if (IsOverRiver(bomb.transform.position))
@@ -870,7 +872,7 @@ public class SceneController3d : MonoBehaviour
                 prefab = bombSplashPrefab;
                 craterAltitude += gameState.riverAltitude;
             }
-            
+
             if (IsOverRoad(bomb.transform.position))
             {
                 prefab = mushroomCloudPrefab;
@@ -900,7 +902,7 @@ public class SceneController3d : MonoBehaviour
                 Destroy(hitObject);
             }
         }
-    
+
         if (bomb != null)
         {
             Destroy(bomb.gameObject);
